@@ -1,0 +1,26 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.tizen.SecurityAccounts.gUserManagement.Group">
+    <signal name="unregistered">
+    </signal>  
+    <method name="addGroup">
+      <arg name="preferred_gid" type="u" direction="in"/>
+      <arg name="gid" type="u" direction="out"/>
+    </method>
+    <method name="deleteGroup">
+    </method>
+    <method name="updateGroup">
+    </method>
+    <method name="addMember">
+      <arg name="uid" type="u" direction="in"/>
+      <arg name="add_as_admin" type="b" direction="in"/>
+    </method>
+    <method name="deleteMember">
+      <arg name="uid" type="u" direction="in"/>
+    </method>
+    <property name="grouptype" type="q" access="readwrite"/>
+    <property name="gid" type="u" access="read"/>
+    <property name="groupname" type="s" access="readwrite"/>
+    <property name="secret" type="s" access="readwrite"/>
+  </interface>
+</node>

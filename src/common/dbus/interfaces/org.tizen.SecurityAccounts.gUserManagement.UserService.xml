@@ -1,0 +1,25 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.tizen.SecurityAccounts.gUserManagement.UserService">
+    <signal name="userAdded">
+        <arg name="uid" type="u" direction="out"/>
+    </signal>  
+    <signal name="userDeleted">
+        <arg name="uid" type="u" direction="out"/>
+    </signal>  
+    <signal name="userUpdated">
+        <arg name="uid" type="u" direction="out"/>
+    </signal>  
+    <method name="createNewUser">
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+    <method name="getUser">
+        <arg name="uid" type="u" direction="in"/>
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+    <method name="getUserByName">
+        <arg name="username" type="s" direction="in"/>
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+  </interface>
+</node>

@@ -1,0 +1,27 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.tizen.SecurityAccounts.gUserManagement.User">
+    <signal name="unregistered">
+    </signal>  
+    <method name="addUser">
+        <arg name="uid" type="u" direction="out"/>
+    </method>
+    <method name="deleteUser">
+        <arg name="rem_home_dir" type="b" direction="in"/>
+    </method>
+    <method name="updateUser">
+    </method>
+    <property name="uid" type="u" access="read"/>
+    <property name="gid" type="u" access="read"/>
+    <property name="usertype" type="q" access="readwrite"/>
+    <property name="nickname" type="s" access="readwrite"/>
+    <property name="username" type="s" access="readwrite"/>
+    <property name="secret" type="s" access="readwrite"/>
+    <property name="realname" type="s" access="readwrite"/>
+    <property name="office" type="s" access="readwrite"/>
+    <property name="officephone" type="s" access="readwrite"/>
+    <property name="homephone" type="s" access="readwrite"/>
+    <property name="homedir" type="s" access="readwrite"/>
+    <property name="shell" type="s" access="readwrite"/>
+  </interface>
+</node>

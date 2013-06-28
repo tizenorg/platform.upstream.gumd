@@ -1,0 +1,15 @@
+<busconfig>
+    <type>@MESSAGE_BUS_TYPE@</type>
+    <listen>unix:tmpdir=/tmp/</listen>
+    <servicedir>@abs_top_builddir@/test/data/services</servicedir>
+    <policy context="default">
+        <!-- Allow everything to be sent -->
+        <allow send_destination="*" eavesdrop="true"/>
+        
+        <!-- Allow everything to be received -->
+        <allow eavesdrop="true"/>
+
+        <!-- Allow anyone to own anything -->
+        <allow own="*"/>
+    </policy>
+</busconfig>

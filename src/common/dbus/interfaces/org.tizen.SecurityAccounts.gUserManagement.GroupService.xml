@@ -1,0 +1,25 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.tizen.SecurityAccounts.gUserManagement.GroupService">
+    <signal name="groupAdded">
+        <arg name="gid" type="u" direction="out"/>
+    </signal>  
+    <signal name="groupDeleted">
+        <arg name="gid" type="u" direction="out"/>
+    </signal>  
+    <signal name="groupUpdated">
+        <arg name="gid" type="u" direction="out"/>
+    </signal>  
+    <method name="createNewGroup">
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+    <method name="getGroup">
+        <arg name="gid" type="u" direction="in"/>
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+    <method name="getGroupByName">
+        <arg name="groupname" type="s" direction="in"/>
+        <arg name="objectPath" type="o" direction="out"/>
+    </method>
+  </interface>
+</node>
