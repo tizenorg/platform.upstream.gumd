@@ -129,6 +129,19 @@ _setup_idle_callback (
 }
 
 static void
+_on_user_remote_object_destroyed(
+        GDBusProxy *proxy,
+        gpointer user_data)
+{
+    g_return_if_fail (GUM_IS_USER (user_data));
+    GumUser *self = GUM_USER (user_data);
+
+    DBG("");
+
+    GUM_OBJECT_UNREF (self->priv->dbus_user);
+}
+
+static void
 _set_property (
         GObject *object,
         guint property_id,
@@ -171,6 +184,11 @@ _dispose (GObject *object)
         g_cancellable_cancel (self->priv->cancellable);
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
+    }
+
+    if (self->priv->dbus_user) {
+        g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->dbus_user),
+                _on_user_remote_object_destroyed, self);
     }
 
     GUM_OBJECT_UNREF (self->priv->dbus_user);
@@ -309,6 +327,24 @@ gum_user_class_init (
 }
 
 static void
+_create_dbus_user (
+        GumUser *user,
+        gchar *object_path,
+        GError *error)
+{
+    user->priv->dbus_user = gum_dbus_user_proxy_new_sync (
+            g_dbus_proxy_get_connection (G_DBUS_PROXY (
+                    user->priv->dbus_service)),
+            G_DBUS_PROXY_FLAGS_NONE, g_dbus_proxy_get_name (
+            G_DBUS_PROXY (user->priv->dbus_service)), object_path,
+            user->priv->cancellable, &error);
+    if (!error) {
+        g_signal_connect (G_OBJECT (user->priv->dbus_user), "unregistered",
+            G_CALLBACK (_on_user_remote_object_destroyed),  user);
+    }
+}
+
+static void
 _on_new_user_cb (
         GObject *object,
         GAsyncResult *res,
@@ -328,12 +364,7 @@ _on_new_user_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            user->priv->dbus_user = gum_dbus_user_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        user->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (G_DBUS_PROXY (user->priv->dbus_service)),
-                object_path, user->priv->cancellable, &error);
+            _create_dbus_user (user, object_path, error);
         }
         _setup_idle_callback (user, error);
     }
@@ -361,12 +392,7 @@ _on_get_user_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            user->priv->dbus_user = gum_dbus_user_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        user->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (G_DBUS_PROXY (user->priv->dbus_service)),
-                object_path, user->priv->cancellable, &error);
+            _create_dbus_user (user, object_path, error);
         }
         _setup_idle_callback (user, error);
     }
@@ -394,12 +420,7 @@ _on_get_user_by_name_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            user->priv->dbus_user = gum_dbus_user_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        user->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (G_DBUS_PROXY (user->priv->dbus_service)),
-                object_path, user->priv->cancellable, &error);
+            _create_dbus_user (user, object_path, error);
         }
         _setup_idle_callback (user, error);
     }

@@ -121,6 +121,19 @@ _setup_idle_callback (
 }
 
 static void
+_on_group_remote_object_destroyed (
+        GDBusProxy *proxy,
+        gpointer user_data)
+{
+    g_return_if_fail (GUM_IS_GROUP (user_data));
+    GumGroup *self = GUM_GROUP (user_data);
+
+    DBG("");
+
+    GUM_OBJECT_UNREF (self->priv->dbus_group);
+}
+
+static void
 _set_property (
         GObject *object,
         guint property_id,
@@ -163,6 +176,11 @@ _dispose (GObject *object)
         g_cancellable_cancel (self->priv->cancellable);
         g_object_unref (self->priv->cancellable);
         self->priv->cancellable = NULL;
+    }
+
+    if (self->priv->dbus_group) {
+        g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->dbus_group),
+                _on_group_remote_object_destroyed, self);
     }
 
     GUM_OBJECT_UNREF (self->priv->dbus_group);
@@ -242,6 +260,25 @@ gum_group_class_init (
             properties);
 }
 
+
+static void
+_create_dbus_group (
+        GumGroup *group,
+        gchar *object_path,
+        GError *error)
+{
+    group->priv->dbus_group = gum_dbus_group_proxy_new_sync (
+            g_dbus_proxy_get_connection (G_DBUS_PROXY (
+                    group->priv->dbus_service)),
+            G_DBUS_PROXY_FLAGS_NONE, g_dbus_proxy_get_name (
+            G_DBUS_PROXY (group->priv->dbus_service)), object_path,
+            group->priv->cancellable, &error);
+    if (!error) {
+        g_signal_connect (G_OBJECT (group->priv->dbus_group), "unregistered",
+            G_CALLBACK (_on_group_remote_object_destroyed),  group);
+    }
+}
+
 static void
 _on_new_group_cb (
         GObject *object,
@@ -262,13 +299,7 @@ _on_new_group_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            group->priv->dbus_group = gum_dbus_group_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        group->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (
-                        G_DBUS_PROXY (group->priv->dbus_service)),
-                object_path, group->priv->cancellable, &error);
+            _create_dbus_group (group, object_path, error);
         }
         _setup_idle_callback (group, error);
     }
@@ -296,13 +327,7 @@ _on_get_group_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            group->priv->dbus_group = gum_dbus_group_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        group->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (
-                        G_DBUS_PROXY (group->priv->dbus_service)),
-                object_path, group->priv->cancellable, &error);
+            _create_dbus_group (group, object_path, error);
         }
         _setup_idle_callback (group, error);
     }
@@ -330,13 +355,7 @@ _on_get_group_by_name_cb (
 
     if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
         if (!error) {
-            group->priv->dbus_group = gum_dbus_group_proxy_new_sync (
-                g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                        group->priv->dbus_service)),
-                G_DBUS_PROXY_FLAGS_NONE,
-                g_dbus_proxy_get_name (
-                        G_DBUS_PROXY (group->priv->dbus_service)),
-                object_path, group->priv->cancellable, &error);
+            _create_dbus_group (group, object_path, error);
         }
         _setup_idle_callback (group, error);
     }
