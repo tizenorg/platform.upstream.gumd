@@ -150,6 +150,42 @@ _get_property (
     }
 }
 
+static void
+_on_group_added (
+        GObject *object,
+        guint gid,
+        gpointer group_data)
+{
+    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
+            group_data);
+    gum_dbus_group_service_emit_group_added (self->priv->dbus_group_service,
+            gid);
+}
+
+static void
+_on_group_deleted (
+        GObject *object,
+        guint gid,
+        gpointer group_data)
+{
+    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
+            group_data);
+    gum_dbus_group_service_emit_group_deleted (self->priv->dbus_group_service,
+            gid);
+}
+
+static void
+_on_group_updated (
+        GObject *object,
+        guint gid,
+        gpointer group_data)
+{
+    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
+            group_data);
+    gum_dbus_group_service_emit_group_updated (self->priv->dbus_group_service,
+            gid);
+}
+
 static PeerGroupService *
 _dbus_peer_group_new (
         GumdDbusGroupServiceAdapter *self,
@@ -205,6 +241,13 @@ _dispose (
         g_list_foreach (self->priv->peer_groups, (GFunc)_dbus_peer_group_remove,
                 self);
     }
+
+    g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->daemon),
+            _on_group_added, self);
+    g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->daemon),
+            _on_group_deleted, self);
+    g_signal_handlers_disconnect_by_func (G_OBJECT (self->priv->daemon),
+            _on_group_updated, self);
 
     GUM_OBJECT_UNREF (self->priv->daemon);
 
@@ -393,40 +436,22 @@ _on_dbus_group_adapter_disposed (
     }
 }
 
-static void
-_on_group_added (
-        GObject *object,
-        guint gid,
-        gpointer group_data)
+static gchar *
+_get_sender (
+        GumdDbusGroupServiceAdapter *self,
+        GDBusMethodInvocation *invocation)
 {
-    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
-            group_data);
-    gum_dbus_group_service_emit_group_added (self->priv->dbus_group_service,
-            gid);
-}
-
-static void
-_on_group_deleted (
-        GObject *object,
-        guint gid,
-        gpointer group_data)
-{
-    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
-            group_data);
-    gum_dbus_group_service_emit_group_deleted (self->priv->dbus_group_service,
-            gid);
-}
-
-static void
-_on_group_updated (
-        GObject *object,
-        guint gid,
-        gpointer group_data)
-{
-    GumdDbusGroupServiceAdapter *self = GUMD_DBUS_GROUP_SERVICE_ADAPTER (
-            group_data);
-    gum_dbus_group_service_emit_group_updated (self->priv->dbus_group_service,
-            gid);
+    gchar *sender = NULL;
+    if (self->priv->dbus_server_type == GUMD_DBUS_SERVER_BUSTYPE_MSG_BUS) {
+        sender = g_strdup (g_dbus_method_invocation_get_sender (invocation));
+    } else {
+        GDBusConnection *connection =  g_dbus_method_invocation_get_connection (
+                invocation);
+        sender = g_strdup_printf ("%d", g_socket_get_fd (
+                g_socket_connection_get_socket (G_SOCKET_CONNECTION (
+                        g_dbus_connection_get_stream(connection)))));
+    }
+    return sender;
 }
 
 static GumdDbusGroupAdapter *
@@ -435,7 +460,6 @@ _create_and_cache_dbus_group (
         GumdDaemonGroup *group,
         GDBusMethodInvocation *invocation)
 {
-    const gchar *sender = NULL;
     GDBusConnection *connection = g_dbus_method_invocation_get_connection (
             invocation);
 
@@ -448,10 +472,9 @@ _create_and_cache_dbus_group (
     if (g_list_length (self->priv->peer_groups) == 0)
         gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
-    sender = g_dbus_method_invocation_get_sender (invocation);
-
     self->priv->peer_groups = g_list_append (self->priv->peer_groups,
-            _dbus_peer_group_new (self, sender, dbus_group));
+            _dbus_peer_group_new (self, _get_sender (self, invocation),
+            dbus_group));
     g_object_weak_ref (G_OBJECT (dbus_group), _on_dbus_group_adapter_disposed,
             self);
 
@@ -464,17 +487,19 @@ _create_and_cache_dbus_group (
 static GumdDbusGroupAdapter *
 _get_dbus_group_from_cache (
         GumdDbusGroupServiceAdapter *self,
-        const gchar *peer_name,
+        GDBusMethodInvocation *invocation,
         gid_t gid)
 {
     GumdDbusGroupAdapter *dbus_group = NULL;
     PeerGroupService *peer_group = NULL;
     GList *list = self->priv->peer_groups;
+    gchar *peer_name = NULL;
 
     if (gid == GUM_GROUP_INVALID_GID) {
         return NULL;
     }
 
+    peer_name = _get_sender (self, invocation);
     DBG ("peername:%s uid %u", peer_name, gid);
     for ( ; list != NULL; list = g_list_next (list)) {
         peer_group = (PeerGroupService *) list->data;
@@ -484,6 +509,7 @@ _get_dbus_group_from_cache (
             break;
         }
     }
+    g_free (peer_name);
 
     return dbus_group;
 }
@@ -528,12 +554,10 @@ _handle_get_group (
     GumdDaemonGroup *group = NULL;
     GError *error = NULL;
     GumdDbusGroupAdapter *dbus_group = NULL;
-    const gchar *peer_name = NULL;
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
-    peer_name = g_dbus_method_invocation_get_sender (invocation);
-    dbus_group = _get_dbus_group_from_cache (self, peer_name, gid);
+    dbus_group = _get_dbus_group_from_cache (self, invocation, gid);
     if (!dbus_group) {
     	group = gumd_daemon_get_group (self->priv->daemon, (gid_t)gid, &error);
     	if (group) {
@@ -569,15 +593,13 @@ _handle_get_group_by_name (
     GError *error = NULL;
     GumdDbusGroupAdapter *dbus_group = NULL;
     gid_t gid = GUM_GROUP_INVALID_GID;
-    const gchar *peer_name = NULL;
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
     gid = gumd_daemon_group_get_gid_by_name (groupname, gumd_daemon_get_config (
     		self->priv->daemon));
 
-    peer_name = g_dbus_method_invocation_get_sender (invocation);
-    dbus_group = _get_dbus_group_from_cache (self, peer_name, gid);
+    dbus_group = _get_dbus_group_from_cache (self, invocation, gid);
     if (!dbus_group) {
         group = gumd_daemon_get_group (self->priv->daemon, (gid_t)gid, &error);
         if (group) {
@@ -589,8 +611,7 @@ _handle_get_group_by_name (
         gum_dbus_group_service_complete_get_group_by_name (
         		self->priv->dbus_group_service, invocation,
         		gumd_dbus_group_adapter_get_object_path (dbus_group));
-    }
-    else {
+    } else {
         if (!error) {
             error = gum_get_gerror_for_id (GUM_ERROR_GROUP_NOT_FOUND,
                     "Group Not Found");
@@ -622,7 +643,7 @@ gumd_dbus_group_service_adapter_new_with_connection (
     if (!g_dbus_interface_skeleton_export (
             G_DBUS_INTERFACE_SKELETON(adapter->priv->dbus_group_service),
             adapter->priv->connection, GUM_GROUP_SERVICE_OBJECTPATH, &err)) {
-        ERR ("failed to register object: %s", err->message);
+        WARN ("failed to register object: %s", err->message);
         g_error_free (err);
         g_object_unref (adapter);
         return NULL;

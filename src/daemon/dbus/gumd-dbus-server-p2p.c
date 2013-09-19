@@ -187,24 +187,28 @@ static void
 _add_user_watchers (
         gpointer connection,
         gpointer user_service,
-        gpointer user_data)
+        GumdDbusServerP2P *server)
 {
     g_signal_connect (connection, "closed", G_CALLBACK(_on_connection_closed),
-            user_data);
+            server);
     g_object_weak_ref (G_OBJECT (user_service), _on_user_service_dispose,
-            user_data);
+            server);
+    g_hash_table_insert (server->priv->user_service_adapters, connection,
+            user_service);
 }
 
 static void
 _add_group_watchers (
         gpointer connection,
         gpointer group_service,
-        gpointer user_data)
+        GumdDbusServerP2P *server)
 {
     g_signal_connect (connection, "closed", G_CALLBACK(_on_connection_closed),
-            user_data);
+            server);
     g_object_weak_ref (G_OBJECT (group_service), _on_group_service_dispose,
-            user_data);
+            server);
+    g_hash_table_insert (server->priv->group_service_adapters, connection,
+            group_service);
 }
 
 static void
@@ -303,8 +307,8 @@ _on_connection_closed (
             connection);
     if  (service) {
         _clear_user_watchers (connection, service, user_data);
-        DBG("P2P dbus connection(%p) closed (peer vanished : %d) with error:"
-                " %s", connection,remote_peer_vanished,
+        DBG("P2P dbus connection(%p) user service closed (peer vanished : %d)"
+                " with error: %s", connection, remote_peer_vanished,
                 error ? error->message : "NONE");
         g_hash_table_remove (server->priv->user_service_adapters, connection);
     }
@@ -313,10 +317,10 @@ _on_connection_closed (
             connection);
     if  (service) {
         _clear_group_watchers (connection, service, user_data);
-        DBG("P2P dbus connection(%p) closed (peer vanished : %d) with error:"
-                " %s", connection,remote_peer_vanished,
+        DBG("P2P dbus connection(%p) group_service closed (peer vanished : %d)"
+                " with error: %s", connection, remote_peer_vanished,
                 error ? error->message : "NONE");
-        g_hash_table_remove (server->priv->user_service_adapters, connection);
+        g_hash_table_remove (server->priv->group_service_adapters, connection);
     }
 }
 
