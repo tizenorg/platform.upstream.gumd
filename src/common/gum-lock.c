@@ -42,14 +42,14 @@ gum_lock_pwdf_lock ()
         /* when run in debug mode, normal user may not have privileges to get
          * the lock */
 #ifndef ENABLE_TESTS
-        DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
+        DBG ("Before: ruid:%d euid:%d rgid:%d egid:%d ", getuid (), geteuid (),
+                getgid (), getegid ());
         if (seteuid (0))
             WARN ("seteuid(0) failed");
-        DBG ("After: real uid %d effective uid %d", getuid (), geteuid ());
-        DBG ("Before: real gid %d effective gid %d", getgid (), getegid ());
         if (setegid (0))
             WARN ("setegid(0) failed");
-        DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
+        DBG ("After: ruid:%d euid:%d rgid:%d egid:%d ", getuid (), geteuid (),
+                getgid (), getegid ());
         if (lckpwdf () < 0) {
             DBG ("pwd lock failed %s", strerror (errno));
             return FALSE;
@@ -71,14 +71,14 @@ gum_lock_pwdf_unlock ()
     	        DBG ("pwd unlock failed %s", strerror (errno));
     	        return FALSE;
     	    }
-    	    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
+            DBG ("Before: ruid:%d euid:%d rgid:%d egid:%d ", getuid (),
+                    geteuid (), getgid (), getegid ());
     	    if (seteuid (getuid()))
     	        WARN ("seteuid() failed");
-            DBG ("After: real uid %d effective uid %d", getuid (), geteuid ());
-            DBG ("Before: real gid %d effective gid %d", getgid (), getegid ());
     	    if (setegid (getgid()))
     	        WARN ("setegid() failed");
-    	    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
+            DBG ("After: ruid:%d euid:%d rgid:%d egid:%d ", getuid (),
+                    geteuid (), getgid (), getegid ());
 #endif
     	}
     } else if (lock_count <= 0) {
