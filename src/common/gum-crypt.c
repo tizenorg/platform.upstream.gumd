@@ -26,6 +26,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "common/gum-crypt.h"
 #include "common/gum-log.h"
@@ -38,16 +40,13 @@ guchar _salt_chars[64 + 1] =
 #define SALT_ARRAY_LEN (METHODID_LEN + SALT_LEN + 1)
 
 gchar *
-gum_crypt_encrypt_secret (
-        const gchar *secret,
+_generate_salt (
         GumCryptMethodID methodid)
 {
-	ssize_t bytes_read = 0;
-	gchar salt[SALT_ARRAY_LEN];
+    ssize_t bytes_read = 0;
+    gchar salt[SALT_ARRAY_LEN];
     int fd = 0;
-    gint idlen = METHODID_LEN, i = 0;
-
-    if (!secret) return NULL;
+    gint id_len = METHODID_LEN, i = 0;
 
     fd = open ("/dev/urandom", O_RDONLY);
     if (fd < 0)
@@ -68,18 +67,82 @@ gum_crypt_encrypt_secret (
             break;
         case GUM_CRYPT_DES:
         default:
-            idlen = 0;
+            id_len = 0;
             break;
     }
 
-    bytes_read = read (fd, &salt[idlen], SALT_LEN);
+    bytes_read = read (fd, &salt[id_len], SALT_LEN);
     close (fd);
     if (bytes_read != SALT_LEN)
         return NULL;
 
-    for (i=idlen; i < (SALT_LEN+idlen); i++) {
+    for (i=id_len; i < (SALT_LEN+id_len); i++) {
         salt[i] = _salt_chars[ salt[i] & 0x3F ];
     }
     salt[i] = '\0';
-    return g_strdup (crypt (secret, salt));
+    return g_strdup (salt);
+}
+
+gchar *
+gum_crypt_encrypt_secret (
+        const gchar *secret,
+        GumCryptMethodID methodid)
+{
+    gchar *enc_sec = NULL;
+    gchar *salt = _generate_salt (methodid);
+    if (!salt) return NULL;
+
+    enc_sec = g_strdup (crypt (secret, salt));
+    g_free (salt);
+    return enc_sec;
+}
+
+gchar *
+_extract_salt (
+        const gchar *enc_secret)
+{
+    gchar *salt = NULL;
+    gint id_len = 0, enc_len = 0, i = 0;
+
+    if (!enc_secret) return NULL;
+
+    if (enc_secret[0] == '$' &&
+        isdigit (enc_secret[1]) &&
+        enc_secret[2] == '$') {
+        id_len = METHODID_LEN;
+    }
+
+    enc_len = strlen (enc_secret);
+    i = id_len;
+    while (i < enc_len) {
+        if (enc_secret[i] == '$') {
+            salt = g_strndup (enc_secret, i);
+            break;
+        }
+        i++;
+    }
+
+    return salt;
+}
+
+gint
+gum_crypt_cmp_secret (
+        const gchar *plain_secret,
+        const gchar *enc_secret)
+{
+    gint cmp = -1;
+    gchar *plain_enc = NULL;
+
+    if (!enc_secret || !plain_secret) return cmp;
+
+    gchar *salt = _extract_salt (enc_secret);
+    if (!salt) return cmp;
+
+    plain_enc = g_strdup (crypt (plain_secret, salt));
+    g_free (salt);
+
+    cmp = g_strcmp0 (plain_enc, enc_secret);
+    g_free (plain_enc);
+
+    return cmp;
 }

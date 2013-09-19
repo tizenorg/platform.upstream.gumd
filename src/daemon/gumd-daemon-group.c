@@ -952,7 +952,9 @@ gumd_daemon_group_update (
     }
 
     if (!self->priv->group->gr_passwd ||
-        g_strcmp0 (self->priv->group->gr_passwd, "x") == 0) {
+        g_strcmp0 (self->priv->group->gr_passwd, "x") == 0 ||
+        gum_crypt_cmp_secret (self->priv->group->gr_passwd,
+                gshadow->sg_passwd) == 0) {
         gum_lock_pwdf_unlock ();
         RETURN_WITH_ERROR (GUM_ERROR_GROUP_NO_CHANGES,
                 "No changes registered", error, FALSE);

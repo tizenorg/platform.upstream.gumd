@@ -44,6 +44,11 @@ gum_crypt_encrypt_secret (
         const gchar *secret,
         GumCryptMethodID methodid);
 
+gint
+gum_crypt_cmp_secret (
+        const gchar *plain_secret,
+        const gchar *enc_secret);
+
 G_END_DECLS
 
 #endif /* __GUM_CRYPT_H_ */

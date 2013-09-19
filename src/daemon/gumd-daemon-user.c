@@ -1467,7 +1467,9 @@ gumd_daemon_user_update (
     _set_homedir_property (self, pw->pw_dir);
 
     if (self->priv->pw->pw_passwd &&
-        g_strcmp0 (self->priv->pw->pw_passwd, "x") != 0) {
+        g_strcmp0 (self->priv->pw->pw_passwd, "x") != 0 &&
+        gum_crypt_cmp_secret (self->priv->pw->pw_passwd,
+                self->priv->shadow->sp_pwdp) != 0) {
         change++;
         if (!_set_secret (self, error)) {
             gum_lock_pwdf_unlock ();

@@ -755,6 +755,9 @@ START_TEST (test_crypt)
     pass = gum_crypt_encrypt_secret("pass ?()#123", GUM_CRYPT_SHA512);
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+86)); /*crypt(3)*/
+
+    fail_unless(gum_crypt_cmp_secret("pass ?()#123", pass) == 0);
+    fail_unless(gum_crypt_cmp_secret("pa1ss ?()#123", pass) != 0);
     g_free (pass);
 
 }
