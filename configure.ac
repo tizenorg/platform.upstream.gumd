@@ -37,17 +37,9 @@ PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [have_check=yes], [have_check=no])
 AC_SUBST(CHECK_CFLAGS)
 AC_SUBST(CHECK_LIBS)
 
-# Attrib library.
 AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([sys/xattr.h attr/xattr.h],[break])
-if test x$ac_cv_header_attr_xattr_h = xyes
-then
-  AC_CHECK_LIB(attr, main, ATTRIB_LIB="-lattr", ATTRIB_LIB="")
-else
-  ATTRIB_LIB=""
-fi
 AC_CHECK_FUNCS(llistxattr lgetxattr lsetxattr)
-AC_SUBST(ATTRIB_LIB)
 
 # Crypt library.
 AC_SEARCH_LIBS([crypt],[crypt], CRYPT_LIB="-l$ac_lib", CRYPT_LIB="")
@@ -143,7 +135,7 @@ AC_SUBST(GUM_INCLUDES)
 # Gum common library cflags, libs, includes
 GUM_COMMON_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gum-common\"'
 AC_SUBST(GUM_COMMON_CFLAGS)
-GUM_COMMON_LIBS='$(GLIB_LIBS) $(ATTRIB_LIB) $(CRYPT_LIB)'
+GUM_COMMON_LIBS='$(GLIB_LIBS) $(CRYPT_LIB)'
 AC_SUBST(GUM_COMMON_LIBS)
 GUM_COMMON_INCLUDES='$(GUM_INCLUDES) -I$(top_srcdir)/include/gum'
 AC_SUBST(GUM_COMMON_INCLUDES)

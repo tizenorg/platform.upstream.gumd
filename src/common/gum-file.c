@@ -28,9 +28,6 @@
 #include <sys/stat.h>
 #if defined HAVE_SYS_XATTR_H
 #include <sys/xattr.h>
-#elif defined HAVE_ATTR_XATTR_H
-#include <sys/types.h>
-#include <attr/xattr.h>
 #endif
 
 #include <unistd.h>
