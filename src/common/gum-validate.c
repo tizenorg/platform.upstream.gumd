@@ -84,7 +84,6 @@ gum_validate_generate_username (
     hid = g_checksum_new (G_CHECKSUM_MD5);
     g_checksum_update (hid, (const guchar*)str, len);
 
-    /* TODO CHECK: 32 characters is too long to be username ?? */
     gen_name = g_strdup (g_checksum_get_string (hid));
     g_checksum_free (hid);
     if (!g_ascii_isalpha ((gchar)gen_name[0])) {

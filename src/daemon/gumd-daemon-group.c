@@ -898,8 +898,6 @@ gumd_daemon_group_delete (
                 "Group is a primary group of an existing user", error, FALSE);
     }
 
-	/* TODO: check if user is not logged in from login manager */
-
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
@@ -973,8 +971,6 @@ gumd_daemon_group_update (
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
-
-    /* TODO: check if user is not logged in from login manager */
 
     GUM_STR_DUP (grp->gr_name, old_name);
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,

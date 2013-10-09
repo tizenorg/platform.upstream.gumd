@@ -644,7 +644,6 @@ _set_daemon_user_name (
     	g_free (tname);
         return TRUE;
     } else if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
-        /* TODO: check if it is needed */
         RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "System user name must exist with pattern "
                 GUM_NAME_PATTERN, error, FALSE);
@@ -1475,6 +1474,7 @@ gumd_daemon_user_update (
             gum_lock_pwdf_unlock ();
             return FALSE;
         }
+        /* TODO: check if user is not logged in from login manager */
     } else {
         _set_secret_property (self, pw->pw_passwd);
     }
@@ -1498,8 +1498,6 @@ gumd_daemon_user_update (
         RETURN_WITH_ERROR (GUM_ERROR_USER_NO_CHANGES,
                 "No changes registered", error, FALSE);
     }
-
-    /* TODO: check if user is not logged in from login manager */
 
     GUM_STR_DUP (pw->pw_name, old_name);
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
