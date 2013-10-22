@@ -39,7 +39,7 @@ gboolean
 gum_lock_pwdf_lock ()
 {
     if (lock_count == 0) {
-        /* when run in debug mode, normal user may not have privileges to get
+        /* when run in test mode, normal user may not have privileges to get
          * the lock */
 #ifndef ENABLE_TESTS
         DBG ("Before: ruid:%d euid:%d rgid:%d egid:%d ", getuid (), geteuid (),

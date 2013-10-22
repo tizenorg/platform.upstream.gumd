@@ -473,7 +473,7 @@ gum_file_create_home_dir (
                     "Home directory creation failure", error, FALSE);
         }
 
-        /* when run in debug mode, user does not exist */
+        /* when run in test mode, user may not exist */
 #ifndef ENABLE_TESTS
 		if (chown (usr_home_dir, uid, gid) < 0) {
 			RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
