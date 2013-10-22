@@ -49,6 +49,9 @@ GDBusErrorEntry _gum_errors[] =
     {GUM_ERROR_USER_GROUP_DELETE_FAILURE,
             _ERROR_PREFIX".UserGroupDeleteFailure"},
     {GUM_ERROR_USER_SELF_DESTRUCTION, _ERROR_PREFIX".UserSelfDestruction"},
+    {GUM_ERROR_USER_SESSION_TERM_FAILURE,
+            _ERROR_PREFIX".UserSessionTermFailure"},
+
     {GUM_ERROR_USER_NO_CHANGES, _ERROR_PREFIX".UserNoChanges"},
 
     {GUM_ERROR_GROUP_ALREADY_EXISTS, _ERROR_PREFIX".GroupAlreadyExists"},

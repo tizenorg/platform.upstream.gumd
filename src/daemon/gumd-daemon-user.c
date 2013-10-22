@@ -22,6 +22,7 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+#include "config.h"
 
 #include <string.h>
 #include <shadow.h>
@@ -1219,6 +1220,49 @@ _copy_passwd_data (
     return TRUE;
 }
 
+gboolean
+_terminate_user (
+        uid_t uid)
+{
+    gboolean retval = TRUE;
+
+    /* when run in test mode, separate dbus-daemon is started. consequently no
+     * system dbus services are available */
+#ifndef ENABLE_TESTS
+    GError *error = NULL;
+    GDBusProxy *proxy = NULL;
+    GVariant *res = NULL;
+
+    GDBusConnection *connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL,
+            &error);
+    if (error) goto finished;
+
+    proxy = g_dbus_proxy_new_sync (connection,
+        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, NULL,
+        "org.freedesktop.login1", //destintation
+        "/org/freedesktop/login1", //path
+        "org.freedesktop.login1.Manager", //interface
+        NULL, &error);
+    if (error) goto finished;
+
+    res = g_dbus_proxy_call_sync (proxy, "KillUser",
+            g_variant_new ("(ui)", uid, SIGTERM), G_DBUS_CALL_FLAGS_NONE, -1,
+            NULL, &error);
+    if (res) g_variant_unref (res);
+
+finished:
+    if (error) {
+        DBG ("failed to terminate user: %s", error->message);
+        g_error_free (error);
+        retval = FALSE;
+    }
+    if (proxy) g_object_unref (proxy);
+    if (connection) g_object_unref (connection);
+#endif
+
+    return retval;
+}
+
 GumdDaemonUser *
 gumd_daemon_user_new (
         GumConfig *config)
@@ -1387,10 +1431,12 @@ gumd_daemon_user_delete (
         		"Self-destruction not possible", error, FALSE);
     }
 
-	/* TODO: check if user is not logged in from login manager
-	 * one way is to read /var/run/utmp file; it is not 100%
-	 * reliable as per its documentation. Besides all the existing sessions
-	 * of the 'user-to-be-deleted' should be removed */
+    if (!_terminate_user (self->priv->pw->pw_uid)) {
+        gum_lock_pwdf_unlock ();
+        RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
+                "unable to terminate user active sessions", error, FALSE);
+    }
+
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateFunc)_update_passwd_entry,
             gum_config_get_string (self->priv->config,
@@ -1474,7 +1520,7 @@ gumd_daemon_user_update (
             gum_lock_pwdf_unlock ();
             return FALSE;
         }
-        /* TODO: check if user is not logged in from login manager */
+
     } else {
         _set_secret_property (self, pw->pw_passwd);
     }
