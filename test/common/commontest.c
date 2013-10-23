@@ -403,11 +403,14 @@ START_TEST (test_file)
     fail_unless (gum_file_getgrgid (1, NULL) == NULL);
     fail_unless (gum_file_getgrgid (0, config) != NULL);
 
-    fail_unless (gum_file_getsgnam (NULL,NULL) == NULL);
-    fail_unless (gum_file_getsgnam ("", NULL) == NULL);
-    fail_unless (gum_file_getsgnam ("", config) == NULL);
-    fail_unless (gum_file_getsgnam ("test121", config) == NULL);
-    fail_unless (gum_file_getsgnam ("root", config) != NULL);
+    if (g_file_test (gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE), G_FILE_TEST_EXISTS)) {
+        fail_unless (gum_file_getsgnam (NULL,NULL) == NULL);
+        fail_unless (gum_file_getsgnam ("", NULL) == NULL);
+        fail_unless (gum_file_getsgnam ("", config) == NULL);
+        fail_unless (gum_file_getsgnam ("test121", config) == NULL);
+        fail_unless (gum_file_getsgnam ("root", config) != NULL);
+    }
 
     fail_unless (gum_file_new_path (NULL, NULL) == NULL);
     fail_unless (gum_file_new_path (NULL,"test123") == NULL);

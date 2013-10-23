@@ -736,10 +736,6 @@ _copy_group_data (
 
     if (!sgent) {
         sgent = gum_file_getsgnam (gent->gr_name, self->priv->config);
-        if (!sgent) {
-            RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group not found",
-                    error, FALSE);
-        }
     }
 
     /*group entry*/
@@ -823,6 +819,8 @@ gumd_daemon_group_add (
      ** update gshadow file
      * unlock db
      */
+    const gchar *shadow_file = NULL;
+
     if (!_check_group_type (self, error)) {
         return FALSE;
     }
@@ -841,11 +839,17 @@ gumd_daemon_group_add (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error) ||
+            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
+        gum_lock_pwdf_unlock ();
+        return FALSE;
+    }
+
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
-            (GumFileUpdateFunc)_update_gshadow_entry,
-            gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), NULL, error)) {
+                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
@@ -864,6 +868,7 @@ gumd_daemon_group_delete (
         GError **error)
 {
     DBG ("");
+    const gchar *shadow_file = NULL;
 
     if (!gum_lock_pwdf_lock ()) {
     	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
@@ -901,11 +906,17 @@ gumd_daemon_group_delete (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error) ||
+            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
+        gum_lock_pwdf_unlock ();
+        return FALSE;
+    }
+
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
-            (GumFileUpdateFunc)_update_gshadow_entry,
-            gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), NULL, error)) {
+                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
@@ -922,6 +933,7 @@ gumd_daemon_group_update (
     struct group *grp = NULL;
     struct sgrp *gshadow = NULL;
     gchar *old_name = NULL;
+    const gchar *shadow_file = NULL;
 
     DBG ("");
 
@@ -942,17 +954,12 @@ gumd_daemon_group_update (
         return FALSE;
     }
 
-    if ((gshadow = gum_file_getsgnam (grp->gr_name,
-            self->priv->config)) == NULL) {
-        gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND,
-                "Group not found in GShadow", error, FALSE);
-    }
+    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
 
     if (!self->priv->group->gr_passwd ||
         g_strcmp0 (self->priv->group->gr_passwd, "x") == 0 ||
-        gum_crypt_cmp_secret (self->priv->group->gr_passwd,
-                gshadow->sg_passwd) == 0) {
+        (gshadow && gum_crypt_cmp_secret (self->priv->group->gr_passwd,
+                gshadow->sg_passwd) == 0)) {
         gum_lock_pwdf_unlock ();
         RETURN_WITH_ERROR (GUM_ERROR_GROUP_NO_CHANGES,
                 "No changes registered", error, FALSE);
@@ -976,15 +983,23 @@ gumd_daemon_group_update (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), old_name, error) ||
-        !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_gshadow_entry,
-            gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), old_name, error)) {
+            GUM_CONFIG_GENERAL_GROUP_FILE), old_name, error)) {
         g_free (old_name);
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
+
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
+        !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+                (GumFileUpdateFunc)_update_gshadow_entry,
+                shadow_file, old_name, error)) {
+        g_free (old_name);
+        gum_lock_pwdf_unlock ();
+        return FALSE;
+    }
+
     g_free (old_name);
 
     gum_lock_pwdf_unlock ();
@@ -1001,6 +1016,7 @@ gumd_daemon_group_add_member (
     struct passwd *pent = NULL;
     struct group *grp = NULL;
     struct sgrp *gshadow = NULL;
+    const gchar *shadow_file = NULL;
 
     DBG ("");
 
@@ -1026,12 +1042,7 @@ gumd_daemon_group_add_member (
                 "User already a member of the group", error, FALSE);
     }
 
-    if ((gshadow = gum_file_getsgnam (grp->gr_name,
-            self->priv->config)) == NULL) {
-        gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND,
-                "Group not found in GShadow", error, FALSE);
-    }
+    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
 
     if (!_copy_group_data (self, grp, gshadow, error)) {
         gum_lock_pwdf_unlock ();
@@ -1046,6 +1057,7 @@ gumd_daemon_group_add_member (
     GUM_STR_DUPV (self->priv->group->gr_mem, self->priv->gshadow->sg_mem);
 
     if (add_as_admin &&
+        gshadow &&
         !gum_string_utils_search_stringv (gshadow->sg_adm, pent->pw_name)) {
         GUM_STR_FREEV (self->priv->gshadow->sg_adm);
         self->priv->gshadow->sg_adm = gum_string_utils_append_string (
@@ -1055,11 +1067,17 @@ gumd_daemon_group_add_member (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error) ||
+            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
+        gum_lock_pwdf_unlock ();
+        return FALSE;
+    }
+
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_gshadow_entry,
-            gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), NULL, error)) {
+                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file,
+                NULL, error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
@@ -1077,6 +1095,7 @@ gumd_daemon_group_delete_member (
     struct passwd *pent = NULL;
     struct group *grp = NULL;
     struct sgrp *gshadow = NULL;
+    const gchar *shadow_file = NULL;
 
     DBG ("");
 
@@ -1102,12 +1121,7 @@ gumd_daemon_group_delete_member (
                 "User not a member of the group", error, FALSE);
     }
 
-    if ((gshadow = gum_file_getsgnam (grp->gr_name,
-            self->priv->config)) == NULL) {
-        gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND,
-                "Group not found in GShadow", error, FALSE);
-    }
+    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
 
     if (!_copy_group_data (self, grp, gshadow, error)) {
         gum_lock_pwdf_unlock ();
@@ -1122,7 +1136,8 @@ gumd_daemon_group_delete_member (
     GUM_STR_DUPV (self->priv->group->gr_mem, self->priv->gshadow->sg_mem);
 
     /* delete user from adm group in gshadow */
-    if (gum_string_utils_search_stringv (gshadow->sg_adm, pent->pw_name)) {
+    if (gshadow &&
+        gum_string_utils_search_stringv (gshadow->sg_adm, pent->pw_name)) {
         GUM_STR_FREEV (self->priv->gshadow->sg_adm);
         self->priv->gshadow->sg_adm = gum_string_utils_delete_string (
                 gshadow->sg_adm, pent->pw_name);
@@ -1131,11 +1146,17 @@ gumd_daemon_group_delete_member (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
             (GumFileUpdateFunc)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error) ||
+            GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
+        gum_lock_pwdf_unlock ();
+        return FALSE;
+    }
+
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_gshadow_entry,
-            gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), NULL, error)) {
+                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
@@ -1212,6 +1233,8 @@ gumd_daemon_group_delete_user_membership (
 
     /* update gshadow entries */
     origfn = gum_config_get_string (config, GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (!g_file_test (origfn, G_FILE_TEST_EXISTS))  goto _finished;
+
     newfn = g_strdup_printf ("%s-tmp.%lu", origfn, (unsigned long)getpid ());
 
     retval = gum_file_open_db_files (origfn, newfn, &origf, &newf, error);
