@@ -250,7 +250,8 @@ _gumd_dbus_server_msg_bus_start (
 {
     g_return_val_if_fail (GUMD_IS_DBUS_SERVER_MSG_BUS (self), FALSE);
 
-    DBG("Start MSG-BUS Dbus server for bus type %d", GUM_BUS_TYPE);
+    DBG("Start MSG-BUS Dbus server for bus type %s",
+            GUM_BUS_TYPE == G_BUS_TYPE_SYSTEM? "SYSTEM":"SESSION");
 
     GumdDbusServerMsgBus *server = GUMD_DBUS_SERVER_MSG_BUS (self);
     server->priv->name_owner_id = g_bus_own_name (GUM_BUS_TYPE,
