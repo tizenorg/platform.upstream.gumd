@@ -403,15 +403,19 @@ gum_file_getsgnam (
 {
     struct sgrp *sgent = NULL;
     FILE *fp = NULL;
+    const gchar *shadow_file = NULL;
 
     if (!grpname || !config) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE), "r"))) {
+    shadow_file = gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (!g_file_test (shadow_file, G_FILE_TEST_EXISTS) ||
+        !(fp = _open_file (shadow_file, "r"))) {
         return NULL;
     }
+
     while ((sgent = fgetsgent (fp)) != NULL) {
         if(g_strcmp0 (grpname, sgent->sg_namp) == 0)
             break;
@@ -443,6 +447,85 @@ gum_file_new_path (
 	return file;
 }
 
+static gboolean
+_copy_dir_recursively (
+        GumConfig *config,
+        const gchar *src,
+        const gchar *dest,
+        uid_t uid,
+        gid_t gid,
+        GError **error)
+{
+    gboolean retval = TRUE;
+    gboolean stop = FALSE;
+    const gchar *src_fname = NULL;
+    gchar *src_filepath = NULL, *dest_filepath = NULL;
+    GDir *src_dir = NULL;
+    struct stat stat_entry;
+
+    if (!src || !dest) {
+        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+                "Invalid directory path(s)", error, FALSE);
+    }
+
+    DBG ("copy directory %s -> %s", src, dest);
+    src_dir = g_dir_open (src, 0, NULL);
+    if (!src_dir) {
+        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+                "Invalid source directory path", error, FALSE);
+    }
+
+    while ((src_fname = g_dir_read_name (src_dir))) {
+        GError *err = NULL;
+        GFile *src_file = NULL, *dest_file = NULL;
+
+        src_filepath = g_build_filename (src, src_fname, NULL);
+        stop = (lstat(src_filepath, &stat_entry) != 0);
+        if (stop) goto _free_data;
+
+        dest_filepath = g_build_filename (dest, src_fname, NULL);
+        src_file = g_file_new_for_path (src_filepath);
+        dest_file = g_file_new_for_path (dest_filepath);
+
+        if (S_ISDIR (stat_entry.st_mode)) {
+            DBG ("copy directory %s", src_filepath);
+            gint mode = GUM_PERM & ~gum_config_get_uint (config,
+                        GUM_CONFIG_GENERAL_UMASK, GUM_UMASK);
+            g_mkdir_with_parents (dest_filepath, mode);
+            stop = !_copy_dir_recursively (config, src_filepath, dest_filepath,
+                    uid, gid, NULL);
+        } else {
+            DBG ("copy file %s", src_filepath);
+            if (!g_file_copy (src_file, dest_file,
+                    G_FILE_COPY_OVERWRITE | G_FILE_COPY_NOFOLLOW_SYMLINKS, NULL,
+                    NULL, NULL, &err)) {
+                WARN("File copy failure error %d:%s", err ? err->code : 0,
+                        err ? err->message : "");
+                if (err) g_error_free (err);
+                stop = TRUE;
+                goto _free_data;
+            }
+#ifndef ENABLE_TESTS
+            stop = (chown (dest_filepath, uid, gid) < 0);
+#endif
+        }
+
+_free_data:
+        g_free (src_filepath);
+        g_free (dest_filepath);
+        GUM_OBJECT_UNREF (src_file);
+        GUM_OBJECT_UNREF (dest_file);
+        if (stop) {
+            SET_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+                    "Home directory copy failure", error, retval, FALSE);
+            break;
+        }
+    }
+
+    g_dir_close (src_dir);
+    return retval;
+}
+
 gboolean
 gum_file_create_home_dir (
         GumConfig *config,
@@ -462,8 +545,6 @@ gum_file_create_home_dir (
 
     if (g_access (usr_home_dir, F_OK) != 0) {
 
-        GDir* skel_dir = NULL;
-        const gchar *skel_dir_path = NULL;
         if (!g_file_test (usr_home_dir, G_FILE_TEST_EXISTS)) {
             g_mkdir_with_parents (usr_home_dir, mode);
         }
@@ -480,43 +561,10 @@ gum_file_create_home_dir (
 					"Home directory chown failure", error, FALSE);
 		}
 #endif
-		skel_dir_path = gum_config_get_string (config,
-				GUM_CONFIG_GENERAL_SKEL_DIR);
-		skel_dir = g_dir_open(skel_dir_path, 0, NULL);
-		if (skel_dir) {
-			gchar *dpath = NULL;
-			const gchar *fname = NULL;
-			GFile *src = NULL, *dest = NULL;
-			while ((fname = g_dir_read_name(skel_dir)) != NULL) {
-				GError *err = NULL;
-				src = gum_file_new_path (skel_dir_path, fname);
-				dest = gum_file_new_path (usr_home_dir, fname);
-				dpath = g_file_get_path (dest);
-				if (!src ||
-					!dest ||
-					!g_file_copy (src, dest, G_FILE_COPY_OVERWRITE, NULL, NULL,
-							NULL, &err)
-#ifndef ENABLE_TESTS
-				    || (chown (dpath, uid, gid) < 0)
-#endif
-				    ) {
-					WARN("File copy failure error %d:%s", err ? err->code : 0,
-							err ? err->message : "");
-					if (err) g_error_free (err);
-	                GUM_OBJECT_UNREF (src);
-	                GUM_OBJECT_UNREF (dest);
-					g_free (dpath);
-					SET_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
-							"Home directory copy failure", error, retval,
-							FALSE);
-					break;
-				}
-				GUM_OBJECT_UNREF (src);
-                GUM_OBJECT_UNREF (dest);
-				g_free (dpath);
-			}
-			g_dir_close(skel_dir);
-		}
+
+		retval = _copy_dir_recursively (config, gum_config_get_string (config,
+                GUM_CONFIG_GENERAL_SKEL_DIR), usr_home_dir, uid, gid,
+		        error);
 	}
 
 	return retval;

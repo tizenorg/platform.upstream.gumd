@@ -118,7 +118,7 @@ _setup_env (void)
     fail_if (system(cmd) != 0, "Failed to copy temp skel dir: %s:%s\n", cmd,
             strerror(errno));
     g_free (cmd);
-    fail_if (system("chmod +w /tmp/gum/skel") != 0);
+    fail_if (system("chmod -R +w /tmp/gum/skel") != 0);
 
     fpath = g_build_filename (GUM_TEST_DATA_DIR, "passwd", NULL);
     fail_if (_create_file (g_getenv("UM_PASSWD_FILE"), fpath) == FALSE);
