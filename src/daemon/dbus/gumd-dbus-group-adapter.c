@@ -296,14 +296,14 @@ _handle_delete_group (
             &error)) {
         gum_dbus_group_complete_delete_group (self->priv->dbus_group,
                 invocation);
+        gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
         /* delete successful so not needed anymore */
         gum_disposable_delete_later (GUM_DISPOSABLE (self));
     } else {
         g_dbus_method_invocation_return_gerror (invocation, error);
         g_error_free (error);
+        gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
     }
-
-    gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
 
     return TRUE;
 }

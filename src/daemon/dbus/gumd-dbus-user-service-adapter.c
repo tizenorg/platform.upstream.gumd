@@ -494,6 +494,7 @@ _get_dbus_user_from_cache (
     PeerUserService *peer_user = NULL;
     GList *list = self->priv->peer_users;
     gchar *peer_name = NULL;
+    gboolean delete_later = FALSE;
 
     if (uid == GUM_USER_INVALID_UID) {
         return NULL;
@@ -505,8 +506,13 @@ _get_dbus_user_from_cache (
         peer_user = (PeerUserService *) list->data;
         if (g_strcmp0 (peer_name, peer_user->peer_name) == 0 &&
             gumd_dbus_user_adapter_get_uid (peer_user->dbus_user) == uid) {
-            dbus_user = peer_user->dbus_user;
-            break;
+
+            g_object_get (G_OBJECT (peer_user->dbus_user), "delete-later",
+                    &delete_later, NULL);
+            if (!delete_later) {
+                dbus_user = peer_user->dbus_user;
+                break;
+            }
         }
     }
     g_free (peer_name);

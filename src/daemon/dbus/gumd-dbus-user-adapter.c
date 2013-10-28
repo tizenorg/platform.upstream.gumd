@@ -296,15 +296,15 @@ _handle_delete_user (
     if (gumd_daemon_delete_user (self->priv->daemon, self->priv->user,
             rem_home_dir, &error)) {
         gum_dbus_user_complete_delete_user (self->priv->dbus_user, invocation);
+        gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
         /* delete successful so not needed anymore */
         gum_disposable_delete_later (GUM_DISPOSABLE (self));
     } else {
         g_dbus_method_invocation_return_gerror (invocation, error);
         g_error_free (error);
+        gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
     }
 
-    gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
-    
     return TRUE;
 }
 

@@ -494,6 +494,7 @@ _get_dbus_group_from_cache (
     PeerGroupService *peer_group = NULL;
     GList *list = self->priv->peer_groups;
     gchar *peer_name = NULL;
+    gboolean delete_later = FALSE;
 
     if (gid == GUM_GROUP_INVALID_GID) {
         return NULL;
@@ -505,8 +506,13 @@ _get_dbus_group_from_cache (
         peer_group = (PeerGroupService *) list->data;
         if (g_strcmp0 (peer_name, peer_group->peer_name) == 0 &&
             gumd_dbus_group_adapter_get_gid (peer_group->dbus_group) == gid) {
-            dbus_group = peer_group->dbus_group;
-            break;
+
+            g_object_get (G_OBJECT (peer_group->dbus_group), "delete-later",
+                    &delete_later, NULL);
+            if (!delete_later) {
+                dbus_group = peer_group->dbus_group;
+                break;
+            }
         }
     }
     g_free (peer_name);

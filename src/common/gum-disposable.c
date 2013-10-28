@@ -31,12 +31,14 @@ struct _GumDisposablePrivate
     guint timeout;       /* timeout in seconds */
     volatile gint  keep_obj_counter; /* keep object request counter */
     guint timer_id;      /* timer source id */
+    gboolean delete_later;
 };
 
 enum {
     PROP_0,
     PROP_TIMEOUT,
     PROP_AUTO_DISPOSE,
+    PROP_DELETE_LATER,
     PROP_MAX,
 };
 
@@ -94,6 +96,9 @@ _get_property (
         break;
     case PROP_AUTO_DISPOSE:
         g_value_set_boolean (value, gum_disposable_get_auto_dispose(self));
+        break;
+    case PROP_DELETE_LATER:
+        g_value_set_boolean (value, self->priv->delete_later);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -157,6 +162,13 @@ gum_disposable_class_init (
                     TRUE,
                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+    properties[PROP_DELETE_LATER] =
+            g_param_spec_boolean ("delete-later",
+                    "Delete Later",
+                    "delete later",
+                    FALSE,
+                    G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
     g_object_class_install_properties (object_class, PROP_MAX, properties);
 
     signals[SIG_DISPOSING] = g_signal_new ("disposing",
@@ -178,6 +190,7 @@ gum_disposable_init (
 
     self->priv->timer_id = 0;
     self->priv->timeout = 0;
+    self->priv->delete_later = FALSE;
     g_atomic_int_set(&self->priv->keep_obj_counter, 0);
 
     DBG ("INIT");
@@ -215,11 +228,15 @@ static void
 _update_timer (
         GumDisposable *self)
 {
-    DBG("%s (%p): keep_obj_counter : %d, timeout : %d", 
+    DBG("%s (%p): keep_obj_counter : %d, timeout : %d  delete_later %d",
             G_OBJECT_TYPE_NAME(self),
             self,
             self->priv->keep_obj_counter,
-            self->priv->timeout);
+            self->priv->timeout,
+            self->priv->delete_later);
+
+    if (self->priv->delete_later) return;
+
     if (g_atomic_int_get(&self->priv->keep_obj_counter) == 0) {
         if (self->priv->timeout) {
             DBG("Setting object timeout to %d", self->priv->timeout);
@@ -227,8 +244,7 @@ _update_timer (
                     _timer_dispose,
                     self);
         }
-    }
-    else if (self->priv->timer_id) {
+    } else if (self->priv->timer_id) {
         g_source_remove (self->priv->timer_id);
         self->priv->timer_id = 0;
     }
@@ -272,6 +288,7 @@ gum_disposable_delete_later (
     INFO ("Object '%s' (%p) about to dispose...",
             G_OBJECT_TYPE_NAME (self), self);
     self->priv->timer_id = g_idle_add (_auto_dispose, self);
+    self->priv->delete_later = TRUE;
 }
 
 gboolean
