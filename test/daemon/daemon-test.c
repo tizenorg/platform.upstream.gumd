@@ -821,7 +821,7 @@ START_TEST(test_get_user_by_uid)
     fail_if (user_proxy == NULL, "Failed to create new user : %s",
             error ? error->message : "");
 
-    g_object_set (G_OBJECT (user_proxy), "username", "test_adduser2",
+    g_object_set (G_OBJECT (user_proxy), "username", "test_getuserbyuid1",
             "secret", "123456", "nickname", "nick2", "usertype",
             GUM_USERTYPE_NORMAL, NULL);
 
@@ -842,7 +842,7 @@ START_TEST(test_get_user_by_uid)
             NULL);
     fail_if (str1 == NULL);
     fail_if (str2 == NULL);
-    fail_if (g_strcmp0 (str1, "test_adduser2") != 0);
+    fail_if (g_strcmp0 (str1, "test_getuserbyuid1") != 0);
     fail_if (g_strcmp0 (str2, "nick2") != 0);
     g_free (str1); g_free (str2);
 
@@ -872,7 +872,7 @@ START_TEST(test_get_user_by_name)
     GumDbusUserService *user_service = 0;
     uid_t user_id = GUM_USER_INVALID_UID;
     GumDbusUser *user_proxy = NULL, *user_proxy2 = NULL;
-    const gchar *name = "test_adduser3";
+    const gchar *name = "test_getuserbyname1";
     gchar *str1 = NULL, *str2 = NULL;
 
     GDBusConnection *connection = _get_bus_connection (&error);
@@ -944,6 +944,7 @@ START_TEST (test_delete_user)
     GDBusConnection *connection = NULL;
     GumDbusUserService *user_service = NULL;
     GumDbusUser *user_proxy = NULL;
+    uid_t user_id = GUM_USER_INVALID_UID;
 
     connection = _get_bus_connection (&error);
     fail_if (connection == NULL, "failed to get bus connection : %s",
@@ -953,8 +954,23 @@ START_TEST (test_delete_user)
     fail_if (user_service == NULL, "failed to get user_service : %s",
             error ? error->message : "");
 
+    /* create and add user */
+    user_proxy = _create_new_user_proxy (user_service, &error);
+    fail_if (user_proxy == NULL, "Failed to create new user : %s",
+            error ? error->message : "");
+
+    g_object_set (G_OBJECT (user_proxy), "username", "test_deluser1",
+            "secret", "123456", "nickname", "nick2", "usertype",
+            GUM_USERTYPE_NORMAL, NULL);
+
+    res = gum_dbus_user_call_add_user_sync (user_proxy, &user_id, NULL,
+            &error);
+    fail_if (res == FALSE, "Failed to add new user : %s",
+            error ? error->message : "");
+    g_object_unref (user_proxy);
+
     /* get user added-by-uid */
-    user_proxy = _get_user_proxy_by_name (user_service, "test_adduser2",
+    user_proxy = _get_user_proxy_by_name (user_service, "test_deluser1",
             &error);
     fail_if (user_proxy == NULL, "Failed to get user for name '%s' : %s",
             "test_adduser2", error ? error->message : "");
@@ -1502,7 +1518,7 @@ START_TEST (test_add_group)
     GDBusConnection *connection = NULL;
     GumDbusGroupService *group_service = NULL;
     GumDbusGroup *group_proxy = NULL;
-    uid_t group_id = GUM_GROUP_INVALID_GID;
+    gid_t group_id = GUM_GROUP_INVALID_GID;
 
     connection = _get_bus_connection (&error);
     fail_if (connection == NULL, "failed to get bus connection : %s",
@@ -1544,7 +1560,7 @@ START_TEST(test_get_group_by_uid)
     gboolean res = FALSE;
     GError *error = NULL;
     GumDbusGroupService *group_service = 0;
-    uid_t group_id = GUM_GROUP_INVALID_GID;
+    gid_t group_id = GUM_GROUP_INVALID_GID;
     GumDbusGroup *group_proxy = NULL, *group_proxy2 = NULL;
     gchar *str1 = NULL, *str2 = NULL;
 
@@ -1566,7 +1582,7 @@ START_TEST(test_get_group_by_uid)
     fail_if (group_proxy == NULL, "Failed to create new group : %s",
             error ? error->message : "");
 
-    g_object_set (G_OBJECT (group_proxy), "groupname", "test_addgroup2",
+    g_object_set (G_OBJECT (group_proxy), "groupname", "test_getgrpbyuid1",
             "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
 
     res = gum_dbus_group_call_add_group_sync (group_proxy,
@@ -1584,7 +1600,7 @@ START_TEST(test_get_group_by_uid)
     /* check properties */
     g_object_get (G_OBJECT (group_proxy), "groupname", &str1, NULL);
     fail_if (str1 == NULL);
-    fail_if (g_strcmp0 (str1, "test_addgroup2") != 0);
+    fail_if (g_strcmp0 (str1, "test_getgrpbyuid1") != 0);
     g_free (str1);
 
     /* check for object paths for groups with same uid */
@@ -1613,7 +1629,7 @@ START_TEST(test_get_group_by_name)
     GumDbusGroupService *group_service = 0;
     gid_t group_id = GUM_GROUP_INVALID_GID;
     GumDbusGroup *group_proxy = NULL, *group_proxy2 = NULL;
-    const gchar *name = "test_addgroup3";
+    const gchar *name = "test_getgrpbyname1";
     gchar *str1 = NULL, *str2 = NULL;
 
     GDBusConnection *connection = _get_bus_connection (&error);
@@ -1681,6 +1697,7 @@ START_TEST (test_delete_group)
     GDBusConnection *connection = NULL;
     GumDbusGroupService *group_service = NULL;
     GumDbusGroup *group_proxy = NULL;
+    gid_t group_id = GUM_GROUP_INVALID_GID;
 
     connection = _get_bus_connection (&error);
     fail_if (connection == NULL, "failed to get bus connection : %s",
@@ -1690,8 +1707,22 @@ START_TEST (test_delete_group)
     fail_if (group_service == NULL, "failed to get group_service : %s",
             error ? error->message : "");
 
+    /* create and add group */
+    group_proxy = _create_new_group_proxy (group_service, &error);
+    fail_if (group_proxy == NULL, "Failed to create new group : %s",
+            error ? error->message : "");
+
+    g_object_set (G_OBJECT (group_proxy), "groupname", "test_delgroup1",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+
+    res = gum_dbus_group_call_add_group_sync (group_proxy,
+            GUM_GROUP_INVALID_GID, &group_id, NULL, &error);
+    fail_if (res == FALSE, "Failed to add new group : %s",
+            error ? error->message : "");
+    g_object_unref (group_proxy);
+
     /* get group added-by-uid */
-    group_proxy = _get_group_proxy_by_name (group_service, "test_addgroup2",
+    group_proxy = _get_group_proxy_by_name (group_service, "test_delgroup1",
             &error);
     fail_if (group_proxy == NULL, "Failed to get group for name '%s' : %s",
             "test_addgroup2", error ? error->message : "");
@@ -1908,6 +1939,7 @@ Suite* daemon_suite (void)
     tcase_add_test (tc, test_get_group_by_name);
     tcase_add_test (tc, test_delete_group);
     tcase_add_test (tc, test_update_group);
+
     tcase_add_test (tc, test_add_group_member);
     tcase_add_test (tc, test_delete_group_member);
     suite_add_tcase (s, tc);
