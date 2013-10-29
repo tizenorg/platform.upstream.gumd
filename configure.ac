@@ -77,10 +77,6 @@ elif test "x$enable_dbus_type" = "xsession" ; then
         DBUS_SERVICES_DIR="`pkg-config --variable session_bus_services_dir dbus-1`"
         DBUS_INTERFACES_DIR="`pkg-config --variable interfaces_dir dbus-1`"
     fi
-    PKG_CHECK_MODULES(GTestDBus, gio-2.0 >= 2.34, [gtestdbus=yes], [gtestdbus=no])
-    if test "x$gtestdbus" = xyes; then
-       AC_DEFINE(HAVE_GTESTDBUS, [1], [Define if GTestDBus exists.])
-    fi
 elif test "x$enable_dbus_type" = "xsystem" ; then
     AC_DEFINE(GUM_BUS_TYPE, [G_BUS_TYPE_SYSTEM], [Use system bus])
     if test "x$enable_distcheck" = "xyes" ; then
@@ -94,7 +90,6 @@ fi
 AC_SUBST(DBUS_SERVICES_DIR)
 AC_SUBST(DBUS_INTERFACES_DIR)
 
-AM_CONDITIONAL(USE_GTESTDBUS, [test x$gtestdbus = xyes])
 AC_SUBST(MESSAGE_BUS_TYPE, [$enable_dbus_type])
 
 # Enable tests
