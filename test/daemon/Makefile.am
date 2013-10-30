@@ -21,11 +21,6 @@ daemontest_CFLAGS = \
     -U G_LOG_DOMAIN \
     -DG_LOG_DOMAIN=\"gum-test-daemon\"
 
-if USE_GTESTDBUS
-daemontest_CFLAGS += \
-    -DGUMD_TEST_DBUS_SERVICE_DIR=\""$(abs_top_builddir)/test/data/services"\"
-endif
-
 daemontest_LDADD = \
     $(top_builddir)/src/daemon/gumd-gumd-daemon-user.o \
     $(top_builddir)/src/daemon/gumd-gumd-daemon-group.o \

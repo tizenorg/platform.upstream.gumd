@@ -61,11 +61,7 @@
 
 gchar *exe_name = 0;
 
-#if HAVE_GTESTDBUS
-GTestDBus *dbus = NULL;
-#else
 GPid daemon_pid = 0;
-#endif
 
 static GMainLoop *main_loop = NULL;
 
@@ -182,17 +178,8 @@ _setup_daemon (void)
 
     _setup_env ();
 
-#if HAVE_GTESTDBUS
-    dbus = g_test_dbus_new (G_TEST_DBUS_NONE);
-    fail_unless (dbus != NULL, "could not create test dbus");
-
-    g_test_dbus_add_service_dir (dbus, GUMD_TEST_DBUS_SERVICE_DIR);
-
-    g_test_dbus_up (dbus);
-    DBG ("Test dbus server address : %s\n", g_test_dbus_get_bus_address(dbus));
-#else
     GError *error = NULL;
-#   ifdef GUM_BUS_TYPE_P2P
+#ifdef GUM_BUS_TYPE_P2P
     /* start daemon maually */
     gchar *argv[2];
     gchar *test_daemon_path = g_build_filename (g_getenv("UM_BIN_DIR"),
@@ -207,7 +194,7 @@ _setup_daemon (void)
     fail_if (error != NULL, "Failed to span daemon : %s",
             error ? error->message : "");
     sleep (5); /* 5 seconds */
-#   else
+#else
     /* session bus where no GTestBus support */
     GIOChannel *channel = NULL;
     gchar *bus_address = NULL;
@@ -274,20 +261,15 @@ _setup_daemon (void)
     		g_error_free (error);
     	}
     }
-#   endif
+#endif
 
     DBG ("Daemon PID = %d\n", daemon_pid);
-#endif
 }
 
 static void
 _teardown_daemon (void)
 {
-#if HAVE_GTESTDBUS
-    g_test_dbus_down (dbus);
-#else
     if (daemon_pid) kill (daemon_pid, SIGTERM);
-#endif
 
     _unset_env ();
 }

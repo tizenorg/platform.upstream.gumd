@@ -21,11 +21,6 @@ clienttest_CFLAGS = \
     -U G_LOG_DOMAIN \
     -DG_LOG_DOMAIN=\"gum-test-client\"
 
-if USE_GTESTDBUS
-clienttest_CFLAGS += \
-    -DGUMD_TEST_DBUS_SERVICE_DIR=\""$(abs_top_builddir)/test/data/services"\"
-endif
-
 clienttest_LDADD = \
     $(top_builddir)/src/common/libgum-common.la \
     $(top_builddir)/src/lib/libgum.la \
