@@ -909,6 +909,93 @@ _update_passwd_entry (
 }
 
 static gboolean
+_copy_shadow_struct (
+        struct spwd *src,
+        struct spwd *dest,
+        gboolean copy_only_if_invalid)
+{
+    if (!src || !dest) return FALSE;
+
+    if (!copy_only_if_invalid || !dest->sp_namp)
+        GUM_STR_DUP (src->sp_namp, dest->sp_namp);
+    if (!copy_only_if_invalid || !dest->sp_pwdp)
+        GUM_STR_DUP (src->sp_pwdp, dest->sp_pwdp);
+    dest->sp_lstchg = src->sp_lstchg;
+    dest->sp_min = src->sp_min;
+    dest->sp_max = src->sp_max;
+    dest->sp_warn = src->sp_warn;
+    dest->sp_inact = src->sp_inact;
+    dest->sp_expire = src->sp_expire;
+    dest->sp_flag = src->sp_flag;
+
+    return TRUE;
+}
+
+static gboolean
+_lock_shadow_entry (
+        GumdDaemonUser *self,
+        GumOpType op,
+        FILE *origf,
+        FILE *newf,
+        gpointer user_data,
+        GError **error)
+{
+    /* Loop all entries */
+    gboolean done = FALSE;
+    struct spwd *entry = NULL;
+
+    if (!user_data) {
+        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                "File write failure", error, FALSE);
+    }
+
+    while ((entry = fgetspent (origf)) != NULL) {
+        if (!done) {
+            switch (op) {
+            case GUM_OPTYPE_MODIFY: {
+                if (g_strcmp0 (self->priv->pw->pw_name, entry->sp_namp) == 0) {
+                    gint ret = -1;
+                    gboolean lock = *((gboolean *)user_data);
+                    struct spwd *spent = g_malloc0 (sizeof (struct spwd));
+                    _copy_shadow_struct (entry, spent, FALSE);
+                    g_free (spent->sp_pwdp);
+                    if (lock && entry->sp_namp[0] != '!') {
+                        /* entry is unlocked, lock it */
+                        spent->sp_pwdp = g_strdup_printf ("!%s",entry->sp_namp);
+                    } else if (!lock && entry->sp_namp[0] == '!') {
+                        /* entry is locked, unlock it */
+                        spent->sp_pwdp = g_strdup (entry->sp_namp+1);
+                    }
+                    ret = putspent (spent, newf);
+                    _free_shadow_entry (spent);
+                    if (ret < 0) {
+                        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                                "File write failure", error, FALSE);
+                    }
+                    done = TRUE;
+                    continue;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        if (putspent (entry, newf) < 0) {
+            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+                    error, FALSE);
+        }
+    }
+
+    if (!done) {
+        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+                error, FALSE);
+    }
+
+    return TRUE;
+}
+
+static gboolean
 _update_shadow_entry (
 		GumdDaemonUser *self,
 		GumOpType op,
@@ -1173,29 +1260,6 @@ _copy_passwd_struct (
 }
 
 static gboolean
-_copy_shadow_struct (
-        struct spwd *src,
-        struct spwd *dest,
-        gboolean copy_only_if_invalid)
-{
-    if (!src || !dest) return FALSE;
-
-    if (!copy_only_if_invalid || !dest->sp_namp)
-        GUM_STR_DUP (src->sp_namp, dest->sp_namp);
-    if (!copy_only_if_invalid || !dest->sp_pwdp)
-        GUM_STR_DUP (src->sp_pwdp, dest->sp_pwdp);
-    dest->sp_lstchg = src->sp_lstchg;
-    dest->sp_min = src->sp_min;
-    dest->sp_max = src->sp_max;
-    dest->sp_warn = src->sp_warn;
-    dest->sp_inact = src->sp_inact;
-    dest->sp_expire = src->sp_expire;
-    dest->sp_flag = src->sp_flag;
-
-    return TRUE;
-}
-
-static gboolean
 _copy_passwd_data (
         GumdDaemonUser *self,
         GError **error)
@@ -1453,6 +1517,7 @@ gumd_daemon_user_delete (
      ** delete home dir (if asked)
      * unlock db
      */
+	gboolean lock = TRUE;
 
     if (!gum_lock_pwdf_lock ()) {
     	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
@@ -1478,7 +1543,23 @@ gumd_daemon_user_delete (
         		"Self-destruction not possible", error, FALSE);
     }
 
+    /* lock the user */
+    if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+            (GumFileUpdateFunc)_lock_shadow_entry,
+            gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, error)) {
+        gum_lock_pwdf_unlock ();
+        RETURN_WITH_ERROR (GUM_ERROR_USER_LOCK_FAILURE,
+                "unable to lock user to login", error, FALSE);
+    }
+
     if (!_terminate_user (self->priv->pw->pw_uid)) {
+        /* unlock the user */
+        lock = FALSE;
+        gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+                    (GumFileUpdateFunc)_lock_shadow_entry,
+                    gum_config_get_string (self->priv->config,
+                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
         gum_lock_pwdf_unlock ();
         RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
                 "unable to terminate user active sessions", error, FALSE);
@@ -1492,6 +1573,13 @@ gumd_daemon_user_delete (
             (GumFileUpdateFunc)_update_shadow_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), NULL, error)) {
+
+        /* unlock the user */
+        lock = FALSE;
+        gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+                    (GumFileUpdateFunc)_lock_shadow_entry,
+                    gum_config_get_string (self->priv->config,
+                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
         gum_lock_pwdf_unlock ();
         return FALSE;
     }

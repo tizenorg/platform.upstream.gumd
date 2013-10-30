@@ -53,6 +53,7 @@ GDBusErrorEntry _gum_errors[] =
             _ERROR_PREFIX".UserSessionTermFailure"},
 
     {GUM_ERROR_USER_NO_CHANGES, _ERROR_PREFIX".UserNoChanges"},
+    {GUM_ERROR_USER_LOCK_FAILURE, _ERROR_PREFIX".UserLockFailure"},
 
     {GUM_ERROR_GROUP_ALREADY_EXISTS, _ERROR_PREFIX".GroupAlreadyExists"},
     {GUM_ERROR_GROUP_GID_NOT_AVAILABLE, _ERROR_PREFIX".GidNotAvailable"},
