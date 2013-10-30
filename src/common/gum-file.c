@@ -505,10 +505,10 @@ _copy_dir_recursively (
                 stop = TRUE;
                 goto _free_data;
             }
-#ifndef ENABLE_TESTS
-            stop = (chown (dest_filepath, uid, gid) < 0);
-#endif
         }
+#ifndef ENABLE_TESTS
+        if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
+#endif
 
 _free_data:
         g_free (src_filepath);
