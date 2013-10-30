@@ -468,6 +468,7 @@ _dispose (GObject *object)
     GumdDaemonUser *self = GUMD_DAEMON_USER (object);
 
     DBG ("");
+
     GUM_OBJECT_UNREF (self->priv->config);
 
     G_OBJECT_CLASS (gumd_daemon_user_parent_class)->dispose (object);
@@ -619,6 +620,7 @@ gumd_daemon_user_class_init (
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
     		properties);
+
 }
 
 static gboolean
@@ -1221,6 +1223,40 @@ _copy_passwd_data (
 }
 
 gboolean
+_is_user_logged_in (
+        GDBusProxy *proxy,
+        uid_t uid)
+{
+    GError *error = NULL;
+    gboolean loggedin = FALSE;
+    GVariant *res = NULL;
+    res = g_dbus_proxy_call_sync (proxy, "ListSessions",
+                    g_variant_new ("()"), G_DBUS_CALL_FLAGS_NONE, -1,
+                    NULL, &error);
+    if (res) {
+        uid_t c_uid;
+        GVariantIter *iter = NULL;
+
+        g_variant_get (res, "(a(susso))", &iter);
+        g_variant_unref (res);
+
+        while (g_variant_iter_next (iter, "(susso)", NULL, &c_uid, NULL, NULL,
+                NULL)) {
+            if (c_uid == uid) {
+                DBG ("user %d is logged in", uid);
+                loggedin = TRUE;
+                break;
+            }
+        }
+        g_variant_iter_free (iter);
+    }
+
+    if (error) g_error_free (error);
+
+    return loggedin;
+}
+
+gboolean
 _terminate_user (
         uid_t uid)
 {
@@ -1235,7 +1271,7 @@ _terminate_user (
 
     GDBusConnection *connection = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL,
             &error);
-    if (error) goto finished;
+    if (error) goto _finished;
 
     proxy = g_dbus_proxy_new_sync (connection,
         G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, NULL,
@@ -1243,14 +1279,25 @@ _terminate_user (
         "/org/freedesktop/login1", //path
         "org.freedesktop.login1.Manager", //interface
         NULL, &error);
-    if (error) goto finished;
+    if (error) goto _finished;
 
-    res = g_dbus_proxy_call_sync (proxy, "KillUser",
-            g_variant_new ("(ui)", uid, SIGTERM), G_DBUS_CALL_FLAGS_NONE, -1,
-            NULL, &error);
-    if (res) g_variant_unref (res);
+    if (_is_user_logged_in (proxy, uid)) {
 
-finished:
+        res = g_dbus_proxy_call_sync (proxy, "TerminateUser",
+                g_variant_new ("(u)", uid), G_DBUS_CALL_FLAGS_NONE, -1,
+                NULL, &error);
+        if (res) g_variant_unref (res);
+        /* seems some bug in systemd as it terminates all the sessions,
+         * and sends userremoved signal but still spits out the error;
+         * so it need to be verified by checking again whether the user is
+         * still logged in or not */
+        if (!_is_user_logged_in (proxy, uid)) {
+            g_error_free (error);
+            error = NULL;
+        }
+    }
+
+_finished:
     if (error) {
         DBG ("failed to terminate user: %s", error->message);
         g_error_free (error);
