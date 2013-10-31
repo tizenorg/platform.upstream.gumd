@@ -15,6 +15,7 @@ Source: %{name}-%{version}.tar.gz
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
+Requires: systemd
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires: pkgconfig(dbus-1)
