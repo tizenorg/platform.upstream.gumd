@@ -14,6 +14,7 @@ Source: %{name}-%{version}.tar.gz
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
+Requires: systemd
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires: pkgconfig(dbus-1)
@@ -62,6 +63,7 @@ Requires:   lib%{name}-common = %{version}-%{release}
 Summary:    Development files for user management daemon
 Group:      Development/Daemons
 Requires:   %{name}d = %{version}-%{release}
+Requires:   lib%{name}-common-devel = %{version}-%{release}
 
 
 %description -n %{name}d-devel
@@ -82,6 +84,7 @@ Requires:   lib%{name}-common = %{version}-%{release}
 Summary:    Development files for user management client library
 Group:      Development/Libraries
 Requires:   lib%{name} = %{version}-%{release}
+Requires:   lib%{name}-common-devel = %{version}-%{release}
 
 
 %description -n lib%{name}-devel
@@ -132,7 +135,6 @@ chmod u+s %{_bindir}/%{name}d
 %{_libdir}/pkgconfig/lib%{name}-common.pc
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
-%{_datadir}/dbus-1/services/*UserManagement*.service
 %endif
 %config(noreplace) %{_sysconfdir}/gum.conf
 
@@ -141,6 +143,9 @@ chmod u+s %{_bindir}/%{name}d
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}d
+%if %{dbus_type} != "p2p"
+%{_datadir}/dbus-1/services/*UserManagement*.service
+%endif
 
 
 %files -n %{name}d-devel
