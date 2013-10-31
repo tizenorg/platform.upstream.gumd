@@ -121,7 +121,6 @@ chmod u+s %{_bindir}/%{name}d
 %files -n lib%{name}-common
 %defattr(-,root,root,-)
 %{_libdir}/lib%{name}-common*.so.*
-%{_libdir}/lib%{name}-common*.la.*
 
 
 %files -n lib%{name}-common-devel
