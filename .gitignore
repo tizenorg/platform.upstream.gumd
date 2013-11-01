@@ -29,7 +29,7 @@ src/daemon/gumd
 test/common/commontest
 test/daemon/daemontest
 test/lib/clienttest
-test/data/gumd-dbus.conf
+test/data/test-gumd-dbus.conf
 examples/gum-example
 stamp-h1
 *service

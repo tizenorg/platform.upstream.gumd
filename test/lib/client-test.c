@@ -206,7 +206,7 @@ _setup_daemon (void)
     const gchar *dbus_monitor = NULL;
 
     argv[1] = g_strdup_printf ("--config-file=%s/%s", GUM_TEST_DATA_DIR,
-            "gumd-dbus.conf");
+            "test-gumd-dbus.conf");
 
     if (pipe(pipe_fd)== -1) {
         WARN("Failed to open temp file : %s", error->message);

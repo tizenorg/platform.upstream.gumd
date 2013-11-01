@@ -176,7 +176,7 @@ examples/Makefile
 
 if test "x$enable_tests" = "xyes" ; then
     AC_CONFIG_FILES([
-    test/data/gumd-dbus.conf
+    test/data/test-gumd-dbus.conf
     ])
     
     if test x$enable_dbus_type != xp2p; then
