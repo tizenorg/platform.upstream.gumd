@@ -15,9 +15,9 @@ Source: %{name}-%{version}.tar.gz
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
-Requires: systemd
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
+BuildRequires: pkgconfig(systemd)
 BuildRequires: pkgconfig(dbus-1)
 BuildRequires: pkgconfig(gtk-doc)
 BuildRequires: pkgconfig(glib-2.0) >= 2.30
