@@ -1,3 +1,4 @@
 [D-BUS Service]
 Name=org.tizen.SecurityAccounts.gUserManagement
 Exec=@prefix@/bin/gumd
+User=root
