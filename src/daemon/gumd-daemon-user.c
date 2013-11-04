@@ -1328,7 +1328,7 @@ _terminate_user (
 
     /* when run in test mode, separate dbus-daemon is started. consequently no
      * system dbus services are available */
-#if USE_SYSTEMD
+#if USE_SYSTEMD && !defined(ENABLE_TESTS)
     GError *error = NULL;
     GDBusProxy *proxy = NULL;
     GVariant *res = NULL;
