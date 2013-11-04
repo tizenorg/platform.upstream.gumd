@@ -73,24 +73,30 @@ elif test "x$enable_dbus_type" = "xsession" ; then
     if test "x$enable_distcheck" = "xyes" ; then
         DBUS_SERVICES_DIR="${datadir}/dbus-1/services"
         DBUS_INTERFACES_DIR="${datadir}/dbus-1/interfaces"
+        DBUS_CONF_DIR="${datadir}/dbus-1/session.d"
     else
         DBUS_SERVICES_DIR="`pkg-config --variable session_bus_services_dir dbus-1`"
         DBUS_INTERFACES_DIR="`pkg-config --variable interfaces_dir dbus-1`"
+        DBUS_CONF_DIR="`pkg-config --variable sysconfdir dbus-1`/dbus-1/session.d"
     fi
 elif test "x$enable_dbus_type" = "xsystem" ; then
     AC_DEFINE(GUM_BUS_TYPE, [G_BUS_TYPE_SYSTEM], [Use system bus])
     if test "x$enable_distcheck" = "xyes" ; then
         DBUS_SERVICES_DIR="${datadir}/dbus-1/system-services"
         DBUS_INTERFACES_DIR="${datadir}/dbus-1/interfaces"
+        DBUS_CONF_DIR="${datadir}/dbus-1/system.d"
     else
         DBUS_SERVICES_DIR="`pkg-config --variable system_bus_services_dir dbus-1`"
         DBUS_INTERFACES_DIR="`pkg-config --variable interfaces_dir dbus-1`"
+        DBUS_CONF_DIR="`pkg-config --variable sysconfdir dbus-1`/dbus-1/system.d"
     fi
 fi
 AC_SUBST(DBUS_SERVICES_DIR)
 AC_SUBST(DBUS_INTERFACES_DIR)
+AC_SUBST(DBUS_CONF_DIR)
 
 AC_SUBST(MESSAGE_BUS_TYPE, [$enable_dbus_type])
+AM_CONDITIONAL(HAVE_SYSTEM_BUS, [test x$enable_dbus_type = xsystem])
 
 # Enable tests
 AC_ARG_ENABLE(tests, [--enable-tests  enable tests features],
@@ -164,6 +170,7 @@ src/daemon/gumd-uninstalled.pc
 src/daemon/Makefile
 src/daemon/dbus/Makefile
 src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service
+src/daemon/dbus/gumd-dbus.conf
 src/lib/Makefile
 src/lib/libgum.pc
 src/lib/libgum-uninstalled.pc

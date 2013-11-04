@@ -38,6 +38,15 @@ dbusservice_DATA = \
 nodist_dbusservice_DATA = \
     $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
 
+EXTRA_DIST = \
+      gumd-dbus.conf.in
+
+if HAVE_SYSTEM_BUS
+dbusconfdir = $(DBUS_CONF_DIR)
+dbusconf_DATA = \
+    gumd-dbus.conf
+endif
+
 clean-local :
 	rm -f *~
 
