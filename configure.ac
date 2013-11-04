@@ -98,6 +98,14 @@ AC_SUBST(DBUS_CONF_DIR)
 AC_SUBST(MESSAGE_BUS_TYPE, [$enable_dbus_type])
 AM_CONDITIONAL(HAVE_SYSTEM_BUS, [test x$enable_dbus_type = xsystem])
 
+# Check for systemd
+VAR_SYSTEMD="`pkg-config --variable systemdsystemunitdir systemd`"
+if test "x$VAR_SYSTEMD" != "x" ; then
+    AC_DEFINE(USE_SYSTEMD, [1], [Use systemd-login dbus APIs])
+elif test "x$VAR_SYSTEMD" = "x" ; then
+    AC_DEFINE(USE_SYSTEMD, [0], [Use systemd-login dbus APIs])
+fi
+
 # Enable tests
 AC_ARG_ENABLE(tests, [--enable-tests  enable tests features],
           [enable_tests=yes], [enable_tests=no])

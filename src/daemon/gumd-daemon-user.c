@@ -1328,7 +1328,7 @@ _terminate_user (
 
     /* when run in test mode, separate dbus-daemon is started. consequently no
      * system dbus services are available */
-#ifndef ENABLE_TESTS
+#if USE_SYSTEMD
     GError *error = NULL;
     GDBusProxy *proxy = NULL;
     GVariant *res = NULL;
@@ -1355,7 +1355,7 @@ _terminate_user (
          * and sends userremoved signal but still spits out the error;
          * so it need to be verified by checking again whether the user is
          * still logged in or not */
-        if (!_is_user_logged_in (proxy, uid)) {
+        if (!_is_user_logged_in (proxy, uid) && error) {
             g_error_free (error);
             error = NULL;
         }
