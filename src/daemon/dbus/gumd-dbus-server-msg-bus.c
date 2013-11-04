@@ -158,7 +158,15 @@ _on_name_acquired (
                     g_object_ref (server->priv->daemon),
                     GUMD_DBUS_SERVER_BUSTYPE_MSG_BUS);
     g_object_weak_ref (G_OBJECT (server->priv->group_service),
-            _on_group_interface_dispose, server);}
+            _on_group_interface_dispose, server);
+
+    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
+    if (seteuid (getuid()))
+        WARN ("seteuid() failed");
+    if (setegid (getgid()))
+        WARN ("setegid() failed");
+    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
+}
 
 static void
 _set_property (

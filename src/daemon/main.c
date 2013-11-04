@@ -71,6 +71,12 @@ _start_dbus_server (
 {
 
 #ifdef GUM_BUS_TYPE_P2P
+    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
+    if (seteuid (getuid()))
+        WARN ("seteuid() failed");
+    if (setegid (getgid()))
+        WARN ("setegid() failed");
+    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
     _server = GUMD_DBUS_SERVER (gumd_dbus_server_p2p_new ());
 #else
     _server = GUMD_DBUS_SERVER (gumd_dbus_server_msg_bus_new ());
@@ -146,13 +152,6 @@ main (int argc, char **argv)
     GOptionEntry opt_entries[] = {
         {NULL }
     };
-
-    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
-    if (seteuid (getuid()))
-        WARN ("seteuid() failed");
-    if (setegid (getgid()))
-        WARN ("setegid() failed");
-    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
 
 #if !GLIB_CHECK_VERSION (2, 36, 0)
     g_type_init ();
