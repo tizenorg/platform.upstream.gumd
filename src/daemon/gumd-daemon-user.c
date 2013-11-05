@@ -1328,6 +1328,9 @@ _terminate_user (
 
     /* when run in test mode, separate dbus-daemon is started. consequently no
      * system dbus services are available */
+    /* TODO: In case where systemd does not exist (e.g. ubuntu), termination of
+     * user-to-be-deleted sessions is required */
+
 #if USE_SYSTEMD && !defined(ENABLE_TESTS)
     GError *error = NULL;
     GDBusProxy *proxy = NULL;
