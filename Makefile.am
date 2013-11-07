@@ -1,12 +1,17 @@
 ACLOCAL_AMFLAGS = -I m4
 
-# --enable-distcheck is here to make it possible to use
-# also --enable-dbus-type=session here
+# configure flags used in by distcheck
 AM_DISTCHECK_CONFIGURE_FLAGS = \
     --enable-distcheck \
+    --enable-dbus-type=p2p\
     --enable-tests
 
-SUBDIRS = src test examples
+if ENABLE_GTK_DOC
+AM_DISTCHECK_CONFIGURE_FLAGS += \
+    --enable-gtk-doc
+endif
+
+SUBDIRS = src test examples docs
 
 EXTRA_DIST = dists tools
 

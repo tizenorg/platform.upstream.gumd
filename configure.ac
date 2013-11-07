@@ -132,7 +132,7 @@ fi
 AM_CONDITIONAL(HAVE_DEBUG, [test x$enable_debug = xyes])
 
 # Gtk-doc
-GTK_DOC_CHECK
+GTK_DOC_CHECK([1.18],[--flavour no-tmpl])
 
 # Checks for typedefs, structures, and compiler characteristics.
 GUM_CFLAGS='$(GLIB_CFLAGS) -D_POSIX_C_SOURCE=\"200809L\" -D_GNU_SOURCE -D_REENTRANT -D_THREAD_SAFE'
@@ -182,6 +182,8 @@ src/daemon/dbus/gumd-dbus.conf
 src/lib/Makefile
 src/lib/libgum.pc
 src/lib/libgum-uninstalled.pc
+docs/Makefile
+docs/version.xml
 test/Makefile
 test/common/Makefile
 test/daemon/Makefile

@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="gumd-examples">
+  <refmeta>
+    <refentrytitle>gumd usage examples</refentrytitle>
+  </refmeta>
+
+  <refsect1 id="intro">
+    <title>Introduction</title>
+    <para>
+        libgsignond-glib comes with an example application <application>gsso-example</application>
+        that demonstrates the most common use cases: listing available authentication methods and
+        their mechanisms, creating and removing identities and performing authentication
+        sessions.
+    </para>
+    <para>
+        Before running the example application, make sure that gSSO daemon and
+        gSSO UI (that is appropriate for your system) are installed and configured
+        correctly.
+    </para>
+    <para>
+        The source code for the example application is available at
+        <ulink url="http://code.google.com/p/accounts-sso/source/browse/examples/gsso-example.c?repo=libgsignon-glib&amp;name=master">
+            http://code.google.com/p/accounts-sso/source/browse/examples/gsso-example.c?repo=libgsignon-glib&amp;name=master</ulink>
+     </para>
+     <para>
+         The full list of available <application>gsso-example</application> options can be 
+         obtained with <userinput>gsso-example --help-all</userinput>
+     </para>
+  </refsect1>
+         
+  <refsect1>
+    <title>Authentication methods and mechanisms</title>
+    <para>
+        The list of available authentication methods can be obtained with
+        <userinput>--query-methods</userinput>:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --query-methods</userinput>:
+Available authentication methods:
+        password
+        oauth
+        digest
+        </computeroutput></literallayout>
+     </para>
+     <para>
+         For each of the available authentication methods it's possible to query
+         available authentication mechanisms with 
+         <userinput>gsso-example --query-mechanisms=method</userinput>:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --query-mechanisms=oauth</userinput>
+Available authentication mechanisms for method oauth:
+        oauth1
+        oauth2
+        </computeroutput></literallayout>
+     </para>
+         
+  </refsect1>
+  <refsect1>
+    <title>Identity management</title>
+    <para>
+        The list of stored identities that the gsso-example application is allowed
+        to use can be obtained with <userinput>gsso-example --query-identities</userinput>:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --query-identities</userinput>
+Available identities:
+        id=27 caption='My test identity'
+        id=28 caption='Another test identity'
+        </computeroutput></literallayout>
+    </para>
+    <para>
+        To create an identity, use <userinput>--create-identity</userinput> option
+        with identity caption (user-readable name) and <userinput>--identity-method</userinput>
+        with the authentication method that the identity will be using.
+        <literallayout><computeroutput>
+<userinput>> gsso-example --create-identity="My test identity" --identity-method=password</userinput>
+Identity stored with id 28            
+        </computeroutput></literallayout>
+    </para>
+    <para>
+        To remove an identity, use <userinput>--remove-identity</userinput> option
+        with identity id:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --remove-identity=28</userinput>
+Identity removed
+        </computeroutput></literallayout>
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>Using 'password' authentication method</title>
+    <para>
+        'password' authentication simply returns to the application the username
+        and the password associated with an identity. If they haven't been stored
+        in gSSO secret database, they're asked from the user through gSSO UI.
+    </para>
+    <para>
+        To use the method, first create an identity with authentication method
+        set to 'password' (as shown above), note its identitiy id and then run:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --get-password=27</userinput>
+Geting password
+Got response: {'UserName': &lt;'megauser'>, 'Secret': &lt;'megapassword'>}
+        </computeroutput></literallayout>
+    </para>   
+  </refsect1>
+  <refsect1>
+    <title>Using 'oauth' authentication method</title>
+    <para>
+        'oauth' authentication method is used to obtain an OAuth1 or OAuth2 
+        authentication token from a remote service over HTTP. An application
+        needs to supply a few service-specific parameters when initiating the
+        authentication. gSSO example application supports obtaining an oauth
+        token from Google service (google-specific parameters are hardcoded
+        into the app source code).
+    </para>
+    <para>
+        Obtaining an OAuth token may also include authorization of the application
+        by the user, which is done through user interaction with the service webpages
+        that are shown by gSSO UI. From the application point of view this authorization
+        happens completely transparently behind the scenes.
+    </para>
+    <para>
+        Before trying the example, if you're behind a proxy, and are using 
+        the Gtk-based gSSO UI, make sure that your GNOME proxy settings are
+        correctly configured, either via GNOME UI, or via command line:
+        <literallayout><computeroutput>
+<userinput>> gsettings list-recursively org.gnome.system.proxy</userinput>
+        </computeroutput></literallayout>
+        To set the proxy, use:
+        <literallayout><computeroutput>
+<userinput>> gsettings set org.gnome.system.proxy mode 'manual'
+> gsettings set org.gnome.system.proxy.http port 8080
+> gsettings set org.gnome.system.proxy.http host 'myproxy.domain.lan'</userinput>
+        </computeroutput></literallayout>
+        To disable the proxy, use
+        <literallayout><computeroutput>
+<userinput>> gsettings set org.gnome.system.proxy mode 'none'</userinput>
+        </computeroutput></literallayout>
+        See all available configurations keys here:
+        <ulink url="http://developer.gnome.org/ProxyConfiguration/">
+        http://developer.gnome.org/ProxyConfiguration/</ulink>
+    </para>
+    <para>
+        You would also need a client identifier and key from Google. Instructions
+        about how to get them are available at 
+        <ulink url="https://developers.google.com/console/help/#generatingoauth2">https://developers.google.com/console/help/#generatingoauth2</ulink>
+    </para>
+    <para>
+        Once the above are settled, create an identity with 'oauth' method
+        (as shown above) and issue:
+        <literallayout><computeroutput>
+<userinput>> gsso-example --get-google-token=12 --client-id=xxxxxxx.apps.googleusercontent.com --client-secret=yyyyyyyyyyyyy</userinput>
+Geting token
+Got response: {'Scope': &lt;'email'>, 'AccessToken': &lt;'tokenvalue'>, 
+               'TokenParameters': &lt;@a{sv} {}>, 'TokenType': &lt;'Bearer'>, 
+               'RefreshToken': &lt;'refreshtokenvalue'>, 'Duration': &lt;int64 3600>, 
+               'Timestamp': &lt;int64 1377707888>}                
+        </computeroutput></literallayout>
+    </para>
+  </refsect1>
+</refentry> 

@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="um-building">
+  <refmeta>
+    <refentrytitle>Building and installing the user management daemon (gumd)
+        and client library (libgum).
+    </refentrytitle>
+    <manvolnum>3</manvolnum>
+    <refmiscinfo>Gumd</refmiscinfo>
+  </refmeta>
+
+  <refsect1 id="building">
+    <title>Building gumd and libgum</title>
+    <para>
+      gumd and libgum uses the standard GNU build system,
+      using <application>autoconf</application> for package
+      configuration and resolving portability issues,
+      <application>automake</application> for building makefiles
+      that comply with the GNU Coding Standards, and
+      <application>libtool</application> for building shared
+      libraries on multiple platforms. The normal sequence for
+      compiling and installing gumd and libgum from distribution tarballs is
+      thus:
+
+      <literallayout>
+        <userinput>./configure</userinput>
+        <userinput>make</userinput>
+        <userinput>make install</userinput>
+      </literallayout>
+      
+      If you have obtained the source code directly from git repository,
+      execute the <command>./autogen.sh</command> script 
+      before the steps above.
+    </para>
+
+    <para>
+      The standard options provided by <application>GNU
+      autoconf</application> may be passed to the
+      <command>configure</command> script.  Please see the
+      <application>autoconf</application> documentation or run
+      <command>./configure --help</command> for information about
+      the standard options.
+    </para>
+    
+  </refsect1>
+  <refsect1 id="dependencies">
+    <title>Dependencies</title>
+    <para>
+      Before you can compile gumd and libgum, you need to have
+      various other tools and libraries installed on your
+      system. The two tools needed during the build process
+      are <command>pkg-config</command> and
+      <ulink url="http://www.gnu.org/software/make">GNU make</ulink>.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="http://www.freedesktop.org/software/pkgconfig/">
+            pkg-config
+          </ulink>
+          is a tool for tracking the compilation flags needed for
+          libraries that are used by the gumd and libgum. (For each
+          library, a small <literal>.pc</literal> text file is
+          installed in a standard location that contains the compilation
+          flags needed for that library along with version number
+          information.) 
+        </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+      gumd depends on a number of other libraries.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+            The <ulink url="https://developer.gnome.org/glib/">GLib
+            library</ulink> is the development framework that gumd and libgum
+            is built on.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+            The <ulink url="http://check.sourceforge.net/">check library</ulink>
+            provides a unit testing framework. It is needed only if you would
+            like to run unit tests with <command>make check</command>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+            The 
+            <ulink url="http://www.freedesktop.org/software/systemd/man/">
+                Systemd
+            </ulink>
+            provides dbus login apis that gumd is using for
+            querying/terminating users sessions e.g. when a user is deleted.
+        </para>
+      </listitem>
+    </itemizedlist>
+
+  </refsect1>
+  <refsect1 id="extra-configuration-options">
+    <title>Extra Configuration Options</title>
+
+    <para>
+      In addition to the normal options, the
+      <command>configure</command> script supports these additional arguments:
+    </para>
+
+    <formalpara>
+      <title><systemitem>--enable-debug</systemitem></title>
+
+      <para>
+        Turns on debugging support. This allows setting environment 
+        variables to influence the runtime behaviour of gumd and libgum
+        (see <link linkend="GumConfig">GumConfig</link>).
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>--enable-tests</systemitem></title>
+
+      <para>
+        This enables unit tests and implicitly enables debugging support as
+        well.
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>--enable-dbus-type=dbus-type</systemitem></title>
+
+      <para>
+          Sets the way in which libgum is using DBus to communicate with 
+          gumd. <systemitem>dbus-type</systemitem> can be one of
+        <itemizedlist>
+          <listitem>
+            <para>
+              <systemitem>'p2p'</systemitem> which is the default value.
+              Gumd will use direct connection over a UNIX domain socket
+              with the client library without involving the DBus daemon.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <systemitem>'session'</systemitem> which will use the session bus.
+              This is not recommended to use because session bus isn't secure
+              against eavesdropping, but it can be used for debugging purposes,
+              as it allows the use of standard tools such as
+              <command>dbus-monitor</command>, <command>d-feet</command> and
+              so on.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <systemitem>'system'</systemitem> which will use the system bus.
+            </para>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </formalpara>
+
+  </refsect1>
+  <refsect1 id="building-packages">
+    <title>Building distribution packages</title>
+
+    <para>
+        Instead of running <command>make install</command> to install gumd and
+        libgum into a system location it is possible to build
+        distribution-specific packages. <filename>dists/</filename> directory
+        in the source tree contains a number of package confuguration files,
+        and to use them also a distribution tarball is needed. If you are
+        building from a git tree, use <command>make dist</command> to create
+        such a tarball.
+    </para>
+  </refsect1>
+
+</refentry>
