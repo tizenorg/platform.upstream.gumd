@@ -694,9 +694,9 @@ main (int argc, char *argv[])
                 &is_group_get_by_name_op, "get group by name -- groupname"
                         " is mandatory", NULL},
         { "add-member", 'm', 0, G_OPTION_ARG_NONE, &is_group_add_mem_op,
-                "group add member -- mem_uid is mandatory", NULL},
+                "group add member -- gid and mem_uid are mandatory", NULL},
         { "delete-member", 'n', 0, G_OPTION_ARG_NONE, &is_group_del_mem_op,
-                "group delete member -- mem_uid is mandatory", NULL},
+                "group delete member -- gid and mem_uid are mandatory", NULL},
         { NULL }
     };
     
