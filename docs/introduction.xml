@@ -4,90 +4,27 @@
 ]>
 <refentry id="um-intro">
   <refmeta>
-    <refentrytitle>gumd introduction</refentrytitle>
+    <refentrytitle>Introduction</refentrytitle>
   </refmeta>
 
   <refsect1>
-    <title>What is gumd?</title>
+    <title>What is gumd/libgum?</title>
     <para>
-        gumd is a framework for centrally storing authentication credentials
-        and handling authentication on behalf of applications as requested by
-        them. It consists of a gumd daemon that implements secure storage of 
-        login credentials (for example usernames and passwords), plugins for 
-        different authentication systems and a client library (libgsignond-glib) 
-        for applications to communicate with this system.        
+        gumd and libgum together provides a framework for creating, deleting
+        and modifying user and groups in the system. gumd is a daemon that
+        implements the functionality that provides access to user/group
+        database and libgum is a client library for applications to communicate
+        with this system.        
     </para>
     <para>
-        By using this client library, an application can authenticate to a
-        (usually remote) service using an existing set of credentials, and manage
-        the credentials database as well (subject to access restrictions).
+        By using libgum client library, an application can query/create/delete/modify
+        users' and groups' database.
     </para>
     <para>
-        Some authentication methods require interaction with the user, for example
-        to request a username and password, or to show a webpage with which the
-        user is expected to interact. This functionality is provided by gumd UI
-        component, and it's completely invisible from the applications' point
-        of view.
-    </para>
-    <para>
-        The client library (libgsignond-glib) interacts with gumd daemon through
-        D-Bus. These D-Bus APIs should not be used directly as they are not documented, subject
-        to change and don't come with backwards compatibility guarantees.
-    </para>
-  </refsect1>
-  <refsect1>
-    <title>Terminology</title>
-    <para>
-        gumd is built around a few key concepts which are explained below:
-        <itemizedlist>
-            <listitem>
-                <para>
-                    <systemitem>Authentication service</systemitem>: the top level
-                    object representing the gumd service. It can be used to query
-                    existing identities, available
-                    authentication menthods and their mechanisms. Authentication
-                    service is represented in the client library by
-                    <link linkend="SignonAuthService">SignonAuthService objects</link>.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    <systemitem>Identity</systemitem>: This is a local object representing a record in the
-                    credentials DB. It contains information about the username and password (the
-                    latter is write-only), plus some metadata such as a descriptive caption, access
-                    control list, reference count, and other metadata. Identities are identified by
-                    numeric identity IDs and represented in the client library by <link linkend="SignonIdentity">
-                    SignonIdentity</link> objects.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    <systemitem>Security context</systemitem>: The information that is used by gumd daemon
-                    to make access control decisions when applications try to access identities
-                    for reading, writing, or starting authentication sessions. Security contexts
-                    consist of two strings: the system context which identifies the application process,
-                    and application context which identifies what the application process is doing. Security
-                    contexts are represented in the client library by <link linkend="SignonSecurityContext">
-                    SignonSecurityContext</link> objects.        
-                </para>
-            </listitem>            
-            <listitem>
-                <para>
-                    <systemitem>Authentication method</systemitem>: the SSO daemon supports different
-                    authentication methods, each implemented by a plugin. Well known examples of
-                    authentication methods include <ulink url="http://en.wikipedia.org/wiki/Simple_Authentication_and_Security_Layer">SASL</ulink>,
-                    or <ulink url="http://en.wikipedia.org/wiki/Oauth">OAuth</ulink>. Authentication methods
-                    might support different authentication mechanisms, which are method-specific variants of authentication process.
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    <systemitem>Authentication session</systemitem>: the process of performing the authentication.
-                    It is represented in the client library by <link linkend="SignonAuthSession">SignonAuthSession objects</link>.
-                    Authentication sessions are started from existing identites.
-                </para>
-            </listitem>
-        </itemizedlist>        
+        The client library, libgum, interacts with gumd daemon through
+        D-Bus. These D-Bus APIs should not be used directly as they are not
+        documented, subject to change and don't come with backwards
+        compatibility guarantees.
     </para>
   </refsect1>
 </refentry>

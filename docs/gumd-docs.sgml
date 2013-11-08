@@ -7,69 +7,57 @@
 <book id="index">
     <bookinfo>
         <title>gumd and libgum API Reference Manual</title>
-        <releaseinfo> This document is for gumd and libgum, version &version;.
+        <releaseinfo>This document discusses the details of user management 
+        daemon (gumd) and client library (libgum) with version &version;.
         </releaseinfo>
     </bookinfo>
 
-    <part id="um-overview">
-        <title>User management Overview</title>
-        
-        <xi:include href="introduction.xml"/>
-        <xi:include href="examples.xml"/>
-    </part>
+    <xi:include href="introduction.xml"/>
   
-    <part id="um-common">
-        <title>Common</title>
-        <chapter>
-            <xi:include href="building.xml"/>
-        </chapter>
-
-        <chapter>
-            <title>Miscellaneous</title>
-            <xi:include href="xml/gum-error.xml"/>
-            <xi:include href="xml/gum-log.xml"/>
-            <xi:include href="xml/gum-utils.xml"/>
-        </chapter>
-    </part>
-
-    <part id="um-gumd">
-        <title>gumd</title>
-           
-        <chapter>
-            <title>gumd configuration</title>
-            <xi:include href="xml/gum-config.xml"/>
-            <xi:include href="xml/gum-config-general.xml"/>
-            <xi:include href="xml/gum-config-dbus.xml"/>
-        </chapter>
-    </part>
+    <xi:include href="building.xml"/>
+        
+    <chapter>
+        <title>Daemon(gumd) configuration</title>
+        <xi:include href="xml/gum-config.xml"/>
+        <xi:include href="xml/gum-config-general.xml"/>
+        <xi:include href="xml/gum-config-dbus.xml"/>
+    </chapter>
     
-    <part id="um-objects">
+    <xi:include href="examples.xml"/>
+
+    <chapter>
+        <title>Miscellaneous</title>
+        <xi:include href="xml/gum-error.xml"/>
+        <xi:include href="xml/gum-log.xml"/>
+        <xi:include href="xml/gum-utils.xml"/>
+    </chapter>
+
+    <chapter>
         <title>gumd and libgum Objects</title>
         <chapter id="object-tree">
             <title>Object Hierarchy</title>
             <xi:include href="xml/tree_index.sgml"/>
         </chapter>
-    </part>
+    </chapter>
   
-    <part id="appendices">
+    <chapter>
         <title>Appendices</title>
-        <index id="api-index-full">
-            <title>API Index</title>
-            <xi:include href="xml/api-index-full.xml">
-                <xi:fallback />
-            </xi:include>
-        </index>
-      
-        <index id="deprecated-api-index" role="deprecated">
-            <title>Index of deprecated API</title>
-            <xi:include href="xml/api-index-deprecated.xml">
-                <xi:fallback />
-            </xi:include>
-        </index>
+        <xi:include href="xml/api-index-full.xml">
+            <xi:fallback />
+        </xi:include>
+    </chapter>  
     
+    <chapter>        
+        <title>Deprecated APIs</title>
+        <xi:include href="xml/api-index-deprecated.xml">
+            <xi:fallback />
+        </xi:include>
+    </chapter>
+    
+    <chapter>    
         <xi:include href="xml/annotation-glossary.xml">
             <xi:fallback />
         </xi:include>
-    </part>
+    </chapter>
   
 </book>

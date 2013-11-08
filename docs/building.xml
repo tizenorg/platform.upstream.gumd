@@ -4,9 +4,7 @@
 ]>
 <refentry id="um-building">
   <refmeta>
-    <refentrytitle>Building and installing the user management daemon (gumd)
-        and client library (libgum).
-    </refentrytitle>
+    <refentrytitle>Building and Installation</refentrytitle>
     <manvolnum>3</manvolnum>
     <refmiscinfo>Gumd</refmiscinfo>
   </refmeta>
