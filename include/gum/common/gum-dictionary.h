@@ -41,9 +41,6 @@ G_BEGIN_DECLS
 
 typedef GHashTable GumDictionary;
 
-GType
-gum_dictionary_get_type (void);
-
 GumDictionary *
 gum_dictionary_new (void);
 
