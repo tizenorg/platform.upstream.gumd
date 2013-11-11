@@ -34,6 +34,77 @@
 #include "gum-user-service.h"
 #include "gum-internals.h"
 
+/**
+ * SECTION:gum-user
+ * @short_description: provides interface for managing user's account
+ * @include: common/gum-user.h
+ *
+ * #GumUser provides interface for adding, removing and updating user accounts.
+ * User's information can also be retrieved using this interface. Only
+ * privileged user can access the interface when system-bus is used for
+ * communication with the use management daemon.
+ *
+ * Following code snippet demonstrates how to create a new remote user object:
+ *
+ * |[
+ *  GMainLoop *main_loop = NULL;
+ *  GumUser *user = NULL;
+ *
+ *  main_loop = g_main_loop_new (NULL, FALSE)
+ *  user = gum_user_create (_on_user_created, NULL);
+ *
+ *  // wait for _on_user_created callback and use the object when callback is
+ *  // triggered
+ *  g_main_loop_run (main_loop);
+ *
+ *  // destroy the object
+ *  g_object_unref (user);
+ * ]|
+ *
+ * Similarly, new user can be added as:
+ * |[
+ *  GMainLoop *main_loop = NULL;
+ *  GumUser *user = NULL;
+ *  gboolean rval = FALSE;
+ *
+ *  main_loop = g_main_loop_new (NULL, FALSE)
+ *  user = gum_user_create (_on_user_created, NULL);
+ *
+ *  // wait for _on_user_created callback and use the object when callback is
+ *  // triggered
+ *  g_main_loop_run (main_loop);
+ *
+ *  // set user properties
+ *  g_object_set (G_OBJECT (user), "username", "user1", "secret", "123456",
+ *   "usertype", GUM_USERTYPE_NORMAL, NULL);
+ *
+ *  // add user
+ *  rval = gum_user_add (user, _on_user_added, NULL);
+ *
+ *  // wait for _on_user_added callback
+ *  g_main_loop_run (main_loop);
+ *
+ *  // destroy the object
+ *  g_object_unref (user);
+ * ]|
+ *
+ * For more details, see example implementation here:
+ *<ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
+ *          gum-example</ulink>
+ */
+
+/**
+ * GumUserCb:
+ *
+ * @user: (transfer none): #GumUser object which is used in the request
+ * @error: (transfer none): #GError object. In case of error, error will be
+ * non-NULL
+ * @user_data: user data passed onto the request
+ *
+ * #GumUserCb specifies the callback signature when user object is created,
+ * added, deleted or updated.
+ */
+
 typedef struct {
     GumUserCb callback;
     gpointer user_data;
@@ -232,6 +303,13 @@ gum_user_class_init (
     object_class->dispose = _dispose;
     object_class->finalize = _finalize;
 
+    /**
+     * GumUser:usertype:
+     *
+     * This property holds a user type that the object corresponds to. Valid
+     * values of user types are; 1 (system), 2 (admin), 3 (guest), 4 (normal).
+     * #GumUser:usertype must be specified when adding a new user.
+     */
     properties[PROP_USERTYPE] =  g_param_spec_uint ("usertype",
             "UserType",
             "Type of the user",
@@ -241,6 +319,12 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:uid:
+     *
+     * This property holds a unique user identity for the user as assigned by
+     * ther underlying framework, which is always be in range [0, MAXUINT].
+     */
     properties[PROP_UID] =  g_param_spec_uint ("uid",
             "Uid",
             "Unique identifier of the user",
@@ -250,6 +334,12 @@ gum_user_class_init (
             G_PARAM_READABLE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:gid:
+     *
+     * This property holds a unique groupd identity for the user as assigned by
+     * the underlying framework, which is always be in range [0, MAXUINT].
+     */
     properties[PROP_GID] =  g_param_spec_uint ("gid",
             "Gid",
             "Unique identifier of the group of the user",
@@ -259,6 +349,14 @@ gum_user_class_init (
             G_PARAM_READABLE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:username:
+     *
+     * This property holds the name of given to the user when the user is
+     * added. Allowed pattern for username is:
+     * "^[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]\\?$". Either #GumUser:username
+     * or #GumUser:nickname must be specified when adding a new user.
+     */
     properties[PROP_USERNAME] = g_param_spec_string ("username",
             "Username",
             "System name of the user",
@@ -266,6 +364,12 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:secret:
+     *
+     * This property holds the secret as chosen by the user. Secret should not
+     * contain any control chars (0x00-0x1F,0x7F) or colon (':' 0x3A).
+     */
     properties[PROP_SECRET] = g_param_spec_string ("secret",
             "Secret",
             "User secret",
@@ -273,6 +377,14 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:nickname:
+     *
+     * This property holds the nickname of given to the user. Nickname should
+     * not contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+     * colon (':' 0x3A). If no #GumUser:username is specified, nickname is
+     * hashed to handle non-ascii characters and then set as #GumUser:username.
+     */
     properties[PROP_NICKNAME] = g_param_spec_string ("nickname",
             "Nickname",
             "Nick name of the user",
@@ -280,6 +392,13 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:realname:
+     *
+     * This property holds the realname of given to the user. Realname should
+     * not contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+     * colon (':' 0x3A).
+     */
     properties[PROP_REALNAME] = g_param_spec_string ("realname",
             "Realname",
             "Real name of the user",
@@ -287,6 +406,13 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:office:
+     *
+     * This property holds the location of the office of the user. Office
+     * should not contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c)
+     * or colon (':' 0x3A).
+     */
     properties[PROP_OFFICE] = g_param_spec_string ("office",
             "Office",
             "Office location of the user",
@@ -294,6 +420,13 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:officephone:
+     *
+     * This property holds the office phone of the user. Office phone
+     * should not contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c)
+     * or colon (':' 0x3A).
+     */
     properties[PROP_OFFICEPHONE] = g_param_spec_string ("officephone",
             "OfficePhone",
             "Office phone of the user",
@@ -301,6 +434,13 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:homephone:
+     *
+     * This property holds the home phone of the user. Home phone should not
+     * contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+     * colon (':' 0x3A).
+     */
     properties[PROP_HOMEPHONE] = g_param_spec_string ("homephone",
             "HomePhone",
             "Home phone of the user",
@@ -308,6 +448,15 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:homedir:
+     *
+     * This property holds the location of the home directory of the user. Home
+     * directory should not contain any control chars (0x00-0x1F,0x7F),
+     * comma (',' 0x2c) or colon (':' 0x3A). For new user, it is recommended to
+     * let the underlying framework to set the home directory of the user based
+     * on the configuration.
+     */
     properties[PROP_HOMEDIR] = g_param_spec_string ("homedir",
             "HomeDir",
             "Home directory of the user",
@@ -315,6 +464,15 @@ gum_user_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumUser:shell:
+     *
+     * This property holds the shell path of the user. Shell path should not
+     * contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+     * colon (':' 0x3A). For new user, it is recommended to let the underlying
+     * framework to set the home directory of the user based on the
+     * configuration.
+     */
     properties[PROP_SHELL] = g_param_spec_string ("shell",
             "Shell",
             "Shell",
@@ -495,6 +653,17 @@ _on_user_update_cb (
     g_clear_error (&error);
 }
 
+/**
+ * gum_user_create:
+ * @callback: #GumUserCb to be invoked when new user object is created
+ * @user_data: user data
+ *
+ * This method creates a new remote user object over the DBus asynchronously.
+ * Callback is used to notify when the remote object is fully created and
+ * accessible.
+ *
+ * Returns: (transfer full): #GumUser newly created object
+ */
 GumUser *
 gum_user_create (
         GumUserCb callback,
@@ -509,6 +678,18 @@ gum_user_create (
     return user;
 }
 
+/**
+ * gum_user_get:
+ * @uid: user id for the user
+ * @callback: #GumUserCb to be invoked when user object is fetched
+ * @user_data: user data
+ *
+ * This method gets the user object attached to uid over the DBus
+ * asynchronously. Callback is used to notify when the remote object is fully
+ * created and accessible.
+ *
+ * Returns: (transfer full): #GumUser object
+ */
 GumUser *
 gum_user_get (
         uid_t uid,
@@ -524,6 +705,18 @@ gum_user_get (
     return user;
 }
 
+/**
+ * gum_user_get_by_name:
+ * @username: name of the user
+ * @callback: #GumUserCb to be invoked when user object is fetched
+ * @user_data: user data
+ *
+ * This method gets the user object attached to username over the DBus
+ * asynchronously. Callback is used to notify when the remote object is fully
+ * created and accessible.
+ *
+ * Returns: (transfer full): #GumUser object
+ */
 GumUser *
 gum_user_get_by_name (
         const gchar *username,
@@ -543,6 +736,18 @@ gum_user_get_by_name (
     return user;
 }
 
+/**
+ * gum_user_add:
+ * @self: #GumUser object to be added
+ * @callback: #GumUserCb to be invoked when user is added
+ * @user_data: user data
+ *
+ * This method adds the user over the DBus asynchronously. Callback is used to
+ * notify when the user is added.
+ *
+ * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
+ * When FALSE, no callback is triggered.
+ */
 gboolean
 gum_user_add (
         GumUser *self,
@@ -562,6 +767,18 @@ gum_user_add (
     return TRUE;
 }
 
+/**
+ * gum_user_delete:
+ * @self: #GumUser object to be deleted
+ * @callback: #GumUserCb to be invoked when user is deleted
+ * @user_data: user data
+ *
+ * This method deletes the user over the DBus asynchronously. Callback is used
+ * to notify when the user is deleted.
+ *
+ * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
+ * When FALSE, no callback is triggered.
+ */
 gboolean
 gum_user_delete (
         GumUser *self,
@@ -582,6 +799,19 @@ gum_user_delete (
     return TRUE;
 }
 
+/**
+ * gum_user_update:
+ * @self: #GumUser object to be updated
+ * @callback: #GumUserCb to be invoked when user is updated
+ * @user_data: user data
+ *
+ * This method updates the user over the DBus asynchronously. Callback is used
+ * to notify when the user is updated. The properties which can be updated are:
+ * secret, realname, office, officephone, homephone and shell.
+ *
+ * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
+ * When FALSE, no callback is triggered.
+ */
 gboolean
 gum_user_update (
         GumUser *self,
