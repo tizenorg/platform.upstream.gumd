@@ -42,7 +42,7 @@
  * #GumUser provides interface for adding, removing and updating user accounts.
  * User's information can also be retrieved using this interface. Only
  * privileged user can access the interface when system-bus is used for
- * communication with the use management daemon.
+ * communication with the user management daemon.
  *
  * Following code snippet demonstrates how to create a new remote user object:
  *
@@ -95,13 +95,12 @@
 
 /**
  * GumUserCb:
- *
  * @user: (transfer none): #GumUser object which is used in the request
  * @error: (transfer none): #GError object. In case of error, error will be
  * non-NULL
  * @user_data: user data passed onto the request
  *
- * #GumUserCb specifies the callback signature when user object is created,
+ * #GumUserCb defines the callback which is used when user object is created,
  * added, deleted or updated.
  */
 
@@ -337,7 +336,7 @@ gum_user_class_init (
     /**
      * GumUser:gid:
      *
-     * This property holds a unique groupd identity for the user as assigned by
+     * This property holds a unique group identity for the user as assigned by
      * the underlying framework, which is always be in range [0, MAXUINT].
      */
     properties[PROP_GID] =  g_param_spec_uint ("gid",
@@ -738,15 +737,18 @@ gum_user_get_by_name (
 
 /**
  * gum_user_add:
- * @self: #GumUser object to be added
+ * @self: #GumUser object to be added; object should have either valid
+ * #GumUser:username or #GumUser:nickname in addition to valid
+ * #GumUser:usertype.
  * @callback: #GumUserCb to be invoked when user is added
  * @user_data: user data
  *
  * This method adds the user over the DBus asynchronously. Callback is used to
  * notify when the user is added.
  *
- * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
- * When FALSE, no callback is triggered.
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
  */
 gboolean
 gum_user_add (
@@ -769,15 +771,18 @@ gum_user_add (
 
 /**
  * gum_user_delete:
- * @self: #GumUser object to be deleted
+ * @self: #GumUser object to be deleted; object should have valid #GumUser:uid
+ * property.
+ * @rem_home_dir: deletes home directory of the user if set to TRUE
  * @callback: #GumUserCb to be invoked when user is deleted
  * @user_data: user data
  *
  * This method deletes the user over the DBus asynchronously. Callback is used
  * to notify when the user is deleted.
  *
- * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
- * When FALSE, no callback is triggered.
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
  */
 gboolean
 gum_user_delete (
@@ -801,16 +806,18 @@ gum_user_delete (
 
 /**
  * gum_user_update:
- * @self: #GumUser object to be updated
+ * @self: #GumUser object to be updated; object should have valid #GumUser:uid
+ * property.
  * @callback: #GumUserCb to be invoked when user is updated
  * @user_data: user data
  *
  * This method updates the user over the DBus asynchronously. Callback is used
- * to notify when the user is updated. The properties which can be updated are:
- * secret, realname, office, officephone, homephone and shell.
+ * to notify when the user is updated. The properties which can be updated
+ * are: secret, realname, office, officephone, homephone and shell.
  *
- * Returns: returns TRUE if the request to DBus is successful, FALSE otherwise.
- * When FALSE, no callback is triggered.
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
  */
 gboolean
 gum_user_update (

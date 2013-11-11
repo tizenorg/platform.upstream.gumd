@@ -34,6 +34,76 @@
 #include "gum-group-service.h"
 #include "gum-internals.h"
 
+/**
+ * SECTION:gum-group
+ * @short_description: provides interface for managing group's data
+ * @include: common/gum-group.h
+ *
+ * #GumGroup provides interface for adding, removing and updating group.
+ * Group's information can also be retrieved using this interface. Only
+ * privileged user can access the interface when system-bus is used for
+ * communication with the user management daemon.
+ *
+ * Following code snippet demonstrates how to create a new remote group object:
+ *
+ * |[
+ *  GMainLoop *main_loop = NULL;
+ *  GumGroup *group = NULL;
+ *
+ *  main_loop = g_main_loop_new (NULL, FALSE)
+ *  group = gum_group_create (_on_group_created, NULL);
+ *
+ *  // wait for _on_group_created callback and use the object when callback is
+ *  // triggered
+ *  g_main_loop_run (main_loop);
+ *
+ *  // destroy the object
+ *  g_object_unref (group);
+ * ]|
+ *
+ * Similarly, new group can be added as:
+ * |[
+ *  GMainLoop *main_loop = NULL;
+ *  GumGroup *group = NULL;
+ *  gboolean rval = FALSE;
+ *
+ *  main_loop = g_main_loop_new (NULL, FALSE)
+ *  group = gum_group_create (_on_group_created, NULL);
+ *
+ *  // wait for _on_group_created callback and use the object when callback is
+ *  // triggered
+ *  g_main_loop_run (main_loop);
+ *
+ *  // set group properties
+ *  g_object_set (G_OBJECT (group), "groupname", "group1", "secret", "123456",
+ *   "grouptype", GUM_GROUPTYPE_USER, NULL);
+ *
+ *  // add group
+ *  rval = gum_group_add (user, _on_group_added, NULL);
+ *
+ *  // wait for _on_group_added callback
+ *  g_main_loop_run (main_loop);
+ *
+ *  // destroy the object
+ *  g_object_unref (group);
+ * ]|
+ *
+ * For more details, see example implementation here:
+ *<ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
+ *          gum-example</ulink>
+ */
+
+/**
+ * GumGroupCb:
+ * @group: (transfer none): #GumGroup object which is used in the request
+ * @error: (transfer none): #GError object. In case of error, error will be
+ * non-NULL
+ * @user_data: user data passed onto the request
+ *
+ * #GumGroupCb defines the callback which is used when group object is created,
+ * added, deleted or updated or new members are added to the group.
+ */
+
 typedef struct {
     GumGroupCb callback;
     gpointer user_data;
@@ -224,6 +294,13 @@ gum_group_class_init (
     object_class->dispose = _dispose;
     object_class->finalize = _finalize;
 
+    /**
+     * GumGroup:grouptype:
+     *
+     * This property holds a group type that the object corresponds to. Valid
+     * values of group types are; 1 (system), 2 (user).
+     * #GumGroup:grouptype must be specified when adding a new group.
+     */
     properties[PROP_GROUPTYPE] =  g_param_spec_uint ("grouptype",
             "GroupType",
             "Type of the group",
@@ -233,6 +310,12 @@ gum_group_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumGroup:gid:
+     *
+     * This property holds a unique group identity for the group as assigned by
+     * the underlying framework, which is always be in range [0, MAXUINT].
+     */
     properties[PROP_GID] =  g_param_spec_uint ("gid",
             "Gid",
             "Unique identifier of the group of the group",
@@ -242,6 +325,13 @@ gum_group_class_init (
             G_PARAM_READABLE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumGroup:groupname:
+     *
+     * This property holds the name of given to the group when the group is
+     * added. Allowed pattern for groupname is:
+     * "^[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]\\?$".
+     */
     properties[PROP_GROUPNAME] = g_param_spec_string ("groupname",
             "Groupname",
             "System name of the group",
@@ -249,6 +339,12 @@ gum_group_class_init (
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumGroup:secret:
+     *
+     * This property holds the secret as chosen. Secret should not
+     * contain any control chars (0x00-0x1F,0x7F) or colon (':' 0x3A).
+     */
     properties[PROP_SECRET] = g_param_spec_string ("secret",
             "Secret",
             "Group secret",
@@ -474,6 +570,17 @@ _on_group_delete_member_cb (
     g_clear_error (&error);
 }
 
+/**
+ * gum_group_create:
+ * @callback: #GumGroupCb to be invoked when new group object is created
+ * @user_data: user data
+ *
+ * This method creates a new remote group object over the DBus asynchronously.
+ * Callback is used to notify when the remote object is fully created and
+ * accessible.
+ *
+ * Returns: (transfer full): #GumGroup newly created object
+ */
 GumGroup *
 gum_group_create (
         GumGroupCb callback,
@@ -488,6 +595,18 @@ gum_group_create (
     return group;
 }
 
+/**
+ * gum_group_get:
+ * @gid: group id for the group
+ * @callback: #GumGroupCb to be invoked when group object is fetched
+ * @user_data: user data
+ *
+ * This method gets the group object attached to gid over the DBus
+ * asynchronously. Callback is used to notify when the remote object is fully
+ * created and accessible.
+ *
+ * Returns: (transfer full): #GumGroup object
+ */
 GumGroup *
 gum_group_get (
         gid_t gid,
@@ -503,6 +622,18 @@ gum_group_get (
     return group;
 }
 
+/**
+ * gum_group_get_by_name:
+ * @groupname: name of the group
+ * @callback: #GumGroupCb to be invoked when group object is fetched
+ * @user_data: user data
+ *
+ * This method gets the group object attached to groupname over the DBus
+ * asynchronously. Callback is used to notify when the remote object is fully
+ * created and accessible.
+ *
+ * Returns: (transfer full): #GumGroup object
+ */
 GumGroup *
 gum_group_get_by_name (
         const gchar *groupname,
@@ -523,6 +654,20 @@ gum_group_get_by_name (
     return group;
 }
 
+/**
+ * gum_group_add:
+ * @self: #GumGroup object to be added; object should have valid
+ * #GumGroup:groupname and #GumGroup:grouptype properties.
+ * @callback: #GumGroupCb to be invoked when group is added
+ * @user_data: user data
+ *
+ * This method adds the group over the DBus asynchronously. Callback is used to
+ * notify when the group is added.
+ *
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
+ */
 gboolean
 gum_group_add (
         GumGroup *self,
@@ -543,6 +688,20 @@ gum_group_add (
     return TRUE;
 }
 
+/**
+ * gum_group_delete:
+ * @self: #GumGroup object to be deleted; object should have valid
+ * #GumGroup:gid property.
+ * @callback: #GumGroupCb to be invoked when group is deleted
+ * @user_data: user data
+ *
+ * This method deletes the group over the DBus asynchronously. Callback is used
+ * to notify when the group is deleted.
+ *
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
+ */
 gboolean
 gum_group_delete (
         GumGroup *self,
@@ -562,6 +721,21 @@ gum_group_delete (
     return TRUE;
 }
 
+/**
+ * gum_group_update:
+ * @self: #GumGroup object to be updated; object should have valid
+ * #GumGroup:gid property.
+ * @callback: #GumGroupCb to be invoked when group is updated
+ * @user_data: user data
+ *
+ * This method updates the group over the DBus asynchronously. Callback is used
+ * to notify when the group is updated. The properties which can be updated
+ * are: secret.
+ *
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
+ */
 gboolean
 gum_group_update (
         GumGroup *self,
@@ -581,6 +755,23 @@ gum_group_update (
     return TRUE;
 }
 
+/**
+ * gum_group_add_member:
+ * @self: #GumGroup object where new member is to be added; object should have
+ * valid #GumGroup:gid property.
+ * @uid: user id of the member to be added to the group
+ * @add_as_admin: user will be added with admin privileges for the group if set
+ * to TRUE
+ * @callback: #GumGroupCb to be invoked when member is added
+ * @user_data: user data
+ *
+ * This method adds new member to the group over the DBus asynchronously.
+ * Callback is used to notify when the member is added.
+ *
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
+ */
 gboolean
 gum_group_add_member (
         GumGroup *self,
@@ -603,6 +794,21 @@ gum_group_add_member (
     return TRUE;
 }
 
+/**
+ * gum_group_delete_member:
+ * @self: #GumGroup object where member is to be deleted from; object should
+ * have valid #GumGroup:gid property.
+ * @uid: user id of the member to be deleted from the group
+ * @callback: #GumGroupCb to be invoked when member is deleted
+ * @user_data: user data
+ *
+ * This method deletes new member from the group over the DBus asynchronously.
+ * Callback is used to notify when the member is deleted.
+ *
+ * Returns: returns TRUE if the request has been pushed and is waiting for
+ * the response, FALSE otherwise. No callback is triggered, in case the
+ * function returns FALSE.
+ */
 gboolean
 gum_group_delete_member (
         GumGroup *self,
