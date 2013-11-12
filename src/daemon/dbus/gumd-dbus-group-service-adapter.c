@@ -657,8 +657,8 @@ gumd_dbus_group_service_adapter_new_with_connection (
     DBG("(+) started group service interface '%p' at path '%s' on connection"
             " '%p'", adapter, GUM_GROUP_SERVICE_OBJECTPATH, bus_connection);
 
-    timeout = gumd_daemon_get_group_timeout (adapter->priv->daemon);
-    if (timeout) {
+    timeout = gumd_daemon_get_timeout (adapter->priv->daemon);
+    if (timeout && bus_type != GUMD_DBUS_SERVER_BUSTYPE_P2P) {
         gum_disposable_set_timeout (GUM_DISPOSABLE (adapter), timeout);
     }
 
