@@ -37,7 +37,7 @@
 /**
  * SECTION:gum-user
  * @short_description: provides interface for managing user's account
- * @include: common/gum-user.h
+ * @include: gum/gum-user.h
  *
  * #GumUser provides interface for adding, removing and updating user accounts.
  * User's information can also be retrieved using this interface. Only
@@ -102,6 +102,18 @@
  *
  * #GumUserCb defines the callback which is used when user object is created,
  * added, deleted or updated.
+ */
+
+/**
+ * GumUser:
+ *
+ * Opaque structure for the object.
+ */
+
+/**
+ * GumUserClass:
+ *
+ * Opaque structure for the class.
  */
 
 typedef struct {

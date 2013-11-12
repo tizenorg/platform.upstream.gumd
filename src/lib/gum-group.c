@@ -37,7 +37,7 @@
 /**
  * SECTION:gum-group
  * @short_description: provides interface for managing group's data
- * @include: common/gum-group.h
+ * @include: gum/gum-group.h
  *
  * #GumGroup provides interface for adding, removing and updating group.
  * Group's information can also be retrieved using this interface. Only
@@ -102,6 +102,18 @@
  *
  * #GumGroupCb defines the callback which is used when group object is created,
  * added, deleted or updated or new members are added to the group.
+ */
+
+/**
+ * GumGroup:
+ *
+ * Opaque structure for the object.
+ */
+
+/**
+ * GumGroupClass:
+ *
+ * Opaque structure for the class.
  */
 
 typedef struct {

@@ -34,6 +34,63 @@
 #include "common/gum-log.h"
 #include "common/gum-dictionary.h"
 
+/**
+ * SECTION:gum-config
+ * @short_description: gum configuration information
+ * @include: gum/common/gum-config.h
+ *
+ * #GumConfig holds configuration information as a set of keys and values
+ * (integer or strings). The key names are defined in
+ * <link linkend="gumd-General-configuration">General config keys</link>,
+ * and <link linkend="gumd-DBus-configuration">DBus config keys</link>.
+ *
+ * The configuration is retrieved from the gum configuration file. See below
+ * for where the file is searched for.
+ *
+ * <refsect1><title>Usage</title></refsect1>
+ * Following code snippet demonstrates how to create and use config object:
+ * |[
+ *
+ * GumConfig* config = gum_config_new ();
+ * const gchar *str = gum_config_get_string (config,
+ *  GUM_CONFIG_GENERAL_SKEL_DIR, 0);
+ * g_object_unref(config);
+ *
+ * ]|
+ *
+ * <refsect1><title>Where the configuration file is searched for</title>
+ * </refsect1>
+ *
+ * If gum has been compiled with --enable-debug, then these locations are used,
+ * in decreasing order of priority:
+ * - UM_CONF_FILE environment variable
+ * - g_get_user_config_dir() + "gum.conf"
+ * - each of g_get_system_config_dirs() + "gum.conf"
+ *
+ * Otherwise, the config file location is determined at compilation time as
+ * $(sysconfdir) + "gum.conf"
+ *
+ * <refsect1><title>Example configuration file</title></refsect1>
+ *
+ * See example configuration file here:
+ * <ulink url="https://github.com/01org/gumd/blob/master/src/common/gum.conf.in">
+ * gum configuration file</ulink>
+ *
+ */
+
+/**
+ * GumConfig:
+ *
+ * Opaque structure for the object.
+ */
+
+/**
+ * GumConfigClass:
+ * @parent_class: parent class object
+ *
+ * Opaque structure for the class.
+ */
+
 struct _GumConfigPrivate
 {
     gchar *config_file_path;
@@ -224,6 +281,17 @@ _load_environment (
 }
 #endif  /* ENABLE_DEBUG */
 
+/**
+ * gum_config_get_int:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: the key name
+ * @retval: value to be returned in case key is not found
+ *
+ * Get an integer configuration value.
+ *
+ * Returns: the value corresponding to the key as an integer. If the key does
+ * not exist or cannot be converted to the integer, retval is returned.
+ */
 gint
 gum_config_get_int (
         GumConfig *self,
@@ -234,6 +302,14 @@ gum_config_get_int (
     return (gint) (str_value ? atoi (str_value) : retval);
 }
 
+/**
+ * gum_config_set_int:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: the key name
+ * @value: the value
+ *
+ * Sets the configuration value to the provided integer.
+ */
 void
 gum_config_set_int (
         GumConfig *self,
@@ -251,6 +327,17 @@ gum_config_set_int (
     g_free (s_value);
 }
 
+/**
+ * gum_config_get_uint:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: the key name
+ * @retval: value to be returned in case key is not found
+ *
+ * Get an unsigned integer configuration value.
+ *
+ * Returns: the value corresponding to the key as an unsigned integer. If the
+ * key does not exist or cannot be converted to the integer, retval is returned.
+ */
 guint
 gum_config_get_uint (
         GumConfig *self,
@@ -263,6 +350,14 @@ gum_config_get_uint (
     return value;
 }
 
+/**
+ * gum_config_set_uint:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: the key name
+ * @value: the value
+ *
+ * Sets the configuration value to the provided unsigned integer.
+ */
 void
 gum_config_set_uint (
         GumConfig *self,
@@ -279,6 +374,16 @@ gum_config_set_uint (
     g_free (s_value);
 }
 
+/**
+ * gum_config_get_string:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: (transfer none): the key name
+ *
+ * Get a string configuration value.
+ *
+ * Returns: the value corresponding to the key as an string. If the
+ * key does not exist or cannot be converted to the integer, NULL is returned.
+ */
 const gchar *
 gum_config_get_string (
         GumConfig *self,
@@ -293,6 +398,14 @@ gum_config_get_string (
     return g_variant_get_string (value, NULL);
 }
 
+/**
+ * gum_config_set_string:
+ * @self: (transfer none): an instance of #GumConfig
+ * @key: (transfer none): the key name
+ * @value: (transfer none): the value
+ *
+ * Sets the configuration value to the provided string.
+ */
 void
 gum_config_set_string (
         GumConfig *self,
@@ -406,6 +519,13 @@ gum_config_class_init (
 
 }
 
+/**
+ * gum_config_new:
+ *
+ * Create a #GumConfig object.
+ *
+ * Returns: an instance of #GumConfig.
+ */
 GumConfig *
 gum_config_new ()
 {

@@ -3,9 +3,9 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2012 Intel Corporation.
+ * Copyright (C) 2013 Intel Corporation.
  *
- * Contact: Amarnath Valluri <amarnath.valluri@linux.intel.com>
+ * Contact: Imran Zaman <imran.zaman@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,6 +32,11 @@
 #include "gum-config-general.h"
 #include "gum-config-dbus.h"
 
+/**
+ * GUM_UMASK:
+ *
+ * Value used to set the mode of home directories created for new users.
+ */
 #define GUM_UMASK  022
 
 G_BEGIN_DECLS
@@ -73,36 +78,36 @@ gum_config_new ();
 
 gint
 gum_config_get_int (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key,
         gint retval);
 
 void
 gum_config_set_int (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key,
         gint value);
 
 guint
 gum_config_get_uint (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key,
         guint retval);
 
 void
 gum_config_set_uint (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key,
         guint value);
 
 const gchar*
 gum_config_get_string (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key);
 
 void
 gum_config_set_string (
-        GumConfig *config,
+        GumConfig *self,
         const gchar *key,
         const gchar *value);
 
