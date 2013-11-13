@@ -576,7 +576,7 @@ _handle_get_group (
                 invocation, gumd_dbus_group_adapter_get_object_path (dbus_group));
     } else {
         if (!error) {
-            error = gum_get_gerror_for_id (GUM_ERROR_GROUP_NOT_FOUND,
+            error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_GROUP_NOT_FOUND,
                     "Group Not Found");
         }
         g_dbus_method_invocation_return_gerror (invocation, error);
@@ -619,7 +619,7 @@ _handle_get_group_by_name (
         		gumd_dbus_group_adapter_get_object_path (dbus_group));
     } else {
         if (!error) {
-            error = gum_get_gerror_for_id (GUM_ERROR_GROUP_NOT_FOUND,
+            error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_GROUP_NOT_FOUND,
                     "Group Not Found");
         }
         g_dbus_method_invocation_return_gerror (invocation, error);

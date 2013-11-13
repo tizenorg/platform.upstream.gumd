@@ -298,7 +298,7 @@ gumd_daemon_get_user (
 {
     GumdDaemonUser *user = NULL;
     if (!self || !GUMD_IS_DAEMON (self)) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon object is not valid", error, NULL);
     }
 
@@ -310,7 +310,7 @@ gumd_daemon_get_user (
 
     user = gumd_daemon_user_new_by_uid (uid, self->priv->config);
     if (!user) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 NULL);
     }
 
@@ -328,13 +328,13 @@ gumd_daemon_get_user_by_name (
 {
     uid_t uid = GUM_USER_INVALID_UID;
     if (!self || !GUMD_IS_DAEMON (self)) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon object is not valid", error, NULL);
     }
 
     uid = gumd_daemon_user_get_uid_by_name (username, self->priv->config);
     if (uid == GUM_USER_INVALID_UID) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 NULL);
     }
 
@@ -350,7 +350,7 @@ gumd_daemon_add_user (
     uid_t uid = GUM_USER_INVALID_UID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !user) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/usr object not valid", error, FALSE);
     }
 
@@ -377,7 +377,7 @@ gumd_daemon_delete_user (
     uid_t uid = GUM_USER_INVALID_UID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !user) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/user object not valid", error, FALSE);
     }
 
@@ -401,7 +401,7 @@ gumd_daemon_update_user (
     uid_t uid = GUM_USER_INVALID_UID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !user) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/user object not valid", error, FALSE);
     }
 
@@ -432,7 +432,7 @@ gumd_daemon_get_group (
 {
     GumdDaemonGroup *group = NULL;
     if (!self || !GUMD_IS_DAEMON (self)) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon object is not valid", error, NULL);
     }
 
@@ -444,7 +444,7 @@ gumd_daemon_get_group (
 
     group = gumd_daemon_group_new_by_gid (gid, self->priv->config);
     if (!group) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group not found", error,
                 FALSE);
     }
 
@@ -462,13 +462,13 @@ gumd_daemon_get_group_by_name (
 {
     gid_t gid = GUM_GROUP_INVALID_GID;
     if (!self || !GUMD_IS_DAEMON (self)) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon object is not valid", error, NULL);
     }
 
     gid = gumd_daemon_group_get_gid_by_name (groupname, self->priv->config);
     if (gid == GUM_GROUP_INVALID_GID) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "User not found", error,
                 NULL);
     }
 
@@ -484,7 +484,7 @@ gumd_daemon_add_group (
     gid_t gid = GUM_GROUP_INVALID_GID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !group) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/usr object not valid", error, FALSE);
     }
 
@@ -508,7 +508,7 @@ gumd_daemon_delete_group (
     gid_t gid = GUM_GROUP_INVALID_GID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !group) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/group object not valid", error, FALSE);
     }
 
@@ -532,7 +532,7 @@ gumd_daemon_update_group (
     gid_t gid = GUM_GROUP_INVALID_GID;
 
     if (!self || !GUMD_IS_DAEMON (self) || !group) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/group object not valid", error, FALSE);
     }
 
@@ -556,7 +556,7 @@ gumd_daemon_add_group_member (
         GError **error)
 {
     if (!self || !GUMD_IS_DAEMON (self) || !group) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/group object not valid", error, FALSE);
     }
 
@@ -575,7 +575,7 @@ gumd_daemon_delete_group_member (
         GError **error)
 {
     if (!self || !GUMD_IS_DAEMON (self) || !group) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
                 "Daemon/group object not valid", error, FALSE);
     }
 

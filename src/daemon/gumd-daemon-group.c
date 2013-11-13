@@ -415,12 +415,12 @@ _set_gid (
 
     if (gum_file_getgrnam (self->priv->group->gr_name, self->priv->config)
             != NULL) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
                 "Group already exists", error, FALSE);
     }
 
     if (!_find_free_gid (self, preferred_gid, &gid)){
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_GID_NOT_AVAILABLE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_GID_NOT_AVAILABLE,
                 "GID not available", error, FALSE);
     }
     _set_gid_property (self, gid);
@@ -446,7 +446,7 @@ _update_daemon_group_entry (
             case GUM_OPTYPE_ADD:
                 if (self->priv->group->gr_gid < entry->gr_gid) {
                     if (putgrent (self->priv->group, newf) < 0) {
-                        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
                     done = TRUE;
@@ -466,7 +466,7 @@ _update_daemon_group_entry (
                 if (self->priv->group->gr_gid == entry->gr_gid &&
                     g_strcmp0 (old_name, entry->gr_name) == 0) {
                     if (putgrent (self->priv->group, newf) < 0) {
-                        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
                     done = TRUE;
@@ -479,7 +479,7 @@ _update_daemon_group_entry (
             }
         }
         if (putgrent (entry, newf) < 0) {
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
     }
@@ -487,14 +487,14 @@ _update_daemon_group_entry (
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
         if (putgrent (self->priv->group, newf) < 0) {
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
         done = TRUE;
     }
 
     if (!done) {
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
                 FALSE);
     }
 
@@ -519,7 +519,7 @@ _update_gshadow_entry (
             case GUM_OPTYPE_ADD:
                 if (g_strcmp0 (self->priv->gshadow->sg_namp,
                         entry->sg_namp) == 0) {
-                    RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
+                    GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
                             "File write failure", error, FALSE);
                 }
                 break;
@@ -535,7 +535,7 @@ _update_gshadow_entry (
                         self->priv->gshadow->sg_namp;
                 if (g_strcmp0 (old_name, entry->sg_namp) == 0) {
                     if (putsgent (self->priv->gshadow, newf) < 0) {
-                        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
                     done = TRUE;
@@ -548,7 +548,7 @@ _update_gshadow_entry (
             }
         }
         if (putsgent (entry, newf) < 0) {
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
     }
@@ -556,14 +556,14 @@ _update_gshadow_entry (
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
         if (putsgent (self->priv->gshadow, newf) < 0) {
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
         done = TRUE;
     }
 
     if (!done) {
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
                 FALSE);
     }
 
@@ -592,7 +592,7 @@ _set_secret (
     self->priv->gshadow->sg_passwd = gum_crypt_encrypt_secret (
             self->priv->group->gr_passwd, GUM_CRYPT_SHA512);
     if (!self->priv->gshadow->sg_passwd) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE,
                 "Secret encryption failed.", error, FALSE);
     }
 
@@ -629,7 +629,7 @@ _check_group_type (
             break;
         case GUM_GROUPTYPE_NONE:
         default:
-            RETURN_WITH_ERROR (GUM_ERROR_GROUP_INVALID_GROUP_TYPE,
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_INVALID_GROUP_TYPE,
                     "Invalid group type", error, FALSE);
             break;
     }
@@ -664,7 +664,7 @@ _get_group (
     if (!grp ||
         (s_gid != G_MAXUINT && s_gid != grp->gr_gid) ||
         (s_name && g_strcmp0 (s_name, grp->gr_name) != 0)) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group not found",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group not found",
                 error, FALSE);
     }
 
@@ -826,7 +826,7 @@ gumd_daemon_group_add (
     }
 
     if (!gum_lock_pwdf_lock ()) {
-    	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
     	        "Database already locked", error, FALSE);
     }
 
@@ -871,13 +871,13 @@ gumd_daemon_group_delete (
     const gchar *shadow_file = NULL;
 
     if (!gum_lock_pwdf_lock ()) {
-    	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
     	        "Database already locked", error, FALSE);
     }
 
     if (self->priv->group->gr_gid == GUM_GROUP_INVALID_GID) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group gid invalid",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group gid invalid",
                 error, FALSE);
     }
 
@@ -888,7 +888,7 @@ gumd_daemon_group_delete (
 
     if (self->priv->group->gr_gid == getegid ()) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_SELF_DESTRUCTION,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_SELF_DESTRUCTION,
         		"Self-destruction not possible", error, FALSE);
     }
 
@@ -899,7 +899,7 @@ gumd_daemon_group_delete (
     if (gum_file_find_user_by_gid (self->priv->group->gr_gid,
             self->priv->config) != NULL) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_HAS_USER,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_HAS_USER,
                 "Group is a primary group of an existing user", error, FALSE);
     }
 
@@ -939,13 +939,13 @@ gumd_daemon_group_update (
 
     /* Only secret can be updated */
     if (!gum_lock_pwdf_lock ()) {
-        RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
                 "Database already locked", error, FALSE);
     }
 
     if (self->priv->group->gr_gid == GUM_GROUP_INVALID_GID) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group gid invalid",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NOT_FOUND, "Group gid invalid",
                 error, FALSE);
     }
 
@@ -961,7 +961,7 @@ gumd_daemon_group_update (
         (gshadow && gum_crypt_cmp_secret (self->priv->group->gr_passwd,
                 gshadow->sg_passwd) == 0)) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_NO_CHANGES,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_NO_CHANGES,
                 "No changes registered", error, FALSE);
     }
 
@@ -1021,13 +1021,13 @@ gumd_daemon_group_add_member (
     DBG ("");
 
     if (!gum_lock_pwdf_lock ()) {
-        RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
                 "Database already locked", error, FALSE);
     }
 
     if ((pent = gum_file_getpwuid (uid, self->priv->config)) == NULL) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 FALSE);
     }
 
@@ -1038,7 +1038,7 @@ gumd_daemon_group_add_member (
 
     if (gum_string_utils_search_stringv (grp->gr_mem, pent->pw_name)) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER,
                 "User already a member of the group", error, FALSE);
     }
 
@@ -1100,13 +1100,13 @@ gumd_daemon_group_delete_member (
     DBG ("");
 
     if (!gum_lock_pwdf_lock ()) {
-        RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
                 "Database already locked", error, FALSE);
     }
 
     if ((pent = gum_file_getpwuid (uid, self->priv->config)) == NULL) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 FALSE);
     }
 
@@ -1117,7 +1117,7 @@ gumd_daemon_group_delete_member (
 
     if (!gum_string_utils_search_stringv (grp->gr_mem, pent->pw_name)) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
                 "User not a member of the group", error, FALSE);
     }
 
@@ -1177,7 +1177,7 @@ gumd_daemon_group_delete_user_membership (
     const gchar *origfn = NULL;
 
     if (!config || !user_name) {
-        RETURN_WITH_ERROR (GUM_ERROR_GROUP_INVALID_DATA,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_INVALID_DATA,
                 "Invalid input data", error, FALSE);
     }
 
@@ -1186,7 +1186,7 @@ gumd_daemon_group_delete_user_membership (
     }
 
     if (!gum_lock_pwdf_lock ()) {
-        RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
                 "Database already locked", error, FALSE);
     }
 
@@ -1210,13 +1210,13 @@ gumd_daemon_group_delete_user_membership (
             status = putgrent (gdest, newf);
             _free_daemon_group_entry (gdest);
             if (status < 0) {
-                SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+                GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                         error, retval, FALSE);
                 break;
             }
 
         } else if (putgrent (gent, newf) < 0) {
-            SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, retval, FALSE);
             break;
         }
@@ -1266,13 +1266,13 @@ gumd_daemon_group_delete_user_membership (
             status = putsgent (gsdest, newf);
             _free_gshadow_entry (gsdest);
             if (status < 0) {
-                SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+                GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                         error, retval, FALSE);
                 break;
             }
 
         } else if (putsgent (gsent, newf) < 0) {
-            SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, retval, FALSE);
             break;
         }

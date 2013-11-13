@@ -31,6 +31,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * SECTION:gum-log
+ * @short_description: logging facilities
+ * @title: Logging
+ * @include: gum/common/gum-log.h
+ *
+ * <filename>gum/common/gum-log.h</filename> file contains logging macros
+ *
+ * For example:
+ * |[    INFO("Object initialized"); ]|
+ */
+
+/**
+ * TRACEBACK:
+ *
+ * This macro prints the current function call stack to stderr.
+ */
 #define TRACEBACK() \
 { \
     void *array[256];\
@@ -46,15 +63,50 @@
     }\
 }
 
+/**
+ * INFO:
+ * @frmt: format string for the message
+ * @...: arguments for the format string
+ *
+ * Use this macro to log informational messages. Gum will take care of
+ * correctly saving them.
+ */
 #define INFO(frmt, args...) g_message("%f %s:%d %s " frmt , \
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
+
+/**
+ * ERR:
+ * @frmt: format string for the message
+ * @...: arguments for the format string
+ *
+ * Use this macro to log error messages. Gum will take care of
+ * correctly saving them.
+ */
 #define ERR(frmt, args...)  g_critical("%f %s:%d %s " frmt , \
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
+
+/**
+ * WARN:
+ * @frmt: format string for the message
+ * @...: arguments for the format string
+ *
+ * Use this macro to log warning messages. Gum will take care of
+ * correctly saving them.
+ */
 #define WARN(frmt, args...) g_warning("%f %s:%d %s " frmt , \
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
+
+/**
+ * DBG:
+ * @frmt: format string for the message
+ * @...: arguments for the format string
+ *
+ * Use this macro to log debug messages. Gum will take care of
+ * correctly saving them.
+ */
 #define DBG(frmt, args...)  g_debug("%f %s:%d %s " frmt , \
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)

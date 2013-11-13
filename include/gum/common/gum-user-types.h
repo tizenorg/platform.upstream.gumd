@@ -30,6 +30,34 @@
 
 G_BEGIN_DECLS
 
+/**
+ * SECTION:gum-user-types
+ * @short_description: user types definition
+ * @title: User types
+ *
+ * This file provides various types of users that can be created by the user
+ * management framework.
+ *
+ */
+
+/**
+ * GumUserType:
+ * @GUM_USERTYPE_NONE: user type not defined/set
+ * @GUM_USERTYPE_SYSTEM: system user. No home directory will be created for
+ * system user. System user is not able to use login/logout functionality as
+ * its primary usage is limited to system daemons.
+ * @GUM_USERTYPE_ADMIN: admin user is similar to normal user with the addition
+ * of super user privileges.
+ * @GUM_USERTYPE_GUEST: guest user does not need secret/password to login.
+ * Guest user home directory is created with login and cleaned up/destroyed
+ * when user logs out.
+ * @GUM_USERTYPE_NORMAL: normal user with home directory created based on prefix
+ * #GUM_CONFIG_GENERAL_HOME_DIR_PREF. Contents of #GUM_CONFIG_GENERAL_SKEL_DIR
+ * are copied to the home directory.
+ *
+ * This enumeration lists users types.
+ */
+
 typedef enum {
 
     GUM_USERTYPE_NONE = 0,

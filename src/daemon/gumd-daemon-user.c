@@ -632,7 +632,7 @@ _set_daemon_user_name (
      * */
     gchar *tname = NULL;
     if (!self->priv->pw->pw_name && !self->priv->nick_name) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "User name not specified", error, FALSE);
     }
 
@@ -647,7 +647,7 @@ _set_daemon_user_name (
     	g_free (tname);
         return TRUE;
     } else if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "System user name must exist with pattern "
                 GUM_NAME_PATTERN, error, FALSE);
     }
@@ -729,12 +729,12 @@ _set_uid (
 
     if (gum_file_getpwnam (self->priv->pw->pw_name, self->priv->config)
             != NULL) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_ALREADY_EXISTS,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_ALREADY_EXISTS,
                 "User already exists", error, FALSE);
     }
 
     if (!_find_free_uid (self, &uid)){
-        RETURN_WITH_ERROR (GUM_ERROR_USER_UID_NOT_AVAILABLE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_UID_NOT_AVAILABLE,
                 "UID not available", error, FALSE);
     }
     _set_uid_property (self, uid);
@@ -764,7 +764,7 @@ _check_daemon_user_type (
 			break;
 		case GUM_USERTYPE_NONE:
 		default:
-			RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
+			GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
 					"Invalid user type", error, FALSE);
 			break;
 	}
@@ -795,7 +795,7 @@ _set_secret (
     self->priv->shadow->sp_pwdp = gum_crypt_encrypt_secret (
             self->priv->pw->pw_passwd, GUM_CRYPT_SHA512);
     if (!self->priv->shadow->sp_pwdp) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE,
                 "Secret encryption failed.", error, FALSE);
     }
 
@@ -852,7 +852,7 @@ _update_passwd_entry (
             case GUM_OPTYPE_ADD:
                 if (self->priv->pw->pw_uid < entry->pw_uid) {
                 	if (putpwent (self->priv->pw, newf) < 0) {
-                		RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
                 	done = TRUE;
@@ -873,7 +873,7 @@ _update_passwd_entry (
                 	self->priv->pw->pw_gid == entry->pw_gid &&
                     g_strcmp0 (old_name, entry->pw_name) == 0) {
                 	if (putpwent (self->priv->pw, newf) < 0) {
-                		RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
                     done = TRUE;
@@ -886,7 +886,7 @@ _update_passwd_entry (
             }
         }
         if (putpwent (entry, newf) < 0) {
-        	RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+        	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
         			error, FALSE);
         }
     }
@@ -894,14 +894,14 @@ _update_passwd_entry (
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
     	if (putpwent (self->priv->pw, newf) < 0) {
-    		RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
+    		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
     				error, FALSE);
     	}
     	done = TRUE;
     }
 
     if (!done) {
-    	RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
     	        error, FALSE);
     }
 
@@ -945,7 +945,7 @@ _lock_shadow_entry (
     struct spwd *entry = NULL;
 
     if (!user_data) {
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 "File write failure", error, FALSE);
     }
 
@@ -969,7 +969,7 @@ _lock_shadow_entry (
                     ret = putspent (spent, newf);
                     _free_shadow_entry (spent);
                     if (ret < 0) {
-                        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
                     done = TRUE;
@@ -982,13 +982,13 @@ _lock_shadow_entry (
             }
         }
         if (putspent (entry, newf) < 0) {
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
     }
 
     if (!done) {
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
                 error, FALSE);
     }
 
@@ -1014,7 +1014,7 @@ _update_shadow_entry (
             case GUM_OPTYPE_ADD:
                 if (g_strcmp0 (self->priv->shadow->sp_namp,
                         entry->sp_namp) == 0) {
-                    RETURN_WITH_ERROR (GUM_ERROR_USER_ALREADY_EXISTS,
+                    GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_ALREADY_EXISTS,
                             "File write failure", error, FALSE);
                 }
                 break;
@@ -1030,7 +1030,7 @@ _update_shadow_entry (
                         self->priv->shadow->sp_namp;
                 if (g_strcmp0 (old_name, entry->sp_namp) == 0) {
                 	if (putspent (self->priv->shadow, newf) < 0) {
-                		RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
                     done = TRUE;
@@ -1043,7 +1043,7 @@ _update_shadow_entry (
             }
         }
         if (putspent (entry, newf) < 0) {
-        	RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+        	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
         			error, FALSE);
         }
     }
@@ -1051,14 +1051,14 @@ _update_shadow_entry (
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
     	if (putspent (self->priv->shadow, newf) < 0) {
-    		RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
+    		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
     				error, FALSE);
     	}
     	done = TRUE;
     }
 
     if (!done) {
-    	RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
     	        error, FALSE);
     }
 
@@ -1076,7 +1076,7 @@ _set_group (
 
     group = gumd_daemon_group_new (self->priv->config);
     if (!group) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
                         "Group add failure", error, FALSE);
     }
 
@@ -1086,7 +1086,7 @@ _set_group (
             "grouptype", grp_type, NULL);
     if (!(added = gumd_daemon_group_add (group, (gid_t)self->priv->pw->pw_uid,
             &gid, error))) {
-        SET_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
+        GUM_SET_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
                         "Group add failure", error, added, FALSE);
         goto _finished;
     }
@@ -1123,7 +1123,7 @@ _set_default_groups (
                 g_object_unref (agroup);
                 if (!added) break;
             } else {
-                RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
+                GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
                                 "Unable to add default groups", error, FALSE);
             }
             ind++;
@@ -1172,7 +1172,7 @@ _delete_group (
 
     group = gumd_daemon_group_new (self->priv->config);
     if (!group) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_DELETE_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_DELETE_FAILURE,
                         "Group delete failure - unable to create group obj",
                         error, FALSE);
     }
@@ -1180,7 +1180,7 @@ _delete_group (
     g_object_set (G_OBJECT(group), "groupname", self->priv->pw->pw_name,
             "gid", self->priv->pw->pw_gid, NULL);
     if (!(deleted = gumd_daemon_group_delete (group, error))) {
-        SET_ERROR (GUM_ERROR_USER_GROUP_DELETE_FAILURE,
+        GUM_SET_ERROR (GUM_ERROR_USER_GROUP_DELETE_FAILURE,
                         "Group delete failure", error, deleted, FALSE);
         goto _finished;
     }
@@ -1217,7 +1217,7 @@ _get_passwd (
     if (!pwd ||
         (s_uid != GUM_USER_INVALID_UID && s_uid != pwd->pw_uid) ||
         (s_name && g_strcmp0 (s_name, pwd->pw_name) != 0)) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
                 error, FALSE);
     }
 
@@ -1273,7 +1273,7 @@ _copy_passwd_data (
     }
     spent = gum_file_getspnam (pent->pw_name, self->priv->config);
     if (!spent) {
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
                 error, FALSE);
     }
 
@@ -1463,7 +1463,7 @@ gumd_daemon_user_add (
     }
 
     if (!gum_lock_pwdf_lock ()) {
-    	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
     			"Database already locked", error, FALSE);
     }
 
@@ -1523,26 +1523,26 @@ gumd_daemon_user_delete (
     gboolean lock = TRUE;
 
     if (!gum_lock_pwdf_lock ()) {
-    	RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
     			"Database already locked", error, FALSE);
     }
 
     if (self->priv->pw->pw_uid == GUM_USER_INVALID_UID) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User uid invalid", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User uid invalid", error,
                 FALSE);
     }
 
     if (!_copy_passwd_data (self, error)) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 FALSE);
     }
 
 	/* deny if user is self-destructing */
     if (self->priv->pw->pw_uid == geteuid ()) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_SELF_DESTRUCTION,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SELF_DESTRUCTION,
         		"Self-destruction not possible", error, FALSE);
     }
 
@@ -1552,7 +1552,7 @@ gumd_daemon_user_delete (
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, error)) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_LOCK_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_LOCK_FAILURE,
                 "unable to lock user to login", error, FALSE);
     }
 
@@ -1564,7 +1564,7 @@ gumd_daemon_user_delete (
                     gum_config_get_string (self->priv->config,
                     GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
                 "unable to terminate user active sessions", error, FALSE);
     }
 
@@ -1618,13 +1618,13 @@ gumd_daemon_user_update (
     /* Only secret, realname, office, officephone, homephone and
      * shell can be updated */
     if (!gum_lock_pwdf_lock ()) {
-        RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
                 "Database already locked", error, FALSE);
     }
 
     if (self->priv->pw->pw_uid == GUM_USER_INVALID_UID) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User uid invalid", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User uid invalid", error,
                 FALSE);
     }
 
@@ -1636,7 +1636,7 @@ gumd_daemon_user_update (
     if ((shadow = gum_file_getspnam (pw->pw_name,
             self->priv->config)) == NULL) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
                 "User not found in Shadow", error, FALSE);
     }
 
@@ -1679,7 +1679,7 @@ gumd_daemon_user_update (
 
     if (change == 0) {
         gum_lock_pwdf_unlock ();
-        RETURN_WITH_ERROR (GUM_ERROR_USER_NO_CHANGES,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NO_CHANGES,
                 "No changes registered", error, FALSE);
     }
 

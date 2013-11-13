@@ -304,7 +304,7 @@ _update_file_entries (
             n_read += n;
         } while (n_read < BLOCKSIZE && n != 0);
         if (n == 0 && ferror (origf))
-            RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Unable to write file",
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Unable to write file",
                     error, FALSE);
 
         p = buffer;
@@ -312,7 +312,7 @@ _update_file_entries (
         while (n_read > 0) {
             n_written = fwrite (p, 1, n_read, newf);
             if (n_written == -1)
-                RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                         "Unable to write file", error, FALSE);
 
             p += n_written;

@@ -41,27 +41,27 @@ gum_validate_name (
     int rval;
     regex_t re;
     if (!name) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "Invalid name. len must be > 0 and less than UT_NAMESIZE",
                 error, FALSE);
     }
 
     len = strlen (name);
     if (len == 0 || len > UT_NAMESIZE) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "Invalid name len. len must be > 0 and less than UT_NAMESIZE",
                 error, FALSE);
     }
 
     memset (&re, 0, sizeof (regex_t));
     if (regcomp (&re, (const char*)GUM_NAME_PATTERN, 0) != 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_INTERNAL_SERVER, "Internal server error",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INTERNAL_SERVER, "Internal server error",
                 error, FALSE);
     }
     rval = regexec (&re, name, 0, NULL, 0);
     regfree (&re);
     if (rval != 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "Name failed pattern match for "
                 GUM_NAME_PATTERN, error, FALSE);
     }
@@ -77,7 +77,7 @@ gum_validate_generate_username (
     GChecksum *hid = NULL;
     gsize len = 0;
     if (!str || (len = strlen (str)) == 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "Unable to generate name for 0 len str", error, NULL);
     }
 
@@ -106,19 +106,19 @@ gum_validate_db_string_entry_regx (
     int rval;
     regex_t re;
     if (!str) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR, "Invalid input str.", error,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR, "Invalid input str.", error,
                 FALSE);
     }
 
     memset (&re, 0, sizeof (regex_t));
     if (regcomp (&re, (const char*)GUM_DB_ENTRY_PATTERN, REG_EXTENDED) != 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_INTERNAL_SERVER, "Internal server error",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INTERNAL_SERVER, "Internal server error",
                 error, FALSE);
     }
     rval = regexec (&re, str, 0, NULL, 0);
     regfree (&re);
     if (rval != 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR,
                 "No control characters or ':' or ',' is allowed."
                 "String failed pattern match for "GUM_DB_ENTRY_PATTERN, error,
                 FALSE);
@@ -142,12 +142,12 @@ gum_validate_db_string_entry (
     };
 
     if (!str) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR, "Invalid input str.",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR, "Invalid input str.",
                 error, FALSE);
     }
 
     if (strlen (str) > 0 && strpbrk (str, invalid) != NULL) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_STR,
                 "No control characters or ':' or ',' is allowed", error, FALSE);
     }
     return TRUE;
@@ -168,12 +168,12 @@ gum_validate_db_secret_entry (
     };
 
     if (!str) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_SECRET, "Invalid input str.",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_SECRET, "Invalid input str.",
                 error, FALSE);
     }
 
     if (strpbrk (str, invalid) != NULL) {
-        RETURN_WITH_ERROR (GUM_ERROR_INVALID_SECRET,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_SECRET,
                 "No control characters or ':' is allowed", error, FALSE);
     }
     return TRUE;

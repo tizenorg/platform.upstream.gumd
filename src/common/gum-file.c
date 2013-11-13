@@ -118,13 +118,13 @@ gum_file_open_db_files (
 {
     if (!origfn || !origf || !(*origf = _open_file (origfn, "r"))) {
         DBG("origfn %s --- orig %p", origfn ? origfn : "NULL", origf);
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open orig file",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open orig file",
                 error, FALSE);
     }
 
     if (!newfn || !newf || !(*newf = _open_file (newfn, "w+"))) {
         if (*origf) fclose (*origf);
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open new file",
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open new file",
                 error, FALSE);
     }
 
@@ -132,7 +132,7 @@ gum_file_open_db_files (
         if (*origf) fclose (*origf);
         if (*newf) fclose (*newf);
         g_unlink (newfn);
-        RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
                 "Unable to get/set file attributes", error, FALSE);
     }
 
@@ -155,7 +155,7 @@ gum_file_close_db_files (
         fflush (newf) != 0 ||
         fsync (fileno (newf)) != 0 ||
         fclose (newf) != 0) {
-        SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error, retval,
+        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error, retval,
                 FALSE);
         goto _close_new;
     }
@@ -164,7 +164,7 @@ gum_file_close_db_files (
     /* Move original file to old file and new file as updated file */
     old_file = g_strdup_printf ("%s.old", origfn);
     if (!old_file) {
-        SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to create old file", error,
+        GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to create old file", error,
                 retval, FALSE);
         goto _close_new;
     }
@@ -172,7 +172,7 @@ gum_file_close_db_files (
     g_unlink (old_file);
     if (link (origfn, old_file) != 0 ||
         g_rename (newfn, origfn) != 0) {
-        SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to move file", error, retval,
+        GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to move file", error, retval,
                 FALSE);
     }
 
@@ -213,7 +213,7 @@ gum_file_update (
 
     /* Update, sync and close file */
     if (!update_func) {
-        SET_ERROR (GUM_ERROR_FILE_WRITE, "File write function not specified",
+        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write function not specified",
                 error, retval, FALSE);
         goto _close;
     }
@@ -464,14 +464,14 @@ _copy_dir_recursively (
     struct stat stat_entry;
 
     if (!src || !dest) {
-        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
                 "Invalid directory path(s)", error, FALSE);
     }
 
     DBG ("copy directory %s -> %s", src, dest);
     src_dir = g_dir_open (src, 0, NULL);
     if (!src_dir) {
-        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
                 "Invalid source directory path", error, FALSE);
     }
 
@@ -516,7 +516,7 @@ _free_data:
         GUM_OBJECT_UNREF (src_file);
         GUM_OBJECT_UNREF (dest_file);
         if (stop) {
-            SET_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
+            GUM_SET_ERROR (GUM_ERROR_HOME_DIR_COPY_FAILURE,
                     "Home directory copy failure", error, retval, FALSE);
             break;
         }
@@ -539,7 +539,7 @@ gum_file_create_home_dir (
 			GUM_CONFIG_GENERAL_UMASK, GUM_UMASK);
 
     if (!usr_home_dir) {
-        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                 "Invalid home directory path", error, FALSE);
     }
 
@@ -550,14 +550,14 @@ gum_file_create_home_dir (
         }
 
         if (!g_file_test (usr_home_dir, G_FILE_TEST_IS_DIR)) {
-            RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                     "Home directory creation failure", error, FALSE);
         }
 
         /* when run in test mode, user may not exist */
 #ifndef ENABLE_TESTS
 		if (chown (usr_home_dir, uid, gid) < 0) {
-			RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
+			GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
 					"Home directory chown failure", error, FALSE);
 		}
 #endif
@@ -579,7 +579,7 @@ gum_file_delete_home_dir (
     struct stat sent;
 
     if (!dir || !(gdir = g_dir_open(dir, 0, NULL))) {
-        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
                 "Invalid home directory path", error, FALSE);
     }
 
@@ -607,14 +607,14 @@ gum_file_delete_home_dir (
         }
         if (retval != 0) {
             g_dir_close (gdir);
-            RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
                 "Unable to delete files in the directory", error, FALSE);
         }
     }
     g_dir_close (gdir);
 
     if (g_remove (dir) != 0) {
-        RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_DELETE_FAILURE,
                 "Unable to delete home directory", error, FALSE);
     }
 

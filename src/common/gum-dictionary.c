@@ -3,9 +3,9 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2012-2013 Intel Corporation.
+ * Copyright (C) 2013 Intel Corporation.
  *
- * Contact: Alexander Kanavin <alex.kanavin@gmail.com>
+ * Contact: Imran Zaman <imran.zaman@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,15 +27,48 @@
 #include "common/gum-log.h"
 
 /**
+ * SECTION:gum-dictionary
+ * @short_description: a dictionary container holding string keys and variant
+ *  values
+ * @title: GumDictionary
+ * @include: gum/common/gum-dictionary.h
+ *
+ * A #GumDictionary is a dictionary data structure that maps string keys to
+ * #GVariant values. It's used in multiple places in gum and its public API
+ * to pass key-value data sets.
+ *
+ * |[
+ *     GumDictionary* dict = gum_dictionary_new();
+ *     gum_dictionary_set_string(dict, "name", "John Smith");
+ *     gum_dictionary_set_uint32(dict, "age", 32);
+ *
+ *     guint32 age;
+ *     gboolean success = gum_dictionary_get_uint32(dict, "age", &age);
+ *     const gchar* name = gum_dictionary_get_string(dict, "name");
+ *     gum_dictionary_unref(dict);
+ * ]|
+ */
+
+/**
+ * GumDictionary:
+ *
+ * #GumDictionary is a typedef for #GHashTable, which
+ * means the developers may also use methods associated with that structure.
+ */
+
+/**
  * gum_dictionary_new_from_variant:
- * @variant: instance of #GVariant
+ * @variant: (transfer none): instance of #GVariant
  *
- * Converts the variant to GumDictionary.
+ * Converts the #GVariant to #GumDictionary. This is useful for example if
+ * the dictionary needs to be deserialized, or if it's contained in another
+ * #GumDictionary and has been retrieved using gum_dictionary_get().
  *
- * Returns: (transfer full) object if successful, NULL otherwise.
+ * Returns: (transfer full): #GumDictionary if successful, NULL otherwise.
  */
 GumDictionary *
-gum_dictionary_new_from_variant (GVariant *variant)
+gum_dictionary_new_from_variant (
+        GVariant *variant)
 {
     GumDictionary *dict = NULL;
     GVariantIter iter;
@@ -56,14 +89,16 @@ gum_dictionary_new_from_variant (GVariant *variant)
 
 /**
  * gum_dictionary_to_variant:
- * @dict: instance of #GumDictionary
+ * @dict: (transfer none): instance of #GumDictionary
  *
- * Converts the GumDictionary to variant.
+ * Converts the #GumDictionary to a #GVariant. The result can be serialized
+ * or put into another #GumDictionary using gum_dictionary_set().
  *
- * Returns: (transfer full) #GVariant object if successful, NULL otherwise.
+ * Returns: (transfer full): #GVariant object if successful, NULL otherwise.
  */
 GVariant *
-gum_dictionary_to_variant (GumDictionary *dict)
+gum_dictionary_to_variant (
+        GumDictionary *dict)
 {
     GVariantBuilder builder;
     GHashTableIter iter;
@@ -90,9 +125,9 @@ gum_dictionary_to_variant (GumDictionary *dict)
 /**
  * gum_dictionary_new:
  *
- * Creates new instance of GumDictionary.
+ * Creates a new instance of #GumDictionary.
  *
- * Returns: (transfer full) #GumDictionary object if successful,
+ * Returns: (transfer full): #GumDictionary object if successful,
  * NULL otherwise.
  */
 GumDictionary *
@@ -106,12 +141,14 @@ gum_dictionary_new (void)
 
 /**
  * gum_dictionary_ref:
- * @dict: instance of #GumDictionary
+ * @dict: (transfer none): instance of #GumDictionary
  *
- * Increment reference count of the dictionary structure.
+ * Increments the reference count of the dictionary structure.
+ *
  */
 void
-gum_dictionary_ref (GumDictionary *dict)
+gum_dictionary_ref (
+        GumDictionary *dict)
 {
     g_return_if_fail (dict != NULL);
 
@@ -120,13 +157,15 @@ gum_dictionary_ref (GumDictionary *dict)
 
 /**
  * gum_dictionary_unref:
- * @dict: instance of #GumDictionary
+ * @dict: (transfer none): instance of #GumDictionary
  *
- * Decrement reference count of the dictionary structure.
+ * Decrements the reference count of the dictionary structure. If the reference
+ * count reaches zero, the structure is deallocated and shouldn't be used.
  *
  */
 void
-gum_dictionary_unref (GumDictionary *dict)
+gum_dictionary_unref (
+        GumDictionary *dict)
 {
     if (!dict)
         return;
@@ -136,14 +175,22 @@ gum_dictionary_unref (GumDictionary *dict)
 
 /**
  * gum_dictionary_get:
- * @dict: instance of #GumDictionary
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): the key to look up in the dictionary
  *
- * Retrieves a value from the dictionary.
+ * Retrieves a #GVariant value from the dictionary. This can be used to retrieve
+ * a value of an arbitrary type, and then convert it manually to a specific type
+ * using #GVariant methods. For most commonly used types, also getters that
+ * return the specific type directly are provided (gum_dictionary_get_string()
+ * and similar).
  *
- * Returns: (transfer none) the value; NULL is returned in case of failure.
+ * Returns: (transfer none): the value; NULL is returned in case of failure (for
+ * example if the entry corresponding to the supplied key doesn't exist).
  */
 GVariant *
-gum_dictionary_get (GumDictionary *dict, const gchar *key)
+gum_dictionary_get (
+        GumDictionary *dict,
+        const gchar *key)
 {
     g_return_val_if_fail (dict != NULL, NULL);
     g_return_val_if_fail (key != NULL, NULL);
@@ -153,18 +200,21 @@ gum_dictionary_get (GumDictionary *dict, const gchar *key)
 
 /**
  * gum_dictionary_set:
- * @dict: instance of #GumDictionary
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to be set
+ * @value: (transfer full): value to be set
  *
- * @key: key to be set
- * @value: value to be set
- *
- * Adds or replaces key-value pair in the dictionary.
+ * Adds or replaces key-value pair in the dictionary. This allows to set a value
+ * of an arbitrary type: it first needs to be converted to a #GVariant. For most
+ * commonly used types also type-specific setters are provided.
  *
  * Returns: TRUE if successful, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set (GumDictionary *dict,
-    const gchar *key, GVariant *value)
+gum_dictionary_set (
+        GumDictionary *dict,
+        const gchar *key,
+        GVariant *value)
 {
     g_return_val_if_fail (dict != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -181,12 +231,19 @@ gum_dictionary_set (GumDictionary *dict,
 
 /**
  * gum_dictionary_get_boolean:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
+ * @value: (transfer none): points to the location where the value should be set
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a gboolean value.
+ *
+ * Returns: TRUE if the value was retrieved successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_get_boolean (GumDictionary *dict, const gchar *key,
-                                 gboolean *value)
+gum_dictionary_get_boolean (
+        GumDictionary *dict,
+        const gchar *key,
+        gboolean *value)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -199,25 +256,39 @@ gum_dictionary_get_boolean (GumDictionary *dict, const gchar *key,
 }
 
 /**
- * gsignon_dictionary_set_boolean:
+ * gum_dictionary_set_boolean:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a gboolean value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_boolean (GumDictionary *dict, const gchar *key,
-                                 gboolean value)
+gum_dictionary_set_boolean (
+        GumDictionary *dict,
+        const gchar *key,
+        gboolean value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_boolean (value));
 }
 
 /**
  * gum_dictionary_get_int32:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
+ * @value: (transfer none): points to the location where the value should be set
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a int32 value.
+ *
+ * Returns: TRUE if the value was retrieved successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_get_int32 (GumDictionary *dict, const gchar *key,
-                               gint32 *value)
+gum_dictionary_get_int32 (
+        GumDictionary *dict,
+        const gchar *key,
+        gint32 *value)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -230,25 +301,39 @@ gum_dictionary_get_int32 (GumDictionary *dict, const gchar *key,
 }
 
 /**
- * gsignon_dictionary_set_int32:
+ * gum_dictionary_set_int32:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a int32 value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_int32 (GumDictionary *dict, const gchar *key,
-                               gint32 value)
+gum_dictionary_set_int32 (
+        GumDictionary *dict,
+        const gchar *key,
+        gint32 value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_int32 (value));
 }
 
 /**
- * gum_dictionary_get_guint32:
+ * gum_dictionary_get_uint32:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
+ * @value: (transfer none): points to the location where the value should be set
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a uint32 value.
+ *
+ * Returns: TRUE if the value was retrieved successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_get_uint32 (GumDictionary *dict, const gchar *key,
-                                guint32 *value)
+gum_dictionary_get_uint32 (
+        GumDictionary *dict,
+        const gchar *key,
+        guint32 *value)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -261,25 +346,39 @@ gum_dictionary_get_uint32 (GumDictionary *dict, const gchar *key,
 }
 
 /**
- * gsignon_dictionary_set_guint32:
+ * gum_dictionary_set_uint32:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a uint32 value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_uint32 (GumDictionary *dict, const gchar *key,
-                                guint32 value)
+gum_dictionary_set_uint32 (
+        GumDictionary *dict,
+        const gchar *key,
+        guint32 value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_uint32 (value));
 }
 
 /**
  * gum_dictionary_get_int64:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
+ * @value: (transfer none): points to the location where the value should be set
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a int64 value.
+ *
+ * Returns: TRUE if the value was retrieved successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_get_int64 (GumDictionary *dict, const gchar *key,
-                               gint64 *value)
+gum_dictionary_get_int64 (
+        GumDictionary *dict,
+        const gchar *key,
+        gint64 *value)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -292,25 +391,39 @@ gum_dictionary_get_int64 (GumDictionary *dict, const gchar *key,
 }
 
 /**
- * gsignon_dictionary_set_int32:
+ * gum_dictionary_set_int64:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a int64 value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_int64 (GumDictionary *dict, const gchar *key,
-                               gint64 value)
+gum_dictionary_set_int64 (
+        GumDictionary *dict,
+        const gchar *key,
+        gint64 value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_int64 (value));
 }
 
 /**
- * gum_dictionary_get_guint32:
+ * gum_dictionary_get_uint64:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
+ * @value: (transfer none): points to the location where the value should be set
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a uint64 value.
+ *
+ * Returns: TRUE if the value was retrieved successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_get_uint64 (GumDictionary *dict, const gchar *key,
-                                guint64 *value)
+gum_dictionary_get_uint64 (
+        GumDictionary *dict,
+        const gchar *key,
+        guint64 *value)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -323,25 +436,38 @@ gum_dictionary_get_uint64 (GumDictionary *dict, const gchar *key,
 }
 
 /**
- * gsignon_dictionary_set_guint32:
+ * gum_dictionary_set_uint64:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a uint64 value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_uint64 (GumDictionary *dict, const gchar *key,
-                                guint64 value)
+gum_dictionary_set_uint64 (
+        GumDictionary *dict,
+        const gchar *key,
+        guint64 value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_uint64 (value));
 }
 
-
 /**
  * gum_dictionary_get_string:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to look up
  *
- * Overload, see #gum_dictionary_get for details.
+ * Retrieves a string value.
+ *
+ * Returns: (transfer none): the value if it was retrieved successfully, NULL
+ * otherwise.
  */
 const gchar *
-gum_dictionary_get_string (GumDictionary *dict, const gchar *key)
+gum_dictionary_get_string (
+        GumDictionary *dict,
+        const gchar *key)
 {
     GVariant *variant = gum_dictionary_get (dict, key);
 
@@ -352,30 +478,37 @@ gum_dictionary_get_string (GumDictionary *dict, const gchar *key)
 }
 
 /**
- * gsignon_dictionary_set_string:
+ * gum_dictionary_set_string:
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key to set
+ * @value: (transfer none): value to set
  *
- * Overload, see #gum_dictionary_set for details.
+ * Sets or replaces a string value in the dictionary.
+ *
+ * Returns: TRUE if the value was set or replaced successfully, FALSE otherwise.
  */
 gboolean
-gum_dictionary_set_string (GumDictionary *dict, const gchar *key,
-                                const gchar *value)
+gum_dictionary_set_string (
+        GumDictionary *dict,
+        const gchar *key,
+        const gchar *value)
 {
     return gum_dictionary_set (dict, key, g_variant_new_string (value));
 }
 
 /**
  * gum_dictionary_remove:
- * @dict: instance of #GumDictionary
- *
- * @key: key which needs to be removed from the dictionary
- * @value: value to be set
+ * @dict: (transfer none): instance of #GumDictionary
+ * @key: (transfer none): key which needs to be removed from the dictionary
  *
  * Removes key-value pair in the dictionary as per key.
  *
  * Returns: TRUE if successful, FALSE otherwise.
  */
 gboolean
-gum_dictionary_remove (GumDictionary *dict, const gchar *key)
+gum_dictionary_remove (
+        GumDictionary *dict,
+        const gchar *key)
 {
     g_return_val_if_fail (dict != NULL, FALSE);
     g_return_val_if_fail (key != NULL, FALSE);
@@ -387,15 +520,16 @@ gum_dictionary_remove (GumDictionary *dict, const gchar *key)
 
 /**
  * gum_dictionary_copy:
- * @other: instance of #GumDictionary
+ * @other: (transfer none): instance of #GumDictionary
  *
  * Creates a copy of the dictionary.
  *
- * Returns: (transfer full) #GumDictionary object if successful,
+ * Returns: (transfer full): #GumDictionary object if the copy was successful,
  * NULL otherwise.
  */
 GumDictionary *
-gum_dictionary_copy (GumDictionary *other)
+gum_dictionary_copy (
+        GumDictionary *other)
 {
     GumDictionary *dict = NULL;
     GHashTableIter iter;
@@ -413,7 +547,6 @@ gum_dictionary_copy (GumDictionary *other)
     {
         gum_dictionary_set (dict, key, value);
     }
-    
 
     return dict;
 }

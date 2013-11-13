@@ -32,26 +32,14 @@
 
 G_BEGIN_DECLS
 
-#define GUM_ERROR_DOMAIN "gum"
-
-/**
- * GUM_ERROR:
- *
- */
 #define GUM_ERROR   (gum_error_quark())
 
 typedef enum {
     GUM_ERROR_NONE,
 
-    /**< Catch-all for errors not distinguished by another code. */
     GUM_ERROR_UNKNOWN = 1,
-    /**< Signon Daemon internal error. */
-    GUM_ERROR_INTERNAL_SERVER = 2,
-    /**< Communication with Signon Daemon error. */
-    GUM_ERROR_INTERNAL_COMMUNICATION = 3,
-    /**< The operation cannot be performed due to insufficient client
-     * permissions. */
-    GUM_ERROR_PERMISSION_DENIED = 4,
+    GUM_ERROR_INTERNAL_SERVER,
+    GUM_ERROR_PERMISSION_DENIED,
 
     GUM_ERROR_USER_ALREADY_EXISTS = 32,
     GUM_ERROR_USER_GROUP_ADD_FAILURE,
@@ -96,39 +84,33 @@ typedef enum {
 
     GUM_ERROR_INVALID_INPUT = 160,
 
-    /* Placeholder to rearrange enumeration - User space specific */
     GUM_ERROR_USER_ERR = 400
-   
+
 } GumError;
 
-#define gum_gerr(error, handler) \
-    G_STMT_START {                 \
-        GString* msg = gum_prepend_domain_to_error_msg(error); \
-        handler(msg->str); \
-        g_string_free(msg, TRUE); \
-    } G_STMT_END\
+#define GUM_GET_ERROR_FOR_ID(code, message, args...) \
+    g_error_new (GUM_ERROR, code, message, ##args);
 
-#define gum_error_gerr(err)       gum_gerr(err, g_error)
+#define GUM_SET_ERROR(code, err_str, err, retvar, retval) \
+    { \
+        if (err) { \
+            *err = GUM_GET_ERROR_FOR_ID (code, err_str); \
+            DBG ("Error %d:%s", code, err_str); \
+        } \
+        retvar = retval; \
+    }
 
-#define gum_critical_gerr(err)    gum_gerr(err, g_critical)
-
-#define gum_warning_gerr(err)     gum_gerr(err, g_warning)
-
-#define gum_message_gerr(err)     gum_gerr(err, g_message)
-
-#define gum_debug_gerr(err)       gum_gerr(err, g_debug)
+#define GUM_RETURN_WITH_ERROR(code, err_str, err, retval) \
+    { \
+        if (err) { \
+            *err = GUM_GET_ERROR_FOR_ID (code, err_str); \
+            DBG ("Error %d:%s", code, err_str); \
+        } \
+        return retval; \
+    }
 
 GQuark
 gum_error_quark (void);
-
-GString*
-gum_concat_domain_and_error (
-        const gchar *str1,
-        const gchar *str2);
-
-GString*
-gum_prepend_domain_to_error_msg (
-        const GError *err);
 
 GError *
 gum_error_new_from_variant (
@@ -137,27 +119,6 @@ gum_error_new_from_variant (
 GVariant *
 gum_error_to_variant (
         GError *error);
-
-#define gum_get_gerror_for_id(err, message, args...) \
-    g_error_new (gum_error_quark(), err, message, ##args);
-
-#define SET_ERROR(code, err_str, err, retvar, retval) \
-    { \
-        if (err) { \
-            *err = gum_get_gerror_for_id (code, err_str); \
-            DBG ("Error %d:%s", code, err_str); \
-        } \
-        retvar = retval; \
-    }
-
-#define RETURN_WITH_ERROR(code, err_str, err, retval) \
-    { \
-        if (err) { \
-            *err = gum_get_gerror_for_id (code, err_str); \
-            DBG ("Error %d:%s", code, err_str); \
-        } \
-        return retval; \
-    }
 
 G_END_DECLS
 

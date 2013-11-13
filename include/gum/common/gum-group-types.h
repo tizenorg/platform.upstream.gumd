@@ -30,6 +30,25 @@
 
 G_BEGIN_DECLS
 
+/**
+ * SECTION:gum-group-types
+ * @short_description: group types definition
+ * @title: Group types
+ *
+ * This file provides various types of group that can be created by the user
+ * management framework.
+ *
+ */
+
+/**
+ * GumGroupType:
+ * @GUM_GROUPTYPE_NONE: group type not defined/set.
+ * @GUM_GROUPTYPE_SYSTEM: system group.
+ * @GUM_GROUPTYPE_USER: normal group.
+ *
+ * This enumeration lists group types.
+ */
+
 typedef enum {
 
     GUM_GROUPTYPE_NONE = 0,
