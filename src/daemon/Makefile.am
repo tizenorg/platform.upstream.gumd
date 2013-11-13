@@ -17,6 +17,7 @@ gumd_SOURCES = \
 gumd_CFLAGS = \
     $(GUMD_INCLUDES) \
     $(GUMD_CFLAGS) \
+    -I$(top_srcdir)/src \
     $(NULL)
 
 gumd_LDADD = \

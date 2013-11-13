@@ -12,7 +12,6 @@ include $(top_srcdir)/test/valgrind_common.mk
 daemontest_SOURCES = daemon-test.c
 
 daemontest_CFLAGS = \
-    -I$(top_builddir)/src \
     -I$(top_srcdir)/src \
     $(GUMD_INCLUDES) \
     $(TEST_CFLAGS) \

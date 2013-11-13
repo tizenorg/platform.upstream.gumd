@@ -7,6 +7,7 @@ libgum_common_la_CPPFLAGS = \
     -DGUM_SYSCONF_DIR='"$(sysconfdir)"' \
     $(GUM_COMMON_INCLUDES) \
     $(GUM_COMMON_CFLAGS) \
+    -I$(top_srcdir)/src \
     $(NULL)
 
 libgum_common_la_DEPENDENCIES = \
@@ -32,9 +33,7 @@ libgum_common_include_HEADERS = \
     $(gum_common_pubhdr)/gum-file.h \
     $(gum_common_pubhdr)/gum-string-utils.h \
     $(gum_common_pubhdr)/gum-utils.h \
-    $(gum_common_pubhdr)/gum-defines.h \
     $(gum_common_pubhdr)/gum-validate.h \
-    $(gum_common_pubhdr)/gum-dbus.h \
     $(gum_common_pubhdr)/gum-user-types.h \
     $(gum_common_pubhdr)/gum-group-types.h \
     $(NULL)
@@ -57,7 +56,9 @@ dist_libgum_common_la_SOURCES = \
 
 EXTRA_DIST =            \
       libgum-common.pc.in \
-      gum.conf.in
+      gum.conf.in \
+      gum-dbus.h \
+      gum-defines.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgum-common.pc
