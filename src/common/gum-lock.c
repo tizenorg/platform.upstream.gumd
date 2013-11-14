@@ -33,8 +33,42 @@
 #include "common/gum-lock.h"
 #include "common/gum-log.h"
 
+/**
+ * SECTION:gum-lock
+ * @short_description: Utility functions for (un)locking user/group database
+ * @title: Gum Lock
+ * @include: gum/common/gum-lock.h
+ *
+ * Locking the user/group database is required when modifications are needed to
+ * the database e.g. adding and deleting users. Lock can be called multiple
+ * times as it merely increases the lock counter after acquiring the lock for
+ * the first time. Similarly unlock can be called multiple times as it decreases
+ * lock counter until it the count reaches to 0 when the lock is released.
+ * Locking and unlocking the database is disabled for when testing is enabled
+ * as tests are run on dummy databases.
+ *
+ * |[
+ *   //return value must be checked if the lock succeed or not.
+ *   gboolean ret = gum_lock_pwdf_lock ();
+ *
+ *   //return value must be checked if the unlock succeed or not.
+ *   ret = gum_lock_pwdf_unlock ();
+ * ]|
+ */
+
 static gint lock_count = 0;
 
+/**
+ * gum_lock_pwdf_lock:
+ *
+ * Gets the lock to the user/group database file(s). Lock can be called multiple
+ * times as it merely increases the lock counter after acquiring the lock for
+ * the first time. In order to release the lock, unlock needs to be called
+ * the same number of times as that of lock. Locking and unlocking the database
+ * is disabled for when testing is enabled as tests are run on dummy databases.
+ *
+ * Returns: TRUE if successful, FALSE otherwise.
+ */
 gboolean
 gum_lock_pwdf_lock ()
 {
@@ -60,6 +94,18 @@ gum_lock_pwdf_lock ()
     return TRUE;
 }
 
+/**
+ * gum_lock_pwdf_unlock:
+ *
+ * Releases the lock to the user/group database file(s). Unlock can be called
+ * multiple times as it decreases lock counter until it the count reaches to 0
+ * when the lock is released. In order to release the lock, unlock needs to be
+ * called the same number of times as that of lock. Locking and unlocking the
+ * database is disabled for when testing is enabled as tests are run on dummy
+ * databases.
+ *
+ * Returns: TRUE if successful, FALSE otherwise.
+ */
 gboolean
 gum_lock_pwdf_unlock ()
 {

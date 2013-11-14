@@ -46,8 +46,8 @@ gum_crypt_encrypt_secret (
 
 gint
 gum_crypt_cmp_secret (
-        const gchar *plain_secret,
-        const gchar *enc_secret);
+        const gchar *plain_str1,
+        const gchar *enc_str2);
 
 G_END_DECLS
 

@@ -6,6 +6,7 @@
  * Copyright (C) 2013 Intel Corporation.
  *
  * Contact: Amarnath Valluri <amarnath.valluri@linux.intel.com>
+ *          Imran Zaman <imran.zaman@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,6 +26,66 @@
 
 #include "common/gum-disposable.h"
 #include "common/gum-log.h"
+
+/**
+ * SECTION:gum-disposable
+ * @short_description: timer-based auto disposable object
+ * @include: gum/common/gum-disposable.h
+ *
+ * #GumDisposable is used to dispose the object when the timer expires with the
+ * specified timeout value provided auto-dispose is enabled. A #GObject which
+ * needs to be auto-disposable should derive itself from #GumDisposable and
+ * can set the timeout value (at the time of object construction e.g.). One such
+ * example, which can make use of #GumDisposable, is a DBus object as it may
+ * be required to destory after some period of inactivity.
+ *
+ * <refsect1><title>Usage</title></refsect1>
+ * Following code snippet demonstrates how to derive and use #GumDisposable:
+ * |[
+ *
+ * //gum-test-object.h
+ * struct _GumTestObject
+ * {
+ *     GumDisposable parent;
+ * };
+ *
+ * struct _GumTestObjectClass
+ * {
+ *     GumDisposableClass parent_class;
+ * };
+ *
+ * //gum-test-object.c
+ * GumTestObject *
+ * gum_test_object_new ()
+ * {
+ *    GumTestObject *obj = g_object_new (GUM_TYPE_TEST_OBJECT, NULL);
+ *
+ *    // ... other code
+ *
+ *    // GumTestobject will be disposed after 5 seconds unless auto-dispose
+ *    // is disabled by calling gum_disposable_set_auto_dispose (obj, FALSE)
+ *    gint timeout = 5;
+ *    gum_disposable_set_timeout (GUM_DISPOSABLE (obj), timeout);
+ *
+ *    // ... other code
+ * }
+ *
+ * ]|
+ *
+ */
+
+/**
+ * GumDisposable:
+ *
+ * Opaque structure for the object.
+ */
+
+/**
+ * GumDisposableClass:
+ * @parent_class: parent class object
+ *
+ * Opaque structure for the class.
+ */
 
 struct _GumDisposablePrivate
 {
@@ -146,6 +207,12 @@ gum_disposable_class_init (
     object_class->dispose = _dispose;
     object_class->finalize = _finalize;
 
+    /**
+     * GumDisposable:timeout:
+     *
+     * This property holds the value of timeout in seconds. Default value is 0.
+     * If timeout value is 0, the object never auto-dispose.
+     */
     properties[PROP_TIMEOUT] = 
             g_param_spec_uint ("timeout",
                     "Object timeout",
@@ -155,6 +222,13 @@ gum_disposable_class_init (
                     0,
                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumDisposable:auto-dispose:
+     *
+     * This property holds the value of auto-dispose to be TRUE or FALSE.
+     * Default value is FALSE. If auto-dispose is TRUE, then object is
+     * auto-disposed otherwise not.
+     */
     properties[PROP_AUTO_DISPOSE] =
             g_param_spec_boolean ("auto-dispose",
                     "Auto dispose",
@@ -162,6 +236,13 @@ gum_disposable_class_init (
                     TRUE,
                     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
+    /**
+     * GumDisposable:delete-later:
+     *
+     * This property is used when the object is asked to be deleted later.
+     * The object should not be used once #gum_disposable_delete_later is
+     * requested for the object.
+     */
     properties[PROP_DELETE_LATER] =
             g_param_spec_boolean ("delete-later",
                     "Delete Later",
@@ -171,6 +252,11 @@ gum_disposable_class_init (
 
     g_object_class_install_properties (object_class, PROP_MAX, properties);
 
+    /**
+     * GumDisposable:disposing:
+     *
+     * This signal is emitted when the object is about to be disposed.
+     */
     signals[SIG_DISPOSING] = g_signal_new ("disposing",
             GUM_TYPE_DISPOSABLE,
             G_SIGNAL_RUN_FIRST| G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -205,7 +291,8 @@ _auto_dispose (
     GumDisposable *self = GUM_DISPOSABLE (user_data);
     g_signal_emit (self, signals[SIG_DISPOSING], 0);
     /* destroy object */
-    DBG ("%s AUTO DISPOSE %d", G_OBJECT_TYPE_NAME (self), G_OBJECT (self)->ref_count);
+    DBG ("%s AUTO DISPOSE %d", G_OBJECT_TYPE_NAME (self),
+            G_OBJECT (self)->ref_count);
     g_object_unref (G_OBJECT (self));
     return FALSE;
 }
@@ -250,6 +337,14 @@ _update_timer (
     }
 }
 
+/**
+ * gum_disposable_set_auto_dispose:
+ * @self: (transfer none): an instance of #GumDisposable
+ * @dispose: dispose flag
+ *
+ * Sets the auto-dispose flag, and sets up the timer if needed.
+ *
+ */
 void
 gum_disposable_set_auto_dispose (
         GumDisposable *self,
@@ -264,6 +359,14 @@ gum_disposable_set_auto_dispose (
     _update_timer (self);
 }
 
+/**
+ * gum_disposable_set_timeout:
+ * @self: (transfer none): an instance of #GumDisposable
+ * @timeout: timeout value in seconds
+ *
+ * Sets the timeout value and sets up the timer if needed. If timeout
+ * value is set to 0, the object is never disposed.
+ */
 void
 gum_disposable_set_timeout (
         GumDisposable *self,
@@ -278,6 +381,13 @@ gum_disposable_set_timeout (
     _update_timer (self);
 }
 
+/**
+ * gum_disposable_delete_later:
+ * @self: (transfer none): an instance of #GumDisposable
+ *
+ * Sets the object to be deleted later. Once delete later is requested, the
+ * object should not be used.
+ */
 void
 gum_disposable_delete_later (
         GumDisposable *self)
@@ -291,6 +401,14 @@ gum_disposable_delete_later (
     self->priv->delete_later = TRUE;
 }
 
+/**
+ * gum_disposable_get_auto_dispose:
+ * @self: (transfer none): an instance of #GumDisposable
+ *
+ * Gets the auto-dispose value.
+ *
+ * Returns: the auto-dispose value of the object.
+ */
 gboolean
 gum_disposable_get_auto_dispose (
         GumDisposable *self)

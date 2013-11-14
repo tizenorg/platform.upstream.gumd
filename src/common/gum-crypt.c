@@ -32,6 +32,37 @@
 #include "common/gum-crypt.h"
 #include "common/gum-log.h"
 
+/**
+ * SECTION:gum-crypt
+ * @short_description: Utility functions for encryption
+ * @title: Gum Crypt
+ * @include: gum/common/gum-crypt.h
+ *
+ * Following code snippets shows how a string can be encrypted with any of the
+ * encrytpion method listed in #GumCryptMethodID. Moreover, plain and encrypted
+ * secrets can be compared if needed.
+ *
+ * |[
+ *   gchar *pass = gum_crypt_encrypt_secret("pas.-s123", GUM_CRYPT_SHA512);
+ *   g_free (pass);
+ *
+ *   pass = gum_crypt_encrypt_secret("pass ?()#123", GUM_CRYPT_SHA512);
+ *   gum_crypt_cmp_secret("pass ?()#123", pass); //should return true.
+ *   g_free (pass);
+ *
+ * ]|
+ */
+
+/**
+ * GumCryptMethodID:
+ * @GUM_CRYPT_MD5: MD5 encryption algorithm
+ * @GUM_CRYPT_SHA256: SHA-256 encryption algorithm
+ * @GUM_CRYPT_SHA512: SHA-512 encryption algorithm
+ * @GUM_CRYPT_DES: DES encryption algorithm
+ *
+ * This enumeration lists the supported encryption methods.
+ */
+
 guchar _salt_chars[64 + 1] =
     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
@@ -83,6 +114,15 @@ _generate_salt (
     return g_strdup (salt);
 }
 
+/**
+ * gum_crypt_encrypt_secret:
+ * @secret: (transfer none): string to encrypt
+ * @methodid: #GumCryptMethodID method id
+ *
+ * Encrypts the secret with the specified method.
+ *
+ * Returns: (transfer full): encrypted secret if successful, NULL otherwise.
+ */
 gchar *
 gum_crypt_encrypt_secret (
         const gchar *secret,
@@ -125,23 +165,34 @@ _extract_salt (
     return salt;
 }
 
+/**
+ * gum_crypt_cmp_secret:
+ * @plain_str1: (transfer none): plain string
+ * @enc_str2: (transfer none): encrypted string
+ *
+ * Encrypts plain string with the same parameters as that of encrypted string
+ * and then compares both encrypted strings.
+ *
+ * Returns: 0 if enc_str1 == enc_str2, less than 0 if the enc_str1 < enc_str2,
+ * greater than 0 if enc_str1 > enc_str2.
+ */
 gint
 gum_crypt_cmp_secret (
-        const gchar *plain_secret,
-        const gchar *enc_secret)
+        const gchar *plain_str1,
+        const gchar *enc_str2)
 {
     gint cmp = -1;
     gchar *plain_enc = NULL;
 
-    if (!enc_secret || !plain_secret) return cmp;
+    if (!enc_str2 || !plain_str1) return cmp;
 
-    gchar *salt = _extract_salt (enc_secret);
+    gchar *salt = _extract_salt (enc_str2);
     if (!salt) return cmp;
 
-    plain_enc = g_strdup (crypt (plain_secret, salt));
+    plain_enc = g_strdup (crypt (plain_str1, salt));
     g_free (salt);
 
-    cmp = g_strcmp0 (plain_enc, enc_secret);
+    cmp = g_strcmp0 (plain_enc, enc_str2);
     g_free (plain_enc);
 
     return cmp;

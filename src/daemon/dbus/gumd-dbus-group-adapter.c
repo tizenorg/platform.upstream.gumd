@@ -458,7 +458,7 @@ gumd_dbus_group_adapter_new_with_connection (
     _sync_group_properties (G_OBJECT (adapter->priv->group),
             G_OBJECT (adapter->priv->dbus_group));
 
-    nonce = gum_generate_nonce ();
+    nonce = gum_generate_nonce (G_CHECKSUM_SHA1);
     object_path = g_strdup_printf ("%s/Group_%s_%d",
             GUM_GROUP_SERVICE_OBJECTPATH, nonce, object_counter++);
     g_free (nonce);

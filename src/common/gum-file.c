@@ -41,6 +41,18 @@
 #include "common/gum-log.h"
 #include "common/gum-error.h"
 
+/**
+ * SECTION:gum-file
+ * @short_description: Utility functions for file handling
+ * @title: Gum File
+ * @include: gum/common/gum-file.h
+ *
+ *
+ * |[
+ *
+ * ]|
+ */
+
 #define GUM_PERM 0777
 
 static FILE *
@@ -506,6 +518,7 @@ _copy_dir_recursively (
                 goto _free_data;
             }
         }
+        /* when run in test mode, user may not exist */
 #ifndef ENABLE_TESTS
         if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
 #endif

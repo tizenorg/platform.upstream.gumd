@@ -28,6 +28,8 @@
 
 #include <glib.h>
 
+G_BEGIN_DECLS
+
 #define GUM_STR_FREE(s) { \
     if (s) { \
         g_free (s); \
@@ -52,8 +54,6 @@
     d = g_strdupv (s); \
     }
 
-G_BEGIN_DECLS
-
 gboolean
 gum_string_utils_search_string (
         const gchar *strings,
@@ -69,14 +69,14 @@ gchar *
 gum_string_utils_get_string (
         const gchar *strings,
         const gchar *separator,
-        guint str_ind /*starts from 0*/);
+        guint str_ind);
 
 gchar *
 gum_string_utils_insert_string (
         const gchar *strings,
         const gchar *separator,
         const gchar *str_to_insert,
-        guint str_ind, /*starts from 0*/
+        guint str_ind,
         guint total_strings);
 
 gchar **

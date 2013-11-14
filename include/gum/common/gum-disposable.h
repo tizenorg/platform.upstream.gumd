@@ -6,6 +6,7 @@
  * Copyright (C) 2013 Intel Corporation.
  *
  * Contact: Amarnath Valluri <amarnath.valluri@linux.intel.com>
+ *          Imran Zaman <imran.zaman@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -63,18 +64,22 @@ struct _GumDisposableClass
 GType gum_disposable_get_type (void) G_GNUC_CONST;
 
 void
-gum_disposable_set_auto_dispose (GumDisposable *disposable,
-                                      gboolean dispose);
+gum_disposable_set_auto_dispose (
+        GumDisposable *self,
+        gboolean dispose);
 
 gboolean
-gum_disposable_get_auto_dispose (GumDisposable *disposable);
+gum_disposable_get_auto_dispose (
+        GumDisposable *self);
 
 void
-gum_disposable_set_timeout (GumDisposable *self,
-                                 guint timeout);
+gum_disposable_set_timeout (
+        GumDisposable *self,
+        guint timeout);
 
 void
-gum_disposable_delete_later (GumDisposable *self);
+gum_disposable_delete_later (
+        GumDisposable *self);
 
 G_END_DECLS
 

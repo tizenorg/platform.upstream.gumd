@@ -32,6 +32,36 @@
 #include "common/gum-log.h"
 #include "common/gum-error.h"
 
+/**
+ * SECTION:gum-validate
+ * @short_description: Utility functions for validating strings
+ * @title: Gum Validate
+ * @include: gum/common/gum-validate.h
+ *
+ */
+
+/**
+ * GUM_NAME_PATTERN:
+ *
+ * A macro that defines the string pattern to be acceptable for names.
+ */
+
+/**
+ * GUM_DB_ENTRY_PATTERN:
+ *
+ * A macro that defines the string pattern to be acceptable for entries in the
+ * user/group database.
+ */
+
+/**
+ * gum_validate_name:
+ * @name: (transfer none): the name string to be validated
+ * @error: (transfer none): the #GError to be set in case of error
+ *
+ * Validates the name against the #GUM_NAME_PATTERN pattern.
+ *
+ * Returns: TRUE if validation succeeds, FALSE otherwise.
+ */
 gboolean
 gum_validate_name (
         const gchar *name,
@@ -68,6 +98,16 @@ gum_validate_name (
     return TRUE;
 }
 
+/**
+ * gum_validate_generate_username:
+ * @str: (transfer none): the string to be validated
+ * @error: (transfer none): the #GError to be set in case of error
+ *
+ * Generate username based on the string @str and then validate the generated
+ * user name against #GUM_NAME_PATTERN pattern.
+ *
+ * Returns: (transfer full): string if successful, NULL otherwise.
+ */
 gchar *
 gum_validate_generate_username (
         const gchar *str,
@@ -98,6 +138,16 @@ gum_validate_generate_username (
     return gen_name;
 }
 
+/**
+ * gum_validate_db_string_entry_regx:
+ * @str: (transfer none): the string to be validated
+ * @error: (transfer none): the #GError to be set in case of error
+ *
+ * Validates the string @str against the #GUM_DB_ENTRY_PATTERN pattern using
+ * regular expressions.
+ *
+ * Returns: TRUE if validation succeeds, FALSE otherwise.
+ */
 gboolean
 gum_validate_db_string_entry_regx (
         const gchar *str,
@@ -126,6 +176,16 @@ gum_validate_db_string_entry_regx (
     return TRUE;
 }
 
+/**
+ * gum_validate_db_string_entry:
+ * @str: (transfer none): the string to be validated
+ * @error: (transfer none): the #GError to be set in case of error
+ *
+ * Validates the string @str to be used in the user/group database. No control
+ * chars (0x00-0x1F,0x7F), comma (',' 0x2c) or colon (':' 0x3A) is allowed.
+ *
+ * Returns: TRUE if validation succeeds, FALSE otherwise.
+ */
 gboolean
 gum_validate_db_string_entry (
         const gchar *str,
@@ -153,6 +213,16 @@ gum_validate_db_string_entry (
     return TRUE;
 }
 
+/**
+ * gum_validate_db_secret_entry:
+ * @str: (transfer none): the string to be validated
+ * @error: (transfer none): the #GError to be set in case of error
+ *
+ * Validates the string @str to be used as secret in the user/group database.
+ * No control chars (0x00-0x1F,0x7F) or colon (':' 0x3A) is allowed.
+ *
+ * Returns: TRUE if validation succeeds, FALSE otherwise.
+ */
 gboolean
 gum_validate_db_secret_entry (
         const gchar *str,

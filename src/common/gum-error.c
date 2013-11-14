@@ -100,7 +100,7 @@
  * @GUM_ERROR_USER_ERR: Placeholder to rearrange enumeration - User space
  * specific
  *
- * This enum provides a list of errors
+ * This enumeration provides a list of errors
  */
 
 /**

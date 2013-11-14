@@ -29,6 +29,57 @@
 #include "common/gum-log.h"
 #include "common/gum-error.h"
 
+/**
+ * SECTION:gum-string-utils
+ * @short_description: Utility functions for strings handling
+ * @title: Gum String Utils
+ * @include: gum/common/gum-string-utils.h
+ *
+ */
+
+/**
+ * GUM_STR_FREE:
+ * @s: the string to free
+ *
+ * A helper macro that frees the string after checking if it is not NULL.
+ */
+
+/**
+ * GUM_STR_DUP:
+ * @s: the source string
+ * @d: the destination string
+ *
+ * A helper macro that duplicates source string to destination string after
+ * freeing the destination string first if it is not NULL.
+ */
+
+/**
+ * GUM_STR_FREEV:
+ * @s: the string vector to free
+ *
+ * A helper macro that frees string vector after checking if it is not NULL.
+ */
+
+/**
+ * GUM_STR_DUPV:
+ * @s: the source string vector
+ * @d: the destination string vector
+ *
+ * A helper macro that duplicates source string vector to destination string
+ * vector after freeing the destination string vector first if it is not NULL.
+ */
+
+/**
+ * gum_string_utils_search_string:
+ * @strings: (transfer none): concatenated strings in a string placeholder
+ * separated by a separator
+ * @separator: (transfer none): separator between strings
+ * @search_str: (transfer none): string to search
+ *
+ * Finds the 'search string' in the strings.
+ *
+ * Returns: TRUE if found, FALSE otherwise.
+ */
 gboolean
 gum_string_utils_search_string (
         const gchar *strings,
@@ -51,6 +102,15 @@ gum_string_utils_search_string (
     return FALSE;
 }
 
+/**
+ * gum_string_utils_search_stringv:
+ * @stringv: (transfer none): vector of strings
+ * @search_str: (transfer none): string to search
+ *
+ * Finds the 'search string' in the string vector.
+ *
+ * Returns: TRUE if found, FALSE otherwise.
+ */
 gboolean
 gum_string_utils_search_stringv (
         gchar **stringv,
@@ -72,11 +132,21 @@ gum_string_utils_search_stringv (
     return FALSE;
 }
 
+/**
+ * gum_string_utils_get_string:
+ * @strings: (transfer none): vector of strings
+ * @separator: (transfer none): separator between strings
+ * @str_ind: starting from 0, position for the string to fetch
+ *
+ * Gets the str_ind'th string from the strings.
+ *
+ * Returns: (transfer full): string if successful, NULL otherwise.
+ */
 gchar *
 gum_string_utils_get_string (
         const gchar *strings,
         const gchar *separator,
-        guint str_ind /*starts from 0*/)
+        guint str_ind)
 {
     gchar **strv = NULL;
     gchar *str = NULL;
@@ -94,12 +164,26 @@ gum_string_utils_get_string (
     return str;
 }
 
+/**
+ * gum_string_utils_insert_string:
+ * @strings: (transfer none): vector of strings
+ * @separator: (transfer none): separator between strings
+ * @str_to_insert: (transfer none): string to insert
+ * @str_ind: starting from 0, position for the string to insert
+ * @total_strings: total number of strings in the strings vector
+ *
+ * Inserts the string at the desired position and returns the concatenated
+ * string
+ *
+ * Returns: (transfer full): concatenated string vector if successful, NULL
+ * otherwise.
+ */
 gchar *
 gum_string_utils_insert_string (
         const gchar *strings,
         const gchar *separator,
         const gchar *str_to_insert,
-        guint str_ind, /*starts from 0*/
+        guint str_ind,
         guint total_strings)
 {
     gchar **src_strv = NULL, **dest_strv = NULL;
@@ -136,6 +220,16 @@ gum_string_utils_insert_string (
     return result_str;
 }
 
+/**
+ * gum_string_utils_delete_string:
+ * @src_strv: (transfer none): vector of strings
+ * @string: (transfer none): string to delete
+ *
+ * Deletes the string from the strings' vector.
+ *
+ * Returns: (transfer full): modified string vector if string found, NULL
+ * otherwise.
+ */
 gchar **
 gum_string_utils_delete_string (
         gchar **src_strv,
@@ -162,6 +256,16 @@ gum_string_utils_delete_string (
     return dest_strv;
 }
 
+/**
+ * gum_string_utils_append_string:
+ * @src_strv: (transfer none): vector of strings
+ * @string: (transfer none): string to append
+ *
+ * Appends the string to the end of the strings' vector.
+ *
+ * Returns: (transfer full): concatenated string vector if successful, NULL
+ * otherwise.
+ */
 gchar **
 gum_string_utils_append_string (
         gchar **src_strv,
