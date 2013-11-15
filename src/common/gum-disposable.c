@@ -103,6 +103,7 @@ enum {
     PROP_MAX,
 };
 
+/* signals */
 enum {
     SIG_DISPOSING,
     SIG_MAX
@@ -253,7 +254,8 @@ gum_disposable_class_init (
     g_object_class_install_properties (object_class, PROP_MAX, properties);
 
     /**
-     * GumDisposable:disposing:
+     * GumDisposable::disposing:
+     * @object: the object which emits the signal
      *
      * This signal is emitted when the object is about to be disposed.
      */
