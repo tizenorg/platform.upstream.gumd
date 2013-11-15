@@ -44,11 +44,11 @@ typedef enum {
     GUM_OPTYPE_MODIFY = 3
 } GumOpType;
 
-typedef gboolean (*GumFileUpdateFunc) (
+typedef gboolean (*GumFileUpdateCB) (
         GObject *object,
         GumOpType op,
-        FILE *origf,
-        FILE *newf,
+        FILE *source_file,
+        FILE *dup_file,
         gpointer user_data,
         GError **error);
 
@@ -56,25 +56,25 @@ gboolean
 gum_file_update (
         GObject *object,
         GumOpType op,
-        GumFileUpdateFunc update_func,
-        const gchar *origfn,
+        GumFileUpdateCB callback,
+        const gchar *source_file_path,
         gpointer user_data,
         GError **error);
 
 gboolean
 gum_file_open_db_files (
-        const gchar *origfn,
-        const gchar *newfn,
-        FILE **origf,
-        FILE **newf,
+        const gchar *source_file_path,
+        const gchar *dup_file_path,
+        FILE **source_file,
+        FILE **dup_file,
         GError **error);
 
 gboolean
 gum_file_close_db_files (
-        const gchar *origfn,
-        const gchar *newfn,
-        FILE *orig,
-        FILE *newf,
+        const gchar *source_file_path,
+        const gchar *dup_file_path,
+        FILE *source_file,
+        FILE *dup_file,
         GError **error);
 
 struct passwd *

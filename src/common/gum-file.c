@@ -47,10 +47,54 @@
  * @title: Gum File
  * @include: gum/common/gum-file.h
  *
+ * Below is the code snippet, which demonstrate how can file update function be
+ * used to add, remove or modify an entry in the user/group database file
+ * (e.g. /etc/passwd).
  *
  * |[
  *
+ *   gboolean _custom_update_file_entries (GObject *obj, GumOpType op,
+ *      FILE *source_file, FILE *dup_file, gpointer user_data, GError **error)
+ *   {
+ *      //loop through the file entries and modify as per operation type
+ *      return TRUE;
+ *   }
+ *
+ *   void update_file_entries ()
+ *   {
+ *      GObject* obj = NULL;
+ *      GError *error = NULL;
+ *      const gchar *source_file = "/tmp/passwd";
+ *      gum_file_update (obj, GUM_OPTYPE_ADD,
+ *       (GumFileUpdateCB)_custom_update_file_entries, source_file, NULL,
+ *       &error);
+ *   }
+ *
  * ]|
+ */
+
+/**
+ * GumOpType:
+ * @GUM_OPTYPE_ADD: add an entry
+ * @GUM_OPTYPE_DELETE: delete an entry
+ * @GUM_OPTYPE_MODIFY: modify an entry
+ *
+ * This enumeration lists the operations on file entry.
+ */
+
+/**
+ * GumFileUpdateCB:
+ * @object: (transfer none): the instance of #GObject
+ * @op: (transfer none): the #GumOpType operation to be done on the file entry
+ * @source_file: (transfer none): the source file pointer
+ * @dup_file: (transfer none): the duplicate file pointer
+ * @user_data: the user data
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Callback can be used for adding, deleting or modifying file entries. It is
+ * invoked in #gum_file_update function.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
  */
 
 #define GUM_PERM 0777
@@ -120,30 +164,49 @@ _copy_file_attributes (
     return ret;
 }
 
+/**
+ * gum_file_open_db_files:
+ * @source_file_path: (transfer none): the path to source file
+ * @dup_file_path: (transfer none): the path to duplicate file, created from
+ * the source file
+ * @source_file: (transfer none): the file pointer created when source file
+ * is opened in read mode
+ * @dup_file: (transfer none): the file pointer created when duplicate file is
+ * opened in write mode
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Opens the source file @source_file_path in read mode. Then creates the
+ * duplicate file @dup_file_path in write mode and copies source file attributes
+ * to the duplicate file. Open file handles are set in @source_file and
+ * @dup_file.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
+ */
 gboolean
 gum_file_open_db_files (
-        const gchar *origfn,
-        const gchar *newfn,
-        FILE **origf,
-        FILE **newf,
+        const gchar *source_file_path,
+        const gchar *dup_file_path,
+        FILE **source_file,
+        FILE **dup_file,
         GError **error)
 {
-    if (!origfn || !origf || !(*origf = _open_file (origfn, "r"))) {
-        DBG("origfn %s --- orig %p", origfn ? origfn : "NULL", origf);
+    if (!source_file_path || !source_file ||
+        !(*source_file = _open_file (source_file_path, "r"))) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open orig file",
                 error, FALSE);
     }
 
-    if (!newfn || !newf || !(*newf = _open_file (newfn, "w+"))) {
-        if (*origf) fclose (*origf);
+    if (!dup_file_path || !dup_file ||
+        !(*dup_file = _open_file (dup_file_path, "w+"))) {
+        if (*source_file) fclose (*source_file);
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open new file",
                 error, FALSE);
     }
 
-    if (!_copy_file_attributes (origfn, newfn)) {
-        if (*origf) fclose (*origf);
-        if (*newf) fclose (*newf);
-        g_unlink (newfn);
+    if (!_copy_file_attributes (source_file_path, dup_file_path)) {
+        if (*source_file) fclose (*source_file);
+        if (*dup_file) fclose (*dup_file);
+        g_unlink (dup_file_path);
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
                 "Unable to get/set file attributes", error, FALSE);
     }
@@ -151,30 +214,44 @@ gum_file_open_db_files (
     return TRUE;
 }
 
+/**
+ * gum_file_close_db_files:
+ * @source_file_path: (transfer none): the path to source file
+ * @dup_file_path: (transfer none): the path to duplicate file
+ * @source_file: (transfer none): the source file pointer
+ * @dup_file: (transfer none): the duplicate file pointer
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Closes the duplicate file @dup_file_path after flushing all the data. Backup
+ * of the source file @source_file_path is created and duplicate file is renamed
+ * to as the source file.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
+ */
 gboolean
 gum_file_close_db_files (
-        const gchar *origfn,
-        const gchar *newfn,
-        FILE *origf,
-        FILE *newf,
+        const gchar *source_file_path,
+        const gchar *dup_file_path,
+        FILE *source_file,
+        FILE *dup_file,
         GError **error)
 {
     gboolean retval = TRUE;
     gchar *old_file = NULL;
 
-    if (!newf ||
-        !newfn ||
-        fflush (newf) != 0 ||
-        fsync (fileno (newf)) != 0 ||
-        fclose (newf) != 0) {
-        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error, retval,
-                FALSE);
+    if (!dup_file ||
+        !dup_file_path ||
+        fflush (dup_file) != 0 ||
+        fsync (fileno (dup_file)) != 0 ||
+        fclose (dup_file) != 0) {
+        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
+                retval, FALSE);
         goto _close_new;
     }
-    newf = NULL;
+    dup_file = NULL;
 
-    /* Move original file to old file and new file as updated file */
-    old_file = g_strdup_printf ("%s.old", origfn);
+    /* Move source file to old file and dup file as updated file */
+    old_file = g_strdup_printf ("%s.old", source_file_path);
     if (!old_file) {
         GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to create old file", error,
                 retval, FALSE);
@@ -182,69 +259,81 @@ gum_file_close_db_files (
     }
 
     g_unlink (old_file);
-    if (link (origfn, old_file) != 0 ||
-        g_rename (newfn, origfn) != 0) {
-        GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to move file", error, retval,
-                FALSE);
+    if (link (source_file_path, old_file) != 0 ||
+        g_rename (dup_file_path, source_file_path) != 0) {
+        GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to move file", error,
+                retval, FALSE);
     }
 
 _close_new:
-    if (newf) fclose (newf);
-    g_unlink (newfn);
+    if (dup_file) fclose (dup_file);
+    g_unlink (dup_file_path);
 
-    if (origf) fclose (origf);
+    if (source_file) fclose (source_file);
 
     g_free (old_file);
 
     return retval;
 }
 
+/**
+ * gum_file_update:
+ * @object: (transfer none): the instance of #GObject; can be NULL
+ * @op: (transfer none): the #GumOpType operation to be done on file entry
+ * the source file
+ * @callback: (transfer none): the callback #GumFileUpdateCB to be invoked
+ * when the source and duplicate files are opened to be handled
+ * @source_file_path: (transfer none): the source file path
+ * @user_data: user data to be passed on to the @callback
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Opens the files and invokes the callback to do the required operation.
+ * Finally files are flushed and closed.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
+ */
 gboolean
 gum_file_update (
         GObject *object,
         GumOpType op,
-        GumFileUpdateFunc update_func,
-        const gchar *origfn,
+        GumFileUpdateCB callback,
+        const gchar *source_file_path,
         gpointer user_data,
         GError **error)
 {
-    /* open files
-     * read (current) file
-     ** write 1-by-1 line to new file along with the
-     ** modification (add/remove/modify)
-     * rename files and move original file to old file
-     * close files
-     * */
     gboolean retval = TRUE;
-    FILE *origf = NULL, *newf = NULL;
-    gchar *newfn = NULL;
+    FILE *source_file = NULL, *dup_file = NULL;
+    gchar *dup_file_path = NULL;
 
-    newfn = g_strdup_printf ("%s-tmp.%lu", origfn, (unsigned long)getpid ());
-    retval = gum_file_open_db_files (origfn, newfn, &origf, &newf, error);
+    dup_file_path = g_strdup_printf ("%s-tmp.%lu", source_file_path,
+            (unsigned long)getpid ());
+    retval = gum_file_open_db_files (source_file_path, dup_file_path,
+            &source_file, &dup_file, error);
     if (!retval) goto _finished;
 
     /* Update, sync and close file */
-    if (!update_func) {
-        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write function not specified",
-                error, retval, FALSE);
+    if (!callback) {
+        GUM_SET_ERROR (GUM_ERROR_FILE_WRITE,
+                "File write function not specified", error, retval, FALSE);
         goto _close;
     }
 
-    retval = (*update_func) (object, op, origf, newf, user_data, error);
+    retval = (*callback) (object, op, source_file, dup_file, user_data, error);
     if (!retval) {
         goto _close;
     }
 
-    retval = gum_file_close_db_files (origfn, newfn, origf, newf, error);
+    retval = gum_file_close_db_files (source_file_path, dup_file_path,
+            source_file,  dup_file, error);
 
 _close:
     if (!retval) {
-        if (newf) fclose (newf);
-        g_unlink (newfn);
-        if (origf) fclose (origf);
+        if (dup_file) fclose (dup_file);
+        g_unlink (dup_file_path);
+        if (source_file) fclose (source_file);
     }
 _finished:
-    g_free (newfn);
+    g_free (dup_file_path);
 
     return retval;
 }

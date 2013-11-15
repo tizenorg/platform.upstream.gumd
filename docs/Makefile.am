@@ -70,7 +70,10 @@ gum-group-service.h\
 gum-dbus-user-gen.h\
 gum-dbus-user-service-gen.h\
 gum-dbus-group-gen.h\
-gum-dbus-group-service-gen.h
+gum-dbus-group-service-gen.h \
+gum-defines.h \
+gum-dbus.h
+
 
 # Images to copy into HTML directory.
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png

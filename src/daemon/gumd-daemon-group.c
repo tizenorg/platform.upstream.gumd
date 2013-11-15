@@ -432,20 +432,20 @@ static gboolean
 _update_daemon_group_entry (
         GumdDaemonGroup *self,
         GumOpType op,
-        FILE *origf,
-        FILE *newf,
+        FILE *source_file,
+        FILE *dup_file,
         gpointer user_data,
         GError **error)
 {
     gboolean done = FALSE;
     struct group *entry;
 
-    while ((entry = fgetgrent (origf)) != NULL) {
+    while ((entry = fgetgrent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_ADD:
                 if (self->priv->group->gr_gid < entry->gr_gid) {
-                    if (putgrent (self->priv->group, newf) < 0) {
+                    if (putgrent (self->priv->group, dup_file) < 0) {
                         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
@@ -465,7 +465,7 @@ _update_daemon_group_entry (
                         self->priv->group->gr_name;
                 if (self->priv->group->gr_gid == entry->gr_gid &&
                     g_strcmp0 (old_name, entry->gr_name) == 0) {
-                    if (putgrent (self->priv->group, newf) < 0) {
+                    if (putgrent (self->priv->group, dup_file) < 0) {
                         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
@@ -478,7 +478,7 @@ _update_daemon_group_entry (
                 break;
             }
         }
-        if (putgrent (entry, newf) < 0) {
+        if (putgrent (entry, dup_file) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
@@ -486,7 +486,7 @@ _update_daemon_group_entry (
 
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
-        if (putgrent (self->priv->group, newf) < 0) {
+        if (putgrent (self->priv->group, dup_file) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
@@ -505,15 +505,15 @@ static gboolean
 _update_gshadow_entry (
         GumdDaemonGroup *self,
         GumOpType op,
-        FILE *origf,
-        FILE *newf,
+        FILE *source_file,
+        FILE *dup_file,
         gpointer user_data,
         GError **error)
 {
     gboolean done = FALSE;
     struct sgrp *entry = NULL;
 
-    while ((entry = fgetsgent (origf)) != NULL) {
+    while ((entry = fgetsgent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_ADD:
@@ -534,7 +534,7 @@ _update_gshadow_entry (
                 gchar *old_name = user_data ? (gchar *)user_data :
                         self->priv->gshadow->sg_namp;
                 if (g_strcmp0 (old_name, entry->sg_namp) == 0) {
-                    if (putsgent (self->priv->gshadow, newf) < 0) {
+                    if (putsgent (self->priv->gshadow, dup_file) < 0) {
                         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
                     }
@@ -547,7 +547,7 @@ _update_gshadow_entry (
                 break;
             }
         }
-        if (putsgent (entry, newf) < 0) {
+        if (putsgent (entry, dup_file) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
@@ -555,7 +555,7 @@ _update_gshadow_entry (
 
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
-        if (putsgent (self->priv->gshadow, newf) < 0) {
+        if (putsgent (self->priv->gshadow, dup_file) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
@@ -837,7 +837,7 @@ gumd_daemon_group_add (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
-            (GumFileUpdateFunc)_update_daemon_group_entry,
+            (GumFileUpdateCB)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
         gum_lock_pwdf_unlock ();
@@ -848,7 +848,7 @@ gumd_daemon_group_add (
             GUM_CONFIG_GENERAL_GSHADOW_FILE);
     if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
-                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                (GumFileUpdateCB)_update_gshadow_entry, shadow_file, NULL,
                 error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
@@ -904,7 +904,7 @@ gumd_daemon_group_delete (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
-            (GumFileUpdateFunc)_update_daemon_group_entry,
+            (GumFileUpdateCB)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
         gum_lock_pwdf_unlock ();
@@ -915,7 +915,7 @@ gumd_daemon_group_delete (
             GUM_CONFIG_GENERAL_GSHADOW_FILE);
     if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
-                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                (GumFileUpdateCB)_update_gshadow_entry, shadow_file, NULL,
                 error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
@@ -981,7 +981,7 @@ gumd_daemon_group_update (
 
     GUM_STR_DUP (grp->gr_name, old_name);
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_daemon_group_entry,
+            (GumFileUpdateCB)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_GROUP_FILE), old_name, error)) {
         g_free (old_name);
@@ -993,7 +993,7 @@ gumd_daemon_group_update (
             GUM_CONFIG_GENERAL_GSHADOW_FILE);
     if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-                (GumFileUpdateFunc)_update_gshadow_entry,
+                (GumFileUpdateCB)_update_gshadow_entry,
                 shadow_file, old_name, error)) {
         g_free (old_name);
         gum_lock_pwdf_unlock ();
@@ -1065,7 +1065,7 @@ gumd_daemon_group_add_member (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_daemon_group_entry,
+            (GumFileUpdateCB)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
         gum_lock_pwdf_unlock ();
@@ -1076,7 +1076,7 @@ gumd_daemon_group_add_member (
             GUM_CONFIG_GENERAL_GSHADOW_FILE);
     if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file,
+                (GumFileUpdateCB)_update_gshadow_entry, shadow_file,
                 NULL, error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
@@ -1144,7 +1144,7 @@ gumd_daemon_group_delete_member (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_daemon_group_entry,
+            (GumFileUpdateCB)_update_daemon_group_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_GROUP_FILE), NULL, error)) {
         gum_lock_pwdf_unlock ();
@@ -1155,7 +1155,7 @@ gumd_daemon_group_delete_member (
             GUM_CONFIG_GENERAL_GSHADOW_FILE);
     if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-                (GumFileUpdateFunc)_update_gshadow_entry, shadow_file, NULL,
+                (GumFileUpdateCB)_update_gshadow_entry, shadow_file, NULL,
                 error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
@@ -1172,9 +1172,9 @@ gumd_daemon_group_delete_user_membership (
         GError **error)
 {
     gboolean retval = TRUE;
-    FILE *origf = NULL, *newf = NULL;
-    gchar *newfn = NULL;
-    const gchar *origfn = NULL;
+    FILE *source_file = NULL, *dup_file = NULL;
+    gchar *dup_file_path = NULL;
+    const gchar *source_file_path = NULL;
 
     if (!config || !user_name) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_INVALID_DATA,
@@ -1191,14 +1191,17 @@ gumd_daemon_group_delete_user_membership (
     }
 
     /* update group entries */
-    origfn = gum_config_get_string (config, GUM_CONFIG_GENERAL_GROUP_FILE);
-    newfn = g_strdup_printf ("%s-tmp.%lu", origfn, (unsigned long)getpid ());
+    source_file_path = gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GROUP_FILE);
+    dup_file_path = g_strdup_printf ("%s-tmp.%lu", source_file_path,
+            (unsigned long)getpid ());
 
-    retval = gum_file_open_db_files (origfn, newfn, &origf, &newf, error);
+    retval = gum_file_open_db_files (source_file_path, dup_file_path,
+            &source_file, &dup_file, error);
     if (!retval) goto _finished;
 
     struct group *gent = NULL;
-    while ((gent = fgetgrent (origf)) != NULL) {
+    while ((gent = fgetgrent (source_file)) != NULL) {
 
         if (gum_string_utils_search_stringv (gent->gr_mem, user_name)) {
             gint status = 0;
@@ -1207,7 +1210,7 @@ gumd_daemon_group_delete_user_membership (
             GUM_STR_FREEV (gdest->gr_mem);
             gdest->gr_mem = gum_string_utils_delete_string (gent->gr_mem,
                     user_name);
-            status = putgrent (gdest, newf);
+            status = putgrent (gdest, dup_file);
             _free_daemon_group_entry (gdest);
             if (status < 0) {
                 GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
@@ -1215,33 +1218,37 @@ gumd_daemon_group_delete_user_membership (
                 break;
             }
 
-        } else if (putgrent (gent, newf) < 0) {
+        } else if (putgrent (gent, dup_file) < 0) {
             GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, retval, FALSE);
             break;
         }
     }
     if (!retval) {
-        fclose (newf);
-        g_unlink (newfn);
-        fclose (origf);
+        fclose (dup_file);
+        g_unlink (dup_file_path);
+        fclose (source_file);
     } else {
-        retval = gum_file_close_db_files (origfn, newfn, origf, newf, error);
+        retval = gum_file_close_db_files (source_file_path, dup_file_path,
+                source_file, dup_file, error);
     }
-    newf = NULL; origf = NULL;
-    g_free (newfn); newfn = NULL;
+    dup_file = NULL; source_file = NULL;
+    g_free (dup_file_path); dup_file_path = NULL;
 
     /* update gshadow entries */
-    origfn = gum_config_get_string (config, GUM_CONFIG_GENERAL_GSHADOW_FILE);
-    if (!g_file_test (origfn, G_FILE_TEST_EXISTS))  goto _finished;
+    source_file_path = gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
+    if (!g_file_test (source_file_path, G_FILE_TEST_EXISTS))  goto _finished;
 
-    newfn = g_strdup_printf ("%s-tmp.%lu", origfn, (unsigned long)getpid ());
+    dup_file_path = g_strdup_printf ("%s-tmp.%lu", source_file_path,
+            (unsigned long)getpid ());
 
-    retval = gum_file_open_db_files (origfn, newfn, &origf, &newf, error);
+    retval = gum_file_open_db_files (source_file_path, dup_file_path,
+            &source_file, &dup_file, error);
     if (!retval) goto _finished;
 
     struct sgrp *gsent = NULL;
-    while ((gsent = fgetsgent (origf)) != NULL) {
+    while ((gsent = fgetsgent (source_file)) != NULL) {
 
         gboolean is_mem = gum_string_utils_search_stringv (gsent->sg_mem,
                 user_name);
@@ -1263,7 +1270,7 @@ gumd_daemon_group_delete_user_membership (
                         user_name);
             }
 
-            status = putsgent (gsdest, newf);
+            status = putsgent (gsdest, dup_file);
             _free_gshadow_entry (gsdest);
             if (status < 0) {
                 GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
@@ -1271,7 +1278,7 @@ gumd_daemon_group_delete_user_membership (
                 break;
             }
 
-        } else if (putsgent (gsent, newf) < 0) {
+        } else if (putsgent (gsent, dup_file) < 0) {
             GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, retval, FALSE);
             break;
@@ -1279,15 +1286,16 @@ gumd_daemon_group_delete_user_membership (
     }
 
     if (!retval) {
-        fclose (newf);
-        g_unlink (newfn);
-        fclose (origf);
+        fclose (dup_file);
+        g_unlink (dup_file_path);
+        fclose (source_file);
     } else {
-        retval = gum_file_close_db_files (origfn, newfn, origf, newf, error);
+        retval = gum_file_close_db_files (source_file_path, dup_file_path,
+                source_file, dup_file, error);
     }
 
 _finished:
-    g_free (newfn);
+    g_free (dup_file_path);
 
     gum_lock_pwdf_unlock ();
     return retval;

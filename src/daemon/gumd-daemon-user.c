@@ -837,8 +837,8 @@ static gboolean
 _update_passwd_entry (
 		GumdDaemonUser *self,
 		GumOpType op,
-		FILE *origf,
-		FILE *newf,
+		FILE *source_file,
+		FILE *dup_file,
         gpointer user_data,
 		GError **error)
 {
@@ -846,12 +846,12 @@ _update_passwd_entry (
 	gboolean done = FALSE;
 	struct passwd *entry;
 
-	while ((entry = fgetpwent (origf)) != NULL) {
+	while ((entry = fgetpwent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_ADD:
                 if (self->priv->pw->pw_uid < entry->pw_uid) {
-                	if (putpwent (self->priv->pw, newf) < 0) {
+                	if (putpwent (self->priv->pw, dup_file) < 0) {
                 		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
@@ -872,7 +872,7 @@ _update_passwd_entry (
                 if (self->priv->pw->pw_uid == entry->pw_uid &&
                 	self->priv->pw->pw_gid == entry->pw_gid &&
                     g_strcmp0 (old_name, entry->pw_name) == 0) {
-                	if (putpwent (self->priv->pw, newf) < 0) {
+                	if (putpwent (self->priv->pw, dup_file) < 0) {
                 		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
@@ -885,7 +885,7 @@ _update_passwd_entry (
                 break;
             }
         }
-        if (putpwent (entry, newf) < 0) {
+        if (putpwent (entry, dup_file) < 0) {
         	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
         			error, FALSE);
         }
@@ -893,7 +893,7 @@ _update_passwd_entry (
 
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
-    	if (putpwent (self->priv->pw, newf) < 0) {
+    	if (putpwent (self->priv->pw, dup_file) < 0) {
     		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
     				error, FALSE);
     	}
@@ -935,8 +935,8 @@ static gboolean
 _lock_shadow_entry (
         GumdDaemonUser *self,
         GumOpType op,
-        FILE *origf,
-        FILE *newf,
+        FILE *source_file,
+        FILE *dup_file,
         gpointer user_data,
         GError **error)
 {
@@ -949,7 +949,7 @@ _lock_shadow_entry (
                 "File write failure", error, FALSE);
     }
 
-    while ((entry = fgetspent (origf)) != NULL) {
+    while ((entry = fgetspent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_MODIFY: {
@@ -966,7 +966,7 @@ _lock_shadow_entry (
                         /* entry is locked, unlock it */
                         spent->sp_pwdp = g_strdup (entry->sp_pwdp+1);
                     }
-                    ret = putspent (spent, newf);
+                    ret = putspent (spent, dup_file);
                     _free_shadow_entry (spent);
                     if (ret < 0) {
                         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
@@ -981,7 +981,7 @@ _lock_shadow_entry (
                 break;
             }
         }
-        if (putspent (entry, newf) < 0) {
+        if (putspent (entry, dup_file) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
                     error, FALSE);
         }
@@ -999,8 +999,8 @@ static gboolean
 _update_shadow_entry (
 		GumdDaemonUser *self,
 		GumOpType op,
-		FILE *origf,
-		FILE *newf,
+		FILE *source_file,
+		FILE *dup_file,
 		gpointer user_data,
 		GError **error)
 {
@@ -1008,7 +1008,7 @@ _update_shadow_entry (
 	gboolean done = FALSE;
 	struct spwd *entry = NULL;
 
-	while ((entry = fgetspent (origf)) != NULL) {
+	while ((entry = fgetspent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_ADD:
@@ -1029,7 +1029,7 @@ _update_shadow_entry (
                 gchar *old_name = user_data ? (gchar *)user_data :
                         self->priv->shadow->sp_namp;
                 if (g_strcmp0 (old_name, entry->sp_namp) == 0) {
-                	if (putspent (self->priv->shadow, newf) < 0) {
+                	if (putspent (self->priv->shadow, dup_file) < 0) {
                 		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                 				"File write failure", error, FALSE);
                 	}
@@ -1042,7 +1042,7 @@ _update_shadow_entry (
                 break;
             }
         }
-        if (putspent (entry, newf) < 0) {
+        if (putspent (entry, dup_file) < 0) {
         	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
         			error, FALSE);
         }
@@ -1050,7 +1050,7 @@ _update_shadow_entry (
 
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
-    	if (putspent (self->priv->shadow, newf) < 0) {
+    	if (putspent (self->priv->shadow, dup_file) < 0) {
     		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
     				error, FALSE);
     	}
@@ -1479,11 +1479,11 @@ gumd_daemon_user_add (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
-            (GumFileUpdateFunc)_update_passwd_entry,
+            (GumFileUpdateCB)_update_passwd_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_PASSWD_FILE), NULL, error) ||
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_ADD,
-            (GumFileUpdateFunc)_update_shadow_entry,
+            (GumFileUpdateCB)_update_shadow_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), NULL, error)) {
         gum_lock_pwdf_unlock ();
@@ -1548,7 +1548,7 @@ gumd_daemon_user_delete (
 
     /* lock the user */
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_lock_shadow_entry,
+            (GumFileUpdateCB)_lock_shadow_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, error)) {
         gum_lock_pwdf_unlock ();
@@ -1560,7 +1560,7 @@ gumd_daemon_user_delete (
         /* unlock the user */
         lock = FALSE;
         gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-                    (GumFileUpdateFunc)_lock_shadow_entry,
+                    (GumFileUpdateCB)_lock_shadow_entry,
                     gum_config_get_string (self->priv->config,
                     GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
         gum_lock_pwdf_unlock ();
@@ -1569,18 +1569,18 @@ gumd_daemon_user_delete (
     }
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
-            (GumFileUpdateFunc)_update_passwd_entry,
+            (GumFileUpdateCB)_update_passwd_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_PASSWD_FILE), NULL, error) ||
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
-            (GumFileUpdateFunc)_update_shadow_entry,
+            (GumFileUpdateCB)_update_shadow_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), NULL, error)) {
 
         /* unlock the user */
         lock = FALSE;
         gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-                    (GumFileUpdateFunc)_lock_shadow_entry,
+                    (GumFileUpdateCB)_lock_shadow_entry,
                     gum_config_get_string (self->priv->config,
                     GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
         gum_lock_pwdf_unlock ();
@@ -1685,11 +1685,11 @@ gumd_daemon_user_update (
 
     GUM_STR_DUP (pw->pw_name, old_name);
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_passwd_entry,
+            (GumFileUpdateCB)_update_passwd_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_PASSWD_FILE), old_name, error) ||
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
-            (GumFileUpdateFunc)_update_shadow_entry,
+            (GumFileUpdateCB)_update_shadow_entry,
             gum_config_get_string (self->priv->config,
             GUM_CONFIG_GENERAL_SHADOW_FILE), old_name, error)) {
         g_free (old_name);

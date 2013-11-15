@@ -40,6 +40,7 @@
  * @title: Gum Utils
  * @include: gum/common/gum-utils.h
  *
+ * Utility functions
  */
 
 typedef struct __nonce_ctx_t

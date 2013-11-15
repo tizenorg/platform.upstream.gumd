@@ -346,7 +346,7 @@ START_TEST (test_file)
     fail_if (stat (origfn, &origst) < 0);
 
     fail_unless (gum_file_update (user, GUM_OPTYPE_ADD,
-            (GumFileUpdateFunc)_update_file_entries, origfn, NULL,
+            (GumFileUpdateCB)_update_file_entries, origfn, NULL,
             &error) == TRUE);
     fail_unless (error == NULL);
 

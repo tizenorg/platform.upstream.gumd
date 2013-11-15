@@ -38,6 +38,7 @@
  * @title: Gum Validate
  * @include: gum/common/gum-validate.h
  *
+ * Name/secret validation functions
  */
 
 /**

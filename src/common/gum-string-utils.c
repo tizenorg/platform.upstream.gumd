@@ -35,6 +35,8 @@
  * @title: Gum String Utils
  * @include: gum/common/gum-string-utils.h
  *
+ * String utility functions
+ *
  */
 
 /**
