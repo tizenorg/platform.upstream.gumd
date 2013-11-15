@@ -46,8 +46,8 @@
  *   gchar *pass = gum_crypt_encrypt_secret("pas.-s123", GUM_CRYPT_SHA512);
  *   g_free (pass);
  *
- *   pass = gum_crypt_encrypt_secret("pass ?()#123", GUM_CRYPT_SHA512);
- *   gum_crypt_cmp_secret("pass ?()#123", pass); //should return true.
+ *   pass = gum_crypt_encrypt_secret("pass ?()123", GUM_CRYPT_SHA512);
+ *   gum_crypt_cmp_secret("pass ?()123", pass); //should return true.
  *   g_free (pass);
  *
  * ]|
