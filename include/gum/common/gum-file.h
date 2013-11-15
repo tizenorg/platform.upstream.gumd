@@ -34,8 +34,6 @@
 #include <gshadow.h>
 #include <gio/gio.h>
 
-#include <common/gum-config.h>
-
 G_BEGIN_DECLS
 
 typedef enum {
@@ -79,50 +77,50 @@ gum_file_close_db_files (
 
 struct passwd *
 gum_file_getpwnam (
-        const gchar *usrname,
-        GumConfig *config);
+        const gchar *username,
+        const gchar *filename);
 
 struct passwd *
 gum_file_getpwuid (
         uid_t uid,
-        GumConfig *config);
+        const gchar *filename);
 
 struct passwd *
 gum_file_find_user_by_gid (
-        gid_t gid,
-        GumConfig *config);
+        gid_t primary_gid,
+        const gchar *filename);
 
 struct spwd *
 gum_file_getspnam (
-        const gchar *usrname,
-        GumConfig *config);
+        const gchar *username,
+        const gchar *filename);
 
 struct group *
 gum_file_getgrnam (
         const gchar *grname,
-        GumConfig *config);
+        const gchar *filename);
 
 struct group *
 gum_file_getgrgid (
         gid_t gid,
-        GumConfig *config);
+        const gchar *filename);
 
 struct sgrp *
 gum_file_getsgnam (
-        const gchar *grpname,
-        GumConfig *config);
+        const gchar *grname,
+        const gchar *filename);
 
 GFile *
 gum_file_new_path (
 		const gchar *dir,
-		const gchar *fname);
+		const gchar *filename);
 
 gboolean
 gum_file_create_home_dir (
-        GumConfig *config,
-        const gchar *usr_home_dir,
+        const gchar *home_dir,
         uid_t uid,
         gid_t gid,
+        guint umask,
         GError **error);
 
 gboolean

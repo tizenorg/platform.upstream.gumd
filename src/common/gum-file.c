@@ -338,24 +338,32 @@ _finished:
     return retval;
 }
 
+/**
+ * gum_file_getpwnam:
+ * @username: (transfer none): name of the user
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the passwd structure from the file based on username.
+ *
+ * Returns: (transfer full): passwd structure if successful, NULL otherwise.
+ */
 struct passwd *
 gum_file_getpwnam (
-        const gchar *usrname,
-        GumConfig *config)
+        const gchar *username,
+        const gchar *filename)
 {
     struct passwd *pent = NULL;
     FILE *fp = NULL;
 
-    if (!usrname || !config) {
+    if (!username || !filename) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_PASSWD_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
     while ((pent = fgetpwent (fp)) != NULL) {
-        if(g_strcmp0 (usrname, pent->pw_name) == 0)
+        if(g_strcmp0 (username, pent->pw_name) == 0)
             break;
         pent = NULL;
     }
@@ -364,20 +372,28 @@ gum_file_getpwnam (
     return pent;
 }
 
+/**
+ * gum_file_getpwuid:
+ * @uid: user id
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the passwd structure from the file based on uid.
+ *
+ * Returns: (transfer full): passwd structure if successful, NULL otherwise.
+ */
 struct passwd *
 gum_file_getpwuid (
         uid_t uid,
-        GumConfig *config)
+        const gchar *filename)
 {
     struct passwd *pent = NULL;
     FILE *fp = NULL;
 
-    if (!config) {
+    if (!filename) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_PASSWD_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
 
@@ -391,25 +407,33 @@ gum_file_getpwuid (
     return pent;
 }
 
+/**
+ * gum_file_find_user_by_gid:
+ * @primary_gid: primary gid of the user
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the passwd structure from the file based on the primary group id.
+ *
+ * Returns: (transfer full): passwd structure if successful, NULL otherwise.
+ */
 struct passwd *
 gum_file_find_user_by_gid (
-        gid_t gid,
-        GumConfig *config)
+        gid_t primary_gid,
+        const gchar *filename)
 {
     struct passwd *pent = NULL;
     FILE *fp = NULL;
 
-    if (!config || gid == GUM_GROUP_INVALID_GID) {
+    if (!filename || primary_gid == GUM_GROUP_INVALID_GID) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_PASSWD_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
 
     while ((pent = fgetpwent (fp)) != NULL) {
-        if(gid == pent->pw_gid)
+        if(primary_gid == pent->pw_gid)
             break;
         pent = NULL;
     }
@@ -418,25 +442,33 @@ gum_file_find_user_by_gid (
     return pent;
 }
 
+/**
+ * gum_file_getspnam:
+ * @username: (transfer none): name of the user
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the spwd structure from the file based on the username.
+ *
+ * Returns: (transfer full): spwd structure if successful, NULL otherwise.
+ */
 struct spwd *
 gum_file_getspnam (
-        const gchar *usrname,
-        GumConfig *config)
+        const gchar *username,
+        const gchar *filename)
 {
     struct spwd *spent = NULL;
     FILE *fp = NULL;
 
-    if (!usrname || !config) {
+    if (!username || !filename) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_SHADOW_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
 
     while ((spent = fgetspent (fp)) != NULL) {
-        if(g_strcmp0 (usrname, spent->sp_namp) == 0)
+        if(g_strcmp0 (username, spent->sp_namp) == 0)
             break;
         spent = NULL;
     }
@@ -445,20 +477,28 @@ gum_file_getspnam (
     return spent;
 }
 
+/**
+ * gum_file_getgrnam:
+ * @grname: (transfer none): name of the group
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the group structure from the file based on the groupname @grname.
+ *
+ * Returns: (transfer full): group structure if successful, NULL otherwise.
+ */
 struct group *
 gum_file_getgrnam (
         const gchar *grname,
-        GumConfig *config)
+        const gchar *filename)
 {
     struct group *gent = NULL;
     FILE *fp = NULL;
 
-    if (!grname || !config) {
+    if (!grname || !filename) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
     while ((gent = fgetgrent (fp)) != NULL) {
@@ -471,20 +511,28 @@ gum_file_getgrnam (
     return gent;
 }
 
+/**
+ * gum_file_getgrgid:
+ * @gid: id of the group
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the group structure from the file based on the gid.
+ *
+ * Returns: (transfer full): group structure if successful, NULL otherwise.
+ */
 struct group *
 gum_file_getgrgid (
         gid_t gid,
-        GumConfig *config)
+        const gchar *filename)
 {
     struct group *gent = NULL;
     FILE *fp = NULL;
 
-    if (!config) {
+    if (!filename) {
         return NULL;
     }
 
-    if (!(fp = _open_file (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_GROUP_FILE), "r"))) {
+    if (!(fp = _open_file (filename, "r"))) {
         return NULL;
     }
     while ((gent = fgetgrent (fp)) != NULL) {
@@ -497,28 +545,34 @@ gum_file_getgrgid (
     return gent;
 }
 
+/**
+ * gum_file_getsgnam:
+ * @grname: (transfer none): name of the group
+ * @filename: (transfer none): path to the file
+ *
+ * Gets the sgrp structure from the file based on the groupname @grname.
+ *
+ * Returns: (transfer full): sgrp structure if successful, NULL otherwise.
+ */
 struct sgrp *
 gum_file_getsgnam (
-        const gchar *grpname,
-        GumConfig *config)
+        const gchar *grname,
+        const gchar *filename)
 {
     struct sgrp *sgent = NULL;
     FILE *fp = NULL;
-    const gchar *shadow_file = NULL;
 
-    if (!grpname || !config) {
+    if (!grname || !filename) {
         return NULL;
     }
 
-    shadow_file = gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE);
-    if (!g_file_test (shadow_file, G_FILE_TEST_EXISTS) ||
-        !(fp = _open_file (shadow_file, "r"))) {
+    if (!g_file_test (filename, G_FILE_TEST_EXISTS) ||
+        !(fp = _open_file (filename, "r"))) {
         return NULL;
     }
 
     while ((sgent = fgetsgent (fp)) != NULL) {
-        if(g_strcmp0 (grpname, sgent->sg_namp) == 0)
+        if(g_strcmp0 (grname, sgent->sg_namp) == 0)
             break;
         sgent = NULL;
     }
@@ -527,19 +581,28 @@ gum_file_getsgnam (
     return sgent;
 }
 
+/**
+ * gum_file_new_path:
+ * @dir: (transfer none): directory path
+ * @filename: (transfer none): name of the file
+ *
+ * Builds complete file path based on the @filename and @dir.
+ *
+ * Returns: (transfer full): the #GFile if successful, NULL otherwise.
+ */
 GFile *
 gum_file_new_path (
 		const gchar *dir,
-		const gchar *fname)
+		const gchar *filename)
 {
 	GFile *file = NULL;
 	gchar *fn = NULL;
 
-	if (!dir || !fname) {
+	if (!dir || !filename) {
 		return NULL;
 	}
 
-	fn = g_build_filename (dir, fname, NULL);
+	fn = g_build_filename (dir, filename, NULL);
 	if (fn) {
 		file = g_file_new_for_path (fn);
 		g_free (fn);
@@ -550,11 +613,11 @@ gum_file_new_path (
 
 static gboolean
 _copy_dir_recursively (
-        GumConfig *config,
         const gchar *src,
         const gchar *dest,
         uid_t uid,
         gid_t gid,
+        guint umask,
         GError **error)
 {
     gboolean retval = TRUE;
@@ -590,11 +653,10 @@ _copy_dir_recursively (
 
         if (S_ISDIR (stat_entry.st_mode)) {
             DBG ("copy directory %s", src_filepath);
-            gint mode = GUM_PERM & ~gum_config_get_uint (config,
-                        GUM_CONFIG_GENERAL_UMASK, GUM_UMASK);
+            gint mode = GUM_PERM & ~umask;
             g_mkdir_with_parents (dest_filepath, mode);
-            stop = !_copy_dir_recursively (config, src_filepath, dest_filepath,
-                    uid, gid, NULL);
+            stop = !_copy_dir_recursively (src_filepath, dest_filepath, uid,
+                    gid, umask, NULL);
         } else {
             DBG ("copy file %s", src_filepath);
             if (!g_file_copy (src_file, dest_file,
@@ -607,10 +669,7 @@ _copy_dir_recursively (
                 goto _free_data;
             }
         }
-        /* when run in test mode, user may not exist */
-#ifndef ENABLE_TESTS
         if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
-#endif
 
 _free_data:
         g_free (src_filepath);
@@ -628,50 +687,77 @@ _free_data:
     return retval;
 }
 
+/**
+ * gum_file_create_home_dir:
+ * @home_dir: path to the user home directory
+ * @uid: id of the user
+ * @gid: group id of the user
+ * @umask: the umask to be used for setting the mode of the files/directories
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Creates the home directory of the user. All the files from the
+ * #GUM_CONFIG_GENERAL_SKEL_DIR are copied (recursively) to the user home
+ * directory.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
+ */
 gboolean
 gum_file_create_home_dir (
-        GumConfig *config,
-        const gchar *usr_home_dir,
+        const gchar *home_dir,
         uid_t uid,
         gid_t gid,
+        guint umask,
         GError **error)
 {
 	gboolean retval = TRUE;
-	gint mode = GUM_PERM & ~gum_config_get_uint (config,
-			GUM_CONFIG_GENERAL_UMASK, GUM_UMASK);
+	gint mode = GUM_PERM & ~umask;
+	const gchar *skel_dir = NULL;
+    /* TODO: fix skel directory path */
 
-    if (!usr_home_dir) {
+    if (!home_dir) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                 "Invalid home directory path", error, FALSE);
     }
 
-    if (g_access (usr_home_dir, F_OK) != 0) {
+    if (g_access (home_dir, F_OK) != 0) {
 
-        if (!g_file_test (usr_home_dir, G_FILE_TEST_EXISTS)) {
-            g_mkdir_with_parents (usr_home_dir, mode);
+        if (!g_file_test (home_dir, G_FILE_TEST_EXISTS)) {
+            g_mkdir_with_parents (home_dir, mode);
         }
 
-        if (!g_file_test (usr_home_dir, G_FILE_TEST_IS_DIR)) {
+        if (!g_file_test (home_dir, G_FILE_TEST_IS_DIR)) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                     "Home directory creation failure", error, FALSE);
         }
 
         /* when run in test mode, user may not exist */
-#ifndef ENABLE_TESTS
-		if (chown (usr_home_dir, uid, gid) < 0) {
-			GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
-					"Home directory chown failure", error, FALSE);
-		}
+#ifdef ENABLE_TESTS
+        uid = getuid ();
+        gid = getgid ();
 #endif
+        if (chown (home_dir, uid, gid) < 0) {
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
+                    "Home directory chown failure", error, FALSE);
+        }
 
-		retval = _copy_dir_recursively (config, gum_config_get_string (config,
-                GUM_CONFIG_GENERAL_SKEL_DIR), usr_home_dir, uid, gid,
-		        error);
+        if (skel_dir) {
+            retval = _copy_dir_recursively (skel_dir, home_dir, uid, gid, umask,
+                    error);
+        }
 	}
 
 	return retval;
 }
 
+/**
+ * gum_file_delete_home_dir:
+ * @dir: (transfer none): the path to the directory
+ * @error: (transfer none): the #GError which is set in case of an error
+ *
+ * Deletes the directory and its sub-directories recursively.
+ *
+ * Returns: TRUE if successful, FALSE otherwise and @error is set.
+ */
 gboolean
 gum_file_delete_home_dir (
         const gchar *dir,

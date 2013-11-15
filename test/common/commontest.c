@@ -377,39 +377,54 @@ START_TEST (test_file)
 
     fail_unless (gum_file_getpwnam (NULL, NULL) == NULL);
     fail_unless (gum_file_getpwnam ("", NULL) == NULL);
-    fail_unless (gum_file_getpwnam ("", config) == NULL);
-    fail_unless (gum_file_getpwnam ("test121", config) == NULL);
-    fail_unless (gum_file_getpwnam ("root", config) != NULL);
+    fail_unless (gum_file_getpwnam ("", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_PASSWD_FILE)) == NULL);
+    fail_unless (gum_file_getpwnam ("test121", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_PASSWD_FILE)) == NULL);
+    fail_unless (gum_file_getpwnam ("root", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_PASSWD_FILE)) != NULL);
 
     fail_unless (gum_file_getpwuid (1, NULL) == NULL);
-    fail_unless (gum_file_getpwuid (0, config) != NULL);
+    fail_unless (gum_file_getpwuid (0, gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_PASSWD_FILE)) != NULL);
 
     fail_unless (gum_file_find_user_by_gid (GUM_GROUP_INVALID_GID, NULL)
             == NULL);
-    fail_unless (gum_file_find_user_by_gid (0, config) != NULL);
+    fail_unless (gum_file_find_user_by_gid (0, gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_PASSWD_FILE)) != NULL);
 
     fail_unless (gum_file_getspnam (NULL,NULL) == NULL);
     fail_unless (gum_file_getspnam ("", NULL) == NULL);
-    fail_unless (gum_file_getspnam ("", config) == NULL);
-    fail_unless (gum_file_getspnam ("test121", config) == NULL);
-    fail_unless (gum_file_getspnam ("root", config) != NULL);
+    fail_unless (gum_file_getspnam ("", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_SHADOW_FILE)) == NULL);
+    fail_unless (gum_file_getspnam ("test121", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_SHADOW_FILE)) == NULL);
+    fail_unless (gum_file_getspnam ("root", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_SHADOW_FILE)) != NULL);
 
     fail_unless (gum_file_getgrnam (NULL,NULL) == NULL);
     fail_unless (gum_file_getgrnam ("", NULL) == NULL);
-    fail_unless (gum_file_getgrnam ("", config) == NULL);
-    fail_unless (gum_file_getgrnam ("test121", config) == NULL);
-    fail_unless (gum_file_getgrnam ("root", config) != NULL);
+    fail_unless (gum_file_getgrnam ("", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
+    fail_unless (gum_file_getgrnam ("test121", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
+    fail_unless (gum_file_getgrnam ("root", gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GROUP_FILE)) != NULL);
 
     fail_unless (gum_file_getgrgid (1, NULL) == NULL);
-    fail_unless (gum_file_getgrgid (0, config) != NULL);
+    fail_unless (gum_file_getgrgid (0, gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_GROUP_FILE)) != NULL);
 
     if (g_file_test (gum_config_get_string (config,
             GUM_CONFIG_GENERAL_GSHADOW_FILE), G_FILE_TEST_EXISTS)) {
         fail_unless (gum_file_getsgnam (NULL,NULL) == NULL);
         fail_unless (gum_file_getsgnam ("", NULL) == NULL);
-        fail_unless (gum_file_getsgnam ("", config) == NULL);
-        fail_unless (gum_file_getsgnam ("test121", config) == NULL);
-        fail_unless (gum_file_getsgnam ("root", config) != NULL);
+        fail_unless (gum_file_getsgnam ("", gum_config_get_string (config,
+                GUM_CONFIG_GENERAL_GSHADOW_FILE)) == NULL);
+        fail_unless (gum_file_getsgnam ("test121", gum_config_get_string (
+                config, GUM_CONFIG_GENERAL_GSHADOW_FILE)) == NULL);
+        fail_unless (gum_file_getsgnam ("root", gum_config_get_string (config,
+                GUM_CONFIG_GENERAL_GSHADOW_FILE)) != NULL);
     }
 
     fail_unless (gum_file_new_path (NULL, NULL) == NULL);
@@ -422,7 +437,8 @@ START_TEST (test_file)
     gid = getgid ();
     hdir = g_build_filename (gum_config_get_string (config,
             GUM_CONFIG_GENERAL_HOME_DIR_PREF), "test_daemon_user_file", NULL);
-    fail_unless (gum_file_create_home_dir (config, hdir, uid, gid,
+    fail_unless (gum_file_create_home_dir (hdir, uid, gid,
+            gum_config_get_uint (config, GUM_CONFIG_GENERAL_UMASK, GUM_UMASK),
             &error) == TRUE);
     fail_unless (error == NULL);
     fail_unless (stat (hdir, &sb) == 0);
@@ -438,7 +454,8 @@ START_TEST (test_file)
     fail_unless (error->code == GUM_ERROR_HOME_DIR_DELETE_FAILURE);
     g_error_free (error);
 
-    fail_unless (gum_file_create_home_dir (config, NULL, uid, gid,
+    fail_unless (gum_file_create_home_dir (NULL, uid, gid,
+            gum_config_get_uint (config, GUM_CONFIG_GENERAL_UMASK, GUM_UMASK),
             &error) == FALSE);
     fail_unless (error != NULL);
     fail_unless (error->code == GUM_ERROR_HOME_DIR_CREATE_FAILURE);

@@ -708,7 +708,8 @@ _find_free_uid (
     /* Select the first available uid */
     tmp_uid = uid_min;
     while (tmp_uid <= uid_max) {
-        if (gum_file_getpwuid (tmp_uid, self->priv->config) == NULL) {
+        if (gum_file_getpwuid (tmp_uid, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE)) == NULL) {
             *uid = tmp_uid;
             return TRUE;
         }
@@ -727,7 +728,8 @@ _set_uid (
         return FALSE;
     }
 
-    if (gum_file_getpwnam (self->priv->pw->pw_name, self->priv->config)
+    if (gum_file_getpwnam (self->priv->pw->pw_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE))
             != NULL) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_ALREADY_EXISTS,
                 "User already exists", error, FALSE);
@@ -1144,9 +1146,10 @@ _create_home_dir (
 		return TRUE;
 	}
 
-	return gum_file_create_home_dir (self->priv->config,
-	        self->priv->pw->pw_dir, self->priv->pw->pw_uid,
-			self->priv->pw->pw_gid, error);
+	return gum_file_create_home_dir (self->priv->pw->pw_dir,
+	        self->priv->pw->pw_uid, self->priv->pw->pw_gid,
+	        gum_config_get_uint (self->priv->config,
+		            GUM_CONFIG_GENERAL_UMASK, GUM_UMASK), error);
 }
 
 gboolean
@@ -1204,13 +1207,15 @@ _get_passwd (
 
     if (self->priv->pw->pw_uid != GUM_USER_INVALID_UID) {
         s_uid = self->priv->pw->pw_uid;
-        pwd = gum_file_getpwuid (s_uid, self->priv->config);
+        pwd = gum_file_getpwuid (s_uid, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE));
     }
 
     if (self->priv->pw->pw_name) {
         s_name = self->priv->pw->pw_name;
         if (!pwd) {
-            pwd = gum_file_getpwnam (s_name, self->priv->config);
+            pwd = gum_file_getpwnam (s_name, gum_config_get_string (
+                    self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE));
         }
     }
 
@@ -1271,7 +1276,8 @@ _copy_passwd_data (
     if ((pent = _get_passwd (self, error)) == NULL) {
         return FALSE;
     }
-    spent = gum_file_getspnam (pent->pw_name, self->priv->config);
+    spent = gum_file_getspnam (pent->pw_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_SHADOW_FILE));
     if (!spent) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
                 error, FALSE);
@@ -1633,8 +1639,8 @@ gumd_daemon_user_update (
         return FALSE;
     }
 
-    if ((shadow = gum_file_getspnam (pw->pw_name,
-            self->priv->config)) == NULL) {
+    if ((shadow = gum_file_getspnam (pw->pw_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_SHADOW_FILE))) == NULL) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
                 "User not found in Shadow", error, FALSE);
@@ -1712,7 +1718,8 @@ gumd_daemon_user_get_uid_by_name (
         if (!gum_lock_pwdf_lock ()) {
             return uid;
         }
-        struct passwd *pwd = gum_file_getpwnam (username, config);
+        struct passwd *pwd = gum_file_getpwnam (username,
+                gum_config_get_string (config, GUM_CONFIG_GENERAL_PASSWD_FILE));
         gum_lock_pwdf_unlock ();
         if (pwd) {
             return pwd->pw_uid;

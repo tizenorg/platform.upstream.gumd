@@ -382,7 +382,8 @@ _find_free_gid (
     gid_t tmp_gid, gid_min, gid_max;
 
     if (preferred_gid != GUM_GROUP_INVALID_GID &&
-        gum_file_getgrgid (preferred_gid, self->priv->config) == NULL) {
+        gum_file_getgrgid (preferred_gid, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL) {
         *gid = preferred_gid;
         return TRUE;
     }
@@ -393,7 +394,8 @@ _find_free_gid (
     /* Select the first available gid */
     tmp_gid = gid_min;
     while (tmp_gid <= gid_max) {
-        if (gum_file_getgrgid (tmp_gid, self->priv->config) == NULL) {
+        if (gum_file_getgrgid (tmp_gid, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL) {
             *gid = tmp_gid;
             return TRUE;
         }
@@ -413,7 +415,8 @@ _set_gid (
         return FALSE;
     }
 
-    if (gum_file_getgrnam (self->priv->group->gr_name, self->priv->config)
+    if (gum_file_getgrnam (self->priv->group->gr_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_GROUP_FILE))
             != NULL) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
                 "Group already exists", error, FALSE);
@@ -651,13 +654,15 @@ _get_group (
 
     if (self->priv->group->gr_gid != G_MAXUINT) {
         s_gid = self->priv->group->gr_gid;
-        grp = gum_file_getgrgid (s_gid, self->priv->config);
+        grp = gum_file_getgrgid (s_gid, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_GROUP_FILE));
     }
 
     if (self->priv->group->gr_name) {
         s_name = self->priv->group->gr_name;
         if (!grp) {
-            grp = gum_file_getgrnam (s_name, self->priv->config);
+            grp = gum_file_getgrnam (s_name, gum_config_get_string (
+                    self->priv->config, GUM_CONFIG_GENERAL_GROUP_FILE));
         }
     }
 
@@ -735,7 +740,8 @@ _copy_group_data (
     }
 
     if (!sgent) {
-        sgent = gum_file_getsgnam (gent->gr_name, self->priv->config);
+        sgent = gum_file_getsgnam (gent->gr_name, gum_config_get_string (
+                self->priv->config, GUM_CONFIG_GENERAL_GSHADOW_FILE));
     }
 
     /*group entry*/
@@ -897,7 +903,8 @@ gumd_daemon_group_delete (
      * being used as primary group by any user.
      */
     if (gum_file_find_user_by_gid (self->priv->group->gr_gid,
-            self->priv->config) != NULL) {
+            gum_config_get_string (self->priv->config,
+                    GUM_CONFIG_GENERAL_PASSWD_FILE)) != NULL) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_HAS_USER,
                 "Group is a primary group of an existing user", error, FALSE);
@@ -954,7 +961,8 @@ gumd_daemon_group_update (
         return FALSE;
     }
 
-    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
+    gshadow = gum_file_getsgnam (grp->gr_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_GSHADOW_FILE));
 
     if (!self->priv->group->gr_passwd ||
         g_strcmp0 (self->priv->group->gr_passwd, "x") == 0 ||
@@ -1025,7 +1033,8 @@ gumd_daemon_group_add_member (
                 "Database already locked", error, FALSE);
     }
 
-    if ((pent = gum_file_getpwuid (uid, self->priv->config)) == NULL) {
+    if ((pent = gum_file_getpwuid (uid, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE))) == NULL) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 FALSE);
@@ -1042,7 +1051,8 @@ gumd_daemon_group_add_member (
                 "User already a member of the group", error, FALSE);
     }
 
-    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
+    gshadow = gum_file_getsgnam (grp->gr_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_GSHADOW_FILE));
 
     if (!_copy_group_data (self, grp, gshadow, error)) {
         gum_lock_pwdf_unlock ();
@@ -1104,7 +1114,8 @@ gumd_daemon_group_delete_member (
                 "Database already locked", error, FALSE);
     }
 
-    if ((pent = gum_file_getpwuid (uid, self->priv->config)) == NULL) {
+    if ((pent = gum_file_getpwuid (uid, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_PASSWD_FILE))) == NULL) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found", error,
                 FALSE);
@@ -1121,7 +1132,8 @@ gumd_daemon_group_delete_member (
                 "User not a member of the group", error, FALSE);
     }
 
-    gshadow = gum_file_getsgnam (grp->gr_name, self->priv->config);
+    gshadow = gum_file_getsgnam (grp->gr_name, gum_config_get_string (
+            self->priv->config, GUM_CONFIG_GENERAL_GSHADOW_FILE));
 
     if (!_copy_group_data (self, grp, gshadow, error)) {
         gum_lock_pwdf_unlock ();
@@ -1311,7 +1323,8 @@ gumd_daemon_group_get_gid_by_name (
         if (!gum_lock_pwdf_lock ()) {
             return gid;
         }
-        struct group *grp = gum_file_getgrnam (groupname, config);
+        struct group *grp = gum_file_getgrnam (groupname,
+                gum_config_get_string (config, GUM_CONFIG_GENERAL_GROUP_FILE));
         gum_lock_pwdf_unlock ();
         if (grp) {
             return grp->gr_gid;

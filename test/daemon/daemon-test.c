@@ -593,8 +593,13 @@ START_TEST (test_daemon_user)
     fail_unless (str != NULL);
     fail_unless (stat (str, &sb) != 0);
     fail_unless (error == NULL);
-    fail_unless (gum_file_getpwnam ("guest_daemon_user1", config) == NULL);
-    fail_unless (gum_file_getgrnam ("guest_daemon_user1", config) == NULL);
+
+    fail_unless (gum_file_getpwnam ("guest_daemon_user1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_PASSWD_FILE)) == NULL);
+    fail_unless (gum_file_getgrnam ("guest_daemon_user1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
     g_free (str);
 
     /* case 16: user exist and delete (dont remove home dir) */
@@ -608,8 +613,12 @@ START_TEST (test_daemon_user)
     fail_unless (str != NULL);
     fail_unless (stat (str, &sb) == 0);
     fail_unless (error == NULL);
-    fail_unless (gum_file_getpwnam ("admin_daemon_user1", config) == NULL);
-    fail_unless (gum_file_getgrnam ("admin_daemon_user1", config) == NULL);
+    fail_unless (gum_file_getpwnam ("admin_daemon_user1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_PASSWD_FILE)) == NULL);
+    fail_unless (gum_file_getgrnam ("admin_daemon_user1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
     g_free (str);
 
     /* case 17: user does exist and update fails */
@@ -1220,7 +1229,9 @@ START_TEST (test_daemon_group)
             "groupname", "user_daemon_group1", "gid", gid, NULL);
     fail_unless (gumd_daemon_group_delete (group, &error) == TRUE);
     fail_unless (error == NULL);
-    fail_unless (gum_file_getgrnam ("user_daemon_group1", config) == NULL);
+    fail_unless (gum_file_getgrnam ("user_daemon_group1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
 
     /* case 11: group exist and delete*/
     g_object_unref (group);
@@ -1228,10 +1239,14 @@ START_TEST (test_daemon_group)
 
     g_object_set (G_OBJECT (group), "grouptype", GUM_GROUPTYPE_SYSTEM,
             "groupname", "system_daemon_group1", "gid", sys_gid, NULL);
-    fail_unless (gum_file_getgrnam ("system_daemon_group1", config) != NULL);
+    fail_unless (gum_file_getgrnam ("system_daemon_group1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_GROUP_FILE)) != NULL);
     fail_unless (gumd_daemon_group_delete (group, &error) == TRUE);
     fail_unless (error == NULL);
-    fail_unless (gum_file_getgrnam ("system_daemon_group1", config) == NULL);
+    fail_unless (gum_file_getgrnam ("system_daemon_group1",
+            gum_config_get_string (config,
+                    GUM_CONFIG_GENERAL_GROUP_FILE)) == NULL);
 
     /* case 12: add user to group and user does not exist*/
     g_object_unref (group);
