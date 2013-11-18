@@ -74,6 +74,13 @@
  */
 
 /**
+ * FILE:
+ *
+ * Data structure that contains information about file stream as defined in
+ * stdio.h.
+ */
+
+/**
  * GumOpType:
  * @GUM_OPTYPE_ADD: add an entry
  * @GUM_OPTYPE_DELETE: delete an entry
@@ -711,8 +718,6 @@ gum_file_create_home_dir (
 {
 	gboolean retval = TRUE;
 	gint mode = GUM_PERM & ~umask;
-	const gchar *skel_dir = NULL;
-    /* TODO: fix skel directory path */
 
     if (!home_dir) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
@@ -740,10 +745,8 @@ gum_file_create_home_dir (
                     "Home directory chown failure", error, FALSE);
         }
 
-        if (skel_dir) {
-            retval = _copy_dir_recursively (skel_dir, home_dir, uid, gid, umask,
-                    error);
-        }
+        retval = _copy_dir_recursively (GUM_SKEL_DIR, home_dir, uid, gid, umask,
+        		error);
 	}
 
 	return retval;

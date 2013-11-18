@@ -43,17 +43,22 @@ G_BEGIN_DECLS
 /**
  * GumUserType:
  * @GUM_USERTYPE_NONE: user type not defined/set
- * @GUM_USERTYPE_SYSTEM: system user. No home directory will be created for
- * system user. System user is not able to use login/logout functionality as
- * its primary usage is limited to system daemons.
+ * @GUM_USERTYPE_SYSTEM: no home directory will be created for system user.
+ * System user is not able to use login/logout functionality as
+ * its primary usage is limited to system daemons. Uid will be chosen between
+ * #GUM_CONFIG_GENERAL_SYS_UID_MIN and #GUM_CONFIG_GENERAL_SYS_UID_MAX
  * @GUM_USERTYPE_ADMIN: admin user is similar to normal user with the addition
- * of super user privileges.
+ * that it will be assigned to admin user groups at the time of account
+ * creation. Uid will be chosen between #GUM_CONFIG_GENERAL_UID_MIN and
+ * #GUM_CONFIG_GENERAL_UID_MAX
  * @GUM_USERTYPE_GUEST: guest user does not need secret/password to login.
  * Guest user home directory is created with login and cleaned up/destroyed
- * when user logs out.
+ * when user logs out. Uid will be chosen between #GUM_CONFIG_GENERAL_UID_MIN
+ * and #GUM_CONFIG_GENERAL_UID_MAX
  * @GUM_USERTYPE_NORMAL: normal user with home directory created based on prefix
  * #GUM_CONFIG_GENERAL_HOME_DIR_PREF. Contents of #GUM_CONFIG_GENERAL_SKEL_DIR
- * are copied to the home directory.
+ * are copied to the home directory. Uid will be chosen between
+ * #GUM_CONFIG_GENERAL_UID_MIN and #GUM_CONFIG_GENERAL_UID_MAX
  *
  * This enumeration lists users types.
  */

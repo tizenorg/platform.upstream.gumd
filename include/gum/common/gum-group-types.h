@@ -43,8 +43,10 @@ G_BEGIN_DECLS
 /**
  * GumGroupType:
  * @GUM_GROUPTYPE_NONE: group type not defined/set.
- * @GUM_GROUPTYPE_SYSTEM: system group.
- * @GUM_GROUPTYPE_USER: normal group.
+ * @GUM_GROUPTYPE_SYSTEM: system group. Gid will be chosen between
+ * #GUM_CONFIG_GENERAL_SYS_GID_MIN and #GUM_CONFIG_GENERAL_SYS_GID_MAX
+ * @GUM_GROUPTYPE_USER: user group. Gid will be chosen between
+ * #GUM_CONFIG_GENERAL_GID_MIN and #GUM_CONFIG_GENERAL_GID_MAX
  *
  * This enumeration lists group types.
  */

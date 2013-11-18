@@ -54,6 +54,15 @@
                                               "/DEFAULT_USR_GROUPS"
 
 /**
+ * GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS:
+ *
+ * Comma separate listed of groups, which admin user will be added to at the
+ * time of admin account creation. Default value is: 'users'
+ */
+#define GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS   GUM_CONFIG_GENERAL \
+                                              "/DEFAULT_ADMIN_GROUPS"
+
+/**
  * GUM_CONFIG_GENERAL_PASSWD_FILE:
  *
  * Path to passwd file which represents user information. Default is
@@ -241,4 +250,12 @@
 #define GUM_CONFIG_GENERAL_UMASK            GUM_CONFIG_GENERAL \
 	                                          "/UMASK"
 
+/**
+ * GUM_CONFIG_GENERAL_ENCRYPT_METHOD:
+ *
+ * Value used to set the encryption algorithm. Default
+ * value is: 'SHA512'. Other supported options are: 'MD5', 'SHA256', 'DES'.
+ */
+#define GUM_CONFIG_GENERAL_ENCRYPT_METHOD    GUM_CONFIG_GENERAL \
+	                                          "/ENCRYPT_METHOD"
 #endif /* __GUM_GENERAL_CONFIG_H_ */

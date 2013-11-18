@@ -30,19 +30,10 @@
 
 G_BEGIN_DECLS
 
-typedef enum {
-
-    GUM_CRYPT_MD5 = 1,
-    GUM_CRYPT_SHA256 = 2,
-    GUM_CRYPT_SHA512 = 3,
-    GUM_CRYPT_DES = 4
-
-} GumCryptMethodID;
-
 gchar *
 gum_crypt_encrypt_secret (
         const gchar *secret,
-        GumCryptMethodID methodid);
+        const gchar *encryp_algo);
 
 gint
 gum_crypt_cmp_secret (

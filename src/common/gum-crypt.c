@@ -39,28 +39,18 @@
  * @include: gum/common/gum-crypt.h
  *
  * Following code snippets shows how a string can be encrypted with any of the
- * encrytpion method listed in #GumCryptMethodID. Moreover, plain and encrypted
- * secrets can be compared if needed.
+ * supported encryption algorithm. Moreover, plain and encrypted secrets can be
+ * compared if needed.
  *
  * |[
- *   gchar *pass = gum_crypt_encrypt_secret("pas.-s123", GUM_CRYPT_SHA512);
+ *   gchar *pass = gum_crypt_encrypt_secret("pas.-s123", "SHA512");
  *   g_free (pass);
  *
- *   pass = gum_crypt_encrypt_secret("pass ?()123", GUM_CRYPT_SHA512);
+ *   pass = gum_crypt_encrypt_secret("pass ?()123", "SHA512");
  *   gum_crypt_cmp_secret("pass ?()123", pass); //should return true.
  *   g_free (pass);
  *
  * ]|
- */
-
-/**
- * GumCryptMethodID:
- * @GUM_CRYPT_MD5: MD5 encryption algorithm
- * @GUM_CRYPT_SHA256: SHA-256 encryption algorithm
- * @GUM_CRYPT_SHA512: SHA-512 encryption algorithm
- * @GUM_CRYPT_DES: DES encryption algorithm
- *
- * This enumeration lists the supported encryption methods.
  */
 
 guchar _salt_chars[64 + 1] =
@@ -72,7 +62,7 @@ guchar _salt_chars[64 + 1] =
 
 gchar *
 _generate_salt (
-        GumCryptMethodID methodid)
+		const gchar *encryp_algo)
 {
     ssize_t bytes_read = 0;
     gchar salt[SALT_ARRAY_LEN];
@@ -83,23 +73,18 @@ _generate_salt (
     if (fd < 0)
         return NULL;
 
-    switch (methodid) {
-        case GUM_CRYPT_MD5:/* crypt(3) */
+    /* crypt(3) */
+    if (g_strcmp0 (encryp_algo, "MD5") == 0) {
             salt[0] = salt[2] = '$';
             salt[1] = '1';
-            break;
-        case GUM_CRYPT_SHA256:
+    } else if (g_strcmp0 (encryp_algo, "SHA256") == 0) {
             salt[0] = salt[2] = '$';
             salt[1] = '5';
-            break;
-        case GUM_CRYPT_SHA512:
+    } else if (g_strcmp0 (encryp_algo, "SHA512") == 0) {
             salt[0] = salt[2] = '$';
             salt[1] = '6';
-            break;
-        case GUM_CRYPT_DES:
-        default:
+    } else { //if (g_strcmp0 (encryp_algo, "DES") == 0)
             id_len = 0;
-            break;
     }
 
     bytes_read = read (fd, &salt[id_len], SALT_LEN);
@@ -117,19 +102,20 @@ _generate_salt (
 /**
  * gum_crypt_encrypt_secret:
  * @secret: (transfer none): string to encrypt
- * @methodid: #GumCryptMethodID method id
+ * @encryp_algo: algorithm to be used for encryption. 'MD5', 'SHA256', 'SHA512',
+ * and 'DES' are supported algorithms.
  *
- * Encrypts the secret with the specified method.
+ * Encrypts the secret with the specified algorithm @encryp_algo.
  *
  * Returns: (transfer full): encrypted secret if successful, NULL otherwise.
  */
 gchar *
 gum_crypt_encrypt_secret (
         const gchar *secret,
-        GumCryptMethodID methodid)
+        const gchar *encryp_algo)
 {
     gchar *enc_sec = NULL;
-    gchar *salt = _generate_salt (methodid);
+    gchar *salt = _generate_salt (encryp_algo);
     if (!salt) return NULL;
 
     enc_sec = g_strdup (crypt (secret, salt));

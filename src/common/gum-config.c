@@ -102,14 +102,6 @@ struct _GumConfigPrivate
 
 G_DEFINE_TYPE (GumConfig, gum_config, G_TYPE_OBJECT);
 
-#define GUM_PASSWD_FILE "/etc/passwd"
-#define GUM_SHADOW_FILE "/etc/shadow"
-#define GUM_GROUP_FILE "/etc/group"
-#define GUM_GSHADOW_FILE "/etc/gshadow"
-#define GUM_HOME_DIR_PREFIX "/home"
-#define GUM_SKEL_DIR "/etc/skel"
-#define GUM_SHELL "/bin/bash"
-#define GUM_DEF_GROUPS "users"
 #define UID_MIN      2000
 #define UID_MAX      60000
 #define SYS_UID_MIN  200
@@ -496,6 +488,12 @@ gum_config_init (
 
     gum_config_set_string (self, GUM_CONFIG_GENERAL_DEF_USR_GROUPS,
             GUM_DEF_GROUPS);
+
+    gum_config_set_string (self, GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS,
+    		GUM_DEF_ADMIN_GROUPS);
+
+    gum_config_set_string (self, GUM_CONFIG_GENERAL_ENCRYPT_METHOD,
+    		GUM_ENCRYPT_METHOD);
 
     if (!_load_config (self))
         WARN ("load configuration failed, using default settings");

@@ -795,7 +795,8 @@ _set_secret (
      * login name.
      */
     self->priv->shadow->sp_pwdp = gum_crypt_encrypt_secret (
-            self->priv->pw->pw_passwd, GUM_CRYPT_SHA512);
+            self->priv->pw->pw_passwd, gum_config_get_string (
+                    self->priv->config, GUM_CONFIG_GENERAL_ENCRYPT_METHOD));
     if (!self->priv->shadow->sp_pwdp) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE,
                 "Secret encryption failed.", error, FALSE);
@@ -1110,8 +1111,13 @@ _set_default_groups (
     if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
         return TRUE;
 
-    def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_DEF_USR_GROUPS), ",", -1);
+    if (self->priv->user_type == GUM_USERTYPE_ADMIN)
+    	def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
+    			GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS), ",", -1);
+    else
+        def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
+                GUM_CONFIG_GENERAL_DEF_USR_GROUPS), ",", -1);
+
     if (def_groupsv) {
 
         gint ind = 0;

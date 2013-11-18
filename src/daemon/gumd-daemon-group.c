@@ -593,7 +593,8 @@ _set_secret (
     pwd_len = strlen(self->priv->group->gr_passwd);
 
     self->priv->gshadow->sg_passwd = gum_crypt_encrypt_secret (
-            self->priv->group->gr_passwd, GUM_CRYPT_SHA512);
+            self->priv->group->gr_passwd, gum_config_get_string (
+                    self->priv->config, GUM_CONFIG_GENERAL_ENCRYPT_METHOD));
     if (!self->priv->gshadow->sg_passwd) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE,
                 "Secret encryption failed.", error, FALSE);

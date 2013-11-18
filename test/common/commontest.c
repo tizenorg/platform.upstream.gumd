@@ -742,37 +742,37 @@ START_TEST (test_crypt)
     DBG("");
     gchar *pass = NULL;
 
-    pass = gum_crypt_encrypt_secret("", GUM_CRYPT_DES);
+    pass = gum_crypt_encrypt_secret("", "DES");
     fail_if (pass == NULL);
     fail_if (strlen (pass) != 13); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("pass123", GUM_CRYPT_DES);
+    pass = gum_crypt_encrypt_secret("pass123", "DES");
     fail_if (pass == NULL);
     fail_if (strlen (pass) != 13); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("pas¤$s123", GUM_CRYPT_MD5);
+    pass = gum_crypt_encrypt_secret("pas¤$s123", "MD5");
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+22)); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("pass{123", GUM_CRYPT_SHA256);
+    pass = gum_crypt_encrypt_secret("pass{123", "SHA256");
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+43)); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("pas.-s123", GUM_CRYPT_SHA512);
+    pass = gum_crypt_encrypt_secret("pas.-s123", "SHA512");
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+86)); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("", GUM_CRYPT_SHA512);
+    pass = gum_crypt_encrypt_secret("", "SHA512");
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+86)); /*crypt(3)*/
     g_free (pass);
 
-    pass = gum_crypt_encrypt_secret("pass ?()#123", GUM_CRYPT_SHA512);
+    pass = gum_crypt_encrypt_secret("pass ?()#123", "SHA512");
     fail_if (pass == NULL);
     fail_unless (strlen (pass) >= (3+9+86)); /*crypt(3)*/
 

@@ -244,26 +244,12 @@ gumd_daemon_class_init (
             G_TYPE_UINT);
 }
 
-/**
- * gumd_daemon_new:
- *
- * Returns: (transfer full): newly created object of type #GumdDaemon
- */
 GumdDaemon *
 gumd_daemon_new ()
 {
     return GUMD_DAEMON (g_object_new (GUMD_TYPE_DAEMON, NULL));
 }
 
-/**
- * gumd_daemon_get_timeout:
- *
- * @self: instance of #GumdDaemon
- *
- * Get the daemon timeout value
- *
- * Returns: the timeout value
- */
 guint
 gumd_daemon_get_timeout (
         GumdDaemon *self)
@@ -272,15 +258,6 @@ gumd_daemon_get_timeout (
         GUM_CONFIG_DBUS_DAEMON_TIMEOUT, 0);
 }
 
-/**
- * gumd_daemon_get_config:
- *
- * @self: instance of #GumdDaemon
- *
- * Retrieves config object.
- *
- * Returns: (transfer none): config object of type #GumConfig
- */
 GumConfig *
 gumd_daemon_get_config (
         GumdDaemon *self)

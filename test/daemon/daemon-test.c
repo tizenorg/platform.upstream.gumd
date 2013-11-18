@@ -396,8 +396,7 @@ START_TEST (test_daemon_user)
     gchar *hdir = NULL;
     struct stat sb;
 
-    gchar *encr_secret = gum_crypt_encrypt_secret ("pass123",
-            GUM_CRYPT_SHA512);
+    gchar *encr_secret = gum_crypt_encrypt_secret ("pass123", "SHA512");
 
     GumConfig* config = gum_config_new ();
     fail_if(config == NULL);
@@ -1135,8 +1134,7 @@ START_TEST (test_daemon_group)
     uid_t uid = 0;
     gchar *str = NULL;
 
-    gchar *encr_secret = gum_crypt_encrypt_secret ("grouppass123",
-            GUM_CRYPT_SHA512);
+    gchar *encr_secret = gum_crypt_encrypt_secret ("grouppass123", "SHA512");
 
     GumConfig* config = gum_config_new ();
     fail_if(config == NULL);
