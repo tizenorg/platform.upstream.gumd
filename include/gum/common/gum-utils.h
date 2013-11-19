@@ -32,7 +32,8 @@
 G_BEGIN_DECLS
 
 gchar *
-gum_generate_nonce ();
+gum_generate_nonce (
+        GChecksumType algorithm);
 
 G_END_DECLS
 
