@@ -319,7 +319,7 @@ gum_user_class_init (
      * GumUser:usertype:
      *
      * This property holds a user type that the object corresponds to. Valid
-     * values of user types are: 1 (system), 2 (admin), 3 (guest), 4 (normal).
+     * values of user types are as specified in #GumUserType.
      * #GumUser:usertype must be specified when adding a new user.
      */
     properties[PROP_USERTYPE] =  g_param_spec_uint ("usertype",

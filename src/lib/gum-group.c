@@ -311,7 +311,7 @@ gum_group_class_init (
      * GumGroup:grouptype:
      *
      * This property holds a group type that the object corresponds to. Valid
-     * values of group types are: 1 (system), 2 (user).
+     * values of group types are as specified in #GumGroupType.
      * #GumGroup:grouptype must be specified when adding a new group.
      */
     properties[PROP_GROUPTYPE] =  g_param_spec_uint ("grouptype",
