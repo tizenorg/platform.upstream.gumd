@@ -40,6 +40,7 @@
 #include "common/gum-defines.h"
 #include "common/gum-log.h"
 #include "common/gum-error.h"
+#include "common/gum-config.h"
 
 /**
  * SECTION:gum-file
@@ -725,6 +726,7 @@ gum_file_create_home_dir (
     }
 
     if (g_access (home_dir, F_OK) != 0) {
+        GumConfig *config = NULL;
 
         if (!g_file_test (home_dir, G_FILE_TEST_EXISTS)) {
             g_mkdir_with_parents (home_dir, mode);
@@ -745,8 +747,11 @@ gum_file_create_home_dir (
                     "Home directory chown failure", error, FALSE);
         }
 
-        retval = _copy_dir_recursively (GUM_SKEL_DIR, home_dir, uid, gid, umask,
-        		error);
+        config = gum_config_new ();
+        retval = _copy_dir_recursively (gum_config_get_string (config,
+            GUM_CONFIG_GENERAL_SKEL_DIR), home_dir, uid, gid, umask, error);
+        g_object_unref (config);
+
 	}
 
 	return retval;
