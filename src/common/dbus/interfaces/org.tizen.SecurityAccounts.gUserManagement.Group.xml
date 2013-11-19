@@ -1,26 +1,119 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
-<node>
-  <interface name="org.tizen.SecurityAccounts.gUserManagement.Group">
-    <signal name="unregistered">
-    </signal>  
-    <method name="addGroup">
-      <arg name="preferred_gid" type="u" direction="in"/>
-      <arg name="gid" type="u" direction="out"/>
-    </method>
-    <method name="deleteGroup">
-    </method>
-    <method name="updateGroup">
-    </method>
-    <method name="addMember">
-      <arg name="uid" type="u" direction="in"/>
-      <arg name="add_as_admin" type="b" direction="in"/>
-    </method>
-    <method name="deleteMember">
-      <arg name="uid" type="u" direction="in"/>
-    </method>
-    <property name="grouptype" type="q" access="readwrite"/>
-    <property name="gid" type="u" access="read"/>
-    <property name="groupname" type="s" access="readwrite"/>
-    <property name="secret" type="s" access="readwrite"/>
-  </interface>
+<node name="/Group"
+  xmlns:tp="http://telepathy.freedesktop.org/wiki/DbusSpec#extensions-v0">
+    
+    <tp:copyright>Copyright © 2013 Intel Corporation</tp:copyright>
+    
+    <tp:license xmlns="http://www.w3.org/1999/xhtml">
+        <p>This library is free software; you can redistribute it and/or
+        modify it under the terms of the GNU Lesser General Public
+        License as published by the Free Software Foundation; either
+        version 2.1 of the License, or (at your option) any later version.
+        </p>
+    
+        <p>This library is distributed in the hope that it will be useful, but
+        WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+        Lesser General Public License for more details.
+        </p>
+    
+        <p>You should have received a copy of the GNU Lesser General Public
+        License along with this library; if not, write to the Free Software
+        Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+        02110-1301 USA
+        </p>
+    </tp:license>
+    
+    <interface name="org.tizen.SecurityAccounts.gUserManagement.Group">
+    
+        <tp:docstring xmlns="http://www.w3.org/1999/xhtml">
+            <p>User object encapsulates the necessary details of a group
+            account including adding, updating and deleting group.
+            </p>
+        </tp:docstring>
+        
+        <signal name="unregistered" tp:name-for-bindings="unregistered">
+            <tp:docstring>Signal is emitted when the group dbus object is
+            destroyed and is no more usable.
+            </tp:docstring>
+        </signal>
+        
+        <method name="addGroup" tp:name-for-bindings="addGroup">
+            <tp:docstring>Adds the group info to the group's account database. 
+            </tp:docstring>
+                    
+            <arg name="preferred_gid" type="u" direction="in">
+                <tp:docstring>preferred GID of the group
+                </tp:docstring>
+            </arg>
+            
+            <arg name="gid" type="u" direction="out">
+                <tp:docstring>GID of the group
+                </tp:docstring>
+            </arg>
+        </method>
+        
+        <method name="deleteGroup" tp:name-for-bindings="deleteGroup">
+            <tp:docstring>Deletes the group info from the group's account
+            database 
+            </tp:docstring>
+        </method>
+        
+        <method name="updateGroup" tp:name-for-bindings="updateGroup">
+            <tp:docstring>Updates the group info into the group's account
+            database 
+            </tp:docstring>
+        </method>
+        
+        <method name="addMember" tp:name-for-bindings="addMember">
+            <tp:docstring>Adds a user to the group accounts' database
+            </tp:docstring>
+            
+            <arg name="uid" type="u" direction="in">
+                <tp:docstring>UID of the user to be added to the group
+                </tp:docstring>
+            </arg>
+            
+            <arg name="add_as_admin" type="b" direction="in">
+                <tp:docstring>flag to indicate whether add the user to the
+                group as admin or not.
+                </tp:docstring>
+            </arg>
+        </method>
+
+        <method name="deleteMember" tp:name-for-bindings="deleteMember">
+            <tp:docstring>Deletes a user from the group's account database 
+            </tp:docstring>
+            
+            <arg name="uid" type="u" direction="in">
+                <tp:docstring>UID of the user to be deleted from the group
+                </tp:docstring>
+            </arg>
+        </method>
+        
+        <property name="grouptype" tp:name-for-bindings="grouptype"
+         type="q" access="readwrite">
+            <tp:docstring>Type of the group. Type can be system(1) and user(2)
+            </tp:docstring>
+        </property>
+
+        <property name="gid" tp:name-for-bindings="gid"
+         type="u" access="read">
+            <tp:docstring>id of the group
+            </tp:docstring>
+        </property>
+
+        <property name="groupname" tp:name-for-bindings="groupname"
+         type="s" access="readwrite">
+            <tp:docstring>name of the group
+            </tp:docstring>
+        </property>
+
+        <property name="secret" tp:name-for-bindings="secret"
+         type="s" access="readwrite">
+            <tp:docstring>secret used for accessing the group data
+            </tp:docstring>
+        </property>
+
+    </interface>
 </node>
