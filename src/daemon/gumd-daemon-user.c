@@ -217,8 +217,10 @@ _set_realname_property (
             0);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
-        self->priv->pw->pw_gecos = gum_string_utils_insert_string (
+        gchar *gecos = gum_string_utils_insert_string (
                 self->priv->pw->pw_gecos, ",", value, 0, 4);
+        GUM_STR_FREE (self->priv->pw->pw_gecos);
+        self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REALNAME]);
     }
     g_free (str);
@@ -233,8 +235,10 @@ _set_office_property (
             1);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
-        self->priv->pw->pw_gecos = gum_string_utils_insert_string (
+        gchar *gecos = gum_string_utils_insert_string (
                 self->priv->pw->pw_gecos, ",", value, 1, 4);
+        GUM_STR_FREE (self->priv->pw->pw_gecos);
+        self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFICE]);
     }
     g_free (str);
@@ -249,8 +253,10 @@ _set_officephone_property (
             2);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
-        self->priv->pw->pw_gecos = gum_string_utils_insert_string (
+        gchar *gecos = gum_string_utils_insert_string (
                 self->priv->pw->pw_gecos, ",", value, 2, 4);
+        GUM_STR_FREE (self->priv->pw->pw_gecos);
+        self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFICEPHONE]);
     }
     g_free (str);
@@ -265,8 +271,10 @@ _set_homephone_property (
             3);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
-        self->priv->pw->pw_gecos = gum_string_utils_insert_string (
+        gchar *gecos = gum_string_utils_insert_string (
                 self->priv->pw->pw_gecos, ",", value, 3, 4);
+        GUM_STR_FREE (self->priv->pw->pw_gecos);
+        self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HOMEPHONE]);
     }
     g_free (str);
