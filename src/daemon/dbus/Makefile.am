@@ -32,11 +32,13 @@ libgumd_dbus_la_SOURCES = \
    gumd-dbus-group-adapter.h \
    $(NULL)
 
+if USE_DBUS_SERVICE
 dbusservicedir = $(DBUS_SERVICES_DIR)
 dbusservice_DATA = \
     $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
 nodist_dbusservice_DATA = \
     $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
+endif
 
 EXTRA_DIST = \
       gumd-dbus.conf.in

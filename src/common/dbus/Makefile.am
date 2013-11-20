@@ -65,13 +65,15 @@ libgum_dbus_glue_la_LIBADD = \
 libgum_dbus_glue_la_SOURCES =  \
    $(DBUS_BUILT_SOURCES) \
    $(NULL)
-   
+
+if USE_DBUS_SERVICE
 dbusinterfacesdir = $(DBUS_INTERFACES_DIR)
 dbusinterfaces_DATA = \
     $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.User.xml \
     $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.UserService.xml \
     $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.Group.xml \
     $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.GroupService.xml
+endif
 
 EXTRA_DIST = interfaces
 

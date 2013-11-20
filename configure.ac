@@ -100,6 +100,7 @@ AC_SUBST(DBUS_CONF_DIR)
 
 AC_SUBST(MESSAGE_BUS_TYPE, [$enable_dbus_type])
 AM_CONDITIONAL(HAVE_SYSTEM_BUS, [test x$enable_dbus_type = xsystem])
+AM_CONDITIONAL(USE_DBUS_SERVICE, [test x$enable_dbus_type != xp2p])
 
 # Check for systemd
 VAR_SYSTEMD="`pkg-config --variable systemdsystemunitdir systemd`"
