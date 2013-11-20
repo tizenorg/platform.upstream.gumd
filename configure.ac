@@ -92,6 +92,7 @@ elif test "x$enable_dbus_type" = "xsystem" ; then
         DBUS_INTERFACES_DIR="`pkg-config --variable interfaces_dir dbus-1`"
         DBUS_CONF_DIR="`pkg-config --variable sysconfdir dbus-1`/dbus-1/system.d"
     fi
+    AC_SUBST(MESSAGE_BUS_USER, ["User=root"])
 fi
 AC_SUBST(DBUS_SERVICES_DIR)
 AC_SUBST(DBUS_INTERFACES_DIR)
