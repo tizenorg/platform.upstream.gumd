@@ -388,7 +388,7 @@ gumd_dbus_user_adapter_new_with_connection (
     _sync_user_properties (G_OBJECT (adapter->priv->user),
             G_OBJECT (adapter->priv->dbus_user));
 
-    nonce = gum_generate_nonce (G_CHECKSUM_SHA1);
+    nonce = gum_utils_generate_nonce (G_CHECKSUM_SHA1);
     object_path = g_strdup_printf ("%s/User_%s_%d",
             GUM_USER_SERVICE_OBJECTPATH, nonce, object_counter++);
     g_free (nonce);

@@ -31,6 +31,7 @@
 #include <sys/types.h>
 
 #include "common/gum-lock.h"
+#include "common/gum-utils.h"
 #include "common/gum-log.h"
 
 /**
@@ -76,14 +77,7 @@ gum_lock_pwdf_lock ()
         /* when run in test mode, normal user may not have privileges to get
          * the lock */
 #ifndef ENABLE_TESTS
-        DBG ("Before: ruid:%d euid:%d rgid:%d egid:%d ", getuid (), geteuid (),
-                getgid (), getegid ());
-        if (seteuid (0))
-            WARN ("seteuid(0) failed");
-        if (setegid (0))
-            WARN ("setegid(0) failed");
-        DBG ("After: ruid:%d euid:%d rgid:%d egid:%d ", getuid (), geteuid (),
-                getgid (), getegid ());
+        gum_utils_gain_privileges ();
         if (lckpwdf () < 0) {
             DBG ("pwd lock failed %s", strerror (errno));
             return FALSE;
@@ -117,14 +111,7 @@ gum_lock_pwdf_unlock ()
     	        DBG ("pwd unlock failed %s", strerror (errno));
     	        return FALSE;
     	    }
-            DBG ("Before: ruid:%d euid:%d rgid:%d egid:%d ", getuid (),
-                    geteuid (), getgid (), getegid ());
-    	    if (seteuid (getuid()))
-    	        WARN ("seteuid() failed");
-    	    if (setegid (getgid()))
-    	        WARN ("setegid() failed");
-            DBG ("After: ruid:%d euid:%d rgid:%d egid:%d ", getuid (),
-                    geteuid (), getgid (), getegid ());
+    	    gum_utils_drop_privileges ();
 #endif
     	}
     } else if (lock_count <= 0) {

@@ -84,7 +84,7 @@ init_exit:
 }
 
 /**
- * gum_generate_nonce:
+ * gum_utils_generate_nonce:
  * @algorithm: the #GChecksumType algorithm
  *
  * Generates nonce based on hashing algorithm as specified in @algorithm
@@ -92,7 +92,7 @@ init_exit:
  * Returns: (transfer full): generate nonce if successful, NULL otherwise.
  */
 gchar *
-gum_generate_nonce (
+gum_utils_generate_nonce (
         GChecksumType algorithm)
 {
     GHmac *hmac;
@@ -125,3 +125,32 @@ nonce_exit:
     return nonce;
 }
 
+/**
+ * gum_utils_drop_privileges:
+ *
+ * Drops the privileges for the calling process. Effective uid is to real uid.
+ *
+ */
+void
+gum_utils_drop_privileges ()
+{
+    DBG ("Before set: r-uid %d e-uid %d", getuid (), geteuid ());
+    if (seteuid (getuid()))
+        WARN ("seteuid() failed");
+    DBG ("After set: r-uid %d e-uid %d", getuid (), geteuid ());
+}
+
+/**
+ * gum_utils_gain_privileges:
+ *
+ * Gains the privileges for the calling process. Effective uid is to 0.
+ *
+ */
+void
+gum_utils_gain_privileges ()
+{
+    DBG ("Before set: r-uid %d e-uid %d", getuid (), geteuid ());
+    if (seteuid (0))
+        WARN ("seteuid() failed");
+    DBG ("After set: r-uid %d e-uid %d", getuid (), geteuid ());
+}

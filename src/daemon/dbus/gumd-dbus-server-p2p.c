@@ -30,6 +30,7 @@
 #include <sys/socket.h>
 
 #include "common/gum-dbus.h"
+#include "common/gum-utils.h"
 #include "common/gum-log.h"
 #include "common/gum-defines.h"
 
@@ -503,6 +504,23 @@ gumd_dbus_server_p2p_new_with_address (
 GumdDbusServerP2P *
 gumd_dbus_server_p2p_new ()
 {
+    /* In case of session bus, privileges are dropped in the daemon start phase
+     * as it is not needed. Besides in order for session bus to work, effective
+     * uid/gid should be same as real uid/gid as 'set-user bit on execution(s)'
+     * is set on the daemon binary.
+     *
+     * In case of system bus, privileges are dropped when bus name is acquired
+     * rather than at the daemon start phase as dbus does not allow daemon to
+     * connect if the privileges are dropped earlier.
+     *
+     * In case of p2p, privileges are dropped in the daemon start phase as it is
+     * not needed.
+     *
+     * In all cases once connected, privileges are gained and dropped on
+     * need basis
+     * */
+    gum_utils_drop_privileges ();
+
     gchar *address = g_strdup_printf (GUM_DBUS_ADDRESS,
             g_get_user_runtime_dir());
     GumdDbusServerP2P *server = gumd_dbus_server_p2p_new_with_address (

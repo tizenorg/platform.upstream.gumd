@@ -28,6 +28,7 @@
 
 #include "config.h"
 #include "common/gum-dbus.h"
+#include "common/gum-utils.h"
 #include "common/gum-log.h"
 #include "common/gum-defines.h"
 
@@ -160,12 +161,24 @@ _on_name_acquired (
     g_object_weak_ref (G_OBJECT (server->priv->group_service),
             _on_group_interface_dispose, server);
 
-    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
-    if (seteuid (getuid()))
-        WARN ("seteuid() failed");
-    if (setegid (getgid()))
-        WARN ("setegid() failed");
-    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
+    /* In case of session bus, privileges are dropped in the daemon start phase
+     * as it is not needed. Besides in order for session bus to work, effective
+     * uid/gid should be same as real uid/gid as 'set-user bit on execution(s)'
+     * is set on the daemon binary.
+     *
+     * In case of system bus, privileges are dropped when bus name is acquired
+     * rather than at the daemon start phase as dbus does not allow daemon to
+     * connect if the privileges are dropped earlier.
+     *
+     * In case of p2p, privileges are dropped in the daemon start phase as it is
+     * not needed.
+     *
+     * In all cases once connected, privileges are gained and dropped on
+     * need basis
+     * */
+    if (GUM_BUS_TYPE == G_BUS_TYPE_SYSTEM) {
+        gum_utils_drop_privileges ();
+    }
 }
 
 static void
@@ -260,6 +273,10 @@ _gumd_dbus_server_msg_bus_start (
 
     DBG("Start MSG-BUS Dbus server for bus type %s",
             GUM_BUS_TYPE == G_BUS_TYPE_SYSTEM? "SYSTEM":"SESSION");
+
+    if (GUM_BUS_TYPE == G_BUS_TYPE_SESSION) {
+        gum_utils_drop_privileges ();
+    }
 
     GumdDbusServerMsgBus *server = GUMD_DBUS_SERVER_MSG_BUS (self);
     server->priv->name_owner_id = g_bus_own_name (GUM_BUS_TYPE,
