@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <glib-unix.h>
 #include <glib.h>
+#include <grp.h>
 #include <gio/gio.h>
 
 #include "common/gum-log.h"
@@ -71,12 +72,6 @@ _start_dbus_server (
 {
 
 #ifdef GUM_BUS_TYPE_P2P
-    DBG ("Before: real uid %d effective uid %d", getuid (), geteuid ());
-    if (seteuid (getuid()))
-        WARN ("seteuid() failed");
-    if (setegid (getgid()))
-        WARN ("setegid() failed");
-    DBG ("After: real gid %d effective gid %d", getgid (), getegid ());
     _server = GUMD_DBUS_SERVER (gumd_dbus_server_p2p_new ());
 #else
     _server = GUMD_DBUS_SERVER (gumd_dbus_server_msg_bus_new ());
@@ -152,6 +147,17 @@ main (int argc, char **argv)
     GOptionEntry opt_entries[] = {
         {NULL }
     };
+    gid_t daemon_gid;
+    struct group *daemon_group;
+
+    DBG ("Before set: r-gid %d e-gid %d", getgid (), getegid ());
+    daemon_gid = getgid ();
+    daemon_group = getgrnam ("gumd");
+    if (daemon_group)
+        daemon_gid = daemon_group->gr_gid;
+    if (setegid (daemon_gid))
+        WARN ("setegid() failed");
+    DBG ("After set: r-gid %d e-gid %d", getgid (), getegid ());
 
 #if !GLIB_CHECK_VERSION (2, 36, 0)
     g_type_init ();

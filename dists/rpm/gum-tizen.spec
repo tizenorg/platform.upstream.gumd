@@ -118,7 +118,7 @@ rm -rf %{buildroot}
 %post
 /sbin/ldconfig
 chmod u+s %{_bindir}/%{name}d
-
+groupadd -f -r gumd
 
 %postun -p /sbin/ldconfig
 
