@@ -425,7 +425,6 @@ _on_dbus_user_adapter_disposed (
 
     DBG ("Dbus user adapter object %p disposed", object);
 
-    peer_user.peer_name = NULL;
     peer_user.dbus_user = GUMD_DBUS_USER_ADAPTER (object);
     peer_user.user_service = self;
     g_list_foreach (self->priv->peer_users, (GFunc)_clear_cache_for_user,

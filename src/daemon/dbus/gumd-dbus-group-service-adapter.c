@@ -189,11 +189,11 @@ _on_group_updated (
 static PeerGroupService *
 _dbus_peer_group_new (
         GumdDbusGroupServiceAdapter *self,
-        const gchar *peer_name,
+        gchar *peer_name,
         GumdDbusGroupAdapter *dbus_group)
 {
     PeerGroupService *peer_group = g_malloc0 (sizeof (PeerGroupService));
-    peer_group->peer_name = g_strdup (peer_name);
+    peer_group->peer_name = peer_name;
     peer_group->dbus_group = dbus_group;
     peer_group->group_service = self;
     return peer_group;
@@ -425,7 +425,6 @@ _on_dbus_group_adapter_disposed (
 
     DBG ("Dbus group adapter object %p disposed", object);
 
-    peer_group.peer_name = NULL;
     peer_group.dbus_group = GUMD_DBUS_GROUP_ADAPTER (object);
     peer_group.group_service = self;
     g_list_foreach (self->priv->peer_groups, (GFunc)_clear_cache_for_group,
