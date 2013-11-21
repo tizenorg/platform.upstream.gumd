@@ -52,5 +52,21 @@ Memcheck:Leak
 ...
 fun:g_resolver_lookup_by_name_async
 }
-
-
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:_dl_allocate_tls
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:gdbus_shared_thread_func
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   ...
+   fun:g_get_user_data_dir
+}
