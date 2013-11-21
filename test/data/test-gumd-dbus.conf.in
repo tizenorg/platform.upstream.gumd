@@ -2,7 +2,6 @@
     <type>@MESSAGE_BUS_TYPE@</type>
     <listen>unix:tmpdir=/tmp/</listen>
     <servicedir>@abs_top_builddir@/test/data/services</servicedir>
-    <servicedir>@DBUS_SERVICES_DIR@</servicedir>
     <policy context="default">
         <!-- Allow everything to be sent -->
         <allow send_destination="*" eavesdrop="true"/>

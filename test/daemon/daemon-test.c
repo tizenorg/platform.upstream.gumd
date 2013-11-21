@@ -199,7 +199,7 @@ _setup_daemon (void)
     gsize len = 0;
     const gchar *dbus_monitor = NULL;
 
-    argv[1] = g_strdup_printf ("--config-file=%s/%s", GUM_TEST_DATA_DIR,
+    argv[1] = g_strdup_printf ("--config-file=%s%s", GUM_TEST_DATA_DIR,
             "test-gumd-dbus.conf");
 
     if (pipe(pipe_fd)== -1) {
@@ -1915,7 +1915,7 @@ Suite* daemon_suite (void)
     Suite *s = suite_create ("Gum daemon");
     
     tc = tcase_create ("Daemon tests");
-    tcase_set_timeout(tc, 10);
+    tcase_set_timeout(tc, 15);
     tcase_add_unchecked_fixture (tc, _setup_daemon, _teardown_daemon);
     tcase_add_checked_fixture (tc, _create_mainloop, _stop_mainloop);
 
