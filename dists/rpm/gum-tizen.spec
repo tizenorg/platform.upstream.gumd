@@ -118,7 +118,7 @@ rm -rf %{buildroot}
 %post
 /sbin/ldconfig
 chmod u+s %{_bindir}/%{name}d
-groupadd -f -r gumd
+getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 
 %postun -p /sbin/ldconfig
 
