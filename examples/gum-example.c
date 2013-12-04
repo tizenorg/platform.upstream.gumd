@@ -382,7 +382,7 @@ _handle_group_add (
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_create_sync (_on_group_op);
+    grp = gum_group_create_sync ();
     if (!grp) return;
 
     _set_group_prop (grp, group);
