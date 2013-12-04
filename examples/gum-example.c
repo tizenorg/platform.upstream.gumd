@@ -215,33 +215,20 @@ _handle_user_add (
         TestUser *user)
 {
     GumUser *guser = NULL;
-    guser = gum_user_create (_on_user_op, NULL);
+    guser = gum_user_create_sync ();
     if (!guser) return;
-
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed user creation for add -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (guser);
-        g_error_free (op_error);
-        return;
-    }
 
     _set_user_prop (guser, user);
 
-    if (!gum_user_add (guser, _on_user_op, NULL)) {
+    if (!gum_user_add_sync (guser)) {
         WARN ("Failed user add setup");
         g_object_unref (guser);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed user add -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-        _print_user_prop (guser);
-        DBG ("User added successfully");
-    }
+
+    _print_user_prop (guser);
+
+    DBG ("User added successfully");
 
     g_object_unref (guser);
 }
@@ -252,29 +239,16 @@ _handle_user_del (
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get (user->uid, _on_user_op, NULL);
+    guser = gum_user_get_sync (user->uid);
     if (!guser) return;
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed get user for uid %d -- %d:%s", user->uid, op_error->code,
-                op_error->message);
-        g_object_unref (guser);
-        g_error_free (op_error);
-        return;
-    }
 
-    if (!gum_user_delete (guser, TRUE, _on_user_op, NULL)) {
+    if (!gum_user_delete_sync (guser, TRUE)) {
         WARN ("Failed user update setup");
         g_object_unref (guser);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed user delete -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-        DBG ("User deleted successfully");
-    }
+
+    DBG ("User deleted successfully");
 
     g_object_unref (guser);
 }
@@ -322,18 +296,11 @@ _handle_user_get (
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get (user->uid, _on_user_op, NULL);
+    guser = gum_user_get_sync (user->uid);
     if (!guser) return;
 
-    _run_mainloop ();
-
-    if (op_error) {
-        WARN ("Failed user get -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-        DBG ("User retrieved successfully");
-        _print_user_prop (guser);
-    }
+    DBG ("User retrieved successfully");
+    _print_user_prop (guser);
 
     if (guser) {
     	g_object_unref (guser);
@@ -415,33 +382,19 @@ _handle_group_add (
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_create (_on_group_op, NULL);
+    grp = gum_group_create_sync (_on_group_op);
     if (!grp) return;
-
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group creation for add -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (grp);
-        g_error_free (op_error);
-        return;
-    }
 
     _set_group_prop (grp, group);
 
-    if (!gum_group_add (grp, _on_group_op, NULL)) {
+    if (!gum_group_add_sync (grp)) {
         WARN ("Failed group add setup");
         g_object_unref (grp);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group add -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-        _print_group_prop (grp);
-        DBG ("Group added successfully");
-    }
+
+    _print_group_prop (grp);
+    DBG ("Group added successfully");
 
     g_object_unref (grp);
 }
@@ -452,32 +405,16 @@ _handle_group_del (
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get (group->gid, _on_group_op, NULL);
+    grp = gum_group_get_sync (group->gid);
     if (!grp) return;
 
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group get for del -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (grp);
-        g_error_free (op_error);
-        return;
-    }
-
-    if (!gum_group_delete (grp, _on_group_op, NULL)) {
+    if (!gum_group_delete_sync (grp)) {
         WARN ("Failed group delete setup");
         g_object_unref (grp);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group delete -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        DBG ("Group deleted successfully");
-    }
 
+    DBG ("Group deleted successfully");
     g_object_unref (grp);
 }
 
@@ -549,19 +486,11 @@ _handle_group_get_by_name (
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get_by_name (group->group_name, _on_group_op, NULL);
+    grp = gum_group_get_by_name_sync (group->group_name);
     if (!grp) return;
 
-    _run_mainloop ();
-
-    if (op_error) {
-        WARN ("Failed group get by name -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        DBG ("Group retrieved by name successfully");
-        _print_group_prop (grp);
-    }
+    DBG ("Group retrieved by name successfully");
+    _print_group_prop (grp);
 
     if (grp) {
     	g_object_unref (grp);
@@ -574,33 +503,16 @@ _handle_group_add_mem (
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get (group->gid, _on_group_op, NULL);
+    grp = gum_group_get_sync (group->gid);
     if (!grp) return;
 
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group get for addmem -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (grp);
-        g_error_free (op_error);
-        return;
-    }
-
-    if (!gum_group_add_member (grp, group->mem_uid, TRUE, _on_group_op,
-    		NULL)) {
+    if (!gum_group_add_member_sync (grp, group->mem_uid, TRUE)) {
         WARN ("Failed group addmem setup");
         g_object_unref (grp);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group addmem -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        DBG ("Group mem added successfully");
-    }
 
+    DBG ("Group mem added successfully");
     g_object_unref (grp);
 }
 
