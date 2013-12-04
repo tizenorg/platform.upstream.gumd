@@ -339,6 +339,10 @@ START_TEST (test_create_new_user)
 
     g_object_unref (user);
     g_object_unref (user2);
+
+    user2 = gum_user_create_sync ();
+    fail_if (user2 == NULL, "failed to create new user sync");
+    g_object_unref (user2);
 }
 END_TEST
 
@@ -378,6 +382,17 @@ START_TEST(test_add_user)
     _run_mainloop ();
 
     g_object_unref (user);
+
+    /* case 4: use sync method to add user*/
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_adduser2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user sync");
+
+    g_object_unref (user);
 }
 END_TEST
 
@@ -415,6 +430,25 @@ START_TEST(test_get_user_by_uid)
     _run_mainloop ();
 
     g_object_unref (user);
+
+    /* case 3: get user sync */
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_getuser2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user sync");
+
+    g_object_get (G_OBJECT (user), "uid", &uid, NULL);
+    fail_if (uid == GUM_USER_INVALID_UID, "Invalid uid for the user");
+
+    g_object_unref (user);
+
+    user = gum_user_get_sync (uid);
+    fail_if (user == NULL, "failed to get user sync");
+
+    g_object_unref (user);
 }
 END_TEST
 
@@ -448,6 +482,20 @@ START_TEST(test_get_user_by_name)
     fail_if (user == NULL, "failed to get user by name");
     _run_mainloop ();
 
+    g_object_unref (user);
+
+    /* case 3: get user sync */
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_getuser_byname2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user sync");
+    g_object_unref (user);
+
+    user = gum_user_get_by_name_sync ("test_getuser_byname2");
+    fail_if (user == NULL, "failed to get user by name sync");
     g_object_unref (user);
 }
 END_TEST
@@ -494,6 +542,20 @@ START_TEST (test_delete_user)
     fail_if (rval == FALSE, "failed to delete user");
     _run_mainloop ();
     g_object_unref (user);
+
+    /* case 4: use sync method to delete user*/
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_deluser3",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user sync");
+
+    rval = gum_user_delete_sync (user, TRUE);
+    fail_if (rval == FALSE, "failed to delete user");
+    g_object_unref (user);
+
 }
 END_TEST
 
@@ -525,6 +587,20 @@ START_TEST (test_update_user)
     fail_if (rval == FALSE, "failed to update user");
     _run_mainloop ();
     g_object_unref (user);
+
+    /* case 3: use sync method to update user*/
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_upuser2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user sync");
+
+    g_object_set (G_OBJECT (user), "secret", "23456", NULL);
+    rval = gum_user_update_sync (user);
+    fail_if (rval == FALSE, "failed to update user");
+    g_object_unref (user);
 }
 END_TEST
 
@@ -537,16 +613,20 @@ START_TEST (test_create_new_group)
     GumGroup *group = NULL, *group2 = NULL;
 
     group = gum_group_create (_on_group_op_success, NULL);
-    fail_if (group == NULL, "failed to create new user");
+    fail_if (group == NULL, "failed to create new group");
 
     _run_mainloop ();
 
     group2 = gum_group_create (_on_group_op_success, NULL);
-    fail_if (group2 == NULL, "failed to create new user2");
+    fail_if (group2 == NULL, "failed to create new group2");
 
     _run_mainloop ();
 
     g_object_unref (group);
+    g_object_unref (group2);
+
+    group2 = gum_group_create_sync ();
+    fail_if (group2 == NULL, "failed to create new group2 sync");
     g_object_unref (group2);
 }
 END_TEST
@@ -575,10 +655,21 @@ START_TEST(test_add_group)
     _run_mainloop ();
 
     g_object_unref (group);
+
+    /* case 3: add group sync */
+    group = gum_group_create_sync ();
+    fail_if (group == NULL, "failed to create new group");
+
+    g_object_set (G_OBJECT (group), "groupname", "test_addgroup2",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+    rval = gum_group_add_sync (group);
+    fail_if (rval == FALSE, "failed to add already existing group");
+
+    g_object_unref (group);
 }
 END_TEST
 
-START_TEST(test_get_group_by_uid)
+START_TEST(test_get_group_by_gid)
 {
     GumGroup *group = NULL;
     gid_t gid = GUM_GROUP_INVALID_GID;
@@ -610,6 +701,24 @@ START_TEST(test_get_group_by_uid)
     group = gum_group_get (gid, _on_group_op_success, NULL);
     fail_if (group == NULL, "failed to get group");
     _run_mainloop ();
+
+    g_object_unref (group);
+
+    /* case 3: get group sync */
+    group = gum_group_create_sync ();
+    fail_if (group == NULL, "failed to create new group");
+
+    g_object_set (G_OBJECT (group), "groupname", "test_getgroup2",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+    rval = gum_group_add_sync (group);
+    fail_if (rval == FALSE, "failed to add group");
+
+    g_object_get (G_OBJECT (group), "gid", &gid, NULL);
+    fail_if (gid == GUM_GROUP_INVALID_GID, "Invalid gid for the group");
+    g_object_unref (group);
+
+    group = gum_group_get_sync (gid);
+    fail_if (group == NULL, "failed to get group");
 
     g_object_unref (group);
 }
@@ -647,6 +756,22 @@ START_TEST(test_get_group_by_name)
     _run_mainloop ();
 
     g_object_unref (group);
+
+    /* case 3: get group by name sync */
+    group = gum_group_create_sync ();
+    fail_if (group == NULL, "failed to create new group");
+
+    g_object_set (G_OBJECT (group), "groupname", "test_getgroup_byname2",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+    rval = gum_group_add_sync (group);
+    fail_if (rval == FALSE, "failed to add group");
+    g_object_unref (group);
+
+    group = gum_group_get_by_name_sync ("test_getgroup_byname2");
+    fail_if (group == NULL, "failed to get group by name sync");
+
+    g_object_unref (group);
+
 }
 END_TEST
 
@@ -676,6 +801,20 @@ START_TEST (test_delete_group)
     rval = gum_group_delete (group, _on_group_op_success, NULL);
     fail_if (rval == FALSE, "failed to delete group");
     _run_mainloop ();
+    g_object_unref (group);
+
+    /* case 2: delete group sync */
+    group = gum_group_create_sync ();
+    fail_if (group == NULL, "failed to create new group");
+
+    g_object_set (G_OBJECT (group), "groupname", "test_delgroup2",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+    rval = gum_group_add_sync (group);
+    fail_if (rval == FALSE, "failed to add group");
+
+    rval = gum_group_delete_sync (group);
+    fail_if (rval == FALSE, "failed to delete group sync");
+
     g_object_unref (group);
 }
 END_TEST
@@ -707,6 +846,21 @@ START_TEST (test_update_group)
     rval = gum_group_update (group, _on_group_op_success, NULL);
     fail_if (rval == FALSE, "failed to update group");
     _run_mainloop ();
+    g_object_unref (group);
+
+    /* case 3: update group sync */
+    group = gum_group_create_sync ();
+    fail_if (group == NULL, "failed to create new group");
+
+    g_object_set (G_OBJECT (group), "groupname", "test_upgroup2",
+            "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
+    rval = gum_group_add_sync (group);
+    fail_if (rval == FALSE, "failed to add group");
+
+    g_object_set (G_OBJECT (group), "secret", "23456", NULL);
+    rval = gum_group_update_sync (group);
+    fail_if (rval == FALSE, "failed to update group");
+
     g_object_unref (group);
 }
 END_TEST
@@ -751,6 +905,22 @@ START_TEST (test_add_group_member)
     rval = gum_group_add_member (group, uid, TRUE, _on_group_op_success, NULL);
     fail_if (rval == FALSE, "failed to add group member");
     _run_mainloop ();
+
+    g_object_unref (user);
+
+    /* case 3: add group mem sync */
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_addgrpmem_user2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user");
+
+    g_object_get (G_OBJECT (user), "uid", &uid, NULL);
+
+    rval = gum_group_add_member_sync (group, uid, TRUE);
+    fail_if (rval == FALSE, "failed to add group member sync");
 
     g_object_unref (user);
     g_object_unref (group);
@@ -803,6 +973,25 @@ START_TEST (test_delete_group_member)
     _run_mainloop ();
 
     g_object_unref (user);
+
+    /* case 3: add group mem sync */
+    user = gum_user_create_sync ();
+    fail_if (user == NULL, "failed to create new user");
+
+    g_object_set (G_OBJECT (user), "username", "test_delgrpmem_user2",
+            "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
+    rval = gum_user_add_sync (user);
+    fail_if (rval == FALSE, "failed to add user");
+
+    g_object_get (G_OBJECT (user), "uid", &uid, NULL);
+
+    rval = gum_group_add_member_sync (group, uid, TRUE);
+    fail_if (rval == FALSE, "failed to add group member sync");
+
+    rval = gum_group_delete_member_sync (group, uid);
+    fail_if (rval == FALSE, "failed to delete group member sync");
+
+    g_object_unref (user);
     g_object_unref (group);
 }
 END_TEST
@@ -827,7 +1016,7 @@ Suite* daemon_suite (void)
 
     tcase_add_test (tc, test_create_new_group);
     tcase_add_test (tc, test_add_group);
-    tcase_add_test (tc, test_get_group_by_uid);
+    tcase_add_test (tc, test_get_group_by_gid);
     tcase_add_test (tc, test_get_group_by_name);
     tcase_add_test (tc, test_delete_group);
     tcase_add_test (tc, test_update_group);

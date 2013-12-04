@@ -75,10 +75,17 @@ gum_user_create (
         gpointer user_data);
 
 GumUser *
+gum_user_create_sync ();
+
+GumUser *
 gum_user_get (
         uid_t uid,
         GumUserCb callback,
         gpointer user_data);
+
+GumUser *
+gum_user_get_sync (
+        uid_t uid);
 
 GumUser *
 gum_user_get_by_name (
@@ -86,11 +93,19 @@ gum_user_get_by_name (
         GumUserCb callback,
         gpointer user_data);
 
+GumUser *
+gum_user_get_by_name_sync (
+        const gchar *username);
+
 gboolean
 gum_user_add (
         GumUser *self,
         GumUserCb callback,
         gpointer user_data);
+
+gboolean
+gum_user_add_sync (
+        GumUser *self);
 
 gboolean
 gum_user_delete (
@@ -100,10 +115,19 @@ gum_user_delete (
         gpointer user_data);
 
 gboolean
+gum_user_delete_sync (
+        GumUser *self,
+        gboolean rem_home_dir);
+
+gboolean
 gum_user_update (
         GumUser *self,
         GumUserCb callback,
         gpointer user_data);
+
+gboolean
+gum_user_update_sync (
+        GumUser *self);
 
 G_END_DECLS
 

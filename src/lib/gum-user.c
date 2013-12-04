@@ -47,15 +47,11 @@
  * Following code snippet demonstrates how to create a new remote user object:
  *
  * |[
- *  GMainLoop *main_loop = NULL;
  *  GumUser *user = NULL;
  *
- *  main_loop = g_main_loop_new (NULL, FALSE)
- *  user = gum_user_create (_on_user_created, NULL);
+ *  user = gum_user_create_sync ();
  *
- *  // wait for _on_user_created callback and use the object when callback is
- *  // triggered
- *  g_main_loop_run (main_loop);
+ *  // use the object
  *
  *  // destroy the object
  *  g_object_unref (user);
@@ -63,26 +59,17 @@
  *
  * Similarly, new user can be added as:
  * |[
- *  GMainLoop *main_loop = NULL;
  *  GumUser *user = NULL;
  *  gboolean rval = FALSE;
  *
- *  main_loop = g_main_loop_new (NULL, FALSE)
- *  user = gum_user_create (_on_user_created, NULL);
- *
- *  // wait for _on_user_created callback and use the object when callback is
- *  // triggered
- *  g_main_loop_run (main_loop);
+ *  user = gum_user_create_sync ();
  *
  *  // set user properties
  *  g_object_set (G_OBJECT (user), "username", "user1", "secret", "123456",
  *   "usertype", GUM_USERTYPE_NORMAL, NULL);
  *
  *  // add user
- *  rval = gum_user_add (user, _on_user_added, NULL);
- *
- *  // wait for _on_user_added callback
- *  g_main_loop_run (main_loop);
+ *  rval = gum_user_add_sync (user);
  *
  *  // destroy the object
  *  g_object_unref (user);
@@ -514,6 +501,78 @@ _create_dbus_user (
     }
 }
 
+static GVariant *
+_get_prop_value (
+        GVariant *props,
+        const gchar *prop)
+{
+    GVariantIter *iter = NULL;
+    GVariant *item = NULL;
+    g_variant_get (props, "(a{sv})",  &iter);
+    while ((item = g_variant_iter_next_value (iter)))  {
+        gchar *key;
+        GVariant *value;
+        g_variant_get (item, "{sv}", &key, &value);
+        if (g_strcmp0 (key, prop) == 0) {
+            g_free (key);
+            return g_variant_ref (value);
+        }
+        g_free (key); key = NULL;
+        g_variant_unref (value); value = NULL;
+    }
+    return NULL;
+}
+
+static gboolean
+_sync_properties (
+        GumUser *user)
+{
+    GError *error = NULL;
+    GVariant *result = NULL;
+
+    /* load all properties synchronously */
+    result = g_dbus_connection_call_sync (
+            g_dbus_proxy_get_connection (
+                    G_DBUS_PROXY (user->priv->dbus_service)),
+            g_dbus_proxy_get_name (G_DBUS_PROXY (user->priv->dbus_service)),
+            g_dbus_proxy_get_object_path (G_DBUS_PROXY (user->priv->dbus_user)),
+            "org.freedesktop.DBus.Properties",
+            "GetAll",
+            g_variant_new ("(s)",
+                    g_dbus_proxy_get_interface_name (
+                            G_DBUS_PROXY (user->priv->dbus_user))),
+            G_VARIANT_TYPE ("(a{sv})"),
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            user->priv->cancellable,
+            &error);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        return FALSE;
+    }
+
+    if (g_variant_is_of_type (result, G_VARIANT_TYPE ("(a{sv})"))) {
+        guint n_properties = 0, ind = 0;
+        GParamSpec **properties = g_object_class_list_properties (
+                G_OBJECT_GET_CLASS(user), &n_properties);
+        for (ind=0; ind < n_properties; ind++) {
+            GParamSpec *pspec = properties[ind];
+            GVariant *prop = _get_prop_value (result,  pspec->name);
+            if (prop != NULL) {
+                g_dbus_proxy_set_cached_property (
+                        G_DBUS_PROXY (user->priv->dbus_user), pspec->name,
+                        prop);
+            }
+        }
+        g_free (properties);
+    }
+    g_variant_unref (result);
+    return TRUE;
+}
+
 static void
 _on_new_user_cb (
         GObject *object,
@@ -691,6 +750,41 @@ gum_user_create (
 }
 
 /**
+ * gum_user_create_sync:
+ *
+ * This method creates a new remote user object over the DBus synchronously.
+ *
+ * Returns: (transfer full): #GumUser newly created object
+ */
+GumUser *
+gum_user_create_sync ()
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
+    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+
+    if (gum_dbus_user_service_call_create_new_user_sync (
+                user->priv->dbus_service, &object_path, user->priv->cancellable,
+                &error)) {
+        _create_dbus_user (user, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (user);
+        user = NULL;
+    }
+
+    return user;
+}
+
+/**
  * gum_user_get:
  * @uid: user id for the user
  * @callback: #GumUserCb to be invoked when user object is fetched
@@ -714,6 +808,43 @@ gum_user_get (
     _create_op (user, callback, user_data);
     gum_dbus_user_service_call_get_user (user->priv->dbus_service, uid,
             user->priv->cancellable, _on_get_user_cb, user);
+    return user;
+}
+
+/**
+ * gum_user_get_sync:
+ * @uid: user id for the user
+ *
+ * This method gets the user object attached to uid over the DBus
+ * synchronously.
+ *
+ * Returns: (transfer full): #GumUser object
+ */
+GumUser *
+gum_user_get_sync (
+        uid_t uid)
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
+    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+
+    if (gum_dbus_user_service_call_get_user_sync (user->priv->dbus_service,
+            uid, &object_path, user->priv->cancellable, &error)) {
+        _create_dbus_user (user, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (user);
+        user = NULL;
+    }
+
     return user;
 }
 
@@ -745,6 +876,48 @@ gum_user_get_by_name (
     _create_op (user, callback, user_data);
     gum_dbus_user_service_call_get_user_by_name (user->priv->dbus_service,
             username, user->priv->cancellable, _on_get_user_by_name_cb, user);
+    return user;
+}
+
+/**
+ * gum_user_get_by_name_sync:
+ * @username: name of the user
+ *
+ * This method gets the user object attached to username over the DBus
+ * synchronously.
+ *
+ * Returns: (transfer full): #GumUser object
+ */
+GumUser *
+gum_user_get_by_name_sync (
+        const gchar *username)
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
+    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+    if (!username) {
+        WARN ("username not specified");
+        return NULL;
+    }
+
+    if (gum_dbus_user_service_call_get_user_by_name_sync (
+            user->priv->dbus_service, username, &object_path,
+            user->priv->cancellable,  &error)) {
+        _create_dbus_user (user, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (user);
+        user = NULL;
+    }
+
     return user;
 }
 
@@ -783,6 +956,44 @@ gum_user_add (
 }
 
 /**
+ * gum_user_add_sync:
+ * @self: #GumUser object to be added; object should have either valid
+ * #GumUser:username or #GumUser:nickname in addition to valid
+ * #GumUser:usertype.
+ *
+ * This method adds the user over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_user_add_sync (
+        GumUser *self)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_USER (self), FALSE);
+    uid_t uid = GUM_USER_INVALID_UID;
+
+    if (!self->priv->dbus_user) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_user_call_add_user_sync (
+            self->priv->dbus_user, &uid, self->priv->cancellable,  &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
+    return _sync_properties (self);
+}
+
+/**
  * gum_user_delete:
  * @self: #GumUser object to be deleted; object should have valid #GumUser:uid
  * property.
@@ -818,6 +1029,45 @@ gum_user_delete (
 }
 
 /**
+ * gum_user_delete_sync:
+ * @self: #GumUser object to be deleted; object should have valid #GumUser:uid
+ * property.
+ * @rem_home_dir: deletes home directory of the user if set to TRUE
+ *
+ * This method deletes the user over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_user_delete_sync (
+        GumUser *self,
+        gboolean rem_home_dir)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_USER (self), FALSE);
+
+    if (!self->priv->dbus_user) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_user_call_delete_user_sync (
+            self->priv->dbus_user, rem_home_dir, self->priv->cancellable,
+            &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/**
  * gum_user_update:
  * @self: #GumUser object to be updated; object should have valid #GumUser:uid
  * property.
@@ -849,4 +1099,41 @@ gum_user_update (
     gum_dbus_user_call_update_user (self->priv->dbus_user,
             self->priv->cancellable, _on_user_update_cb, self);
     return TRUE;
+}
+
+/**
+ * gum_user_update_sync:
+ * @self: #GumUser object to be updated; object should have valid #GumUser:uid
+ * property.
+ *
+ * This method updates the user over the DBus synchronously. The properties
+ * which can be updated are: secret, realname, office, officephone, homephone
+ * and shell.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_user_update_sync (
+        GumUser *self)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_USER (self), FALSE);
+
+    if (!self->priv->dbus_user) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_user_call_update_user_sync (
+            self->priv->dbus_user, self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+    return _sync_properties (self);
 }

@@ -75,16 +75,27 @@ gum_group_create (
         gpointer user_data);
 
 GumGroup *
+gum_group_create_sync ();
+
+GumGroup *
 gum_group_get (
         gid_t gid,
         GumGroupCb callback,
         gpointer user_data);
 
 GumGroup *
+gum_group_get_sync (
+        gid_t gid);
+
+GumGroup *
 gum_group_get_by_name (
         const gchar *groupname,
         GumGroupCb callback,
         gpointer user_data);
+
+GumGroup *
+gum_group_get_by_name_sync (
+        const gchar *groupname);
 
 gboolean
 gum_group_add (
@@ -93,16 +104,28 @@ gum_group_add (
         gpointer user_data);
 
 gboolean
+gum_group_add_sync (
+        GumGroup *self);
+
+gboolean
 gum_group_delete (
         GumGroup *self,
         GumGroupCb callback,
         gpointer user_data);
 
 gboolean
+gum_group_delete_sync (
+        GumGroup *self);
+
+gboolean
 gum_group_update (
         GumGroup *self,
         GumGroupCb callback,
         gpointer user_data);
+
+gboolean
+gum_group_update_sync (
+        GumGroup *self);
 
 gboolean
 gum_group_add_member (
@@ -113,11 +136,22 @@ gum_group_add_member (
         gpointer user_data);
 
 gboolean
+gum_group_add_member_sync (
+        GumGroup *self,
+        uid_t uid,
+        gboolean add_as_admin);
+
+gboolean
 gum_group_delete_member (
         GumGroup *self,
         uid_t uid,
         GumGroupCb callback,
         gpointer user_data);
+
+gboolean
+gum_group_delete_member_sync (
+        GumGroup *self,
+        uid_t uid);
 
 G_END_DECLS
 

@@ -47,15 +47,11 @@
  * Following code snippet demonstrates how to create a new remote group object:
  *
  * |[
- *  GMainLoop *main_loop = NULL;
  *  GumGroup *group = NULL;
  *
- *  main_loop = g_main_loop_new (NULL, FALSE)
- *  group = gum_group_create (_on_group_created, NULL);
+ *  group = gum_group_create_sync ();
  *
- *  // wait for _on_group_created callback and use the object when callback is
- *  // triggered
- *  g_main_loop_run (main_loop);
+ *  // use the object
  *
  *  // destroy the object
  *  g_object_unref (group);
@@ -63,26 +59,17 @@
  *
  * Similarly, new group can be added as:
  * |[
- *  GMainLoop *main_loop = NULL;
  *  GumGroup *group = NULL;
  *  gboolean rval = FALSE;
  *
- *  main_loop = g_main_loop_new (NULL, FALSE)
- *  group = gum_group_create (_on_group_created, NULL);
- *
- *  // wait for _on_group_created callback and use the object when callback is
- *  // triggered
- *  g_main_loop_run (main_loop);
+ *  group = gum_group_create_sync ();
  *
  *  // set group properties
  *  g_object_set (G_OBJECT (group), "groupname", "group1", "secret", "123456",
  *   "grouptype", GUM_GROUPTYPE_USER, NULL);
  *
  *  // add group
- *  rval = gum_group_add (user, _on_group_added, NULL);
- *
- *  // wait for _on_group_added callback
- *  g_main_loop_run (main_loop);
+ *  rval = gum_group_add_sync (user);
  *
  *  // destroy the object
  *  g_object_unref (group);
@@ -388,6 +375,78 @@ _create_dbus_group (
     }
 }
 
+static GVariant *
+_get_prop_value (
+        GVariant *props,
+        const gchar *prop)
+{
+    GVariantIter *iter = NULL;
+    GVariant *item = NULL;
+    g_variant_get (props, "(a{sv})",  &iter);
+    while ((item = g_variant_iter_next_value (iter)))  {
+        gchar *key;
+        GVariant *value;
+        g_variant_get (item, "{sv}", &key, &value);
+        if (g_strcmp0 (key, prop) == 0) {
+            g_free (key);
+            return g_variant_ref (value);
+        }
+        g_free (key); key = NULL;
+        g_variant_unref (value); value = NULL;
+    }
+    return NULL;
+}
+
+static gboolean
+_sync_properties (
+        GumGroup *group)
+{
+    GError *error = NULL;
+    GVariant *result = NULL;
+
+    /* load all properties synchronously */
+    result = g_dbus_connection_call_sync (
+            g_dbus_proxy_get_connection (
+                    G_DBUS_PROXY (group->priv->dbus_service)),
+            g_dbus_proxy_get_name (G_DBUS_PROXY (group->priv->dbus_service)),
+            g_dbus_proxy_get_object_path (G_DBUS_PROXY (group->priv->dbus_group)),
+            "org.freedesktop.DBus.Properties",
+            "GetAll",
+            g_variant_new ("(s)",
+                    g_dbus_proxy_get_interface_name (
+                            G_DBUS_PROXY (group->priv->dbus_group))),
+            G_VARIANT_TYPE ("(a{sv})"),
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            group->priv->cancellable,
+            &error);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        return FALSE;
+    }
+
+    if (g_variant_is_of_type (result, G_VARIANT_TYPE ("(a{sv})"))) {
+        guint n_properties = 0, ind = 0;
+        GParamSpec **properties = g_object_class_list_properties (
+                G_OBJECT_GET_CLASS(group), &n_properties);
+        for (ind=0; ind < n_properties; ind++) {
+            GParamSpec *pspec = properties[ind];
+            GVariant *prop = _get_prop_value (result,  pspec->name);
+            if (prop != NULL) {
+                g_dbus_proxy_set_cached_property (
+                        G_DBUS_PROXY (group->priv->dbus_group), pspec->name,
+                        prop);
+            }
+        }
+        g_free (properties);
+    }
+    g_variant_unref (result);
+    return TRUE;
+}
+
 static void
 _on_new_group_cb (
         GObject *object,
@@ -609,6 +668,41 @@ gum_group_create (
 }
 
 /**
+ * gum_group_create_sync:
+ *
+ * This method creates a new remote group object over the DBus synchronously.
+ *
+ * Returns: (transfer full): #GumGroup newly created object
+ */
+GumGroup *
+gum_group_create_sync ()
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
+    g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
+
+    if (gum_dbus_group_service_call_create_new_group_sync (
+            group->priv->dbus_service, &object_path, group->priv->cancellable,
+                &error)) {
+        _create_dbus_group (group, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (group);
+        group = NULL;
+    }
+
+    return group;
+}
+
+/**
  * gum_group_get:
  * @gid: group id for the group
  * @callback: #GumGroupCb to be invoked when group object is fetched
@@ -632,6 +726,44 @@ gum_group_get (
     _create_op (group, callback, user_data);
     gum_dbus_group_service_call_get_group (group->priv->dbus_service, gid,
             group->priv->cancellable, _on_get_group_cb, group);
+    return group;
+}
+
+
+/**
+ * gum_group_get_sync:
+ * @gid: group id for the group
+ *
+ * This method gets the group object attached to gid over the DBus
+ * synchronously.
+ *
+ * Returns: (transfer full): #GumGroup object
+ */
+GumGroup *
+gum_group_get_sync (
+        gid_t gid)
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
+    g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
+
+    if (gum_dbus_group_service_call_get_group_sync (
+            group->priv->dbus_service, gid, &object_path,
+            group->priv->cancellable, &error)) {
+        _create_dbus_group (group, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (group);
+        group = NULL;
+    }
     return group;
 }
 
@@ -664,6 +796,48 @@ gum_group_get_by_name (
     gum_dbus_group_service_call_get_group_by_name (group->priv->dbus_service,
             groupname, group->priv->cancellable, _on_get_group_by_name_cb,
             group);
+    return group;
+}
+
+/**
+ * gum_group_get_by_name_sync:
+ * @groupname: name of the group
+ *
+ * This method gets the group object attached to groupname over the DBus
+ * synchronously.
+ *
+ * Returns: (transfer full): #GumGroup object
+ */
+GumGroup *
+gum_group_get_by_name_sync (
+        const gchar *groupname)
+{
+    GError *error = NULL;
+    gchar *object_path = NULL;
+
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
+    g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
+
+    if (!groupname) {
+        WARN ("groupname not specified");
+        return NULL;
+    }
+
+    if (gum_dbus_group_service_call_get_group_by_name_sync (
+            group->priv->dbus_service, groupname, &object_path,
+            group->priv->cancellable, &error)) {
+        _create_dbus_group (group, object_path, error);
+    }
+
+    g_free (object_path);
+
+    if (error) {
+        DBG ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
+        g_object_unref (group);
+        group = NULL;
+    }
     return group;
 }
 
@@ -702,6 +876,43 @@ gum_group_add (
 }
 
 /**
+ * gum_group_add_sync:
+ * @self: #GumGroup object to be added; object should have valid
+ * #GumGroup:groupname and #GumGroup:grouptype properties.
+ *
+ * This method adds the group over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_group_add_sync (
+        GumGroup *self)
+{
+    GError *error = NULL;
+    gid_t gid = GUM_GROUP_INVALID_GID;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
+
+    if (!self->priv->dbus_group) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_group_call_add_group_sync (self->priv->dbus_group,
+            GUM_GROUP_INVALID_GID, &gid, self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
+    return _sync_properties (self);
+}
+
+/**
  * gum_group_delete:
  * @self: #GumGroup object to be deleted; object should have valid
  * #GumGroup:gid property.
@@ -731,6 +942,42 @@ gum_group_delete (
     _create_op (self, callback, user_data);
     gum_dbus_group_call_delete_group (self->priv->dbus_group,
             self->priv->cancellable, _on_group_delete_cb, self);
+    return TRUE;
+}
+
+/**
+ * gum_group_delete_sync:
+ * @self: #GumGroup object to be deleted; object should have valid
+ * #GumGroup:gid property.
+ *
+ * This method deletes the group over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_group_delete_sync (
+        GumGroup *self)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
+
+    if (!self->priv->dbus_group) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_group_call_delete_group_sync (self->priv->dbus_group,
+            self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
     return TRUE;
 }
 
@@ -766,6 +1013,43 @@ gum_group_update (
     gum_dbus_group_call_update_group (self->priv->dbus_group,
             self->priv->cancellable, _on_group_update_cb, self);
     return TRUE;
+}
+
+/**
+ * gum_group_update_sync:
+ * @self: #GumGroup object to be updated; object should have valid
+ * #GumGroup:gid property.
+ *
+ * This method updates the group over the DBus synchronously. The properties
+ * which can be updated are: secret.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_group_update_sync (
+        GumGroup *self)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
+
+    if (!self->priv->dbus_group) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_group_call_update_group_sync (self->priv->dbus_group,
+            self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
+    return _sync_properties (self);
 }
 
 /**
@@ -808,6 +1092,47 @@ gum_group_add_member (
 }
 
 /**
+ * gum_group_add_member_sync:
+ * @self: #GumGroup object where new member is to be added; object should have
+ * valid #GumGroup:gid property.
+ * @uid: user id of the member to be added to the group
+ * @add_as_admin: user will be added with admin privileges for the group if set
+ * to TRUE
+ *
+ * This method adds new member to the group over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_group_add_member_sync (
+        GumGroup *self,
+        uid_t uid,
+        gboolean add_as_admin)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
+
+    if (!self->priv->dbus_group) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_group_call_add_member_sync (self->priv->dbus_group, uid,
+            add_as_admin, self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/**
  * gum_group_delete_member:
  * @self: #GumGroup object where member is to be deleted from; object should
  * have valid #GumGroup:gid property.
@@ -839,5 +1164,43 @@ gum_group_delete_member (
     _create_op (self, callback, user_data);
     gum_dbus_group_call_delete_member (self->priv->dbus_group, uid,
             self->priv->cancellable, _on_group_delete_member_cb, self);
+    return TRUE;
+}
+
+/**
+ * gum_group_delete_member_sync:
+ * @self: #GumGroup object where member is to be deleted from; object should
+ * have valid #GumGroup:gid property.
+ * @uid: user id of the member to be deleted from the group
+ *
+ * This method deletes new member from the group over the DBus synchronously.
+ *
+ * Returns: returns TRUE if successful, FALSE otherwise.
+ */
+gboolean
+gum_group_delete_member_sync (
+        GumGroup *self,
+        uid_t uid)
+{
+    GError *error = NULL;
+
+    DBG ("");
+    g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
+
+    if (!self->priv->dbus_group) {
+        DBG ("Remote dbus object not valid");
+        return FALSE;
+    }
+
+    if (!gum_dbus_group_call_delete_member_sync (self->priv->dbus_group, uid,
+            self->priv->cancellable, &error)) {
+        if (error) {
+            DBG ("Failed with error %d:%s", error->code, error->message);
+            g_error_free (error);
+            error = NULL;
+        }
+        return FALSE;
+    }
+
     return TRUE;
 }
