@@ -95,7 +95,7 @@ typedef enum {
     { \
         if (err) { \
             *err = GUM_GET_ERROR_FOR_ID (code, err_str); \
-            DBG ("Error %d:%s", code, err_str); \
+            WARN ("Error %d:%s", code, err_str); \
         } \
         retvar = retval; \
     }
@@ -104,7 +104,7 @@ typedef enum {
     { \
         if (err) { \
             *err = GUM_GET_ERROR_FOR_ID (code, err_str); \
-            DBG ("Error %d:%s", code, err_str); \
+            WARN ("Error %d:%s", code, err_str); \
         } \
         return retval; \
     }
