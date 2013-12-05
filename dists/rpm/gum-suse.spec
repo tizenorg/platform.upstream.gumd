@@ -1,5 +1,5 @@
 # define used dbus type [p2p, session, system]
-%define dbus_type session
+%define dbus_type system
 # enable debug features such as control environment variables
 # WARNING! do not use for production builds as it will break security
 %define debug_build 0

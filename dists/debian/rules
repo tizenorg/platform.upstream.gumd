@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-DEB_CONFIGURE_EXTRA_FLAGS += --enable-dbus-type=session
+DEB_CONFIGURE_EXTRA_FLAGS += --enable-dbus-type=system
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
