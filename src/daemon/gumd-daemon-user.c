@@ -749,8 +749,7 @@ _set_uid (
     }
     _set_uid_property (self, uid);
 
-    if (self->priv->user_type == GUM_USERTYPE_NORMAL ||
-        self->priv->user_type == GUM_USERTYPE_ADMIN) {
+    if (self->priv->user_type != GUM_USERTYPE_SYSTEM)  {
         gchar *dir = g_strdup_printf ("%s/%s",
                 gum_config_get_string (self->priv->config,
                         GUM_CONFIG_GENERAL_HOME_DIR_PREF),
@@ -1155,8 +1154,7 @@ _create_home_dir (
         GumdDaemonUser *self,
         GError **error)
 {
-	if (self->priv->user_type == GUM_USERTYPE_SYSTEM ||
-		self->priv->user_type == GUM_USERTYPE_GUEST) {
+	if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
 		return TRUE;
 	}
 
@@ -1171,8 +1169,7 @@ _delete_home_dir (
         GumdDaemonUser *self,
         GError **error)
 {
-	if (self->priv->user_type == GUM_USERTYPE_SYSTEM ||
-		self->priv->user_type == GUM_USERTYPE_GUEST) {
+	if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
 		return TRUE;
 	}
 

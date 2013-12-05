@@ -567,7 +567,7 @@ START_TEST (test_daemon_user)
     fail_unless (uid == gid);
     hdir = g_build_filename (gum_config_get_string (config,
             GUM_CONFIG_GENERAL_HOME_DIR_PREF), "guest_daemon_user1", NULL);
-    fail_unless (stat (hdir, &sb) != 0);
+    fail_unless (stat (hdir, &sb) == 0);
     g_free (hdir);
 
     /* case 14: user does not exist and delete */
