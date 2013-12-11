@@ -146,13 +146,14 @@ _copy_file_attributes (
         gchar *names = g_new0 (gchar, attrs_size + 1);
         if (names && llistxattr (from_path, names, attrs_size) > 0) {
 
-            gchar *name = NULL, *value = NULL;
+            gchar *name = names, *value = NULL;
             gchar *end_names = names + attrs_size;
             names[attrs_size] = '\0';
             gsize size = 0;
 
-            for (name = names; name != end_names; name =strchr (name,'\0')+1) {
-
+            while (name != end_names) {
+                if (name)
+                    name = strchr (name,'\0')+1;
                 if (name && (size = lgetxattr (from_path, name, NULL, 0)) > 0 &&
                         (value = g_realloc (value, size)) &&
                         lgetxattr (from_path, name, value, size) > 0) {

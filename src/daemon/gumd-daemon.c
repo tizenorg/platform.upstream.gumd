@@ -262,7 +262,7 @@ GumConfig *
 gumd_daemon_get_config (
         GumdDaemon *self)
 {
-    g_return_val_if_fail (self != NULL || self->priv != NULL, NULL);
+    g_return_val_if_fail (self != NULL && self->priv != NULL, NULL);
 
     return self->priv->config;
 }
