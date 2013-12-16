@@ -448,6 +448,7 @@ _update_daemon_group_entry (
             switch (op) {
             case GUM_OPTYPE_ADD:
                 if (self->priv->group->gr_gid < entry->gr_gid) {
+
                     if (putgrent (self->priv->group, dup_file) < 0) {
                         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
                                 "File write failure", error, FALSE);
@@ -1051,9 +1052,10 @@ gumd_daemon_group_add_member (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER,
                 "User already a member of the group", error, FALSE);
     }
+    shadow_file = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_GSHADOW_FILE);
 
-    gshadow = gum_file_getsgnam (grp->gr_name, gum_config_get_string (
-            self->priv->config, GUM_CONFIG_GENERAL_GSHADOW_FILE));
+    gshadow = gum_file_getsgnam (grp->gr_name, shadow_file);
 
     if (!_copy_group_data (self, grp, gshadow, error)) {
         gum_lock_pwdf_unlock ();
@@ -1083,9 +1085,7 @@ gumd_daemon_group_add_member (
         return FALSE;
     }
 
-    shadow_file = gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_GSHADOW_FILE);
-    if (g_file_test (shadow_file, G_FILE_TEST_EXISTS) &&
+    if (gshadow &&
         !gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
                 (GumFileUpdateCB)_update_gshadow_entry, shadow_file,
                 NULL, error)) {
