@@ -22,6 +22,7 @@ case "$1" in
     configure)
         ldconfig
     groupadd -f -r gumd
+    chmod 4755 /usr/bin/gumd
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
