@@ -1,1 +1,0 @@
-../dists/rpm/gum-tizen.spec

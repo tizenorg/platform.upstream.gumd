@@ -130,18 +130,25 @@ groupadd -f -r gumd
 %{_libdir}/lib%{name}-common*.so
 %{_libdir}/lib%{name}-common*.la
 %{_libdir}/pkgconfig/lib%{name}-common.pc
+%config(noreplace) %{_sysconfdir}/gum.conf
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
-%config(noreplace) %{_sysconfdir}/gum.conf
 
 
 %files -n %{name}d
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}d
-%if %{dbus_type} != "p2p"
+%if %{dbus_type} == "session"
+%dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service
+%else if %{dbus_type} == "system"
+%dir %{_datadir}/dbus-1/system-services
+%{_datadir}/dbus-1/system-services/*UserManagement*.service
+%dir %{_sysconfdir}/dbus-1
+%dir %{_sysconfdir}/dbus-1/system.d
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/gumd-dbus.conf
 %endif
 
 %files -n %{name}d-devel
@@ -161,6 +168,7 @@ groupadd -f -r gumd
 %{_libdir}/lib%{name}.la
 %{_libdir}/pkgconfig/lib%{name}.pc
 %{_bindir}/%{name}-example
+
 
 %changelog
 * Mon Sep 02 2013 Imran Zaman <imran.zaman@intel.com>
