@@ -13,7 +13,7 @@ License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
 Source1001:     %{name}d.manifest
 Source1002:     lib%{name}.manifest
-Source1002:     lib%{name}-common.manifest
+Source1003:     lib%{name}-common.manifest
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
