@@ -127,7 +127,7 @@ _copy_file_attributes (
         const gchar *to_path)
 {
     gboolean ret = TRUE;
-    gsize attrs_size = 0;
+    ssize_t attrs_size = 0;
     struct stat from_stat;
 
     if (stat (from_path, &from_stat) < 0 ||
@@ -149,18 +149,21 @@ _copy_file_attributes (
             gchar *name = names, *value = NULL;
             gchar *end_names = names + attrs_size;
             names[attrs_size] = '\0';
-            gsize size = 0;
+            ssize_t size = 0;
 
             while (name != end_names) {
                 if (name)
                     name = strchr (name,'\0')+1;
-                if (name && (size = lgetxattr (from_path, name, NULL, 0)) > 0 &&
+                if (name && name[0] != '\0') {
+                    size = lgetxattr (from_path, name, NULL, 0);
+                    if(size > 0 &&
                         (value = g_realloc (value, size)) &&
                         lgetxattr (from_path, name, value, size) > 0) {
 
-                    if (lsetxattr (to_path, name, value, size, 0) != 0) {
-                        ret = FALSE;
-                        break;
+                        if (lsetxattr (to_path, name, value, size, 0) != 0) {
+                            ret = FALSE;
+                            break;
+                        }
                     }
                 }
             }
@@ -219,7 +222,6 @@ gum_file_open_db_files (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
                 "Unable to get/set file attributes", error, FALSE);
     }
-
     return TRUE;
 }
 
