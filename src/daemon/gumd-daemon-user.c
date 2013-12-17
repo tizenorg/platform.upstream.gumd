@@ -1096,8 +1096,6 @@ _set_group (
             "grouptype", grp_type, NULL);
     if (!(added = gumd_daemon_group_add (group, (gid_t)self->priv->pw->pw_uid,
             &gid, error))) {
-        GUM_SET_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
-                        "Group add failure", error, added, FALSE);
         goto _finished;
     }
     _set_gid_property (self, gid);

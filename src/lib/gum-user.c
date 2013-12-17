@@ -548,7 +548,7 @@ _sync_properties (
             &error);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         return FALSE;
@@ -774,7 +774,7 @@ gum_user_create_sync ()
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (user);
@@ -838,7 +838,7 @@ gum_user_get_sync (
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (user);
@@ -911,7 +911,7 @@ gum_user_get_by_name_sync (
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (user);
@@ -946,7 +946,7 @@ gum_user_add (
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -976,20 +976,19 @@ gum_user_add_sync (
     uid_t uid = GUM_USER_INVALID_UID;
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_user_call_add_user_sync (
             self->priv->dbus_user, &uid, self->priv->cancellable,  &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
         return FALSE;
     }
-
     return _sync_properties (self);
 }
 
@@ -1019,7 +1018,7 @@ gum_user_delete (
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -1049,7 +1048,7 @@ gum_user_delete_sync (
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
@@ -1057,7 +1056,7 @@ gum_user_delete_sync (
             self->priv->dbus_user, rem_home_dir, self->priv->cancellable,
             &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
@@ -1092,7 +1091,7 @@ gum_user_update (
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -1122,14 +1121,14 @@ gum_user_update_sync (
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
     if (!self->priv->dbus_user) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_user_call_update_user_sync (
             self->priv->dbus_user, self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }

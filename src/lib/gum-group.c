@@ -422,7 +422,7 @@ _sync_properties (
             &error);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         return FALSE;
@@ -692,7 +692,7 @@ gum_group_create_sync ()
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (group);
@@ -758,7 +758,7 @@ gum_group_get_sync (
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (group);
@@ -832,7 +832,7 @@ gum_group_get_by_name_sync (
     g_free (object_path);
 
     if (error) {
-        DBG ("Failed with error %d:%s", error->code, error->message);
+        WARN ("Failed with error %d:%s", error->code, error->message);
         g_error_free (error);
         error = NULL;
         g_object_unref (group);
@@ -865,7 +865,7 @@ gum_group_add (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -895,14 +895,14 @@ gum_group_add_sync (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_group_call_add_group_sync (self->priv->dbus_group,
             GUM_GROUP_INVALID_GID, &gid, self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
@@ -936,7 +936,7 @@ gum_group_delete (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -964,14 +964,14 @@ gum_group_delete_sync (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_group_call_delete_group_sync (self->priv->dbus_group,
             self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
@@ -1006,7 +1006,7 @@ gum_group_update (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -1035,14 +1035,14 @@ gum_group_update_sync (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_group_call_update_group_sync (self->priv->dbus_group,
             self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
@@ -1081,7 +1081,7 @@ gum_group_add_member (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -1115,14 +1115,14 @@ gum_group_add_member_sync (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_group_call_add_member_sync (self->priv->dbus_group, uid,
             add_as_admin, self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
@@ -1158,7 +1158,7 @@ gum_group_delete_member (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
     _create_op (self, callback, user_data);
@@ -1188,14 +1188,14 @@ gum_group_delete_member_sync (
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
     if (!self->priv->dbus_group) {
-        DBG ("Remote dbus object not valid");
+        WARN ("Remote dbus object not valid");
         return FALSE;
     }
 
     if (!gum_dbus_group_call_delete_member_sync (self->priv->dbus_group, uid,
             self->priv->cancellable, &error)) {
         if (error) {
-            DBG ("Failed with error %d:%s", error->code, error->message);
+            WARN ("Failed with error %d:%s", error->code, error->message);
             g_error_free (error);
             error = NULL;
         }
