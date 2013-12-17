@@ -192,18 +192,18 @@ AC_DEFINE_UNQUOTED(GUM_SHELL, ["$enable_shell"],
 # defult user groups
 AC_ARG_ENABLE(defusergroups,
 	      [  --enable-defusergroups=groups  enable default user groups by
-	       "groups" instead of default "users"], 
+	       "groups" instead of default ""],
 	      [enable_defusergroups=$enableval],
-	      [enable_defusergroups="users"])
+	      [enable_defusergroups=""])
 AC_DEFINE_UNQUOTED(GUM_DEF_GROUPS, ["$enable_defusergroups"],
 		 [Default user groups to be assigned to user on creation])
 
 # defult admin groups
 AC_ARG_ENABLE(defadmingroups,
 	      [  --enable-defadmingroups=groups  enable default groups for admin
-	       user by "groups" instead of default "users"], 
+	       user by "groups" instead of default ""],
 	      [enable_defadmingroups=$enableval],
-	      [enable_defadmingroups="users"])
+	      [enable_defadmingroups=""])
 AC_DEFINE_UNQUOTED(GUM_DEF_ADMIN_GROUPS, ["$enable_defadmingroups"],
 		 [Default groups to be assigned to the admin user on creation])
 		 
