@@ -48,6 +48,16 @@ if test "x$CRYPT_LIB" = "x" ; then
     AC_MSG_ERROR("CRYPT Library is required")
 fi
 
+# Enable gcov
+AC_ARG_ENABLE(gcov, [  --enable-gcov build to be used for coverage analysis ],
+          [enable_gcov=yes], [enable_gcov=no])
+if test "x$enable_gcov" = "xyes" ; then
+    GCOV_CFLAGS="-ftest-coverage -fprofile-arcs"
+    GCOV_LIBS="-lgcov"
+fi
+AC_SUBST(GCOV_CFLAGS)
+AC_SUBST(GCOV_LIBS)
+
 # Enable Distcheck
 AC_ARG_ENABLE(distcheck, [  --enable-distcheck build for distcheck target],
 	      [enable_distcheck=yes], [enable_distcheck=no])
@@ -230,7 +240,7 @@ GTK_DOC_CHECK([1.18],[--flavour no-tmpl])
 
 # Checks for typedefs, structures, and compiler characteristics.
 GUM_CFLAGS='$(GLIB_CFLAGS) -D_POSIX_C_SOURCE=\"200809L\" -D_GNU_SOURCE -D_REENTRANT -D_THREAD_SAFE'
-GUM_CFLAGS="$GUM_CFLAGS -Wall -Werror"
+GUM_CFLAGS="$GUM_CFLAGS -Wall -Werror $GCOV_CFLAGS"
 AC_SUBST(GUM_CFLAGS)
 GUM_INCLUDES='-I$(top_builddir) -I$(top_srcdir)'
 AC_SUBST(GUM_INCLUDES)
@@ -238,7 +248,7 @@ AC_SUBST(GUM_INCLUDES)
 # Gum common library cflags, libs, includes
 GUM_COMMON_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gum-common\"'
 AC_SUBST(GUM_COMMON_CFLAGS)
-GUM_COMMON_LIBS='$(GLIB_LIBS) $(CRYPT_LIB)'
+GUM_COMMON_LIBS='$(GLIB_LIBS) $(CRYPT_LIB) $(GCOV_LIBS)'
 AC_SUBST(GUM_COMMON_LIBS)
 GUM_COMMON_INCLUDES='$(GUM_INCLUDES) -I$(top_srcdir)/include/gum'
 AC_SUBST(GUM_COMMON_INCLUDES)
@@ -246,7 +256,7 @@ AC_SUBST(GUM_COMMON_INCLUDES)
 # Gum daemon cflags, libs, includes
 GUMD_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gumd\"'
 AC_SUBST(GUMD_CFLAGS)
-GUMD_LIBS='$(GLIB_LIBS)'
+GUMD_LIBS='$(GLIB_LIBS) $(GCOV_LIBS)'
 AC_SUBST(GUMD_LIBS)
 GUMD_INCLUDES='$(GUM_COMMON_INCLUDES)'
 AC_SUBST(GUMD_INCLUDES)
@@ -254,7 +264,7 @@ AC_SUBST(GUMD_INCLUDES)
 # Gum client library cflags, libs, includes
 LIBGUM_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gum\"'
 AC_SUBST(LIBGUM_CFLAGS)
-LIBGUM_LIBS='$(GLIB_LIBS)'
+LIBGUM_LIBS='$(GLIB_LIBS) $(GCOV_LIBS)'
 AC_SUBST(LIBGUM_LIBS)
 LIBGUM_INCLUDES='$(GUM_COMMON_INCLUDES)'
 AC_SUBST(LIBGUM_INCLUDES)
