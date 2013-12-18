@@ -50,8 +50,12 @@
                         --homephone=&lt;home phone&gt;
                         --homedir=&lt;home dir&gt;
                         --shell=&lt;path to shell exe&gt;
+                        --write-nfc
             </computeroutput>
         </literallayout>
+        --write-nfc flag can be used to write the username and secret to an NFC
+        tag, if gum-example was compiled with <link linkend="um-building">libtlm-nfc
+        </link> support.
      </para>        
   </refsect1>
   
@@ -85,9 +89,11 @@
                         --officephone=&lt;office phone&gt;
                         --homephone=&lt;home phone&gt;
                         --shell=&lt;path to shell exe&gt; 
+                        --write-nfc
             </computeroutput>
         </literallayout>
-     </para>        
+        --write-nfc flag has the same meaning as with adding users.
+     </para>
   </refsect1>
 
   <refsect1>
