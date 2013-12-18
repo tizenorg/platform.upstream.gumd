@@ -48,7 +48,7 @@
  *
  * Comma separate listed of groups, which every user (other than system user)
  * will be added to at the time of user account creation. Default value is:
- * 'users'
+ * ''
  */
 #define GUM_CONFIG_GENERAL_DEF_USR_GROUPS   GUM_CONFIG_GENERAL \
                                               "/DEFAULT_USR_GROUPS"
@@ -57,7 +57,7 @@
  * GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS:
  *
  * Comma separate listed of groups, which admin user will be added to at the
- * time of admin account creation. Default value is: 'users'
+ * time of admin account creation. Default value is: ''
  */
 #define GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS   GUM_CONFIG_GENERAL \
                                               "/DEFAULT_ADMIN_GROUPS"
