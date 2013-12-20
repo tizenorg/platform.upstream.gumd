@@ -5,13 +5,13 @@
 %define debug_build 0
 
 
-Name: gum
+Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.1
 Release: 1
 Group: System/Libraries
 License: LGPL-2.1+
-Source: %{name}d-%{version}.tar.gz
+Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
@@ -32,70 +32,70 @@ BuildRequires: pkgconfig(gmodule-2.0)
 %{summary}.
 
 
-%package -n lib%{name}-common
+%package -n libgum-common
 Summary:    User management common library
 Group:      System/Libraries
 
 
-%description -n lib%{name}-common
+%description -n libgum-common
 %{summary}.
 
 
-%package -n lib%{name}-common-devel
+%package -n libgum-common-devel
 Summary:    Development files for user management common library
 Group:      Development/Libraries
-Requires:   lib%{name}-common = %{version}-%{release}
+Requires:   libgum-common = %{version}-%{release}
 
 
-%description -n lib%{name}-common-devel
+%description -n libgum-common-devel
 %{summary}.
 
 
-%package -n %{name}d
+%package %{name}
 Summary:    User management daemon
 Group:      System/Daemons
-Requires:   lib%{name}-common = %{version}-%{release}
+Requires:   libgum-common = %{version}-%{release}
 
 
-%description -n %{name}d
+%description %{name}
 %{summary}.
 
 
-%package -n %{name}d-devel
+%package -n %{name}-devel
 Summary:    Development files for user management daemon
 Group:      Development/Daemons
-Requires:   %{name}d = %{version}-%{release}
-Requires:   lib%{name}-common-devel = %{version}-%{release}
+Requires:   %{name} = %{version}-%{release}
+Requires:   libgum-common-devel = %{version}-%{release}
 
-%description -n %{name}d-devel
+%description -n %{name}-devel
 %{summary}.
 
 
-%package -n lib%{name}
+%package -n libgum
 Summary:    User management client library
 Group:      System/Libraries
-Requires:   lib%{name}-common = %{version}-%{release}
+Requires:   libgum-common = %{version}-%{release}
 
 
-%description -n lib%{name}
+%description -n libgum
 %{summary}.
 
 
-%package -n lib%{name}-devel
+%package -n libgum-devel
 Summary:    Development files for user management client library
 Group:      Development/Libraries
-Requires:   lib%{name} = %{version}-%{release}
-Requires:   lib%{name}-common-devel = %{version}-%{release}
+Requires:   libgum = %{version}-%{release}
+Requires:   libgum-common-devel = %{version}-%{release}
 
 
-%description -n lib%{name}-devel
+%description -n libgum-devel
 %{summary}.
 
 
 %package doc
 Summary:    Documentation files for %{name}
 Group:      Development/Libraries
-Requires:   lib%{name} = %{version}-%{release}
+Requires:   libgum = %{version}-%{release}
 
 
 %description doc
@@ -124,34 +124,34 @@ rm -rf %{buildroot}
 
 %post
 /sbin/ldconfig
-chmod u+s %{_bindir}/%{name}d
+chmod u+s %{_bindir}/%{name}
 groupadd -f -r gumd
 
 
 %postun -p /sbin/ldconfig
 
 
-%files -n lib%{name}-common
+%files -n libgum-common
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}-common*.so.*
+%{_libdir}/libgum-common*.so.*
 
 
-%files -n lib%{name}-common-devel
+%files -n libgum-common-devel
 %defattr(-,root,root,-)
-%{_includedir}/%{name}/common/*
-%{_libdir}/lib%{name}-common*.so
-%{_libdir}/lib%{name}-common*.la
-%{_libdir}/pkgconfig/lib%{name}-common.pc
+%{_includedir}/gum/common/*
+%{_libdir}/libgum-common*.so
+%{_libdir}/libgum-common*.la
+%{_libdir}/pkgconfig/libgum-common.pc
 %config(noreplace) %{_sysconfdir}/gum.conf
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
 
 
-%files -n %{name}d
+%files %{name}
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
-%{_bindir}/%{name}d
+%{_bindir}/%{name}
 %if %{dbus_type} == "session"
 %dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service
@@ -164,23 +164,23 @@ groupadd -f -r gumd
 %endif
 
 
-%files -n %{name}d-devel
+%files -n %{name}-devel
 %defattr(-,root,root,-)
-%{_libdir}/pkgconfig/%{name}d.pc
+%{_libdir}/pkgconfig/%{name}.pc
 
 
-%files -n lib%{name}
+%files -n libgum
 %defattr(-,root,root,-)
-%{_libdir}/lib%{name}.so.*
+%{_libdir}/libgum.so.*
 
 
-%files -n lib%{name}-devel
+%files -n libgum-devel
 %defattr(-,root,root,-)
-%{_includedir}/%{name}/*.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/lib%{name}.la
-%{_libdir}/pkgconfig/lib%{name}.pc
-%{_bindir}/%{name}-example
+%{_includedir}/gum/*.h
+%{_libdir}/libgum.so
+%{_libdir}/libgum.la
+%{_libdir}/pkgconfig/libgum.pc
+%{_bindir}/gum-example
 
 
 %files doc
@@ -189,6 +189,9 @@ groupadd -f -r gumd
 
 
 %changelog
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Corrected spec and changes file names 
+
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
 - Removed dist spec packaging folder from main source tree
 

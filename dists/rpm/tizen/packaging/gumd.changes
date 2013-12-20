@@ -1,4 +1,7 @@
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Corrected spec and changes file names 
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
 - Removed dist spec packaging folder from main source tree
 
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
