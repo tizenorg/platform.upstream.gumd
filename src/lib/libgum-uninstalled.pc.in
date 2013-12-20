@@ -1,0 +1,12 @@
+# Nicked the idea/template for uninstalled development from gstreamer
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@abs_top_builddir@/include/gum
+
+Name: Gum client library
+Description: User management client library, not installed
+Version: @PACKAGE_VERSION@
+URL: @PACKAGE_URL@
+Requires: glib-2.0 >= 2.30 gio-2.0 gio-unix-2.0 gmodule-2.0
+Cflags: -I${includedir}

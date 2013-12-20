@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+  <!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index">
+    <bookinfo>
+        <title>gumd API Reference Manual</title>
+        <releaseinfo>This document discusses the details of user management 
+        daemon (gumd) and client library (libgum) with version &version;.
+        </releaseinfo>
+    </bookinfo>
+
+    <xi:include href="introduction.xml"/>
+  
+    <xi:include href="building.xml"/>
+        
+    <chapter>
+        <title>Daemon (gumd) configuration</title>
+        <xi:include href="xml/gum-config.xml"/>
+        <xi:include href="xml/gum-config-general.xml"/>
+        <xi:include href="xml/gum-config-dbus.xml"/>
+    </chapter>
+    
+    <chapter>
+        <title>Common</title>
+        <xi:include href="xml/gum-dictionary.xml"/>
+        <xi:include href="xml/gum-crypt.xml"/>
+        <xi:include href="xml/gum-log.xml"/>
+        <xi:include href="xml/gum-error.xml"/>
+        <xi:include href="xml/gum-disposable.xml"/>
+        <xi:include href="xml/gum-file.xml"/>
+        <xi:include href="xml/gum-validate.xml"/>
+        <xi:include href="xml/gum-lock.xml"/>
+        <xi:include href="xml/gum-string-utils.xml"/>
+        <xi:include href="xml/gum-utils.xml"/>
+        <xi:include href="xml/gum-user-types.xml"/>
+        <xi:include href="xml/gum-group-types.xml"/>
+    </chapter>
+
+    <chapter>
+        <title>Client library (libgum) interface</title>
+        <xi:include href="xml/gum-user.xml"/>
+        <xi:include href="xml/gum-group.xml"/>
+    </chapter>
+    
+    <xi:include href="examples.xml"/>
+
+    <chapter>
+        <title>Appendices</title>
+        <xi:include href="xml/api-index-full.xml">
+            <xi:fallback />
+        </xi:include>
+    </chapter>  
+    
+    <chapter>        
+        <title>Deprecated APIs</title>
+        <xi:include href="xml/api-index-deprecated.xml">
+            <xi:fallback />
+        </xi:include>
+    </chapter>
+    
+    <chapter>    
+        <xi:include href="xml/annotation-glossary.xml">
+            <xi:fallback />
+        </xi:include>
+    </chapter>
+  
+</book>

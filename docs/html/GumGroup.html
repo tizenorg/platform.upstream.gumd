@@ -1,0 +1,772 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>GumGroup</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="gumd API Reference Manual">
+<link rel="up" href="ch03.html" title="Client library (libgum) interface">
+<link rel="prev" href="GumUser.html" title="GumUser">
+<link rel="next" href="gumd-examples.html" title="Examples">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="GumUser.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch03.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">gumd API Reference Manual</th>
+<td><a accesskey="n" href="gumd-examples.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#GumGroup.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#GumGroup.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#GumGroup.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                   | 
+                  <a href="#GumGroup.properties" class="shortcut">Properties</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="GumGroup"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="GumGroup.top_of_page"></a>GumGroup</span></h2>
+<p>GumGroup — provides interface for managing group's data</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="GumGroup.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;gum/gum-group.h&gt;
+
+struct              <a class="link" href="GumGroup.html#GumGroup-struct" title="struct GumGroup">GumGroup</a>;
+<span class="returnvalue">void</span>                (<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()">*GumGroupCb</a>)                       (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *group</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> *error</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+struct              <a class="link" href="GumGroup.html#GumGroupClass" title="struct GumGroupClass">GumGroupClass</a>;
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-add" title="gum_group_add ()">gum_group_add</a>                       (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-add-member" title="gum_group_add_member ()">gum_group_add_member</a>                (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> add_as_admin</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-add-member-sync" title="gum_group_add_member_sync ()">gum_group_add_member_sync</a>           (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> add_as_admin</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-add-sync" title="gum_group_add_sync ()">gum_group_add_sync</a>                  (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-create" title="gum_group_create ()">gum_group_create</a>                    (<em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-create-sync" title="gum_group_create_sync ()">gum_group_create_sync</a>               ();
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-delete" title="gum_group_delete ()">gum_group_delete</a>                    (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-delete-member" title="gum_group_delete_member ()">gum_group_delete_member</a>             (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-delete-member-sync" title="gum_group_delete_member_sync ()">gum_group_delete_member_sync</a>        (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-delete-sync" title="gum_group_delete_sync ()">gum_group_delete_sync</a>               (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-get" title="gum_group_get ()">gum_group_get</a>                       (<em class="parameter"><code><span class="type">gid_t</span> gid</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-get-by-name" title="gum_group_get_by_name ()">gum_group_get_by_name</a>               (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *groupname</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-get-by-name-sync" title="gum_group_get_by_name_sync ()">gum_group_get_by_name_sync</a>          (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *groupname</code></em>);
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          <a class="link" href="GumGroup.html#gum-group-get-sync" title="gum_group_get_sync ()">gum_group_get_sync</a>                  (<em class="parameter"><code><span class="type">gid_t</span> gid</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-update" title="gum_group_update ()">gum_group_update</a>                    (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumGroup.html#gum-group-update-sync" title="gum_group_update_sync ()">gum_group_update_sync</a>               (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumGroup.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+  <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+   +----GumGroup
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumGroup.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'>gid</a>"                      <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read
+  "<a class="link" href="GumGroup.html#GumGroup--groupname" title='The "groupname" property'>groupname</a>"                <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write
+  "<a class="link" href="GumGroup.html#GumGroup--grouptype" title='The "grouptype" property'>grouptype</a>"                <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write
+  "<a class="link" href="GumGroup.html#GumGroup--secret" title='The "secret" property'>secret</a>"                   <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumGroup.description"></a><h2>Description</h2>
+<p>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> provides interface for adding, removing and updating group.
+Group's information can also be retrieved using this interface. Only
+privileged user can access the interface when system-bus is used for
+communication with the user management daemon.
+</p>
+<p>
+Following code snippet demonstrates how to create a new remote group object:
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GumGroup *group = NULL;
+
+ group = gum_group_create_sync ();
+
+ // use the object
+
+ // destroy the object
+ g_object_unref (group);
+</pre></div>
+<p>
+</p>
+<p>
+Similarly, new group can be added as:
+</p>
+<div class="informalexample"><pre class="programlisting">
+ GumGroup *group = NULL;
+ gboolean rval = FALSE;
+
+ group = gum_group_create_sync ();
+
+ // set group properties
+ g_object_set (G_OBJECT (group), "groupname", "group1", "secret", "123456",
+  "grouptype", GUM_GROUPTYPE_USER, NULL);
+
+ // add group
+ rval = gum_group_add_sync (user);
+
+ // destroy the object
+ g_object_unref (group);
+</pre></div>
+<p>
+</p>
+<p>
+For more details, see example implementation here:
+<a class="ulink" href="https://github.com/01org/gumd/blob/master/examples/gum-example.c" target="_top">
+         gum-example</a>
+</p>
+</div>
+<div class="refsect1">
+<a name="GumGroup.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="GumGroup-struct"></a><h3>struct GumGroup</h3>
+<pre class="programlisting">struct GumGroup;</pre>
+<p>
+Opaque structure for the object.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumGroupCb"></a><h3>GumGroupCb ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                (*GumGroupCb)                       (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *group</code></em>,
+                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> *error</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> defines the callback which is used when group object is created,
+added, deleted or updated or new members are added to the group.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>group</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object which is used in the request. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> object. In case of error, error will be
+non-NULL. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data passed onto the request</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumGroupClass"></a><h3>struct GumGroupClass</h3>
+<pre class="programlisting">struct GumGroupClass {
+    GObjectClass parent_class;
+};
+</pre>
+<p>
+Opaque structure for the class.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObjectClass"><span class="type">GObjectClass</span></a> <em class="structfield"><code><a name="GumGroupClass.parent-class"></a>parent_class</code></em>;</span></p></td>
+<td>parent class object</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-add"></a><h3>gum_group_add ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_add                       (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method adds the group over the DBus asynchronously. Callback is used to
+notify when the group is added.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be added; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--groupname" title='The "groupname" property'><span class="type">"groupname"</span></a> and <a class="link" href="GumGroup.html#GumGroup--grouptype" title='The "grouptype" property'><span class="type">"grouptype"</span></a> properties.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when group is added</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if the request has been pushed and is waiting for
+the response, FALSE otherwise. No callback is triggered, in case the
+function returns FALSE.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-add-member"></a><h3>gum_group_add_member ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_add_member                (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> add_as_admin</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method adds new member to the group over the DBus asynchronously.
+Callback is used to notify when the member is added.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object where new member is to be added; object should have
+valid <a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
+<td>user id of the member to be added to the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>add_as_admin</code></em> :</span></p></td>
+<td>user will be added with admin privileges for the group if set
+to TRUE</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when member is added</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if the request has been pushed and is waiting for
+the response, FALSE otherwise. No callback is triggered, in case the
+function returns FALSE.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-add-member-sync"></a><h3>gum_group_add_member_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_add_member_sync           (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> add_as_admin</code></em>);</pre>
+<p>
+This method adds new member to the group over the DBus synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object where new member is to be added; object should have
+valid <a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
+<td>user id of the member to be added to the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>add_as_admin</code></em> :</span></p></td>
+<td>user will be added with admin privileges for the group if set
+to TRUE</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if successful, FALSE otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-add-sync"></a><h3>gum_group_add_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_add_sync                  (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);</pre>
+<p>
+This method adds the group over the DBus synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be added; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--groupname" title='The "groupname" property'><span class="type">"groupname"</span></a> and <a class="link" href="GumGroup.html#GumGroup--grouptype" title='The "grouptype" property'><span class="type">"grouptype"</span></a> properties.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if successful, FALSE otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-create"></a><h3>gum_group_create ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_create                    (<em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method creates a new remote group object over the DBus asynchronously.
+Callback is used to notify when the remote object is fully created and
+accessible.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when new group object is created</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> newly created object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-create-sync"></a><h3>gum_group_create_sync ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_create_sync               ();</pre>
+<p>
+This method creates a new remote group object over the DBus synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> newly created object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-delete"></a><h3>gum_group_delete ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_delete                    (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method deletes the group over the DBus asynchronously. Callback is used
+to notify when the group is deleted.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be deleted; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when group is deleted</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if the request has been pushed and is waiting for
+the response, FALSE otherwise. No callback is triggered, in case the
+function returns FALSE.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-delete-member"></a><h3>gum_group_delete_member ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_delete_member             (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method deletes new member from the group over the DBus asynchronously.
+Callback is used to notify when the member is deleted.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object where member is to be deleted from; object should
+have valid <a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
+<td>user id of the member to be deleted from the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when member is deleted</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if the request has been pushed and is waiting for
+the response, FALSE otherwise. No callback is triggered, in case the
+function returns FALSE.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-delete-member-sync"></a><h3>gum_group_delete_member_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_delete_member_sync        (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>);</pre>
+<p>
+This method deletes new member from the group over the DBus synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object where member is to be deleted from; object should
+have valid <a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>uid</code></em> :</span></p></td>
+<td>user id of the member to be deleted from the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if successful, FALSE otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-delete-sync"></a><h3>gum_group_delete_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_delete_sync               (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);</pre>
+<p>
+This method deletes the group over the DBus synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be deleted; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if successful, FALSE otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-get"></a><h3>gum_group_get ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_get                       (<em class="parameter"><code><span class="type">gid_t</span> gid</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method gets the group object attached to gid over the DBus
+asynchronously. Callback is used to notify when the remote object is fully
+created and accessible.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>gid</code></em> :</span></p></td>
+<td>group id for the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when group object is fetched</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-get-by-name"></a><h3>gum_group_get_by_name ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_get_by_name               (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *groupname</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method gets the group object attached to groupname over the DBus
+asynchronously. Callback is used to notify when the remote object is fully
+created and accessible.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>groupname</code></em> :</span></p></td>
+<td>name of the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when group object is fetched</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-get-by-name-sync"></a><h3>gum_group_get_by_name_sync ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_get_by_name_sync          (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *groupname</code></em>);</pre>
+<p>
+This method gets the group object attached to groupname over the DBus
+synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>groupname</code></em> :</span></p></td>
+<td>name of the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-get-sync"></a><h3>gum_group_get_sync ()</h3>
+<pre class="programlisting"><a class="link" href="GumGroup.html" title="GumGroup"><span class="returnvalue">GumGroup</span></a> *          gum_group_get_sync                  (<em class="parameter"><code><span class="type">gid_t</span> gid</code></em>);</pre>
+<p>
+This method gets the group object attached to gid over the DBus
+synchronously.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>gid</code></em> :</span></p></td>
+<td>group id for the group</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-update"></a><h3>gum_group_update ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_update                    (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> callback</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> user_data</code></em>);</pre>
+<p>
+This method updates the group over the DBus asynchronously. Callback is used
+to notify when the group is updated. The properties which can be updated
+are: secret.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be updated; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>callback</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html#GumGroupCb" title="GumGroupCb ()"><span class="type">GumGroupCb</span></a> to be invoked when group is updated</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if the request has been pushed and is waiting for
+the response, FALSE otherwise. No callback is triggered, in case the
+function returns FALSE.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-group-update-sync"></a><h3>gum_group_update_sync ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_group_update_sync               (<em class="parameter"><code><a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> *self</code></em>);</pre>
+<p>
+This method updates the group over the DBus synchronously. The properties
+which can be updated are: secret.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>
+<a class="link" href="GumGroup.html" title="GumGroup"><span class="type">GumGroup</span></a> object to be updated; object should have valid
+<a class="link" href="GumGroup.html#GumGroup--gid" title='The "gid" property'><span class="type">"gid"</span></a> property.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>returns TRUE if successful, FALSE otherwise.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="GumGroup.property-details"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="GumGroup--gid"></a><h3>The <code class="literal">"gid"</code> property</h3>
+<pre class="programlisting">  "gid"                      <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read</pre>
+<p>
+This property holds a unique group identity for the group as assigned by
+the underlying framework, which is always be in range [0, MAXUINT].
+</p>
+<p>Default value: 4294967295</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumGroup--groupname"></a><h3>The <code class="literal">"groupname"</code> property</h3>
+<pre class="programlisting">  "groupname"                <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
+<p>
+This property holds the name of given to the group when the group is
+added. Allowed pattern for groupname is:
+"^[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]\\?$".
+</p>
+<p>Default value: ""</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumGroup--grouptype"></a><h3>The <code class="literal">"grouptype"</code> property</h3>
+<pre class="programlisting">  "grouptype"                <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
+<p>
+This property holds a group type that the object corresponds to. Valid
+values of group types are as specified in <a class="link" href="gumd-Group-types.html#GumGroupType" title="enum GumGroupType"><span class="type">GumGroupType</span></a>.
+<a class="link" href="GumGroup.html#GumGroup--grouptype" title='The "grouptype" property'><span class="type">"grouptype"</span></a> must be specified when adding a new group.
+</p>
+<p>Allowed values: &lt;= 65535</p>
+<p>Default value: 0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumGroup--secret"></a><h3>The <code class="literal">"secret"</code> property</h3>
+<pre class="programlisting">  "secret"                   <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>*                : Read / Write</pre>
+<p>
+This property holds the secret as chosen. Secret should not
+contain any control chars (0x00-0x1F,0x7F) or colon (':' 0x3A).
+</p>
+<p>Default value: ""</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

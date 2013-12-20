@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Logging</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="gumd API Reference Manual">
+<link rel="up" href="ch02.html" title="Common">
+<link rel="prev" href="gumd-Gum-Crypt.html" title="Gum Crypt">
+<link rel="next" href="gumd-Errors.html" title="Errors">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="gumd-Gum-Crypt.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">gumd API Reference Manual</th>
+<td><a accesskey="n" href="gumd-Errors.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#gumd-Logging.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#gumd-Logging.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="gumd-Logging"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gumd-Logging.top_of_page"></a>Logging</span></h2>
+<p>Logging — logging facilities</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="gumd-Logging.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;gum/common/gum-log.h&gt;
+
+#define             <a class="link" href="gumd-Logging.html#DBG:CAPS" title="DBG()">DBG</a>                                 (frmt,
+                                                         ...)
+#define             <a class="link" href="gumd-Logging.html#ERR:CAPS" title="ERR()">ERR</a>                                 (frmt,
+                                                         ...)
+#define             <a class="link" href="gumd-Logging.html#INFO:CAPS" title="INFO()">INFO</a>                                (frmt,
+                                                         ...)
+#define             <a class="link" href="gumd-Logging.html#TRACEBACK:CAPS" title="TRACEBACK">TRACEBACK</a>
+#define             <a class="link" href="gumd-Logging.html#WARN:CAPS" title="WARN()">WARN</a>                                (frmt,
+                                                         ...)
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-Logging.description"></a><h2>Description</h2>
+<p>
+<code class="filename">gum/common/gum-log.h</code> file contains logging macros
+</p>
+<p>
+For example:
+</p>
+<div class="informalexample"><pre class="programlisting">    INFO("Object initialized"); </pre></div>
+<p>
+</p>
+</div>
+<div class="refsect1">
+<a name="gumd-Logging.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="DBG:CAPS"></a><h3>DBG()</h3>
+<pre class="programlisting">#define             DBG(frmt, args...)</pre>
+<p>
+Use this macro to log debug messages. Gum will take care of
+correctly saving them.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>frmt</code></em> :</span></p></td>
+<td>format string for the message</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>...</code></em> :</span></p></td>
+<td>arguments for the format string</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="ERR:CAPS"></a><h3>ERR()</h3>
+<pre class="programlisting">#define             ERR(frmt, args...)</pre>
+<p>
+Use this macro to log error messages. Gum will take care of
+correctly saving them.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>frmt</code></em> :</span></p></td>
+<td>format string for the message</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>...</code></em> :</span></p></td>
+<td>arguments for the format string</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="INFO:CAPS"></a><h3>INFO()</h3>
+<pre class="programlisting">#define             INFO(frmt, args...)</pre>
+<p>
+Use this macro to log informational messages. Gum will take care of
+correctly saving them.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>frmt</code></em> :</span></p></td>
+<td>format string for the message</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>...</code></em> :</span></p></td>
+<td>arguments for the format string</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="TRACEBACK:CAPS"></a><h3>TRACEBACK</h3>
+<pre class="programlisting">#define             TRACEBACK()</pre>
+<p>
+This macro prints the current function call stack to stderr.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="WARN:CAPS"></a><h3>WARN()</h3>
+<pre class="programlisting">#define             WARN(frmt, args...)</pre>
+<p>
+Use this macro to log warning messages. Gum will take care of
+correctly saving them.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>frmt</code></em> :</span></p></td>
+<td>format string for the message</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>...</code></em> :</span></p></td>
+<td>arguments for the format string</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

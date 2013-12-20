@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Building and Installation</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="gumd API Reference Manual">
+<link rel="up" href="index.html" title="gumd API Reference Manual">
+<link rel="prev" href="um-intro.html" title="Introduction">
+<link rel="next" href="ch01.html" title="Daemon (gumd) configuration">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2"><tr valign="middle">
+<td><a accesskey="p" href="um-intro.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td> </td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">gumd API Reference Manual</th>
+<td><a accesskey="n" href="ch01.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="um-building"></a><div class="titlepage"></div>
+<div class="refsect1">
+<a name="building"></a><h2>Building gumd and libgum</h2>
+<p>
+      gumd and libgum uses the standard GNU build system,
+      using <span class="application">autoconf</span> for package
+      configuration and resolving portability issues,
+      <span class="application">automake</span> for building makefiles
+      that comply with the GNU Coding Standards, and
+      <span class="application">libtool</span> for building shared
+      libraries on multiple platforms. The normal sequence for
+      compiling and installing gumd and libgum from distribution tarballs is
+      thus:
+
+      </p>
+<div class="literallayout"><p><br>
+        <strong class="userinput"><code>./configure</code></strong><br>
+        <strong class="userinput"><code>make</code></strong><br>
+        <strong class="userinput"><code>make install</code></strong><br>
+      </p></div>
+<p>
+      
+      If you have obtained the source code directly from git repository,
+      execute the <span class="command"><strong>./autogen.sh</strong></span> script 
+      before the steps above.
+    </p>
+<p>
+      The standard options provided by <span class="application">GNU
+      autoconf</span> may be passed to the
+      <span class="command"><strong>configure</strong></span> script.  Please see the
+      <span class="application">autoconf</span> documentation or run
+      <span class="command"><strong>./configure --help</strong></span> for information about
+      the standard options.
+    </p>
+</div>
+<div class="refsect1">
+<a name="dependencies"></a><h2>Dependencies</h2>
+<p>
+      Before you can compile gumd and libgum, you need to have
+      various other tools and libraries installed on your
+      system. The two tools needed during the build process
+      are <span class="command"><strong>pkg-config</strong></span> and
+      <a class="ulink" href="http://www.gnu.org/software/make" target="_top">GNU make</a>.
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+          <a class="ulink" href="http://www.freedesktop.org/software/pkgconfig/" target="_top">
+            pkg-config
+          </a>
+          is a tool for tracking the compilation flags needed for
+          libraries that are used by the gumd and libgum. (For each
+          library, a small <code class="literal">.pc</code> text file is
+          installed in a standard location that contains the compilation
+          flags needed for that library along with version number
+          information.) 
+        </p></li></ul></div>
+<p>
+      gumd depends on a number of other libraries.
+    </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+            The <a class="ulink" href="https://developer.gnome.org/glib/" target="_top">GLib
+            library</a> is the development framework that gumd and libgum
+            is built on.
+        </p></li>
+<li class="listitem"><p>
+            The <a class="ulink" href="http://check.sourceforge.net/" target="_top">check library</a>
+            provides a unit testing framework. It is needed only if you would
+            like to run unit tests with <span class="command"><strong>make check</strong></span>.
+        </p></li>
+<li class="listitem"><p>
+            The
+            <a class="ulink" href="http://www.freedesktop.org/software/systemd/man/" target="_top">
+                Systemd
+            </a>
+            provides dbus login apis that gumd is using for
+            querying/terminating users sessions e.g. when a user is deleted.
+        </p></li>
+<li class="listitem"><p>
+            The optional
+            <a class="ulink" href="https://github.com/01org/libtlm-nfc" target="_top">
+                libtlm-nfc library
+            </a>
+            provides support for writing usernames and passwords to NFC tags
+            in <a class="link" href="gumd-examples.html" title="Examples">gum-example application</a>.
+            Such tags can be used for logging in with TLM login manager.
+        </p></li>
+</ul></div>
+</div>
+<div class="refsect1">
+<a name="extra-configuration-options"></a><h2>Extra Configuration Options</h2>
+<p>
+      In addition to the normal options, the
+      <span class="command"><strong>configure</strong></span> script supports these additional arguments:
+    </p>
+<p><b><code class="systemitem">--enable-debug</code>. </b>
+        Turns on debugging support. This allows setting environment 
+        variables to influence the runtime behaviour of gumd and libgum
+        (see <a class="link" href="GumConfig.html" title="GumConfig">GumConfig</a>).
+      </p>
+<p><b><code class="systemitem">--enable-tests</code>. </b>
+        This enables unit tests and implicitly enables debugging support as
+        well.
+      </p>
+<p><b><code class="systemitem">--enable-dbus-type=dbus-type</code>. </b>
+          Sets the way in which libgum is using DBus to communicate with 
+          gumd. <code class="systemitem">dbus-type</code> can be one of
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+              <code class="systemitem">'p2p'</code> which is the default value.
+              Gumd will use direct connection over a UNIX domain socket
+              with the client library without involving the DBus daemon.
+            </p></li>
+<li class="listitem"><p>
+              <code class="systemitem">'session'</code> which will use the session bus.
+              This is not recommended to use because session bus isn't secure
+              against eavesdropping, but it can be used for debugging purposes,
+              as it allows the use of standard tools such as
+              <span class="command"><strong>dbus-monitor</strong></span>, <span class="command"><strong>d-feet</strong></span> and
+              so on.
+            </p></li>
+<li class="listitem"><p>
+              <code class="systemitem">'system'</code> which will use the system bus.
+            </p></li>
+</ul></div>
+<p>
+      </p>
+</div>
+<div class="refsect1">
+<a name="building-packages"></a><h2>Building distribution packages</h2>
+<p>
+        Instead of running <span class="command"><strong>make install</strong></span> to install gumd and
+        libgum into a system location it is possible to build
+        distribution-specific packages. <code class="filename">dists/</code> directory
+        in the source tree contains a number of package confuguration files,
+        and to use them also a distribution tarball is needed. If you are
+        building from a git tree, use <span class="command"><strong>make dist</strong></span> to create
+        such a tarball.
+    </p>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="gumd-examples">
+  <refmeta>
+    <refentrytitle>Examples</refentrytitle>
+  </refmeta>
+
+  <refsect1 id="intro">
+    <title>Introduction</title>
+    <para>
+        libgum comes with an example application
+        <application>gum-example</application> that demonstrates the most
+        common use cases: creating users/groups, deleting users/groups,
+        modifying users/groups, and querying users/groups
+    </para>
+    <para>
+        Before running the example application, make sure that gum daemon and
+        libgum are installed and configured correctly.
+    </para>
+    <para>
+        The source code for the example application is available at
+        <ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
+           gum-example</ulink>
+     </para>
+     <para>
+         The full list of available <application>gum-example</application>
+         options can be obtained with
+         <userinput>gum-example --help-all</userinput>
+     </para>
+  </refsect1>
+         
+  <refsect1>
+    <title>Add User</title>
+    <para>
+        User can be added with flag <userinput>--add-user</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --add-user &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
+                    mandatory-args are:
+                        --username=&lt;username&gt; OR --nickname=&lt;nickname&gt;
+                        --usertype=&lt;usertype&gt;
+                         possible usertypes are: system(1), admin(2), guest(3), normal(4).
+                    optional-args are:
+                        --usecret=&lt;secret&gt;
+                        --realname=&lt;realname&gt;
+                        --office=&lt;office location&gt;
+                        --officephone=&lt;ooffice phone&gt;
+                        --homephone=&lt;home phone&gt;
+                        --homedir=&lt;home dir&gt;
+                        --shell=&lt;path to shell exe&gt;
+                        --write-nfc
+            </computeroutput>
+        </literallayout>
+        --write-nfc flag can be used to write the username and secret to an NFC
+        tag, if gum-example was compiled with <link linkend="um-building">libtlm-nfc
+        </link> support.
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Delete User</title>
+    <para>
+        User can be deleted with flag <userinput>--delete-user</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --delete-user &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --uid=&lt;uid&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+    
+  <refsect1>
+    <title>Update User</title>
+    <para>
+        User can be update with flag <userinput>--update-user</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --update-user &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
+                    mandatory-args are:
+                        --uid=&lt;uid&gt; 
+                    possible update-args are:    
+                        --usecret=&lt;secret&gt;
+                        --realname=&lt;realname&gt;
+                        --office=&lt;office location&gt;
+                        --officephone=&lt;office phone&gt;
+                        --homephone=&lt;home phone&gt;
+                        --shell=&lt;path to shell exe&gt; 
+                        --write-nfc
+            </computeroutput>
+        </literallayout>
+        --write-nfc flag has the same meaning as with adding users.
+     </para>
+  </refsect1>
+
+  <refsect1>
+    <title>Get User</title>
+    <para>
+        User data can be retrieved with flag <userinput>--get-user</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --get-user &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --uid=&lt;uid&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Get User By Name</title>
+    <para>
+        User data can be retrieved with flag <userinput>--get-user-by-name</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --get-user-by-name &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --username=&lt;username&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Add Group</title>
+    <para>
+        Group can be added with flag <userinput>--add-group</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --add-group &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
+                    mandatory-args are:
+                        --groupname=&lt;groupname&gt;
+                        --grouptype=&lt;grouptype&gt;
+                        possible grouptypes are: system(1), user(2).
+                    optional-args are:
+                        --gsecret=&lt;secret&gt;
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+      
+  <refsect1>
+    <title>Delete Group</title>
+    <para>
+        Group can be deleted with flag <userinput>--delete-group</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --delete-group &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --gid=&lt;gid&gt;
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Update Group</title>
+    <para>
+        Group can be updated with flag <userinput>--udpate-group</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --update-group &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
+                    mandatory-args are:
+                        --gid=&lt;gid&gt;
+                    possible update-args are:    
+                        --gsecret=&lt;secret&gt;
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Get Group</title>
+    <para>
+        Group data can be retrieved with flag <userinput>--get-group</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --get-group &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --gid=&lt;gid&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+
+  <refsect1>
+    <title>Get Group By Name</title>
+    <para>
+        Group data can be retrieved with flag <userinput>--get-group-by-name</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --get-group-by-name &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --groupname=&lt;groupname&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+      
+  <refsect1>
+    <title>Add member To Group</title>
+    <para>
+        New member can be added to a group with flag <userinput>--add-member</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --add-member &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --gid=&lt;gid&gt; 
+                        --mem_uid=&lt;mem_uid&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+  
+  <refsect1>
+    <title>Delete member From Group</title>
+    <para>
+        A member can be removed from the group with flag <userinput>--delete-member</userinput>:
+        <literallayout>
+            <computeroutput>
+                <userinput>gum-example --delete-member &lt;mandatory-args&gt;</userinput>:
+                    mandatory-args are:
+                        --gid=&lt;gid&gt; 
+                        --mem_uid=&lt;mem_uid&gt; 
+            </computeroutput>
+        </literallayout>
+     </para>        
+  </refsect1>
+
+</refentry> 

@@ -1,0 +1,4 @@
+gum_config_get_type
+gum_disposable_get_type
+gum_group_get_type
+gum_user_get_type

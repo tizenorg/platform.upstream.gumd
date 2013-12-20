@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>GumDisposable</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="gumd API Reference Manual">
+<link rel="up" href="ch02.html" title="Common">
+<link rel="prev" href="gumd-Errors.html" title="Errors">
+<link rel="next" href="gumd-Gum-File.html" title="Gum File">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="gumd-Errors.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">gumd API Reference Manual</th>
+<td><a accesskey="n" href="gumd-Gum-File.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#GumDisposable.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#GumDisposable.description" class="shortcut">Description</a>
+                   | 
+                  <a href="#GumDisposable.object-hierarchy" class="shortcut">Object Hierarchy</a>
+                   | 
+                  <a href="#GumDisposable.properties" class="shortcut">Properties</a>
+                   | 
+                  <a href="#GumDisposable.signals" class="shortcut">Signals</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="GumDisposable"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="GumDisposable.top_of_page"></a>GumDisposable</span></h2>
+<p>GumDisposable — timer-based auto disposable object</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="GumDisposable.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;gum/common/gum-disposable.h&gt;
+
+struct              <a class="link" href="GumDisposable.html#GumDisposable-struct" title="struct GumDisposable">GumDisposable</a>;
+struct              <a class="link" href="GumDisposable.html#GumDisposableClass" title="struct GumDisposableClass">GumDisposableClass</a>;
+<span class="returnvalue">void</span>                <a class="link" href="GumDisposable.html#gum-disposable-delete-later" title="gum_disposable_delete_later ()">gum_disposable_delete_later</a>         (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>);
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="GumDisposable.html#gum-disposable-get-auto-dispose" title="gum_disposable_get_auto_dispose ()">gum_disposable_get_auto_dispose</a>     (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="GumDisposable.html#gum-disposable-set-auto-dispose" title="gum_disposable_set_auto_dispose ()">gum_disposable_set_auto_dispose</a>     (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> dispose</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="GumDisposable.html#gum-disposable-set-timeout" title="gum_disposable_set_timeout ()">gum_disposable_set_timeout</a>          (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> timeout</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="synopsis">
+  <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+   +----GumDisposable
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.properties"></a><h2>Properties</h2>
+<pre class="synopsis">
+  "<a class="link" href="GumDisposable.html#GumDisposable--auto-dispose" title='The "auto-dispose" property'>auto-dispose</a>"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write
+  "<a class="link" href="GumDisposable.html#GumDisposable--delete-later" title='The "delete-later" property'>delete-later</a>"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read
+  "<a class="link" href="GumDisposable.html#GumDisposable--timeout" title='The "timeout" property'>timeout</a>"                  <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.signals"></a><h2>Signals</h2>
+<pre class="synopsis">
+  "<a class="link" href="GumDisposable.html#GumDisposable-disposing" title='The "disposing" signal'>disposing</a>"                                      : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-ACTION:CAPS"><code class="literal">Action</code></a>
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.description"></a><h2>Description</h2>
+<p>
+<a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> is used to dispose the object when the timer expires with the
+specified timeout value provided auto-dispose is enabled. A <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject"><span class="type">GObject</span></a> which
+needs to be auto-disposable should derive itself from <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> and
+can set the timeout value (at the time of object construction e.g.). One such
+example, which can make use of <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>, is a DBus object as it may
+be required to destory after some period of inactivity.
+</p>
+<p>
+</p>
+<div class="refsect1">
+<a name="idp8023152"></a><h2>Usage</h2>
+</div>
+<p>
+Following code snippet demonstrates how to derive and use <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>:
+</p>
+<div class="informalexample"><pre class="programlisting">
+
+//gum-test-object.h
+struct _GumTestObject
+{
+    GumDisposable parent;
+};
+
+struct _GumTestObjectClass
+{
+    GumDisposableClass parent_class;
+};
+
+//gum-test-object.c
+GumTestObject *
+gum_test_object_new ()
+{
+   GumTestObject *obj = g_object_new (GUM_TYPE_TEST_OBJECT, NULL);
+
+   // ... other code
+
+   // GumTestobject will be disposed after 5 seconds unless auto-dispose
+   // is disabled by calling gum_disposable_set_auto_dispose (obj, FALSE)
+   gint timeout = 5;
+   gum_disposable_set_timeout (GUM_DISPOSABLE (obj), timeout);
+
+   // ... other code
+}
+
+</pre></div>
+<p>
+</p>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="GumDisposable-struct"></a><h3>struct GumDisposable</h3>
+<pre class="programlisting">struct GumDisposable;</pre>
+<p>
+Opaque structure for the object.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumDisposableClass"></a><h3>struct GumDisposableClass</h3>
+<pre class="programlisting">struct GumDisposableClass {
+    GObjectClass parent_class;
+};
+</pre>
+<p>
+Opaque structure for the class.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObjectClass"><span class="type">GObjectClass</span></a> <em class="structfield"><code><a name="GumDisposableClass.parent-class"></a>parent_class</code></em>;</span></p></td>
+<td>parent class object</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-disposable-delete-later"></a><h3>gum_disposable_delete_later ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                gum_disposable_delete_later         (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>);</pre>
+<p>
+Sets the object to be deleted later. Once delete later is requested, the
+object should not be used.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>an instance of <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-disposable-get-auto-dispose"></a><h3>gum_disposable_get_auto_dispose ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_disposable_get_auto_dispose     (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>);</pre>
+<p>
+Gets the auto-dispose value.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>an instance of <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the auto-dispose value of the object.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-disposable-set-auto-dispose"></a><h3>gum_disposable_set_auto_dispose ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                gum_disposable_set_auto_dispose     (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> dispose</code></em>);</pre>
+<p>
+Sets the auto-dispose flag, and sets up the timer if needed.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>an instance of <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>dispose</code></em> :</span></p></td>
+<td>dispose flag</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-disposable-set-timeout"></a><h3>gum_disposable_set_timeout ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                gum_disposable_set_timeout          (<em class="parameter"><code><a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *self</code></em>,
+                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> timeout</code></em>);</pre>
+<p>
+Sets the timeout value and sets up the timer if needed. If timeout
+value is set to 0, the object is never disposed.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
+<td>an instance of <a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>timeout</code></em> :</span></p></td>
+<td>timeout value in seconds</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.property-details"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="GumDisposable--auto-dispose"></a><h3>The <code class="literal">"auto-dispose"</code> property</h3>
+<pre class="programlisting">  "auto-dispose"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read / Write</pre>
+<p>
+This property holds the value of auto-dispose to be TRUE or FALSE.
+Default value is FALSE. If auto-dispose is TRUE, then object is
+auto-disposed otherwise not.
+</p>
+<p>Default value: TRUE</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumDisposable--delete-later"></a><h3>The <code class="literal">"delete-later"</code> property</h3>
+<pre class="programlisting">  "delete-later"             <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>              : Read</pre>
+<p>
+This property is used when the object is asked to be deleted later.
+The object should not be used once <a class="link" href="GumDisposable.html#gum-disposable-delete-later" title="gum_disposable_delete_later ()"><span class="type">gum_disposable_delete_later</span></a> is
+requested for the object.
+</p>
+<p>Default value: FALSE</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumDisposable--timeout"></a><h3>The <code class="literal">"timeout"</code> property</h3>
+<pre class="programlisting">  "timeout"                  <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a>                 : Read / Write</pre>
+<p>
+This property holds the value of timeout in seconds. Default value is 0.
+If timeout value is 0, the object never auto-dispose.
+</p>
+<p>Default value: 0</p>
+</div>
+</div>
+<div class="refsect1">
+<a name="GumDisposable.signal-details"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="GumDisposable-disposing"></a><h3>The <code class="literal">"disposing"</code> signal</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                user_function                      (<a class="link" href="GumDisposable.html" title="GumDisposable"><span class="type">GumDisposable</span></a> *object,
+                                                        <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>       user_data)      : <a href="http://library.gnome.org/devel/gobject/unstable/gobject-Signals.html#G-SIGNAL-ACTION:CAPS"><code class="literal">Action</code></a></pre>
+<p>
+This signal is emitted when the object is about to be disposed.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>object</code></em> :</span></p></td>
+<td>the object which emits the signal</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>user_data</code></em> :</span></p></td>
+<td>user data set when the signal handler was connected.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>

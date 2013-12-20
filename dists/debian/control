@@ -1,0 +1,42 @@
+Source: gum
+Section: admin
+Priority: extra
+Maintainer: Imran Zaman <imran.zaman@intel.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev, pkg-config, libdbus-1-dev, gtk-doc-tools, libglib2.0-dev
+Standards-Version: 3.9.2
+Vcs-Git: https://github.com/otcshare/gum.git
+Vcs-Browser: https://github.com/otcshare/gum
+
+Package: libgum-common
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Common library for user management
+
+Package: libgum-common-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: development files for common library
+ Headers and libraries.
+
+Package: gumd
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgum-common (= ${source:Version})
+Description: User management daemon
+ User management daemon provides interface to add/delete/update users/groups
+
+Package: gumd-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: development files for daemon
+
+Package: libgum
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgum-common (= ${source:Version})
+Description: Client library for user management
+
+Package: libgum-dev
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgum-common-dev (= ${source:Version})
+Description: development files for client library
+ Headers and libraries.
+

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+               "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+]>
+<refentry id="um-intro">
+  <refmeta>
+    <refentrytitle>Introduction</refentrytitle>
+  </refmeta>
+
+  <refsect1>
+    <title>What is gumd/libgum?</title>
+    <para>
+        gumd and libgum together provides a framework for creating, deleting
+        and modifying user and groups in the system. gumd is a daemon that
+        implements the functionality that provides access to user/group
+        database and libgum is a client library for applications to communicate
+        with this system.        
+    </para>
+    <para>
+        By using libgum client library, an application can query/create/delete/modify
+        users' and groups' database.
+    </para>
+    <para>
+        The client library, libgum, interacts with gumd daemon through
+        D-Bus. These D-Bus APIs should not be used directly as they are not
+        documented, subject to change and don't come with backwards
+        compatibility guarantees.
+    </para>
+  </refsect1>
+</refentry>

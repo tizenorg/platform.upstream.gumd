@@ -1,0 +1,125 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Enable debug features */
+#undef ENABLE_DEBUG
+
+/* Enable tests features */
+#undef ENABLE_TESTS
+
+/* Use system bus */
+#undef GUM_BUS_TYPE
+
+/* Use peer to peer dbus */
+#undef GUM_BUS_TYPE_P2P
+
+/* Default groups to be assigned to the admin user on creation */
+#undef GUM_DEF_ADMIN_GROUPS
+
+/* Default user groups to be assigned to user on creation */
+#undef GUM_DEF_GROUPS
+
+/* Encrypt algorithm */
+#undef GUM_ENCRYPT_METHOD
+
+/* Path for group file */
+#undef GUM_GROUP_FILE
+
+/* Path for gshadow file */
+#undef GUM_GSHADOW_FILE
+
+/* Path for home dir prefix */
+#undef GUM_HOME_DIR_PREFIX
+
+/* Path for passwd file */
+#undef GUM_PASSWD_FILE
+
+/* Path for shadow file */
+#undef GUM_SHADOW_FILE
+
+/* Path for shell */
+#undef GUM_SHELL
+
+/* Path for skel directory */
+#undef GUM_SKEL_DIR
+
+/* Define to 1 if you have the <attr/xattr.h> header file. */
+#undef HAVE_ATTR_XATTR_H
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `lgetxattr' function. */
+#undef HAVE_LGETXATTR
+
+/* Define if libtlm-nfc exists. */
+#undef HAVE_LIBTLM_NFC
+
+/* Define to 1 if you have the `llistxattr' function. */
+#undef HAVE_LLISTXATTR
+
+/* Define to 1 if you have the `lsetxattr' function. */
+#undef HAVE_LSETXATTR
+
+/* Define to 1 if you have the <memory.h> header file. */
+#undef HAVE_MEMORY_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <sys/xattr.h> header file. */
+#undef HAVE_SYS_XATTR_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to 1 if you have the ANSI C header files. */
+#undef STDC_HEADERS
+
+/* Use systemd-login dbus APIs */
+#undef USE_SYSTEMD
+
+/* Version number of package */
+#undef VERSION

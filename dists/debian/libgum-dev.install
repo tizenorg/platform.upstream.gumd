@@ -1,0 +1,5 @@
+/usr/include/gum/*.h
+/usr/lib/libgum.so
+/usr/lib/libgum.la
+/usr/lib/pkgconfig/libgum.pc
+/usr/bin/gum-example
