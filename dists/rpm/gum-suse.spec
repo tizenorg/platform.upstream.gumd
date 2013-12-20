@@ -11,7 +11,8 @@ Version: 0.0.1
 Release: 1
 Group: System/Libraries
 License: LGPL-2.1+
-Source: %{name}-%{version}.tar.gz
+Source: %{name}d-%{version}.tar.gz
+URL: https://github.com/01org/gumd
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
@@ -171,5 +172,8 @@ groupadd -f -r gumd
 
 
 %changelog
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Release 0.0.1
+
 * Mon Sep 02 2013 Imran Zaman <imran.zaman@intel.com>
 - Initial RPM packaging

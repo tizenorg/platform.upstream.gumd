@@ -10,7 +10,8 @@ Version: 0.0.1
 Release: 1
 Group: System/Libraries
 License: LGPL-2.1+
-Source: %{name}-%{version}.tar.gz
+Source: %{name}d-%{version}.tar.gz
+URL: https://github.com/01org/gumd
 Source1001:     %{name}d.manifest
 Source1002:     lib%{name}.manifest
 Source1003:     lib%{name}-common.manifest

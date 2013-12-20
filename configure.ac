@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([gum], [0.0.1],[],[],[https://github.com/otcshare/gum])
+AC_INIT([gumd], [0.0.1],[],[],[https://github.com/01org/gumd])
 AC_CONFIG_SRCDIR([src/daemon/main.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
