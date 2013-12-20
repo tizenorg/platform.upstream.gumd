@@ -4,7 +4,8 @@ ACLOCAL_AMFLAGS = -I m4
 AM_DISTCHECK_CONFIGURE_FLAGS = \
     --enable-distcheck \
     --enable-dbus-type=p2p\
-    --enable-tests
+    --enable-tests\
+    --enable-gtk-doc
 
 if ENABLE_GTK_DOC
 AM_DISTCHECK_CONFIGURE_FLAGS += \
