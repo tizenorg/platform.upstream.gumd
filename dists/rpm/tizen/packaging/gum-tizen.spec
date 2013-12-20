@@ -95,15 +95,25 @@ Requires:   lib%{name}-common-devel = %{version}-%{release}
 %{summary}.
 
 
+%package doc
+Summary:    Documentation files for %{name}
+Group:      Development/Libraries
+Requires:   lib%{name} = %{version}-%{release}
+
+
+%description doc
+%{summary}.
+
+
 %prep
 %setup -q -n %{name}-%{version}
 
 
 %build
 %if %{debug_build} == 1
-%autogen --enable-dbus-type=%{dbus_type} %{_enable_debug}
+%configure --enable-dbus-type=%{dbus_type} %{_enable_debug}
 %else
-%autogen --enable-dbus-type=%{dbus_type}
+%configure --enable-dbus-type=%{dbus_type}
 %endif
 
 make %{?_smp_mflags}
@@ -169,6 +179,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %manifest %{_datadir}/lib%{name}.manifest
 %{_libdir}/lib%{name}.so.*
 
+
 %files -n lib%{name}-devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}/*.h
@@ -176,3 +187,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %{_libdir}/pkgconfig/lib%{name}.pc
 %{_bindir}/%{name}-example
 
+
+%files doc
+%defattr(-,root,root,-)
+%{_datadir}/gtk-doc/html/gumd/*

@@ -87,13 +87,23 @@ Group:      Development/Libraries
 Requires:   lib%{name} = %{version}-%{release}
 Requires:   lib%{name}-common-devel = %{version}-%{release}
 
+
 %description -n lib%{name}-devel
 %{summary}.
 
+
+%package doc
+Summary:    Documentation files for %{name}
+Group:      Development/Libraries
+Requires:   lib%{name} = %{version}-%{release}
+
+
+%description doc
+%{summary}.
+
+
 %prep
 %setup -q -n %{name}-%{version}
-# fore release source packages
-autoreconf -f -i
 
 
 %build
@@ -116,6 +126,7 @@ rm -rf %{buildroot}
 /sbin/ldconfig
 chmod u+s %{_bindir}/%{name}d
 groupadd -f -r gumd
+
 
 %postun -p /sbin/ldconfig
 
@@ -152,6 +163,7 @@ groupadd -f -r gumd
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/gumd-dbus.conf
 %endif
 
+
 %files -n %{name}d-devel
 %defattr(-,root,root,-)
 %{_libdir}/pkgconfig/%{name}d.pc
@@ -169,6 +181,11 @@ groupadd -f -r gumd
 %{_libdir}/lib%{name}.la
 %{_libdir}/pkgconfig/lib%{name}.pc
 %{_bindir}/%{name}-example
+
+
+%files doc
+%defattr(-,root,root,-)
+%{_datadir}/gtk-doc/html/gumd/*
 
 
 %changelog
