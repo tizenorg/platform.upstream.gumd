@@ -14,7 +14,7 @@ echo "CURR dir = $currdir"
 
 mkdir -p $2 && \
 cd $2 && \
-git rm -r *;
+git rm -r *; rm -f packaging;
 tar -xzvf $currdir/$1 -C $2 --strip-components 1 && \
 ln -s dists/rpm/tizen/packaging && \
 git add *;
