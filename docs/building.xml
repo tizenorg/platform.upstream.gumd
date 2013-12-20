@@ -87,12 +87,23 @@
       </listitem>
       <listitem>
         <para>
-            The 
+            The
             <ulink url="http://www.freedesktop.org/software/systemd/man/">
                 Systemd
             </ulink>
             provides dbus login apis that gumd is using for
             querying/terminating users sessions e.g. when a user is deleted.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+            The optional
+            <ulink url="https://github.com/01org/libtlm-nfc">
+                libtlm-nfc library
+            </ulink>
+            provides support for writing usernames and passwords to NFC tags
+            in <link linkend="gumd-examples">gum-example application</link>.
+            Such tags can be used for logging in with TLM login manager.
         </para>
       </listitem>
     </itemizedlist>

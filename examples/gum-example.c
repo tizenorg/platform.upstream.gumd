@@ -32,6 +32,11 @@
 #include "gum-group.h"
 #include "common/gum-group-types.h"
 #include "common/gum-defines.h"
+#include "config.h"
+
+#ifdef HAVE_LIBTLM_NFC
+#include <gtlm-nfc.h>
+#endif
 
 typedef struct {
     uid_t uid;
@@ -210,9 +215,73 @@ _print_user_prop (
     _free_test_user (user);
 }
 
+#ifdef HAVE_LIBTLM_NFC
+static void _on_tag_found(GTlmNfc* tlm_nfc,
+                          const gchar* tag_path,
+                          gpointer user_data)
+{
+    g_print("Tag %s found\n", tag_path);
+
+    g_print("Waiting 5 seconds due to https://01.org/jira/browse/NFC-57\n");
+    sleep(5);
+
+    GumUser* user = GUM_USER(user_data);
+
+    gchar* user_name;
+    gchar* secret;
+
+    g_object_get (G_OBJECT (user), "username", &user_name, NULL);
+    g_object_get (G_OBJECT (user), "secret", &secret, NULL);
+
+    GError* error = NULL;
+    g_print("Writing to tag...");
+    gtlm_nfc_write_username_password(tlm_nfc,
+                                     tag_path,
+                                     user_name,
+                                     secret,
+                                     &error);
+
+    if (!error)
+        g_print("success!\n");
+    else
+        g_print("error: %s\n", error->message);
+
+    g_free(user_name);
+    g_free(secret);
+
+    _stop_mainloop();
+}
+
+static void
+_handle_write_nfc (
+        GumUser *user)
+{
+    g_print("Writing the username and password to NFC tag; please place a tag next \
+to the NFC adapter\n");
+
+    GTlmNfc* tlm_nfc = g_object_new(G_TYPE_TLM_NFC, NULL);
+    G_IS_TLM_NFC(tlm_nfc);
+    g_signal_connect(tlm_nfc, "tag-found", G_CALLBACK(_on_tag_found), user);
+
+    _run_mainloop();
+
+    g_object_unref(tlm_nfc);
+
+}
+#else
+static void
+_handle_write_nfc (
+        GumUser *user)
+{
+    g_print("gum-example was compiled without libtlm-nfc support\n");
+}
+#endif
+
 static void
 _handle_user_add (
-        TestUser *user)
+        TestUser *user,
+        gboolean write_nfc
+                 )
 {
     GumUser *guser = NULL;
     guser = gum_user_create_sync ();
@@ -229,6 +298,10 @@ _handle_user_add (
     _print_user_prop (guser);
 
     DBG ("User added successfully");
+
+    if (write_nfc) {
+        _handle_write_nfc(guser);
+    }
 
     g_object_unref (guser);
 }
@@ -255,7 +328,9 @@ _handle_user_del (
 
 static void
 _handle_user_up (
-		TestUser *user)
+		TestUser *user,
+                gboolean write_nfc
+                )
 {
     GumUser *guser = NULL;
 
@@ -285,6 +360,10 @@ _handle_user_up (
     } else {
     	_print_user_prop (guser);
         DBG ("User updated successfully");
+    }
+
+    if (write_nfc) {
+        _handle_write_nfc(guser);
     }
 
     g_object_unref (guser);
@@ -570,6 +649,7 @@ main (int argc, char *argv[])
     gboolean is_group_up_op = FALSE, is_group_get_op = FALSE;
     gboolean is_group_get_by_name_op = FALSE, is_group_add_mem_op = FALSE;
     gboolean is_group_del_mem_op = FALSE;
+    gboolean is_write_nfc = FALSE;
     GOptionGroup* group_option = NULL;
     TestGroup *group = NULL;
 
@@ -609,6 +689,8 @@ main (int argc, char *argv[])
                 "group add member -- gid and mem_uid are mandatory", NULL},
         { "delete-member", 'n', 0, G_OPTION_ARG_NONE, &is_group_del_mem_op,
                 "group delete member -- gid and mem_uid are mandatory", NULL},
+        { "write-nfc", 0, 0, G_OPTION_ARG_NONE, &is_write_nfc,
+                "write username and secret to an NFC tag when creating or updating a user", NULL},
         { NULL }
     };
     
@@ -684,11 +766,11 @@ main (int argc, char *argv[])
     _create_mainloop ();
     
     if (is_user_add_op) {
-        _handle_user_add (user);
+        _handle_user_add (user, is_write_nfc);
     } else if (is_user_del_op) {
     	_handle_user_del (user);
     } else if (is_user_up_op) {
-    	_handle_user_up (user);
+    	_handle_user_up (user, is_write_nfc);
     } else if (is_user_get_op) {
     	_handle_user_get (user);
     } else if (is_user_get_by_name_op) {

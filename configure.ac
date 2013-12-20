@@ -32,6 +32,13 @@ AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 AC_PATH_PROG(GLIB_MKENUMS, glib-mkenums)
 
+# Checks for libtlm-nfc
+PKG_CHECK_MODULES([LIBTLM_NFC], [libtlm-nfc], [have_libtlm_nfc=yes], [have_libtlm_nfc=no])
+AM_CONDITIONAL(HAVE_LIBTLM_NFC, [test x$have_libtlm_nfc = xyes])
+if test "x$have_libtlm_nfc" = xyes; then
+    AC_DEFINE(HAVE_LIBTLM_NFC, [1], [Define if libtlm-nfc exists.])
+fi
+
 # Check library.
 PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], [have_check=yes], [have_check=no])
 AC_SUBST(CHECK_CFLAGS)
