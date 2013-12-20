@@ -190,6 +190,9 @@ groupadd -f -r gumd
 
 %changelog
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Removed dist spec packaging folder from main source tree
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
 - Release 0.0.1 (First release)
 
 * Mon Sep 02 2013 Imran Zaman <imran.zaman@intel.com>
