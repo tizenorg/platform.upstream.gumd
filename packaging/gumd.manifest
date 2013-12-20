@@ -1,1 +1,5 @@
-../dists/rpm/tizen/packaging/gumd.manifest
+<manifest>
+    <request>
+        <domain name="_"/>
+    </request>
+</manifest>
