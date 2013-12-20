@@ -1299,16 +1299,13 @@ START_TEST (test_daemon_group)
     fail_unless (error->code == GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER);
     g_error_free (error); error = NULL;
 
-    /* case 16: adding 'users' group should fail as it is added by default*/
+    /* case 16: adding user to 'users' group should succeed */
     g_object_unref (group);
     group = gumd_daemon_group_new (config);
     g_object_set (G_OBJECT (group), "grouptype", GUM_GROUPTYPE_USER,
             "groupname", "users", NULL);
     fail_unless (gumd_daemon_group_add_member (group, uid, TRUE, &error)
-            == FALSE);
-    fail_unless (error != NULL);
-    fail_unless (error->code == GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER);
-    g_error_free (error); error = NULL;
+            == TRUE);
 
     /* case 17: delete user from group and user does not exist*/
     g_object_unref (group);

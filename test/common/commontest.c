@@ -154,7 +154,7 @@ START_TEST (test_config)
             GUM_CONFIG_GENERAL_DEF_USR_GROUPS) == NULL);
 
     fail_if (g_strcmp0 (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_DEF_USR_GROUPS), "users") != 0);
+            GUM_CONFIG_GENERAL_DEF_USR_GROUPS), "") != 0);
 
     g_unsetenv ("UM_CONF_FILE");
 
