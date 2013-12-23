@@ -18,3 +18,10 @@ EXTRA_DIST = dists tools
 
 valgrind:
 	cd test; make valgrind
+
+lcov: check
+	@rm -rf lcov-report
+	@lcov -c --directory src/ --output-file lcov.output
+	@genhtml lcov.output --output-directory lcov-report
+	@rm lcov.output
+	@echo "Coverage report is in file://$(abs_srcdir)/lcov-report/index.html"

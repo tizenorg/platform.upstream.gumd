@@ -63,14 +63,14 @@ Requires:   libgum-common = %{version}-%{release}
 %{summary}.
 
 
-%package -n %{name}-devel
+%package devel
 Summary:    Development files for user management daemon
 Group:      Development/Daemons
 Requires:   %{name} = %{version}-%{release}
 Requires:   libgum-common-devel = %{version}-%{release}
 
 
-%description -n %{name}-devel
+%description devel
 %{summary}.
 
 
@@ -152,7 +152,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %endif
 
 
-%files %{name}
+%files
 %defattr(-,root,root,-)
 %manifest %{_datadir}/%{name}.manifest
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
@@ -169,7 +169,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %endif
 
 
-%files -n %{name}-devel
+%files devel
 %defattr(-,root,root,-)
 %{_libdir}/pkgconfig/%{name}.pc
 
