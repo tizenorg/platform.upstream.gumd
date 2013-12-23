@@ -55,10 +55,10 @@ if test "x$CRYPT_LIB" = "x" ; then
     AC_MSG_ERROR("CRYPT Library is required")
 fi
 
-# Enable gcov
-AC_ARG_ENABLE(gcov, [  --enable-gcov build to be used for coverage analysis ],
-          [enable_gcov=yes], [enable_gcov=no])
-if test "x$enable_gcov" = "xyes" ; then
+# Enable cov
+AC_ARG_ENABLE(cov, [  --enable-cov build to be used for coverage analysis ],
+          [enable_cov=yes], [enable_cov=no])
+if test "x$enable_cov" = "xyes" ; then
     GCOV_CFLAGS="-ftest-coverage -fprofile-arcs"
     GCOV_LIBS="-lgcov"
 fi
@@ -130,6 +130,10 @@ fi
 # Enable tests
 AC_ARG_ENABLE(tests, [  --enable-tests  enable tests features],
           [enable_tests=yes], [enable_tests=no])
+if test "x$enable_cov" = "xyes" ; then
+    # Enable tests automatically when code coverage is enabled
+    enable_tests="yes"
+fi
 echo "--------------------------------"
 echo "Enable tests features: '$enable_tests'"
 if test "x$enable_tests" = "xyes" ; then
