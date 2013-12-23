@@ -27,3 +27,4 @@ daemontest_LDADD = \
     $(GUMD_LIBS) \
     $(CHECK_LIBS)
 
+CLEANFILES = *.gcno *.gcda

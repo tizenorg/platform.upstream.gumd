@@ -44,5 +44,5 @@ EXTRA_DIST = \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgum.pc
 
-CLEANFILES = 
+CLEANFILES = *.gcno *.gcda
 

@@ -20,3 +20,5 @@ commontest_LDADD = \
     $(top_builddir)/src/common/libgum-common.la \
     $(GUMD_LIBS) \
     $(CHECK_LIBS)
+
+CLEANFILES = *.gcno *.gcda

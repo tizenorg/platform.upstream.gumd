@@ -65,5 +65,5 @@ pkgconfig_DATA = libgum-common.pc
 
 sysconf_DATA = gum.conf
 
-CLEANFILES = 
+CLEANFILES = *.gcno *.gcda
 
