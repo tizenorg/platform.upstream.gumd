@@ -44,6 +44,7 @@
 #include "common/gum-lock.h"
 #include "common/gum-string-utils.h"
 #include "common/gum-defines.h"
+#include "common/gum-dictionary.h"
 
 gboolean
 _create_file (
@@ -783,6 +784,75 @@ START_TEST (test_crypt)
 }
 END_TEST
 
+START_TEST (test_error)
+{
+    DBG("");
+
+    GVariant *var = NULL;
+    GError *err = GUM_GET_ERROR_FOR_ID (GUM_ERROR_INVALID_INPUT, "testerror");
+    fail_if (err == NULL);
+
+    var = gum_error_to_variant (err);
+    fail_if (var == NULL);
+
+    g_error_free (err); err = NULL;
+    err = gum_error_new_from_variant (var);
+
+    fail_if (err == NULL);
+    fail_if (err->code != GUM_ERROR_INVALID_INPUT);
+    fail_if (g_strcmp0 (err->message, "testerror") != 0);
+
+    g_error_free (err);
+    g_variant_unref (var);
+}
+END_TEST
+
+START_TEST (test_dictionary)
+{
+    DBG("");
+    gboolean data1 = FALSE;
+    GVariant *var = NULL;
+    gint64 data2 = 123;
+    guint64 data3 = 789;
+
+    GumDictionary* dict = gum_dictionary_new ();
+    fail_if (dict == NULL);
+    fail_if (gum_dictionary_get_boolean (dict,
+            "key1", &data1) == TRUE);
+
+    fail_if (gum_dictionary_set_boolean (dict,
+            "key1", data1) == FALSE);
+    data1 = TRUE;
+    fail_if (gum_dictionary_get_boolean (dict,
+            "key1", &data1) == FALSE);
+    fail_if (data1 == TRUE);
+    fail_if (gum_dictionary_get_boolean (dict,
+            "key1", &data1) == FALSE);
+
+    fail_if (gum_dictionary_set_int64 (dict,
+            "key2", data2) == FALSE);
+    data2 = 456;
+    fail_if (gum_dictionary_set_uint64 (dict,
+            "key3", data3) == FALSE);
+
+    var = gum_dictionary_to_variant (dict);
+    fail_if (var == NULL);
+    g_hash_table_unref (dict);
+
+    dict = gum_dictionary_new_from_variant (var);
+    fail_if (dict == NULL);
+
+    fail_if (gum_dictionary_get_int64 (dict,
+            "key2", &data2) == FALSE);
+    fail_if (data2 != 123);
+    fail_if (gum_dictionary_get_uint64 (dict,
+            "key3", &data3) == FALSE);
+
+    g_variant_unref (var);
+    g_hash_table_unref (dict);
+}
+END_TEST
+
 Suite* common_suite (void)
 {
     Suite *s = suite_create ("Common library");
@@ -797,6 +867,8 @@ Suite* common_suite (void)
     tcase_add_test (tc_core, test_file);
     tcase_add_test (tc_core, test_validate);
     tcase_add_test (tc_core, test_crypt);
+    tcase_add_test (tc_core, test_error);
+    tcase_add_test (tc_core, test_dictionary);
     suite_add_tcase (s, tc_core);
     return s;
 }
