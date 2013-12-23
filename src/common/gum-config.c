@@ -211,7 +211,13 @@ _load_config (
 
             DBG ("found config : '%s/%s' - '%s'", groups[i], keys[j], value);
 
-            gum_config_set_string (self, key, value);
+            if (g_strcmp0 (GUM_CONFIG_DBUS_DAEMON_TIMEOUT, key) == 0 ||
+                g_strcmp0 (GUM_CONFIG_DBUS_USER_TIMEOUT, key) == 0 ||
+                g_strcmp0 (GUM_CONFIG_DBUS_GROUP_TIMEOUT, key) == 0) {
+                gum_config_set_int (self, key, atoi (value));
+            } else {
+                gum_config_set_string (self, key, value);
+            }
 
             g_free (key);
             g_free (value);
@@ -233,19 +239,19 @@ _load_environment (
         GumConfig *self)
 {
     const gchar *e_val = 0;
-    guint timeout = 0;
+    gint timeout = 0;
     
     e_val = g_getenv ("UM_DAEMON_TIMEOUT");
     if (e_val && (timeout = atoi(e_val)))
-        gum_config_set_string (self, GUM_CONFIG_DBUS_DAEMON_TIMEOUT, e_val);
+        gum_config_set_int (self, GUM_CONFIG_DBUS_DAEMON_TIMEOUT, timeout);
 
     e_val = g_getenv ("UM_USER_TIMEOUT");
     if (e_val && (timeout = atoi(e_val)))
-        gum_config_set_string (self, GUM_CONFIG_DBUS_USER_TIMEOUT, e_val);
+        gum_config_set_int (self, GUM_CONFIG_DBUS_USER_TIMEOUT, timeout);
 
     e_val = g_getenv ("UM_GROUP_TIMEOUT");
     if (e_val && (timeout = atoi(e_val)))
-        gum_config_set_string (self, GUM_CONFIG_DBUS_GROUP_TIMEOUT, e_val);
+        gum_config_set_int (self, GUM_CONFIG_DBUS_GROUP_TIMEOUT, timeout);
 
     e_val = g_getenv ("UM_PASSWD_FILE");
     if (e_val)
@@ -290,8 +296,9 @@ gum_config_get_int (
         const gchar *key,
         gint retval)
 {
-    const gchar *str_value = gum_config_get_string (self, key);
-    return (gint) (str_value ? atoi (str_value) : retval);
+    gint32 value = retval;
+    gum_dictionary_get_int32 (self->priv->config_table, key, &value);
+    return value;
 }
 
 /**
@@ -308,15 +315,9 @@ gum_config_set_int (
         const gchar *key,
         gint value)
 {
-    gchar *s_value = 0;
     g_return_if_fail (self && GUM_IS_CONFIG (self));
 
-    s_value = g_strdup_printf ("%d", value);
-    if (!s_value) return;
-
-    gum_config_set_string (self, (gpointer) key, s_value);
-
-    g_free (s_value);
+    gum_dictionary_set_int32 (self->priv->config_table, key, value);
 }
 
 /**
@@ -336,9 +337,8 @@ gum_config_get_uint (
         const gchar *key,
         guint retval)
 {
-    guint value;
-    const gchar *str_value = gum_config_get_string (self, key);
-    if (!str_value || sscanf (str_value,"%u",&value) <= 0) value = retval;
+    guint32 value = retval;
+    gum_dictionary_get_uint32 (self->priv->config_table, key, &value);
     return value;
 }
 
@@ -356,14 +356,9 @@ gum_config_set_uint (
         const gchar *key,
         guint value)
 {
-    gchar *s_value = 0;
     g_return_if_fail (self && GUM_IS_CONFIG (self));
 
-    s_value = g_strdup_printf ("%u", value);
-    if (!s_value) return;
-
-    gum_config_set_string (self, (gpointer) key, s_value);
-    g_free (s_value);
+    gum_dictionary_set_uint32 (self->priv->config_table, key, value);
 }
 
 /**
@@ -383,11 +378,7 @@ gum_config_get_string (
 {
     g_return_val_if_fail (self && GUM_IS_CONFIG (self), NULL);
 
-    GVariant* value = gum_dictionary_get (self->priv->config_table,
-                                               (gpointer) key);
-    if (!value) return NULL;
-
-    return g_variant_get_string (value, NULL);
+    return gum_dictionary_get_string (self->priv->config_table, key);
 }
 
 /**
@@ -406,10 +397,7 @@ gum_config_set_string (
 {
     g_return_if_fail (self && GUM_IS_CONFIG (self));
 
-    gum_dictionary_set (self->priv->config_table,
-                             (gpointer) key,
-                             g_variant_new_string (value));
-
+    gum_dictionary_set_string (self->priv->config_table, key, value);
 }
 
 static void
