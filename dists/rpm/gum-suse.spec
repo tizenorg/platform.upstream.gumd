@@ -189,6 +189,13 @@ groupadd -f -r gumd
 
 
 %changelog
+* Mon Dec 23 2013 Imran Zaman <imran.zaman@intel.com>
+- added test cases for error and dictionary objects
+- utilized dictionary functions for get/set key-value pairs
+- clean up generated coverage files on make clean
+- enable tests by default if coverage is enabled
+- exclude external and generated dbus files from code coverage calculation
+
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
 - Corrected spec and changes file names 
 

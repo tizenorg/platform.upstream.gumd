@@ -19,3 +19,5 @@ if HAVE_LIBTLM_NFC
 gum_example_CPPFLAGS += $(LIBTLM_NFC_CFLAGS)
 gum_example_LDADD += $(LIBTLM_NFC_LIBS)
 endif
+
+CLEANFILES = *.gcno *.gcda

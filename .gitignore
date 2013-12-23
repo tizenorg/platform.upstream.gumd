@@ -22,6 +22,8 @@ m4/lt*.m4
 *.stamp
 *.typelib
 *.tar.*
+*.gcno
+*.gcda
 build-aux
 *dbus*gen*
 src/common/gum.conf

@@ -37,3 +37,5 @@ install-exec-hook:
 	chown root $(DESTDIR)$(bindir)/gumd || true
 	chmod u+s $(DESTDIR)$(bindir)/gumd || true
 endif
+
+CLEANFILES = *.gcno *.gcda

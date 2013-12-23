@@ -26,3 +26,5 @@ clienttest_LDADD = \
     $(top_builddir)/src/lib/libgum.la \
     $(GUMD_LIBS) \
     $(CHECK_LIBS)
+
+CLEANFILES = *.gcno *.gcda

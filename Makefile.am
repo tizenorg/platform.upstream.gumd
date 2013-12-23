@@ -21,7 +21,8 @@ valgrind:
 
 lcov: check
 	@rm -rf lcov-report
-	@lcov -c --directory src/ --output-file lcov.output
+	@lcov --no-external -c --directory src/ --output-file cov.output
+	@lcov -r cov.output common/dbus/\* daemon/dbus/\*.c --output-file lcov.output
 	@genhtml lcov.output --output-directory lcov-report
-	@rm lcov.output
+	@rm lcov.output cov.output
 	@echo "Coverage report is in file://$(abs_srcdir)/lcov-report/index.html"

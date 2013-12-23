@@ -389,7 +389,7 @@ EXTRA_DIST = \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgum-common.pc
 sysconf_DATA = gum.conf
-CLEANFILES = 
+CLEANFILES = *.gcno *.gcda
 all: all-recursive
 
 .SUFFIXES:

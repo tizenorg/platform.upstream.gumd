@@ -797,7 +797,7 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
-enable_gcov
+enable_cov
 enable_distcheck
 enable_dbus_type
 enable_tests
@@ -1468,7 +1468,7 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-gcov build to be used for coverage analysis
+  --enable-cov build to be used for coverage analysis
   --enable-distcheck build for distcheck target
   --enable-dbus-type=dbus-type specify daemon dbus type:
            p2p: uses peer to peer dbus
@@ -12271,15 +12271,15 @@ if test "x$CRYPT_LIB" = "x" ; then
     as_fn_error $? "\"CRYPT Library is required\"" "$LINENO" 5
 fi
 
-# Enable gcov
-# Check whether --enable-gcov was given.
-if test "${enable_gcov+set}" = set; then :
-  enableval=$enable_gcov; enable_gcov=yes
+# Enable cov
+# Check whether --enable-cov was given.
+if test "${enable_cov+set}" = set; then :
+  enableval=$enable_cov; enable_cov=yes
 else
-  enable_gcov=no
+  enable_cov=no
 fi
 
-if test "x$enable_gcov" = "xyes" ; then
+if test "x$enable_cov" = "xyes" ; then
     GCOV_CFLAGS="-ftest-coverage -fprofile-arcs"
     GCOV_LIBS="-lgcov"
 fi
@@ -12575,6 +12575,10 @@ else
   enable_tests=no
 fi
 
+if test "x$enable_cov" = "xyes" ; then
+    # Enable tests automatically when code coverage is enabled
+    enable_tests="yes"
+fi
 echo "--------------------------------"
 echo "Enable tests features: '$enable_tests'"
 if test "x$enable_tests" = "xyes" ; then
