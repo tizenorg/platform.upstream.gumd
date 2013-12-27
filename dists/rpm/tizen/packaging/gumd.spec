@@ -15,6 +15,7 @@ URL: https://github.com/01org/gumd
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
 Source1003:     libgum-common.manifest
+Obsoletes: gum
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
