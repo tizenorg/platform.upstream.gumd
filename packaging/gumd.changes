@@ -1,0 +1,21 @@
+* Fri Dec 27 2013 Imran Zaman <imran.zaman@intel.com>
+- Obsoletes gum package as the package is renamed to gumd
+
+* Mon Dec 23 2013 Imran Zaman <imran.zaman@intel.com>
+- added test cases for error and dictionary objects
+- utilized dictionary functions for get/set key-value pairs
+- clean up generated coverage files on make clean
+- enable tests by default if coverage is enabled
+- exclude external and generated dbus files from code coverage calculation
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Corrected spec and changes file names 
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Removed dist spec packaging folder from main source tree
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Release 0.0.1  (First release)
+
+* Mon Sep 02 2013 Imran Zaman <imran.zaman@intel.com>
+- Initial RPM packaging
