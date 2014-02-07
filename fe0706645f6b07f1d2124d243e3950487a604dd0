@@ -1,0 +1,9 @@
+Code-Review+2: Patrick McCarty <patrick.mccarty@linux.intel.com>
+Verified+1: Patrick McCarty <patrick.mccarty@linux.intel.com>
+Code-Review+1: Lukasz Stelmach <l.stelmach@samsung.com>
+Code-Review+1: Karol Lewandowski <k.lewandowsk@samsung.com>
+Submitted-by: Patrick McCarty <patrick.mccarty@linux.intel.com>
+Submitted-at: Fri, 07 Feb 2014 07:43:02 -0800
+Reviewed-on: https://review.tizen.org/gerrit/15565
+Project: platform/upstream/gumd
+Branch: refs/heads/tizen
