@@ -1,3 +1,7 @@
+* Fri Feb 07 2014 Patrick McCarty <patrick.mccarty@linux.intel.com> fe07066
+- Move the packaging files into the packaging/ directory, since a symlink with
+  the same name does not work with 'gbs build'. (DEVT-148)
+
 * Fri Dec 27 2013 Imran Zaman <imran.zaman@intel.com>
 - Obsoletes gum package as the package is renamed to gumd
 
