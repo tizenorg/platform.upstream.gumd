@@ -13,7 +13,7 @@ export DH_OPTIONS
 	dh $@ --parallel
 
 override_dh_auto_configure:
-	dh_auto_configure -- --enable-dbus-type=session
+	dh_auto_configure -- --enable-dbus-type=system
 
 override_dh_auto_test:
 	true
