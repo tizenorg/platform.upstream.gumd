@@ -7,12 +7,13 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.1
+Version: 0.0.2
 Release: 1
-Group: System/Libraries
+Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
+Requires:   libgum = %{version}-%{release}
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
@@ -32,49 +33,9 @@ BuildRequires: pkgconfig(gmodule-2.0)
 %{summary}.
 
 
-%package -n libgum-common
-Summary:    User management common library
-Group:      System/Libraries
-
-
-%description -n libgum-common
-%{summary}.
-
-
-%package -n libgum-common-devel
-Summary:    Development files for user management common library
-Group:      Development/Libraries
-Requires:   libgum-common = %{version}-%{release}
-
-
-%description -n libgum-common-devel
-%{summary}.
-
-
-%package %{name}
-Summary:    User management daemon
-Group:      System/Daemons
-Requires:   libgum-common = %{version}-%{release}
-
-
-%description %{name}
-%{summary}.
-
-
-%package -n %{name}-devel
-Summary:    Development files for user management daemon
-Group:      Development/Daemons
-Requires:   %{name} = %{version}-%{release}
-Requires:   libgum-common-devel = %{version}-%{release}
-
-%description -n %{name}-devel
-%{summary}.
-
-
 %package -n libgum
 Summary:    User management client library
 Group:      System/Libraries
-Requires:   libgum-common = %{version}-%{release}
 
 
 %description -n libgum
@@ -85,7 +46,6 @@ Requires:   libgum-common = %{version}-%{release}
 Summary:    Development files for user management client library
 Group:      Development/Libraries
 Requires:   libgum = %{version}-%{release}
-Requires:   libgum-common-devel = %{version}-%{release}
 
 
 %description -n libgum-devel
@@ -131,27 +91,28 @@ groupadd -f -r gumd
 %postun -p /sbin/ldconfig
 
 
-%files -n libgum-common
+%files -n libgum
 %defattr(-,root,root,-)
-%{_libdir}/libgum-common*.so.*
+%{_libdir}/libgum*.so.*
 
 
-%files -n libgum-common-devel
+%files -n libgum-devel
 %defattr(-,root,root,-)
-%{_includedir}/gum/common/*
-%{_libdir}/libgum-common*.so
-%{_libdir}/libgum-common*.la
-%{_libdir}/pkgconfig/libgum-common.pc
-%config(noreplace) %{_sysconfdir}/gum.conf
+%{_includedir}/gum/*
+%{_libdir}/libgum*.so
+%{_libdir}/libgum*.la
+%{_libdir}/pkgconfig/libgum.pc
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
+%{_bindir}/gum-example
 
 
-%files %{name}
+%files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}
+%config(noreplace) %{_sysconfdir}/gumd.conf
 %if %{dbus_type} == "session"
 %dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service
@@ -164,31 +125,15 @@ groupadd -f -r gumd
 %endif
 
 
-%files -n %{name}-devel
-%defattr(-,root,root,-)
-%{_libdir}/pkgconfig/%{name}.pc
-
-
-%files -n libgum
-%defattr(-,root,root,-)
-%{_libdir}/libgum.so.*
-
-
-%files -n libgum-devel
-%defattr(-,root,root,-)
-%{_includedir}/gum/*.h
-%{_libdir}/libgum.so
-%{_libdir}/libgum.la
-%{_libdir}/pkgconfig/libgum.pc
-%{_bindir}/gum-example
-
-
 %files doc
 %defattr(-,root,root,-)
 %{_datadir}/gtk-doc/html/gumd/*
 
 
 %changelog
+* Wed Feb 12 2014 Imran Zaman <imran.zaman@intel.com>
+- Simplified gumd packages 
+
 * Mon Dec 23 2013 Imran Zaman <imran.zaman@intel.com>
 - added test cases for error and dictionary objects
 - utilized dictionary functions for get/set key-value pairs

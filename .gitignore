@@ -26,7 +26,7 @@ m4/lt*.m4
 *.gcda
 build-aux
 *dbus*gen*
-src/common/gum.conf
+src/daemon/gumd.conf
 src/daemon/gumd
 src/daemon/dbus/gumd-dbus.conf
 test/common/commontest

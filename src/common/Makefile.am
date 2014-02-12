@@ -54,16 +54,9 @@ libgum_common_la_SOURCES = \
 dist_libgum_common_la_SOURCES = \
     $(NULL)
 
-EXTRA_DIST =            \
-      libgum-common.pc.in \
-      gum.conf.in \
+EXTRA_DIST =     \
       gum-dbus.h \
       gum-defines.h
-
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libgum-common.pc
-
-sysconf_DATA = gum.conf
 
 CLEANFILES = *.gcno *.gcda
 

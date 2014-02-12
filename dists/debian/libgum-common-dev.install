@@ -1,5 +1,0 @@
-/usr/include/gum/common/*
-/usr/lib/libgum-common*.so
-/usr/lib/libgum-common*.la
-/usr/lib/pkgconfig/libgum-common.pc
-/usr/share/dbus-1/interfaces/*UserManagement*.xml
