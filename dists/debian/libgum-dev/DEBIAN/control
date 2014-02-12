@@ -1,0 +1,11 @@
+Package: libgum-dev
+Source: gumd
+Version: 0.0.2-1
+Architecture: amd64
+Maintainer: Imran Zaman <imran.zaman@intel.com>
+Installed-Size: 148
+Depends: libc6 (>= 2.2.5), libglib2.0-0 (>= 2.28.0), libgum (= 0.0.2-1)
+Section: admin
+Priority: extra
+Description: development files for client library
+ Headers and libraries.

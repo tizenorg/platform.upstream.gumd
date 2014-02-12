@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([gumd], [0.0.1],[],[],[https://github.com/01org/gumd])
+AC_INIT([gumd], [0.0.2],[],[],[https://github.com/01org/gumd])
 AC_CONFIG_SRCDIR([src/daemon/main.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -284,15 +284,11 @@ AC_CONFIG_FILES([
 Makefile
 src/Makefile
 src/common/Makefile
-src/common/gum.conf
-src/common/libgum-common.pc
-src/common/libgum-common-uninstalled.pc
 src/common/dbus/Makefile
-src/daemon/gumd.pc
-src/daemon/gumd-uninstalled.pc
 src/daemon/Makefile
 src/daemon/dbus/Makefile
 src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service
+src/daemon/gumd.conf
 src/daemon/dbus/gumd-dbus.conf
 src/lib/Makefile
 src/lib/libgum.pc

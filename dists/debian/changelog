@@ -1,3 +1,9 @@
+gumd (0.0.2-1) unstable; urgency=low
+
+  * Simplified gumd packages
+
+ -- Imran Zaman <imran.zaman@intel.com>  Wed, 12 Feb  2014 10:24:53 +0300
+
 gum (0.0.1-1) unstable; urgency=low
 
   * Initial Release.

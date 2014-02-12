@@ -1,0 +1,10 @@
+Package: gumd
+Version: 0.0.2-1
+Architecture: amd64
+Maintainer: Imran Zaman <imran.zaman@intel.com>
+Installed-Size: 165
+Depends: libc6 (>= 2.10), libglib2.0-0 (>= 2.31.8), libgum (= 0.0.2-1)
+Section: admin
+Priority: extra
+Description: User management daemon
+ User management daemon provides interface to add/delete/update users/groups

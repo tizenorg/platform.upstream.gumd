@@ -1,0 +1,10 @@
+Package: libgum
+Source: gumd
+Version: 0.0.2-1
+Architecture: amd64
+Maintainer: Imran Zaman <imran.zaman@intel.com>
+Installed-Size: 221
+Depends: libc6 (>= 2.10), libglib2.0-0 (>= 2.31.8)
+Section: admin
+Priority: extra
+Description: Client library for user management
