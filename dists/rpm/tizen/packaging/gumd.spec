@@ -8,13 +8,14 @@ Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.2
 Release: 1
-Group: System/Libraries
+Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
 Obsoletes: gum
+Requires:   libgum = %{version}-%{release}
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
@@ -50,16 +51,6 @@ Requires:   libgum = %{version}-%{release}
 
 
 %description -n libgum-devel
-%{summary}.
-
-
-%package %{name}
-Summary:    User management daemon
-Group:      System/Daemons
-Requires:   libgum = %{version}-%{release}
-
-
-%description %{name}
 %{summary}.
 
 

@@ -9,10 +9,11 @@ Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.2
 Release: 1
-Group: System/Libraries
+Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
+Requires:   libgum = %{version}-%{release}
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
@@ -29,16 +30,6 @@ BuildRequires: pkgconfig(gmodule-2.0)
 
 
 %description
-%{summary}.
-
-
-%package %{name}
-Summary:    User management daemon
-Group:      System/Daemons
-Requires:   libgum = %{version}-%{release}
-
-
-%description %{name}
 %{summary}.
 
 
@@ -117,7 +108,7 @@ groupadd -f -r gumd
 %{_bindir}/gum-example
 
 
-%files %{name}
+%files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}
@@ -141,7 +132,7 @@ groupadd -f -r gumd
 
 %changelog
 * Wed Feb 12 2014 Imran Zaman <imran.zaman@intel.com>
-- Simplified gumd packages 
+- Simplified gumd packages
 
 * Mon Dec 23 2013 Imran Zaman <imran.zaman@intel.com>
 - added test cases for error and dictionary objects
