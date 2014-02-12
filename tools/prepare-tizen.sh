@@ -14,8 +14,12 @@ echo "CURR dir = $currdir"
 
 mkdir -p $2 && \
 cd $2 && \
-git rm -r *; rm -f packaging;
+git rm -r *; rm -rf packaging;
 tar -xzvf $currdir/$1 -C $2 --strip-components 1 && \
-ln -s dists/rpm/tizen/packaging && \
+mkdir -p packaging && \
+cp dists/rpm/tizen/packaging/gumd.spec packaging/ && \
+cp dists/rpm/tizen/packaging/gumd.manifest packaging/ && \
+cp dists/rpm/tizen/packaging/gumd.changes packaging/ && \
+cp dists/rpm/tizen/packaging/libgum.manifest packaging/ && \
 git add -f *;
 cp $currdir/.gitignore $2/; 

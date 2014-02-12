@@ -27,10 +27,9 @@ gumd_LDADD = \
     $(NULL)
 
 EXTRA_DIST = \
-      gumd.pc.in
+      gumd.conf.in
 
-pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gumd.pc
+sysconf_DATA = gumd.conf
 
 if SET_PERMISSIONS
 install-exec-hook:

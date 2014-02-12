@@ -26,12 +26,13 @@ m4/lt*.m4
 *.gcda
 build-aux
 *dbus*gen*
-src/common/gum.conf
+src/daemon/gumd.conf
 src/daemon/gumd
 src/daemon/dbus/gumd-dbus.conf
 test/common/commontest
 test/daemon/daemontest
 test/lib/clienttest
+test/data/services/org.tizen.SecurityAccounts.gUserManagement.service
 test/data/test-gumd-dbus.conf
 examples/gum-example
 stamp-h1
