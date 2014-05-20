@@ -1,3 +1,7 @@
+* Tue May 20 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug#TIVI-3170 (fixed smack labels for newly created files and folders
+  as reported in https://bugs.tizen.org/jira/browse/TIVI-3170)
+
 * Wed Feb 12 2014 Imran Zaman <imran.zaman@intel.com>
 - Simplified gumd packages for Tizen and SUSE
 - Simplified gumd packages
@@ -18,7 +22,7 @@
 - exclude external and generated dbus files from code coverage calculation
 
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
-- Corrected spec and changes file names 
+- Corrected spec and changes file names
 
 * Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
 - Removed dist spec packaging folder from main source tree

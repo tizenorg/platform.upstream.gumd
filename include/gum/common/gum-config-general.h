@@ -258,4 +258,21 @@
  */
 #define GUM_CONFIG_GENERAL_ENCRYPT_METHOD    GUM_CONFIG_GENERAL \
 	                                          "/ENCRYPT_METHOD"
+
+/**
+ * GUM_CONFIG_GENERAL_SMACK64_NEW_FILES:
+ *
+ * Value used to set the smack label for newly created files and folders.
+ */
+#define GUM_CONFIG_GENERAL_SMACK64_NEW_FILES    GUM_CONFIG_GENERAL \
+                                              "/SMACK64_NEW_FILES"
+
+/**
+ * GUM_CONFIG_GENERAL_SMACK64_USER_FILES:
+ *
+ * Value used to set the smack label for User files and folders.
+ */
+#define GUM_CONFIG_GENERAL_SMACK64_USER_FILES   GUM_CONFIG_GENERAL \
+                                              "/SMACK64_USER_FILES"
+
 #endif /* __GUM_GENERAL_CONFIG_H_ */

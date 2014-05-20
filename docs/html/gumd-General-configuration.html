@@ -56,6 +56,8 @@
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS" title="GUM_CONFIG_GENERAL_SHADOW_FILE">GUM_CONFIG_GENERAL_SHADOW_FILE</a>
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHELL:CAPS" title="GUM_CONFIG_GENERAL_SHELL">GUM_CONFIG_GENERAL_SHELL</a>
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SKEL-DIR:CAPS" title="GUM_CONFIG_GENERAL_SKEL_DIR">GUM_CONFIG_GENERAL_SKEL_DIR</a>
+#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_NEW_FILES">GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</a>
+#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_USER_FILES">GUM_CONFIG_GENERAL_SMACK64_USER_FILES</a>
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MAX">GUM_CONFIG_GENERAL_SYS_GID_MAX</a>
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MIN">GUM_CONFIG_GENERAL_SYS_GID_MIN</a>
 #define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_UID_MAX">GUM_CONFIG_GENERAL_SYS_UID_MAX</a>
@@ -241,6 +243,22 @@ folder is copied to user home directory. Default value is '/etc/skel'
 <p>
 Can be overriden in debug builds by setting UM_SKEL_DIR
 environment variable.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</pre>
+<p>
+Value used to set the smack label for newly created files and folders.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_USER_FILES</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_USER_FILES</pre>
+<p>
+Value used to set the smack label for User files and folders.
 </p>
 </div>
 <hr>

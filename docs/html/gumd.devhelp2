@@ -61,6 +61,8 @@
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SHADOW_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SHELL" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHELL:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SKEL_DIR" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SKEL-DIR:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SMACK64_NEW_FILES" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SMACK64_USER_FILES" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_UID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS"/>

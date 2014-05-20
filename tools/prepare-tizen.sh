@@ -21,5 +21,6 @@ cp dists/rpm/tizen/packaging/gumd.spec packaging/ && \
 cp dists/rpm/tizen/packaging/gumd.manifest packaging/ && \
 cp dists/rpm/tizen/packaging/gumd.changes packaging/ && \
 cp dists/rpm/tizen/packaging/libgum.manifest packaging/ && \
+cp dists/rpm/tizen/packaging/gumd-tizen.conf packaging/ && \
 git add -f *;
 cp $currdir/.gitignore $2/; 

@@ -14,6 +14,7 @@ Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
+Source1003:     %{name}-tizen.conf
 Obsoletes: gum
 Requires:   libgum = %{version}-%{release}
 %if %{dbus_type} != "p2p"
@@ -84,6 +85,7 @@ rm -rf %{buildroot}
 %make_install
 cp -a %{SOURCE1001} %{buildroot}%{_datadir}/%{name}.manifest
 cp -a %{SOURCE1002} %{buildroot}%{_datadir}/libgum.manifest
+cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}.conf
 
 
 %post
@@ -117,7 +119,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %manifest %{_datadir}/%{name}.manifest
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}
-%config(noreplace) %{_sysconfdir}/gumd.conf
+%config(noreplace) %{_sysconfdir}/%{name}.conf
 %if %{dbus_type} == "session"
 %dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service
