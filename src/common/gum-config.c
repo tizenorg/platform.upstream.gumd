@@ -116,11 +116,22 @@ G_DEFINE_TYPE (GumConfig, gum_config, G_TYPE_OBJECT);
 #define PASS_MIN_DAYS  0
 #define PASS_WARN_AGE  7
 
+static gchar *
+_check_config_file (
+        const gchar *path)
+{
+    gchar *filename = g_build_filename (path, "gumd.conf", NULL);
+    DBG ("check config file at %s", filename);
+    if (g_access (filename, R_OK) == 0)
+        return filename;
+    g_free (filename);
+    return NULL;
+}
+
 static gboolean
 _load_config (
         GumConfig *self)
 {
-    gchar *def_config;
     GError *err = NULL;
     gchar **groups = NULL;
     gsize n_groups = 0;
@@ -131,41 +142,30 @@ _load_config (
     const gchar * const *sysconfdirs;
 
     if (!self->priv->config_file_path) {
-        def_config = g_strdup (g_getenv ("UM_CONF_FILE"));
-        if (!def_config)
-            def_config = g_build_filename (g_get_user_config_dir(),
-                                           "gum/gum.conf",
-                                           NULL);
-        if (g_access (def_config, R_OK) == 0) {
-            self->priv->config_file_path = def_config;
-        } else {
-            g_free (def_config);
-            sysconfdirs = g_get_system_config_dirs ();
-            while (*sysconfdirs != NULL) {
-                def_config = g_build_filename (*sysconfdirs,
-                                               "gum/gum.conf",
-                                               NULL);
-                if (g_access (def_config, R_OK) == 0) {
-                    self->priv->config_file_path = def_config;
-                    break;
-                }
-                g_free (def_config);
-                sysconfdirs++;
+        const gchar *def_config = g_getenv ("UM_CONF_FILE");
+        if (def_config)
+            self->priv->config_file_path = _check_config_file (def_config);
+    }
+
+    if (!self->priv->config_file_path) {
+        self->priv->config_file_path = _check_config_file (GUM_SYSCONF_DIR);
+    }
+
+    if (!self->priv->config_file_path) {
+        sysconfdirs = g_get_system_config_dirs ();
+        while (*sysconfdirs != NULL) {
+            self->priv->config_file_path = _check_config_file (*sysconfdirs);
+            if (self->priv->config_file_path) {
+                break;
             }
+            sysconfdirs++;
         }
     }
 #   else  /* ENABLE_DEBUG */
 #   ifndef GUM_SYSCONF_DIR
 #   error "System configuration directory not defined!"
 #   endif
-    def_config = g_build_filename (GUM_SYSCONF_DIR,
-                                   "gum/gum.conf",
-                                   NULL);
-    if (g_access (def_config, R_OK) == 0) {
-        self->priv->config_file_path = def_config;
-    } else {
-        g_free (def_config);
-    }
+    self->priv->config_file_path = _check_config_file (GUM_SYSCONF_DIR);
 #   endif  /* ENABLE_DEBUG */
 
     if (self->priv->config_file_path) {

@@ -126,7 +126,6 @@ _terminate (void)
 START_TEST (test_config)
 {
     DBG("");
-    gchar *fpath = NULL;
 
     GumConfig* config = gum_config_new ();
     fail_if(config == NULL);
@@ -134,9 +133,7 @@ START_TEST (test_config)
             GUM_CONFIG_DBUS_DAEMON_TIMEOUT, 0) != 0);
     g_object_unref(config);
 
-    fpath = g_build_filename (GUM_TEST_DATA_DIR, "gum-test.conf", NULL);
-    fail_if (g_setenv ("UM_CONF_FILE", fpath, TRUE) == FALSE);
-    g_free (fpath);
+    fail_if (g_setenv ("UM_CONF_FILE", GUM_TEST_DATA_DIR, TRUE) == FALSE);
     fail_if (g_setenv ("UM_DAEMON_TIMEOUT", "6", TRUE) == FALSE);
 
     config = gum_config_new ();

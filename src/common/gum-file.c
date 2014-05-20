@@ -29,6 +29,7 @@
 #if defined HAVE_SYS_XATTR_H
 #include <sys/xattr.h>
 #endif
+#include <linux/xattr.h>
 
 #include <unistd.h>
 #include <string.h>
@@ -106,6 +107,36 @@
  */
 
 #define GUM_PERM 0777
+
+static gboolean
+_set_smack64_attr (
+        const gchar *path,
+        const gchar *key)
+{
+#if defined(HAVE_LSETXATTR)
+    GumConfig *config = NULL;
+    ssize_t len = 0;
+
+    config = gum_config_new ();
+    const gchar *smack_label = gum_config_get_string (config, key);
+    if (smack_label) {
+        DBG ("Set smack label %s for path %s with len %d",smack_label, path,
+                (int)len);
+        len = strlen (smack_label);
+    }
+    /*
+     * Set smack64 extended attribute (when provided in the config file)
+     */
+    if (smack_label &&
+        len > 0 &&
+        setxattr (path, XATTR_NAME_SMACK, smack_label, len, 0) != 0) {
+        g_object_unref (config);
+        return FALSE;
+    }
+    g_object_unref (config);
+#endif
+    return TRUE;
+}
 
 static FILE *
 _open_file (
@@ -222,6 +253,13 @@ gum_file_open_db_files (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
                 "Unable to get/set file attributes", error, FALSE);
     }
+
+    if (!_set_smack64_attr (dup_file_path,
+            GUM_CONFIG_GENERAL_SMACK64_NEW_FILES)) {
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                 "Unable to set smack file attributes", error, FALSE);
+    }
+
     return TRUE;
 }
 
@@ -666,7 +704,10 @@ _copy_dir_recursively (
             DBG ("copy directory %s", src_filepath);
             gint mode = GUM_PERM & ~umask;
             g_mkdir_with_parents (dest_filepath, mode);
-            stop = !_copy_dir_recursively (src_filepath, dest_filepath, uid,
+            stop = !_set_smack64_attr (dest_filepath,
+                    GUM_CONFIG_GENERAL_SMACK64_USER_FILES);
+            if (!stop)
+                stop = !_copy_dir_recursively (src_filepath, dest_filepath, uid,
                     gid, umask, NULL);
         } else {
             DBG ("copy file %s", src_filepath);
@@ -679,6 +720,8 @@ _copy_dir_recursively (
                 stop = TRUE;
                 goto _free_data;
             }
+            stop = !_set_smack64_attr (dest_filepath,
+                    GUM_CONFIG_GENERAL_SMACK64_USER_FILES);
         }
         if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
 
@@ -738,6 +781,12 @@ gum_file_create_home_dir (
         if (!g_file_test (home_dir, G_FILE_TEST_IS_DIR)) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                     "Home directory creation failure", error, FALSE);
+        }
+
+        if (!_set_smack64_attr (home_dir,
+                GUM_CONFIG_GENERAL_SMACK64_USER_FILES)) {
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                     "Unable to set smack64 home dir attr", error, FALSE);
         }
 
         /* when run in test mode, user may not exist */
