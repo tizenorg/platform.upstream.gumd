@@ -968,7 +968,7 @@ _lock_shadow_entry (
                     gboolean lock = *((gboolean *)user_data);
                     struct spwd *spent = g_malloc0 (sizeof (struct spwd));
                     _copy_shadow_struct (entry, spent, FALSE);
-                    g_free (spent->sp_pwdp);
+                    GUM_STR_FREE (spent->sp_pwdp);
                     if (lock && entry->sp_pwdp[0] != '!') {
                         /* entry is unlocked, lock it */
                         spent->sp_pwdp = g_strdup_printf ("!%s",entry->sp_pwdp);
@@ -1357,7 +1357,7 @@ _terminate_user (
 
     proxy = g_dbus_proxy_new_sync (connection,
         G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, NULL,
-        "org.freedesktop.login1", //destintation
+        "org.freedesktop.login1", //destination
         "/org/freedesktop/login1", //path
         "org.freedesktop.login1.Manager", //interface
         NULL, &error);

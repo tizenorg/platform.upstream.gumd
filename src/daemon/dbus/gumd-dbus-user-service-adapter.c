@@ -49,7 +49,7 @@ static GParamSpec *properties[N_PROPERTIES];
 typedef struct
 {
     gchar *peer_name;
-    GumdDbusUserAdapter *dbus_user;
+    GumdDbusUserAdapter *user_adapter;
     GumdDbusUserServiceAdapter *user_service;
 }PeerUserService;
 
@@ -189,11 +189,11 @@ static PeerUserService *
 _dbus_peer_user_new (
         GumdDbusUserServiceAdapter *self,
         gchar *peer_name,
-        GumdDbusUserAdapter *dbus_user)
+        GumdDbusUserAdapter *user_adapter)
 {
     PeerUserService *peer_user = g_malloc0 (sizeof (PeerUserService));
     peer_user->peer_name = peer_name;
-    peer_user->dbus_user = dbus_user;
+    peer_user->user_adapter = user_adapter;
     peer_user->user_service = self;
     return peer_user;
 }
@@ -205,7 +205,7 @@ _dbus_peer_user_free (
 {
     if (peer_user) {
         GUM_STR_FREE (peer_user->peer_name);
-        GUM_OBJECT_UNREF (peer_user->dbus_user);
+        GUM_OBJECT_UNREF (peer_user->user_adapter);
         peer_user->user_service = NULL;
         g_free (peer_user);
     }
@@ -218,8 +218,8 @@ _dbus_peer_user_remove (
 {
     GumdDbusUserServiceAdapter *self = GUMD_DBUS_USER_SERVICE_ADAPTER (
             user_data);
-    if (peer_user && GUMD_IS_DBUS_USER_ADAPTER(peer_user->dbus_user)) {
-        g_object_weak_unref (G_OBJECT (peer_user->dbus_user),
+    if (peer_user && GUMD_IS_DBUS_USER_ADAPTER(peer_user->user_adapter)) {
+        g_object_weak_unref (G_OBJECT (peer_user->user_adapter),
                 _on_dbus_user_adapter_disposed, user_data);
         _dbus_peer_user_free (peer_user, NULL);
         self->priv->peer_users = g_list_remove (self->priv->peer_users,
@@ -233,7 +233,7 @@ _dispose (
 {
     GumdDbusUserServiceAdapter *self = GUMD_DBUS_USER_SERVICE_ADAPTER (object);
 
-    DBG("- unregistering dbus user service. %d",
+    DBG("- unregistering dbus user service adapter (%p). %d", object,
             G_OBJECT (self->priv->daemon)->ref_count);
 
     if (self->priv->peer_users) {
@@ -261,6 +261,7 @@ _dispose (
 
     G_OBJECT_CLASS (gumd_dbus_user_service_adapter_parent_class)->dispose (
             object);
+    DBG ("user service adapter (%p) dispose end", object);
 }
 
 static void
@@ -268,12 +269,14 @@ _finalize (
         GObject *object)
 {
     GumdDbusUserServiceAdapter *self = GUMD_DBUS_USER_SERVICE_ADAPTER (object);
+    DBG ("user service adapter (%p) finalise beg", object);
 
     if (self->priv->peer_users) {
         g_list_free (self->priv->peer_users);
         self->priv->peer_users = NULL;
     }
 
+    DBG ("user service adapter (%p) finalize end", object);
     G_OBJECT_CLASS (gumd_dbus_user_service_adapter_parent_class)->finalize (
             object);
 }
@@ -337,12 +340,12 @@ _clear_cache_for_peer_name (
         PeerUserService *user_data)
 {
     g_return_if_fail (peer_user && user_data);
-    g_return_if_fail (GUMD_IS_DBUS_USER_ADAPTER (peer_user->dbus_user));
+    g_return_if_fail (GUMD_IS_DBUS_USER_ADAPTER (peer_user->user_adapter));
 
     if (g_strcmp0 (peer_user->peer_name, user_data->peer_name) == 0) {
         DBG ("removing dbus user '%p' for peer name %s from cache",
-                peer_user->dbus_user, peer_user->peer_name);
-        g_object_weak_unref (G_OBJECT (peer_user->dbus_user),
+                peer_user->user_adapter, peer_user->peer_name);
+        g_object_weak_unref (G_OBJECT (peer_user->user_adapter),
                 _on_dbus_user_adapter_disposed, peer_user->user_service);
         _dbus_peer_user_free (peer_user, NULL);
         user_data->user_service->priv->peer_users = g_list_remove (
@@ -367,7 +370,7 @@ _on_bus_name_lost (
     DBG ("(-)peer disappeared : %s", peer_name);
 
     peer_user.peer_name = (gchar *)peer_name;
-    peer_user.dbus_user = NULL;
+    peer_user.user_adapter = NULL;
     peer_user.user_service = self;
     g_list_foreach (self->priv->peer_users, (GFunc)_clear_cache_for_peer_name,
             (gpointer)&peer_user);
@@ -378,7 +381,7 @@ _on_bus_name_lost (
 static void
 _add_bus_name_watcher (
         GumdDbusUserServiceAdapter *self,
-        GumdDbusUserAdapter *dbus_user,
+        GumdDbusUserAdapter *user_adapter,
         GDBusMethodInvocation *invocation)
 {
     if (self->priv->dbus_server_type == GUMD_DBUS_SERVER_BUSTYPE_MSG_BUS) {
@@ -402,11 +405,12 @@ _clear_cache_for_user (
         PeerUserService *user_data)
 {
     g_return_if_fail (peer_user && user_data);
-    g_return_if_fail (GUMD_IS_DBUS_USER_ADAPTER (peer_user->dbus_user));
+    g_return_if_fail (GUMD_IS_DBUS_USER_ADAPTER (peer_user->user_adapter));
 
-    if (peer_user->dbus_user == user_data->dbus_user) {
-        DBG ("removing dbus user '%p' from cache", peer_user->dbus_user);
-        peer_user->dbus_user = NULL;
+    if (peer_user->user_adapter == user_data->user_adapter) {
+        DBG ("removing dbus user adapter '%p' from cache",
+                peer_user->user_adapter);
+        peer_user->user_adapter = NULL;
         _dbus_peer_user_free (peer_user, NULL);
         user_data->user_service->priv->peer_users = g_list_remove (
                 user_data->user_service->priv->peer_users,
@@ -425,7 +429,7 @@ _on_dbus_user_adapter_disposed (
 
     DBG ("Dbus user adapter object %p disposed", object);
 
-    peer_user.dbus_user = GUMD_DBUS_USER_ADAPTER (object);
+    peer_user.user_adapter = GUMD_DBUS_USER_ADAPTER (object);
     peer_user.user_service = self;
     g_list_foreach (self->priv->peer_users, (GFunc)_clear_cache_for_user,
             (gpointer)&peer_user);
@@ -454,7 +458,7 @@ _get_sender (
 }
 
 static GumdDbusUserAdapter *
-_create_and_cache_dbus_user (
+_create_and_cache_user_adapter (
         GumdDbusUserServiceAdapter *self,
         GumdDaemonUser *user,
         GDBusMethodInvocation *invocation)
@@ -462,7 +466,7 @@ _create_and_cache_dbus_user (
     GDBusConnection *connection = g_dbus_method_invocation_get_connection (
             invocation);
 
-    GumdDbusUserAdapter *dbus_user =
+    GumdDbusUserAdapter *user_adapter =
             gumd_dbus_user_adapter_new_with_connection (
                     g_object_ref (connection), user,
                     gumd_daemon_get_user_timeout (self->priv->daemon));
@@ -473,23 +477,24 @@ _create_and_cache_dbus_user (
 
     self->priv->peer_users = g_list_append (self->priv->peer_users,
             _dbus_peer_user_new (self, _get_sender (self, invocation),
-                    dbus_user));
-    g_object_weak_ref (G_OBJECT (dbus_user), _on_dbus_user_adapter_disposed,
+                    user_adapter));
+    g_object_weak_ref (G_OBJECT (user_adapter), _on_dbus_user_adapter_disposed,
             self);
 
     /* watchers used for msg-bus only */
-    _add_bus_name_watcher (self, dbus_user, invocation);
+    _add_bus_name_watcher (self, user_adapter, invocation);
 
-    return dbus_user;
+    DBG ("created user adapter %p for user %p", user_adapter, user);
+    return user_adapter;
 }
 
 static GumdDbusUserAdapter *
-_get_dbus_user_from_cache (
+_get_user_adapter_from_cache (
         GumdDbusUserServiceAdapter *self,
         GDBusMethodInvocation *invocation,
         uid_t uid)
 {
-    GumdDbusUserAdapter *dbus_user = NULL;
+    GumdDbusUserAdapter *user_adapter = NULL;
     PeerUserService *peer_user = NULL;
     GList *list = self->priv->peer_users;
     gchar *peer_name = NULL;
@@ -504,19 +509,20 @@ _get_dbus_user_from_cache (
     for ( ; list != NULL; list = g_list_next (list)) {
         peer_user = (PeerUserService *) list->data;
         if (g_strcmp0 (peer_name, peer_user->peer_name) == 0 &&
-            gumd_dbus_user_adapter_get_uid (peer_user->dbus_user) == uid) {
+            gumd_dbus_user_adapter_get_uid (peer_user->user_adapter) == uid) {
 
-            g_object_get (G_OBJECT (peer_user->dbus_user), "delete-later",
+            g_object_get (G_OBJECT (peer_user->user_adapter), "delete-later",
                     &delete_later, NULL);
             if (!delete_later) {
-                dbus_user = peer_user->dbus_user;
+                user_adapter = peer_user->user_adapter;
                 break;
             }
         }
     }
     g_free (peer_name);
 
-    return dbus_user;
+    DBG ("user adapter %p", user_adapter);
+    return user_adapter;
 }
 
 static gboolean
@@ -530,16 +536,17 @@ _handle_create_new_user (
 
     g_return_val_if_fail (self && GUMD_IS_DBUS_USER_SERVICE_ADAPTER(self),
             FALSE);
+    DBG ("");
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
     user = gumd_daemon_user_new (gumd_daemon_get_config (self->priv->daemon));
     if (user) {
-        GumdDbusUserAdapter *dbus_user = _create_and_cache_dbus_user (self,
-                user, invocation);
+        GumdDbusUserAdapter *user_adapter = _create_and_cache_user_adapter (
+                self, user, invocation);
         gum_dbus_user_service_complete_create_new_user (
                 self->priv->dbus_user_service, invocation,
-                gumd_dbus_user_adapter_get_object_path (dbus_user));
+                gumd_dbus_user_adapter_get_object_path (user_adapter));
     } else {
         g_dbus_method_invocation_return_gerror (invocation, error);
         g_error_free (error);
@@ -558,21 +565,24 @@ _handle_get_user (
 {
     GumdDaemonUser *user = NULL;
     GError *error = NULL;
-    GumdDbusUserAdapter *dbus_user = NULL;
+    GumdDbusUserAdapter *user_adapter = NULL;
+    DBG ("uid %d", uid);
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
-    dbus_user = _get_dbus_user_from_cache (self, invocation, uid);
-    if (!dbus_user) {
+    user_adapter = _get_user_adapter_from_cache (self, invocation, uid);
+    if (!user_adapter) {
     	user = gumd_daemon_get_user (self->priv->daemon, (uid_t)uid, &error);
     	if (user) {
-    		dbus_user = _create_and_cache_dbus_user (self, user, invocation);
+            user_adapter = _create_and_cache_user_adapter (self, user,
+                invocation);
     	}
     }
 
-    if (dbus_user) {
+    if (user_adapter) {
         gum_dbus_user_service_complete_get_user (self->priv->dbus_user_service,
-                invocation, gumd_dbus_user_adapter_get_object_path (dbus_user));
+                invocation, gumd_dbus_user_adapter_get_object_path (
+                        user_adapter));
     } else {
         if (!error) {
             error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_USER_NOT_FOUND,
@@ -596,26 +606,29 @@ _handle_get_user_by_name (
 {
     GumdDaemonUser *user = NULL;
     GError *error = NULL;
-    GumdDbusUserAdapter *dbus_user = NULL;
+    GumdDbusUserAdapter *user_adapter = NULL;
     uid_t uid = GUM_USER_INVALID_UID;
+
+    DBG ("username %s", username);
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 
     uid = gumd_daemon_user_get_uid_by_name (username, gumd_daemon_get_config (
     		self->priv->daemon));
 
-    dbus_user = _get_dbus_user_from_cache (self, invocation, uid);
-    if (!dbus_user) {
+    user_adapter = _get_user_adapter_from_cache (self, invocation, uid);
+    if (!user_adapter) {
         user = gumd_daemon_get_user (self->priv->daemon, (uid_t)uid, &error);
         if (user) {
-            dbus_user = _create_and_cache_dbus_user (self, user, invocation);
+            user_adapter = _create_and_cache_user_adapter (self, user,
+                    invocation);
         }
     }
 
-    if (dbus_user) {
+    if (user_adapter) {
         gum_dbus_user_service_complete_get_user_by_name (
         		self->priv->dbus_user_service, invocation,
-        		gumd_dbus_user_adapter_get_object_path (dbus_user));
+                gumd_dbus_user_adapter_get_object_path (user_adapter));
     } else {
         if (!error) {
             error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_USER_NOT_FOUND,

@@ -131,6 +131,14 @@ groupadd -f -r gumd
 
 
 %changelog
+* Wed May 21 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed Bug # TIVI-2988
+- Updated logs
+
+* Tue May 20 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug#TIVI-3170 (fixed smack labels for newly created files and folders
+  as reported in https://bugs.tizen.org/jira/browse/TIVI-3170)
+
 * Wed Feb 12 2014 Imran Zaman <imran.zaman@intel.com>
 - Simplified gumd packages
 

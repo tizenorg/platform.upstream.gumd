@@ -120,9 +120,9 @@ _set_smack64_attr (
     config = gum_config_new ();
     const gchar *smack_label = gum_config_get_string (config, key);
     if (smack_label) {
+        len = strlen (smack_label);
         DBG ("Set smack label %s for path %s with len %d",smack_label, path,
                 (int)len);
-        len = strlen (smack_label);
     }
     /*
      * Set smack64 extended attribute (when provided in the config file)
