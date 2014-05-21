@@ -67,11 +67,6 @@ gumd_dbus_user_adapter_get_type (
 		void) G_GNUC_CONST;
 
 GumdDbusUserAdapter *
-gumd_dbus_user_adapter_new (
-        GumdDaemonUser *user,
-        guint timeout);
-
-GumdDbusUserAdapter *
 gumd_dbus_user_adapter_new_with_connection (
         GDBusConnection *connection,
         GumdDaemonUser *user,

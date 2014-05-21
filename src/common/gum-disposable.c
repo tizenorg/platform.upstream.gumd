@@ -281,7 +281,7 @@ gum_disposable_init (
     self->priv->delete_later = FALSE;
     g_atomic_int_set(&self->priv->keep_obj_counter, 0);
 
-    DBG ("INIT");
+    DBG ("init %p", self);
 }
 
 static gboolean
@@ -293,7 +293,7 @@ _auto_dispose (
     GumDisposable *self = GUM_DISPOSABLE (user_data);
     g_signal_emit (self, signals[SIG_DISPOSING], 0);
     /* destroy object */
-    DBG ("%s AUTO DISPOSE %d", G_OBJECT_TYPE_NAME (self),
+    DBG ("%s (%p) auto dispose %d", G_OBJECT_TYPE_NAME (self), self,
             G_OBJECT (self)->ref_count);
     g_object_unref (G_OBJECT (self));
     return FALSE;
@@ -306,7 +306,7 @@ _timer_dispose (
     g_return_val_if_fail (user_data && GUM_IS_DISPOSABLE (user_data), FALSE);
     GumDisposable *self = GUM_DISPOSABLE (user_data);
 
-    DBG ("%s TIMER DISPOSE", G_OBJECT_TYPE_NAME (self));
+    DBG ("%s (%p) timer dispose", G_OBJECT_TYPE_NAME (self), self);
     /* clear out timer since we are already inside timer cb */
     self->priv->timer_id = 0;
 
@@ -317,6 +317,8 @@ static void
 _update_timer (
         GumDisposable *self)
 {
+    if (self->priv->delete_later) return;
+
     DBG("%s (%p): keep_obj_counter : %d, timeout : %d  delete_later %d",
             G_OBJECT_TYPE_NAME(self),
             self,
@@ -324,11 +326,8 @@ _update_timer (
             self->priv->timeout,
             self->priv->delete_later);
 
-    if (self->priv->delete_later) return;
-
     if (g_atomic_int_get(&self->priv->keep_obj_counter) == 0) {
         if (self->priv->timeout) {
-            DBG("Setting object timeout to %d", self->priv->timeout);
             self->priv->timer_id = g_timeout_add_seconds (self->priv->timeout,
                     _timer_dispose,
                     self);
@@ -397,8 +396,7 @@ gum_disposable_delete_later (
     if (self->priv->timer_id)
         g_source_remove (self->priv->timer_id);
 
-    INFO ("Object '%s' (%p) about to dispose...",
-            G_OBJECT_TYPE_NAME (self), self);
+    DBG ("object (%p) '%s' about to dispose", self, G_OBJECT_TYPE_NAME (self));
     self->priv->timer_id = g_idle_add (_auto_dispose, self);
     self->priv->delete_later = TRUE;
 }

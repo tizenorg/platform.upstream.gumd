@@ -114,6 +114,7 @@ _dispose (
         GObject *object)
 {
     GumdDbusUserAdapter *self = GUMD_DBUS_USER_ADAPTER (object);
+    DBG ("user adapter (%p) dispose beg", object);
 
     GUM_OBJECT_UNREF (self->priv->daemon);
     GUM_OBJECT_UNREF (self->priv->user);
@@ -132,6 +133,7 @@ _dispose (
     GUM_OBJECT_UNREF (self->priv->connection);
 
     G_OBJECT_CLASS (gumd_dbus_user_adapter_parent_class)->dispose (object);
+    DBG ("user adapter (%p) dispose", object);
 }
 
 static void
@@ -139,7 +141,7 @@ _finalize (
         GObject *object)
 {
     //GumdDbusUserAdapter *self = GUMD_DBUS_USER_ADAPTER (object);
-
+    DBG ("user adapter (%p) finalize", object);
     G_OBJECT_CLASS (gumd_dbus_user_adapter_parent_class)->finalize (object);
 }
 
@@ -351,24 +353,6 @@ gumd_dbus_user_adapter_init (
     self->priv->dbus_user = gum_dbus_user_skeleton_new ();
     self->priv->prop_name_in_change = NULL;
     self->priv->daemon = gumd_daemon_new ();
-}
-
-GumdDbusUserAdapter *
-gumd_dbus_user_adapter_new (
-        GumdDaemonUser *user,
-        guint timeout)
-{
-    GError *error = NULL;
-    GDBusConnection *connection = g_bus_get_sync (GUM_BUS_TYPE, NULL,
-            &error);
-    if (error) {
-        WARN("failed to connect to session bus : %s", error->message);
-        g_error_free (error);
-        return NULL;
-    }
-
-    return gumd_dbus_user_adapter_new_with_connection (connection, user,
-            timeout);
 }
 
 GumdDbusUserAdapter *
