@@ -27,7 +27,7 @@
       <sub name="GumUser" link="GumUser.html"/>
       <sub name="GumGroup" link="GumGroup.html"/>
     </sub>
-    <sub name="Examples" link="gumd-examples.html"/>
+    <sub name="Utils" link="gumd-utils.html"/>
     <sub name="Appendices" link="ch04.html"/>
     <sub name="Deprecated APIs" link="ch05.html"/>
     <sub name="" link="ch06.html">

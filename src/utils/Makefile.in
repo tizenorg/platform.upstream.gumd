@@ -34,10 +34,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = gum-example$(EXEEXT)
+bin_PROGRAMS = gum-utils$(EXEEXT)
 @HAVE_LIBTLM_NFC_TRUE@am__append_1 = $(LIBTLM_NFC_CFLAGS)
 @HAVE_LIBTLM_NFC_TRUE@am__append_2 = $(LIBTLM_NFC_LIBS)
-subdir = examples
+subdir = src/utils
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ax_check_gnu_make.m4 \
@@ -53,11 +53,11 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_gum_example_OBJECTS = gum_example-gum-example.$(OBJEXT)
-gum_example_OBJECTS = $(am_gum_example_OBJECTS)
+am_gum_utils_OBJECTS = gum_utils-gum-utils.$(OBJEXT)
+gum_utils_OBJECTS = $(am_gum_utils_OBJECTS)
 am__DEPENDENCIES_1 =
 @HAVE_LIBTLM_NFC_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
-gum_example_DEPENDENCIES = $(top_builddir)/src/lib/libgum.la \
+gum_utils_DEPENDENCIES = $(top_builddir)/src/lib/libgum.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -88,8 +88,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(gum_example_SOURCES)
-DIST_SOURCES = $(gum_example_SOURCES)
+SOURCES = $(gum_utils_SOURCES)
+DIST_SOURCES = $(gum_utils_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -245,11 +245,11 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-gum_example_SOURCES = gum-example.c
-gum_example_CPPFLAGS = -I$(top_builddir)/src -I$(top_srcdir)/src \
+gum_utils_SOURCES = gum-utils.c
+gum_utils_CPPFLAGS = -I$(top_builddir)/src -I$(top_srcdir)/src \
 	$(LIBGUM_INCLUDES) $(LIBGUM_CFLAGS) $(DEPS_CFLAGS) \
 	$(am__append_1)
-gum_example_LDADD = $(DEPS_LIBS) $(top_builddir)/src/lib/libgum.la \
+gum_utils_LDADD = $(DEPS_LIBS) $(top_builddir)/src/lib/libgum.la \
 	$(LIBGUM_LIBS) $(am__append_2)
 CLEANFILES = *.gcno *.gcda
 all: all-am
@@ -265,9 +265,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu examples/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu src/utils/Makefile'; \
 	$(am__cd) $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu examples/Makefile
+	  $(AUTOMAKE) --gnu src/utils/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -329,9 +329,9 @@ clean-binPROGRAMS:
 	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
 	echo " rm -f" $$list; \
 	rm -f $$list
-gum-example$(EXEEXT): $(gum_example_OBJECTS) $(gum_example_DEPENDENCIES) $(EXTRA_gum_example_DEPENDENCIES) 
-	@rm -f gum-example$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(gum_example_OBJECTS) $(gum_example_LDADD) $(LIBS)
+gum-utils$(EXEEXT): $(gum_utils_OBJECTS) $(gum_utils_DEPENDENCIES) $(EXTRA_gum_utils_DEPENDENCIES) 
+	@rm -f gum-utils$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(gum_utils_OBJECTS) $(gum_utils_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -339,7 +339,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gum_example-gum-example.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gum_utils-gum-utils.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -365,19 +365,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-gum_example-gum-example.o: gum-example.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_example_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gum_example-gum-example.o -MD -MP -MF $(DEPDIR)/gum_example-gum-example.Tpo -c -o gum_example-gum-example.o `test -f 'gum-example.c' || echo '$(srcdir)/'`gum-example.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gum_example-gum-example.Tpo $(DEPDIR)/gum_example-gum-example.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-example.c' object='gum_example-gum-example.o' libtool=no @AMDEPBACKSLASH@
+gum_utils-gum-utils.o: gum-utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_utils_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gum_utils-gum-utils.o -MD -MP -MF $(DEPDIR)/gum_utils-gum-utils.Tpo -c -o gum_utils-gum-utils.o `test -f 'gum-utils.c' || echo '$(srcdir)/'`gum-utils.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gum_utils-gum-utils.Tpo $(DEPDIR)/gum_utils-gum-utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-utils.c' object='gum_utils-gum-utils.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_example_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gum_example-gum-example.o `test -f 'gum-example.c' || echo '$(srcdir)/'`gum-example.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_utils_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gum_utils-gum-utils.o `test -f 'gum-utils.c' || echo '$(srcdir)/'`gum-utils.c
 
-gum_example-gum-example.obj: gum-example.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_example_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gum_example-gum-example.obj -MD -MP -MF $(DEPDIR)/gum_example-gum-example.Tpo -c -o gum_example-gum-example.obj `if test -f 'gum-example.c'; then $(CYGPATH_W) 'gum-example.c'; else $(CYGPATH_W) '$(srcdir)/gum-example.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gum_example-gum-example.Tpo $(DEPDIR)/gum_example-gum-example.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-example.c' object='gum_example-gum-example.obj' libtool=no @AMDEPBACKSLASH@
+gum_utils-gum-utils.obj: gum-utils.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_utils_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT gum_utils-gum-utils.obj -MD -MP -MF $(DEPDIR)/gum_utils-gum-utils.Tpo -c -o gum_utils-gum-utils.obj `if test -f 'gum-utils.c'; then $(CYGPATH_W) 'gum-utils.c'; else $(CYGPATH_W) '$(srcdir)/gum-utils.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gum_utils-gum-utils.Tpo $(DEPDIR)/gum_utils-gum-utils.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-utils.c' object='gum_utils-gum-utils.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_example_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gum_example-gum-example.obj `if test -f 'gum-example.c'; then $(CYGPATH_W) 'gum-example.c'; else $(CYGPATH_W) '$(srcdir)/gum-example.c'; fi`
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(gum_utils_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o gum_utils-gum-utils.obj `if test -f 'gum-utils.c'; then $(CYGPATH_W) 'gum-utils.c'; else $(CYGPATH_W) '$(srcdir)/gum-utils.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

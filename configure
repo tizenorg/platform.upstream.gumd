@@ -13118,7 +13118,7 @@ LIBGUM_LIBS='$(GLIB_LIBS) $(GCOV_LIBS)'
 LIBGUM_INCLUDES='$(GUM_COMMON_INCLUDES)'
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/common/dbus/Makefile src/daemon/Makefile src/daemon/dbus/Makefile src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service src/daemon/gumd.conf src/daemon/dbus/gumd-dbus.conf src/lib/Makefile src/lib/libgum.pc src/lib/libgum-uninstalled.pc docs/Makefile docs/version.xml test/Makefile test/common/Makefile test/daemon/Makefile test/lib/Makefile examples/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/common/Makefile src/common/dbus/Makefile src/daemon/Makefile src/daemon/dbus/Makefile src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service src/daemon/gumd.conf src/daemon/dbus/gumd-dbus.conf src/lib/Makefile src/lib/libgum.pc src/lib/libgum-uninstalled.pc src/utils/Makefile docs/Makefile docs/version.xml test/Makefile test/common/Makefile test/daemon/Makefile test/lib/Makefile"
 
 
 if test "x$enable_tests" = "xyes" ; then
@@ -14197,13 +14197,13 @@ do
     "src/lib/Makefile") CONFIG_FILES="$CONFIG_FILES src/lib/Makefile" ;;
     "src/lib/libgum.pc") CONFIG_FILES="$CONFIG_FILES src/lib/libgum.pc" ;;
     "src/lib/libgum-uninstalled.pc") CONFIG_FILES="$CONFIG_FILES src/lib/libgum-uninstalled.pc" ;;
+    "src/utils/Makefile") CONFIG_FILES="$CONFIG_FILES src/utils/Makefile" ;;
     "docs/Makefile") CONFIG_FILES="$CONFIG_FILES docs/Makefile" ;;
     "docs/version.xml") CONFIG_FILES="$CONFIG_FILES docs/version.xml" ;;
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
     "test/common/Makefile") CONFIG_FILES="$CONFIG_FILES test/common/Makefile" ;;
     "test/daemon/Makefile") CONFIG_FILES="$CONFIG_FILES test/daemon/Makefile" ;;
     "test/lib/Makefile") CONFIG_FILES="$CONFIG_FILES test/lib/Makefile" ;;
-    "examples/Makefile") CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
     "test/data/test-gumd-dbus.conf") CONFIG_FILES="$CONFIG_FILES test/data/test-gumd-dbus.conf" ;;
     "test/data/services/org.tizen.SecurityAccounts.gUserManagement.service") CONFIG_FILES="$CONFIG_FILES test/data/services/org.tizen.SecurityAccounts.gUserManagement.service" ;;
 

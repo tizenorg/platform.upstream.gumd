@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Examples</title>
+<title>Utils</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="index.html" title="gumd API Reference Manual">
@@ -20,38 +20,38 @@
 <td><a accesskey="n" href="ch04.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr></table>
 <div class="refentry">
-<a name="gumd-examples"></a><div class="titlepage"></div>
+<a name="gumd-utils"></a><div class="titlepage"></div>
 <div class="refsect1">
 <a name="intro"></a><h2>Introduction</h2>
 <p>
-        libgum comes with an example application
-        <span class="application">gum-example</span> that demonstrates the most
+        libgum comes with an command line utility
+        <span class="application">gum-utility</span> that demonstrates the most
         common use cases: creating users/groups, deleting users/groups,
         modifying users/groups, and querying users/groups
     </p>
 <p>
-        Before running the example application, make sure that gum daemon and
+        Before running the command-line utility, make sure that gum daemon and
         libgum are installed and configured correctly.
     </p>
 <p>
-        The source code for the example application is available at
-        <a class="ulink" href="https://github.com/01org/gumd/blob/master/examples/gum-example.c" target="_top">
-           gum-example</a>
+        The source code for the utility is available at
+        <a class="ulink" href="https://github.com/01org/gumd/blob/master/src/utils/gum-utils.c" target="_top">
+           gum-utils</a>
      </p>
 <p>
-         The full list of available <span class="application">gum-example</span>
+         The full list of available <span class="application">gum-utils</span>
          options can be obtained with
-         <strong class="userinput"><code>gum-example --help-all</code></strong>
+         <strong class="userinput"><code>gum-utils --help-all</code></strong>
      </p>
 </div>
 <div class="refsect1">
-<a name="idp10710240"></a><h2>Add User</h2>
+<a name="idp7279376"></a><h2>Add User</h2>
 <p>
         User can be added with flag <strong class="userinput"><code>--add-user</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --add-user &lt;mandatory-args&gt; &lt;optional-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --add-user &lt;mandatory-args&gt; &lt;optional-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --username=&lt;username&gt; OR --nickname=&lt;nickname&gt;<br>
                         --usertype=&lt;usertype&gt;<br>
@@ -69,18 +69,18 @@
         </p></div>
 <p>
         --write-nfc flag can be used to write the username and secret to an NFC
-        tag, if gum-example was compiled with <a class="link" href="um-building.html" title="Building and Installation">libtlm-nfc
+        tag, if gum-utils was compiled with <a class="link" href="um-building.html" title="Building and Installation">libtlm-nfc
         </a> support.
      </p>
 </div>
 <div class="refsect1">
-<a name="idp10525904"></a><h2>Delete User</h2>
+<a name="idp12027552"></a><h2>Delete User</h2>
 <p>
         User can be deleted with flag <strong class="userinput"><code>--delete-user</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --delete-user &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --delete-user &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --uid=&lt;uid&gt; <br>
             </code><br>
@@ -89,13 +89,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp9269376"></a><h2>Update User</h2>
+<a name="idp12204352"></a><h2>Update User</h2>
 <p>
         User can be update with flag <strong class="userinput"><code>--update-user</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --update-user &lt;mandatory-args&gt; &lt;update-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --update-user &lt;mandatory-args&gt; &lt;update-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --uid=&lt;uid&gt; <br>
                     possible update-args are:    <br>
@@ -113,13 +113,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp14484976"></a><h2>Get User</h2>
+<a name="idp12209264"></a><h2>Get User</h2>
 <p>
         User data can be retrieved with flag <strong class="userinput"><code>--get-user</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --get-user &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --get-user &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --uid=&lt;uid&gt; <br>
             </code><br>
@@ -128,13 +128,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp13118528"></a><h2>Get User By Name</h2>
+<a name="idp12818160"></a><h2>Get User By Name</h2>
 <p>
         User data can be retrieved with flag <strong class="userinput"><code>--get-user-by-name</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --get-user-by-name &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --get-user-by-name &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --username=&lt;username&gt; <br>
             </code><br>
@@ -143,13 +143,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp13123040"></a><h2>Add Group</h2>
+<a name="idp12843584"></a><h2>Add Group</h2>
 <p>
         Group can be added with flag <strong class="userinput"><code>--add-group</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --add-group &lt;mandatory-args&gt; &lt;optional-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --add-group &lt;mandatory-args&gt; &lt;optional-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --groupname=&lt;groupname&gt;<br>
                         --grouptype=&lt;grouptype&gt;<br>
@@ -162,13 +162,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp14060912"></a><h2>Delete Group</h2>
+<a name="idp12848352"></a><h2>Delete Group</h2>
 <p>
         Group can be deleted with flag <strong class="userinput"><code>--delete-group</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --delete-group &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --delete-group &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --gid=&lt;gid&gt;<br>
             </code><br>
@@ -177,13 +177,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp14065424"></a><h2>Update Group</h2>
+<a name="idp12852864"></a><h2>Update Group</h2>
 <p>
         Group can be updated with flag <strong class="userinput"><code>--udpate-group</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --update-group &lt;mandatory-args&gt; &lt;update-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --update-group &lt;mandatory-args&gt; &lt;update-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --gid=&lt;gid&gt;<br>
                     possible update-args are:    <br>
@@ -194,13 +194,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp14070016"></a><h2>Get Group</h2>
+<a name="idp12857456"></a><h2>Get Group</h2>
 <p>
         Group data can be retrieved with flag <strong class="userinput"><code>--get-group</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --get-group &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --get-group &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --gid=&lt;gid&gt; <br>
             </code><br>
@@ -209,13 +209,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp14074528"></a><h2>Get Group By Name</h2>
+<a name="idp14177664"></a><h2>Get Group By Name</h2>
 <p>
         Group data can be retrieved with flag <strong class="userinput"><code>--get-group-by-name</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --get-group-by-name &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --get-group-by-name &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --groupname=&lt;groupname&gt; <br>
             </code><br>
@@ -224,13 +224,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp12776176"></a><h2>Add member To Group</h2>
+<a name="idp14182176"></a><h2>Add member To Group</h2>
 <p>
         New member can be added to a group with flag <strong class="userinput"><code>--add-member</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --add-member &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --add-member &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --gid=&lt;gid&gt; <br>
                         --mem_uid=&lt;mem_uid&gt; <br>
@@ -240,13 +240,13 @@
      </p>
 </div>
 <div class="refsect1">
-<a name="idp12780736"></a><h2>Delete member From Group</h2>
+<a name="idp14186784"></a><h2>Delete member From Group</h2>
 <p>
         A member can be removed from the group with flag <strong class="userinput"><code>--delete-member</code></strong>:
         </p>
 <div class="literallayout"><p><br>
             <code class="computeroutput"><br>
-                <strong class="userinput"><code>gum-example --delete-member &lt;mandatory-args&gt;</code></strong>:<br>
+                <strong class="userinput"><code>gum-utils --delete-member &lt;mandatory-args&gt;</code></strong>:<br>
                     mandatory-args are:<br>
                         --gid=&lt;gid&gt; <br>
                         --mem_uid=&lt;mem_uid&gt; <br>

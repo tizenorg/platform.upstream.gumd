@@ -1,1 +1,1 @@
-SUBDIRS=common daemon lib
+SUBDIRS=common daemon lib utils

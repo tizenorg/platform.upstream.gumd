@@ -2,5 +2,4 @@
 /usr/lib/libgum*.so
 /usr/lib/libgum*.la
 /usr/lib/pkgconfig/libgum.pc
-/usr/bin/gum-example
 /usr/share/dbus-1/interfaces/*UserManagement*.xml

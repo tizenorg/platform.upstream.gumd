@@ -101,6 +101,7 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %defattr(-,root,root,-)
 %manifest %{_datadir}/libgum.manifest
 %{_libdir}/libgum*.so.*
+%{_bindir}/gum-utils
 
 
 %files -n libgum-devel
@@ -108,7 +109,6 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %{_includedir}/gum/*
 %{_libdir}/libgum*.so
 %{_libdir}/pkgconfig/libgum.pc
-%{_bindir}/gum-example
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
