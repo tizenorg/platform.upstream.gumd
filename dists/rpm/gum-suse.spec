@@ -94,6 +94,7 @@ groupadd -f -r gumd
 %files -n libgum
 %defattr(-,root,root,-)
 %{_libdir}/libgum*.so.*
+%{_bindir}/gum-utils
 
 
 %files -n libgum-devel
@@ -105,7 +106,6 @@ groupadd -f -r gumd
 %if %{dbus_type} != "p2p"
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
-%{_bindir}/gum-example
 
 
 %files
@@ -131,6 +131,9 @@ groupadd -f -r gumd
 
 
 %changelog
+* Thu May 22 2014 Imran Zaman <imran.zaman@intel.com>
+- Renamed gum-example as gum-utils to be used as command line utility
+
 * Wed May 21 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed Bug # TIVI-2988
 - Updated logs

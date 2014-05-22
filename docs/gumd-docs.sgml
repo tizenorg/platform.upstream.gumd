@@ -46,7 +46,7 @@
         <xi:include href="xml/gum-group.xml"/>
     </chapter>
     
-    <xi:include href="examples.xml"/>
+    <xi:include href="utils.xml"/>
 
     <chapter>
         <title>Appendices</title>

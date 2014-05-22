@@ -273,7 +273,7 @@ static void
 _handle_write_nfc (
         GumUser *user)
 {
-    g_print("gum-example was compiled without libtlm-nfc support\n");
+    g_print("gum-utils was compiled without libtlm-nfc support\n");
 }
 #endif
 
@@ -741,7 +741,7 @@ main (int argc, char *argv[])
 #endif   
     
     context = g_option_context_new (" [Application Option]\n"
-            "  e.g. To delete a user, ./gum-example --uid=2001 -v");
+            "  e.g. To delete a user, ./gum-utils --uid=2001 -v");
     g_option_context_add_main_entries (context, main_entries, NULL);
 
     user_option = g_option_group_new("user-options", "User specific options",

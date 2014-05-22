@@ -2,32 +2,32 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
                "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 ]>
-<refentry id="gumd-examples">
+<refentry id="gumd-utils">
   <refmeta>
-    <refentrytitle>Examples</refentrytitle>
+    <refentrytitle>Utils</refentrytitle>
   </refmeta>
 
   <refsect1 id="intro">
     <title>Introduction</title>
     <para>
-        libgum comes with an example application
-        <application>gum-example</application> that demonstrates the most
+        libgum comes with an command line utility
+        <application>gum-utility</application> that demonstrates the most
         common use cases: creating users/groups, deleting users/groups,
         modifying users/groups, and querying users/groups
     </para>
     <para>
-        Before running the example application, make sure that gum daemon and
+        Before running the command-line utility, make sure that gum daemon and
         libgum are installed and configured correctly.
     </para>
     <para>
-        The source code for the example application is available at
-        <ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
-           gum-example</ulink>
+        The source code for the utility is available at
+        <ulink url="https://github.com/01org/gumd/blob/master/src/utils/gum-utils.c">
+           gum-utils</ulink>
      </para>
      <para>
-         The full list of available <application>gum-example</application>
+         The full list of available <application>gum-utils</application>
          options can be obtained with
-         <userinput>gum-example --help-all</userinput>
+         <userinput>gum-utils --help-all</userinput>
      </para>
   </refsect1>
          
@@ -37,7 +37,7 @@
         User can be added with flag <userinput>--add-user</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --add-user &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
+                <userinput>gum-utils --add-user &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
                     mandatory-args are:
                         --username=&lt;username&gt; OR --nickname=&lt;nickname&gt;
                         --usertype=&lt;usertype&gt;
@@ -54,7 +54,7 @@
             </computeroutput>
         </literallayout>
         --write-nfc flag can be used to write the username and secret to an NFC
-        tag, if gum-example was compiled with <link linkend="um-building">libtlm-nfc
+        tag, if gum-utils was compiled with <link linkend="um-building">libtlm-nfc
         </link> support.
      </para>        
   </refsect1>
@@ -65,7 +65,7 @@
         User can be deleted with flag <userinput>--delete-user</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --delete-user &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --delete-user &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --uid=&lt;uid&gt; 
             </computeroutput>
@@ -79,7 +79,7 @@
         User can be update with flag <userinput>--update-user</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --update-user &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
+                <userinput>gum-utils --update-user &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
                     mandatory-args are:
                         --uid=&lt;uid&gt; 
                     possible update-args are:    
@@ -102,7 +102,7 @@
         User data can be retrieved with flag <userinput>--get-user</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --get-user &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --get-user &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --uid=&lt;uid&gt; 
             </computeroutput>
@@ -116,7 +116,7 @@
         User data can be retrieved with flag <userinput>--get-user-by-name</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --get-user-by-name &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --get-user-by-name &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --username=&lt;username&gt; 
             </computeroutput>
@@ -130,7 +130,7 @@
         Group can be added with flag <userinput>--add-group</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --add-group &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
+                <userinput>gum-utils --add-group &lt;mandatory-args&gt; &lt;optional-args&gt;</userinput>:
                     mandatory-args are:
                         --groupname=&lt;groupname&gt;
                         --grouptype=&lt;grouptype&gt;
@@ -148,7 +148,7 @@
         Group can be deleted with flag <userinput>--delete-group</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --delete-group &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --delete-group &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --gid=&lt;gid&gt;
             </computeroutput>
@@ -162,7 +162,7 @@
         Group can be updated with flag <userinput>--udpate-group</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --update-group &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
+                <userinput>gum-utils --update-group &lt;mandatory-args&gt; &lt;update-args&gt;</userinput>:
                     mandatory-args are:
                         --gid=&lt;gid&gt;
                     possible update-args are:    
@@ -178,7 +178,7 @@
         Group data can be retrieved with flag <userinput>--get-group</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --get-group &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --get-group &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --gid=&lt;gid&gt; 
             </computeroutput>
@@ -192,7 +192,7 @@
         Group data can be retrieved with flag <userinput>--get-group-by-name</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --get-group-by-name &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --get-group-by-name &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --groupname=&lt;groupname&gt; 
             </computeroutput>
@@ -206,7 +206,7 @@
         New member can be added to a group with flag <userinput>--add-member</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --add-member &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --add-member &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --gid=&lt;gid&gt; 
                         --mem_uid=&lt;mem_uid&gt; 
@@ -221,7 +221,7 @@
         A member can be removed from the group with flag <userinput>--delete-member</userinput>:
         <literallayout>
             <computeroutput>
-                <userinput>gum-example --delete-member &lt;mandatory-args&gt;</userinput>:
+                <userinput>gum-utils --delete-member &lt;mandatory-args&gt;</userinput>:
                     mandatory-args are:
                         --gid=&lt;gid&gt; 
                         --mem_uid=&lt;mem_uid&gt; 

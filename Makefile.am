@@ -12,7 +12,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS += \
     --enable-gtk-doc
 endif
 
-SUBDIRS = src test examples docs
+SUBDIRS = src test docs
 
 EXTRA_DIST = dists tools
 

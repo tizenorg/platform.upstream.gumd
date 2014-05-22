@@ -76,8 +76,8 @@
  * ]|
  *
  * For more details, see example implementation here:
- *<ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
- *          gum-example</ulink>
+ *<ulink url="https://github.com/01org/gumd/blob/master/src/utils/gum-utils.c">
+ *          gum-utils</ulink>
  */
 
 /**

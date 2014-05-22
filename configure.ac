@@ -293,13 +293,13 @@ src/daemon/dbus/gumd-dbus.conf
 src/lib/Makefile
 src/lib/libgum.pc
 src/lib/libgum-uninstalled.pc
+src/utils/Makefile
 docs/Makefile
 docs/version.xml
 test/Makefile
 test/common/Makefile
 test/daemon/Makefile
 test/lib/Makefile
-examples/Makefile
 ])
 
 if test "x$enable_tests" = "xyes" ; then

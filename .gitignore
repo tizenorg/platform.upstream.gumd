@@ -34,7 +34,7 @@ test/daemon/daemontest
 test/lib/clienttest
 test/data/services/org.tizen.SecurityAccounts.gUserManagement.service
 test/data/test-gumd-dbus.conf
-examples/gum-example
+src/utils/gum-utils
 stamp-h1
 *service
 docs/gumd-decl-list.txt

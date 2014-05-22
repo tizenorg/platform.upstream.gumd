@@ -75,9 +75,9 @@
  *  g_object_unref (group);
  * ]|
  *
- * For more details, see example implementation here:
- *<ulink url="https://github.com/01org/gumd/blob/master/examples/gum-example.c">
- *          gum-example</ulink>
+ * For more details, see command-line utility implementation here:
+ *<ulink url="https://github.com/01org/gumd/blob/master/src/utils/gum-utils.c">
+ *          gum-utils</ulink>
  */
 
 /**

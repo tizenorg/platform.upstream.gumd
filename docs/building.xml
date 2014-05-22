@@ -102,7 +102,7 @@
                 libtlm-nfc library
             </ulink>
             provides support for writing usernames and passwords to NFC tags
-            in <link linkend="gumd-examples">gum-example application</link>.
+            in <link linkend="gumd-utils">gum-utils utility</link>.
             Such tags can be used for logging in with TLM login manager.
         </para>
       </listitem>
