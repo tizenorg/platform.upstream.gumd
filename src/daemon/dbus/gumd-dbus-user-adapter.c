@@ -78,7 +78,7 @@ _set_property (
             break;
         }
         case PROP_CONNECTION: {
-            self->priv->connection = g_value_get_object(value);
+            self->priv->connection = g_value_dup_object(value);
             break;
         }
         default:
