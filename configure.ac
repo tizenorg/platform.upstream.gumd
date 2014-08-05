@@ -251,7 +251,14 @@ GTK_DOC_CHECK([1.18],[--flavour no-tmpl])
 
 # Checks for typedefs, structures, and compiler characteristics.
 GUM_CFLAGS='$(GLIB_CFLAGS) -D_POSIX_C_SOURCE=\"200809L\" -D_GNU_SOURCE -D_REENTRANT -D_THREAD_SAFE'
-GUM_CFLAGS="$GUM_CFLAGS -Wall -Werror $GCOV_CFLAGS"
+GUM_CFLAGS="$GUM_CFLAGS -Wall $GCOV_CFLAGS"
+if test "x$enable_debug" = "xno" ; then
+    GUM_CFLAGS="$GUM_CFLAGS -Werror"
+else
+    GUM_CFLAGS="$GUM_CFLAGS -DENABLE_DEBUG"
+fi
+
+
 AC_SUBST(GUM_CFLAGS)
 GUM_INCLUDES='-I$(top_builddir) -I$(top_srcdir)'
 AC_SUBST(GUM_INCLUDES)
