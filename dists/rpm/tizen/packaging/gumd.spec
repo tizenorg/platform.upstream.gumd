@@ -6,9 +6,9 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.2
+Version: 0.0.3
 Release: 1
-Group: System/Daemons
+Group: Security/Accounts
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
 URL: https://github.com/01org/gumd
@@ -38,7 +38,7 @@ BuildRequires: pkgconfig(gmodule-2.0)
 
 %package -n libgum
 Summary:    User management client library
-Group:      System/Libraries
+Group:      Security/Accounts
 
 
 %description -n libgum
@@ -47,7 +47,7 @@ Group:      System/Libraries
 
 %package -n libgum-devel
 Summary:    Development files for user management client library
-Group:      Development/Libraries
+Group:      SDK/Libraries
 Requires:   libgum = %{version}-%{release}
 
 
@@ -57,7 +57,7 @@ Requires:   libgum = %{version}-%{release}
 
 %package doc
 Summary:    Documentation files for %{name}
-Group:      Development/Libraries
+Group:      SDK/Documentation
 Requires:   libgum = %{version}-%{release}
 
 

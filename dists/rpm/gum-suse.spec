@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.2
+Version: 0.0.3
 Release: 1
 Group: System/Daemons
 License: LGPL-2.1+
@@ -131,6 +131,10 @@ groupadd -f -r gumd
 
 
 %changelog
+* Tue Aug 05 2014 Imran Zaman <imran.zaman@intel.com>
+- Log only when logging is enabled
+- Fixed p2p stream descriptor leak
+
 * Thu May 22 2014 Imran Zaman <imran.zaman@intel.com>
 - Renamed gum-example as gum-utils to be used as command line utility
 
