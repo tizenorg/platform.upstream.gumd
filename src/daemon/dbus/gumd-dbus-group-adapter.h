@@ -68,11 +68,6 @@ gumd_dbus_group_adapter_get_type (
         void) G_GNUC_CONST;
 
 GumdDbusGroupAdapter *
-gumd_dbus_group_adapter_new (
-        GumdDaemonGroup *group,
-        guint timeout);
-
-GumdDbusGroupAdapter *
 gumd_dbus_group_adapter_new_with_connection (
         GDBusConnection *connection,
         GumdDaemonGroup *group,

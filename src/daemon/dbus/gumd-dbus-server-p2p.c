@@ -337,13 +337,11 @@ _gumd_dbus_server_p2p_start_user_service (
     DBG("Export interfaces on connection %p", connection);
 
     user_service = gumd_dbus_user_service_adapter_new_with_connection (
-            g_object_ref (connection), g_object_ref (server->priv->daemon),
-            GUMD_DBUS_SERVER_BUSTYPE_P2P);
+            connection, server->priv->daemon, GUMD_DBUS_SERVER_BUSTYPE_P2P);
     _add_user_watchers (connection, user_service, server);
 
     group_service = gumd_dbus_group_service_adapter_new_with_connection (
-            g_object_ref (connection), g_object_ref (server->priv->daemon),
-            GUMD_DBUS_SERVER_BUSTYPE_P2P);
+            connection, server->priv->daemon, GUMD_DBUS_SERVER_BUSTYPE_P2P);
     _add_group_watchers (connection, group_service, server);
 }
 

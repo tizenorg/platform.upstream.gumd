@@ -78,7 +78,7 @@ _set_property (
             break;
         }
         case PROP_CONNECTION: {
-            self->priv->connection = g_value_get_object(value);
+            self->priv->connection = g_value_dup_object(value);
             break;
         }
         default:
@@ -420,25 +420,6 @@ gumd_dbus_group_adapter_init (
     self->priv->dbus_group = gum_dbus_group_skeleton_new ();
     self->priv->prop_name_in_change = NULL;
     self->priv->daemon = gumd_daemon_new ();
-}
-
-GumdDbusGroupAdapter *
-gumd_dbus_group_adapter_new (
-        GumdDaemonGroup *group,
-        guint timeout)
-{
-    GError *error = NULL;
-    GDBusConnection *connection = g_bus_get_sync (GUM_BUS_TYPE, NULL,
-            &error);
-
-    if (error) {
-        WARN("failed to connect to session bus : %s", error->message);
-        g_error_free (error);
-        return NULL;
-    }
-
-    return gumd_dbus_group_adapter_new_with_connection (connection, group,
-            timeout);
 }
 
 GumdDbusGroupAdapter *
