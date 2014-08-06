@@ -13,6 +13,7 @@ daemontest_SOURCES = daemon-test.c
 
 daemontest_CFLAGS = \
     -I$(top_srcdir)/src \
+    -I$(top_builddir)/src/ \
     $(GUMD_INCLUDES) \
     $(TEST_CFLAGS) \
     $(GUMD_CFLAGS) \
