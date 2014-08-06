@@ -106,15 +106,11 @@ _set_property (
 
     switch (property_id) {
         case PROP_DAEMON: {
-            GObject *daemon = g_value_get_object (value);
-            if (daemon) {
-                GUM_OBJECT_UNREF (self->priv->daemon);
-                self->priv->daemon = GUMD_DAEMON (daemon);
-            }
+            self->priv->daemon = g_value_dup_object(value);
             break;
         }
         case PROP_CONNECTION:
-            self->priv->connection = g_value_get_object(value);
+            self->priv->connection = g_value_dup_object(value);
             break;
         case PROP_SERVER_BUSTYPE:
             self->priv->dbus_server_type =
@@ -256,6 +252,21 @@ _dispose (
                 self->priv->dbus_group_service));
         g_object_unref (self->priv->dbus_group_service);
         self->priv->dbus_group_service = NULL;
+    }
+
+    if (self->priv->connection) {
+        /* NOTE: There seems to be some bug in glib's dbus connection's
+         * https://bugzilla.gnome.org/show_bug.cgi?id=734281
+         * worker thread such that it does not closes the stream. The problem
+         * is hard to be tracked exactly as it is more of timing issue.
+         * Following code snippet at least closes the stream to avoid any
+         * descriptors leak.
+         * */
+        GIOStream *stream = g_dbus_connection_get_stream (
+                self->priv->connection);
+        if (stream) g_io_stream_close (stream, NULL, NULL);
+        g_object_unref (self->priv->connection);
+        self->priv->connection = NULL;
     }
 
     GUM_HASHTABLE_UNREF (self->priv->caller_watchers);
@@ -464,7 +475,7 @@ _create_and_cache_dbus_group (
 
     GumdDbusGroupAdapter *dbus_group =
             gumd_dbus_group_adapter_new_with_connection (
-                    g_object_ref (connection), group,
+                    connection, group,
                     gumd_daemon_get_group_timeout (self->priv->daemon));
 
     /* keep alive till this group object gets disposed */

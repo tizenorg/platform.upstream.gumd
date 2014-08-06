@@ -147,16 +147,16 @@ _on_name_acquired (
     DBG("Export user service interface");
     server->priv->user_service =
     		gumd_dbus_user_service_adapter_new_with_connection (
-    				g_object_ref (connection),
-    				g_object_ref (server->priv->daemon),
+    				connection,
+    				server->priv->daemon,
     				GUMD_DBUS_SERVER_BUSTYPE_MSG_BUS);
     g_object_weak_ref (G_OBJECT (server->priv->user_service),
             _on_user_interface_dispose, server);
 
     server->priv->group_service =
             gumd_dbus_group_service_adapter_new_with_connection (
-                    g_object_ref (connection),
-                    g_object_ref (server->priv->daemon),
+                    connection,
+                    server->priv->daemon,
                     GUMD_DBUS_SERVER_BUSTYPE_MSG_BUS);
     g_object_weak_ref (G_OBJECT (server->priv->group_service),
             _on_group_interface_dispose, server);

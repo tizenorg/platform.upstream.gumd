@@ -2,30 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>GumDictionary</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: GumDictionary</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch02.html" title="Common">
 <link rel="prev" href="ch02.html" title="Common">
 <link rel="next" href="gumd-Gum-Crypt.html" title="Gum Crypt">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="ch02.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="gumd-Gum-Crypt.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#gumd-GumDictionary.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#gumd-GumDictionary.description" class="shortcut">Description</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#gumd-GumDictionary.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#gumd-GumDictionary.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="ch02.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gumd-Gum-Crypt.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="gumd-GumDictionary"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -34,73 +31,201 @@
 <p>GumDictionary — a dictionary container holding string keys and variant
  values</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="gumd-GumDictionary.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-dictionary.h&gt;
-
-typedef             <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary">GumDictionary</a>;
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     <a class="link" href="gumd-GumDictionary.html#gum-dictionary-copy" title="gum_dictionary_copy ()">gum_dictionary_copy</a>                 (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *other</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get" title="gum_dictionary_get ()">gum_dictionary_get</a>                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-boolean" title="gum_dictionary_get_boolean ()">gum_dictionary_get_boolean</a>          (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> *value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-int32" title="gum_dictionary_get_int32 ()">gum_dictionary_get_int32</a>            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-int64" title="gum_dictionary_get_int64 ()">gum_dictionary_get_int64</a>            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint64</span> *value</code></em>);
-const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-string" title="gum_dictionary_get_string ()">gum_dictionary_get_string</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-uint32" title="gum_dictionary_get_uint32 ()">gum_dictionary_get_uint32</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> *value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-uint64" title="gum_dictionary_get_uint64 ()">gum_dictionary_get_uint64</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint64</span> *value</code></em>);
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     <a class="link" href="gumd-GumDictionary.html#gum-dictionary-new" title="gum_dictionary_new ()">gum_dictionary_new</a>                  (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     <a class="link" href="gumd-GumDictionary.html#gum-dictionary-new-from-variant" title="gum_dictionary_new_from_variant ()">gum_dictionary_new_from_variant</a>     (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *variant</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="gumd-GumDictionary.html#gum-dictionary-ref" title="gum_dictionary_ref ()">gum_dictionary_ref</a>                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-remove" title="gum_dictionary_remove ()">gum_dictionary_remove</a>               (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set" title="gum_dictionary_set ()">gum_dictionary_set</a>                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-boolean" title="gum_dictionary_set_boolean ()">gum_dictionary_set_boolean</a>          (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-int32" title="gum_dictionary_set_int32 ()">gum_dictionary_set_int32</a>            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-int64" title="gum_dictionary_set_int64 ()">gum_dictionary_set_int64</a>            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint64</span> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-string" title="gum_dictionary_set_string ()">gum_dictionary_set_string</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-uint32" title="gum_dictionary_set_uint32 ()">gum_dictionary_set_uint32</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint32</span> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-uint64" title="gum_dictionary_set_uint64 ()">gum_dictionary_set_uint64</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint64</span> value</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          <a class="link" href="gumd-GumDictionary.html#gum-dictionary-to-variant" title="gum_dictionary_to_variant ()">gum_dictionary_to_variant</a>           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="gumd-GumDictionary.html#gum-dictionary-unref" title="gum_dictionary_unref ()">gum_dictionary_unref</a>                (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);
+<div class="refsect1">
+<a name="gumd-GumDictionary.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<span class="returnvalue">GumDictionary</span> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-new" title="gum_dictionary_new ()">gum_dictionary_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-ref" title="gum_dictionary_ref ()">gum_dictionary_ref</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-unref" title="gum_dictionary_unref ()">gum_dictionary_unref</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">GumDictionary</span> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-copy" title="gum_dictionary_copy ()">gum_dictionary_copy</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">GumDictionary</span> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-new-from-variant" title="gum_dictionary_new_from_variant ()">gum_dictionary_new_from_variant</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-to-variant" title="gum_dictionary_to_variant ()">gum_dictionary_to_variant</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get" title="gum_dictionary_get ()">gum_dictionary_get</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set" title="gum_dictionary_set ()">gum_dictionary_set</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-boolean" title="gum_dictionary_get_boolean ()">gum_dictionary_get_boolean</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-boolean" title="gum_dictionary_set_boolean ()">gum_dictionary_set_boolean</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-int32" title="gum_dictionary_get_int32 ()">gum_dictionary_get_int32</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-int32" title="gum_dictionary_set_int32 ()">gum_dictionary_set_int32</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-uint32" title="gum_dictionary_get_uint32 ()">gum_dictionary_get_uint32</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-uint32" title="gum_dictionary_set_uint32 ()">gum_dictionary_set_uint32</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-int64" title="gum_dictionary_get_int64 ()">gum_dictionary_get_int64</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-int64" title="gum_dictionary_set_int64 ()">gum_dictionary_set_int64</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-uint64" title="gum_dictionary_get_uint64 ()">gum_dictionary_get_uint64</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-uint64" title="gum_dictionary_set_uint64 ()">gum_dictionary_set_uint64</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-string" title="gum_dictionary_get_string ()">gum_dictionary_get_string</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-set-string" title="gum_dictionary_set_string ()">gum_dictionary_set_string</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-GumDictionary.html#gum-dictionary-remove" title="gum_dictionary_remove ()">gum_dictionary_remove</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="gumd-GumDictionary.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-GumDictionary.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-dictionary.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="gumd-GumDictionary.description"></a><h2>Description</h2>
-<p>
-A <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> is a dictionary data structure that maps string keys to
+<p>A <span class="type">GumDictionary</span> is a dictionary data structure that maps string keys to
 <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> values. It's used in multiple places in gum and its public API
-to pass key-value data sets.
-</p>
-<p>
-</p>
+to pass key-value data sets.</p>
 <div class="informalexample"><pre class="programlisting">
     GumDictionary* dict = gum_dictionary_new();
     gum_dictionary_set_string(dict, "name", "John Smith");
@@ -111,648 +236,764 @@ to pass key-value data sets.
     const gchar* name = gum_dictionary_get_string(dict, "name");
     gum_dictionary_unref(dict);
 </pre></div>
-<p>
-</p>
+<p></p>
 </div>
 <div class="refsect1">
-<a name="gumd-GumDictionary.details"></a><h2>Details</h2>
+<a name="gumd-GumDictionary.functions_details"></a><h2>Functions</h2>
 <div class="refsect2">
-<a name="GumDictionary"></a><h3>GumDictionary</h3>
-<pre class="programlisting">typedef GHashTable GumDictionary;
-</pre>
-<p>
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> is a typedef for <a href="http://library.gnome.org/devel/glib/unstable/glib-Hash-Tables.html#GHashTable"><span class="type">GHashTable</span></a>, which
-means the developers may also use methods associated with that structure.
-</p>
+<a name="gum-dictionary-new"></a><h3>gum_dictionary_new ()</h3>
+<pre class="programlisting"><span class="returnvalue">GumDictionary</span> *
+gum_dictionary_new (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>Creates a new instance of <span class="type">GumDictionary</span>.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.2.5"></a><h4>Returns</h4>
+<p> <span class="type">GumDictionary</span> object if successful,
+NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-copy"></a><h3>gum_dictionary_copy ()</h3>
-<pre class="programlisting"><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     gum_dictionary_copy                 (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *other</code></em>);</pre>
-<p>
-Creates a copy of the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>other</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> object if the copy was successful,
-NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
+<a name="gum-dictionary-ref"></a><h3>gum_dictionary_ref ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_dictionary_ref (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>);</pre>
+<p>Increments the reference count of the dictionary structure.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
 </table></div>
 </div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-get"></a><h3>gum_dictionary_get ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          gum_dictionary_get                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
-<p>
-Retrieves a <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> value from the dictionary. This can be used to retrieve
+<a name="gum-dictionary-unref"></a><h3>gum_dictionary_unref ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_dictionary_unref (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>);</pre>
+<p>Decrements the reference count of the dictionary structure. If the reference
+count reaches zero, the structure is deallocated and shouldn't be used.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-copy"></a><h3>gum_dictionary_copy ()</h3>
+<pre class="programlisting"><span class="returnvalue">GumDictionary</span> *
+gum_dictionary_copy (<em class="parameter"><code><span class="type">GumDictionary</span> *other</code></em>);</pre>
+<p>Creates a copy of the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.5.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>other</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.5.6"></a><h4>Returns</h4>
+<p> <span class="type">GumDictionary</span> object if the copy was successful,
+NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-new-from-variant"></a><h3>gum_dictionary_new_from_variant ()</h3>
+<pre class="programlisting"><span class="returnvalue">GumDictionary</span> *
+gum_dictionary_new_from_variant (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *variant</code></em>);</pre>
+<p>Converts the <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> to <span class="type">GumDictionary</span>. This is useful for example if
+the dictionary needs to be deserialized, or if it's contained in another
+<span class="type">GumDictionary</span> and has been retrieved using <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get" title="gum_dictionary_get ()"><code class="function">gum_dictionary_get()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.6.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>variant</p></td>
+<td class="parameter_description"><p> instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.6.6"></a><h4>Returns</h4>
+<p> <span class="type">GumDictionary</span> if successful, NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-to-variant"></a><h3>gum_dictionary_to_variant ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+gum_dictionary_to_variant (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>);</pre>
+<p>Converts the <span class="type">GumDictionary</span> to a <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. The result can be serialized
+or put into another <span class="type">GumDictionary</span> using <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set" title="gum_dictionary_set ()"><code class="function">gum_dictionary_set()</code></a>.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.7.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.7.6"></a><h4>Returns</h4>
+<p> <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> object if successful, NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-get"></a><h3>gum_dictionary_get ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+gum_dictionary_get (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                    <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
+<p>Retrieves a <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> value from the dictionary. This can be used to retrieve
 a value of an arbitrary type, and then convert it manually to a specific type
 using <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> methods. For most commonly used types, also getters that
-return the specific type directly are provided (<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-string" title="gum_dictionary_get_string ()"><code class="function">gum_dictionary_get_string()</code></a>
-and similar).
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+return the specific type directly are provided (<a class="link" href="gumd-GumDictionary.html#gum-dictionary-get-string" title="gum_dictionary_get_string ()"><code class="function">gum_dictionary_get_string()</code></a>
+and similar).</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.8.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key to look up in the dictionary. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value; NULL is returned in case of failure (for
-example if the entry corresponding to the supplied key doesn't exist). <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> the key to look up in the dictionary. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-get-boolean"></a><h3>gum_dictionary_get_boolean ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_get_boolean          (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> *value</code></em>);</pre>
-<p>
-Retrieves a gboolean value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>points to the location where the value should be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was retrieved successfully, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
+<div class="refsect3">
+<a name="id-1.5.2.7.8.6"></a><h4>Returns</h4>
+<p> the value; NULL is returned in case of failure (for
+example if the entry corresponding to the supplied key doesn't exist). </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-get-int32"></a><h3>gum_dictionary_get_int32 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_get_int32            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *value</code></em>);</pre>
-<p>
-Retrieves a int32 value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>points to the location where the value should be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was retrieved successfully, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-get-int64"></a><h3>gum_dictionary_get_int64 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_get_int64            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint64</span> *value</code></em>);</pre>
-<p>
-Retrieves a int64 value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>points to the location where the value should be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was retrieved successfully, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-get-string"></a><h3>gum_dictionary_get_string ()</h3>
-<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       gum_dictionary_get_string           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
-<p>
-Retrieves a string value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value if it was retrieved successfully, NULL
-otherwise. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-get-uint32"></a><h3>gum_dictionary_get_uint32 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_get_uint32           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> *value</code></em>);</pre>
-<p>
-Retrieves a uint32 value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>points to the location where the value should be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was retrieved successfully, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-get-uint64"></a><h3>gum_dictionary_get_uint64 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_get_uint64           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint64</span> *value</code></em>);</pre>
-<p>
-Retrieves a uint64 value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to look up. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>points to the location where the value should be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was retrieved successfully, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-new"></a><h3>gum_dictionary_new ()</h3>
-<pre class="programlisting"><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     gum_dictionary_new                  (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Creates a new instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> object if successful,
-NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-new-from-variant"></a><h3>gum_dictionary_new_from_variant ()</h3>
-<pre class="programlisting"><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="returnvalue">GumDictionary</span></a> *     gum_dictionary_new_from_variant     (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *variant</code></em>);</pre>
-<p>
-Converts the <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> to <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. This is useful for example if
-the dictionary needs to be deserialized, or if it's contained in another
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> and has been retrieved using <a class="link" href="gumd-GumDictionary.html#gum-dictionary-get" title="gum_dictionary_get ()"><code class="function">gum_dictionary_get()</code></a>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>variant</code></em> :</span></p></td>
-<td>instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> if successful, NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-ref"></a><h3>gum_dictionary_ref ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_dictionary_ref                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);</pre>
-<p>
-Increments the reference count of the dictionary structure.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-remove"></a><h3>gum_dictionary_remove ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_remove               (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
-<p>
-Removes key-value pair in the dictionary as per key.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key which needs to be removed from the dictionary. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if successful, FALSE otherwise.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-dictionary-set"></a><h3>gum_dictionary_set ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set                  (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *value</code></em>);</pre>
-<p>
-Adds or replaces key-value pair in the dictionary. This allows to set a value
+<a name="gum-dictionary-set"></a><h3>gum_dictionary_set ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                    <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                    <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *value</code></em>);</pre>
+<p>Adds or replaces key-value pair in the dictionary. This allows to set a value
 of an arbitrary type: it first needs to be converted to a <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. For most
-commonly used types also type-specific setters are provided.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+commonly used types also type-specific setters are provided.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.9.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to be set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to be set. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if successful, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> value to be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.9.6"></a><h4>Returns</h4>
+<p> TRUE if successful, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-boolean"></a><h3>gum_dictionary_set_boolean ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_boolean          (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> value</code></em>);</pre>
-<p>
-Sets or replaces a gboolean value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-get-boolean"></a><h3>gum_dictionary_get_boolean ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_get_boolean (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                            <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> *value</code></em>);</pre>
+<p>Retrieves a gboolean value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.10.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> points to the location where the value should be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.10.6"></a><h4>Returns</h4>
+<p> TRUE if the value was retrieved successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-int32"></a><h3>gum_dictionary_set_int32 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_int32            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);</pre>
-<p>
-Sets or replaces a int32 value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-set-boolean"></a><h3>gum_dictionary_set_boolean ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_boolean (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                            <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> value</code></em>);</pre>
+<p>Sets or replaces a gboolean value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.11.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>value to set</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.11.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-int64"></a><h3>gum_dictionary_set_int64 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_int64            (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">gint64</span> value</code></em>);</pre>
-<p>
-Sets or replaces a int64 value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-get-int32"></a><h3>gum_dictionary_get_int32 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_get_int32 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *value</code></em>);</pre>
+<p>Retrieves a int32 value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.12.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> points to the location where the value should be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.12.6"></a><h4>Returns</h4>
+<p> TRUE if the value was retrieved successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-string"></a><h3>gum_dictionary_set_string ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_string           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);</pre>
-<p>
-Sets or replaces a string value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-set-int32"></a><h3>gum_dictionary_set_int32 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_int32 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                          <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);</pre>
+<p>Sets or replaces a int32 value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.13.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>value to set</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.13.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-uint32"></a><h3>gum_dictionary_set_uint32 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_uint32           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint32</span> value</code></em>);</pre>
-<p>
-Sets or replaces a uint32 value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-get-uint32"></a><h3>gum_dictionary_get_uint32 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_get_uint32 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                           <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> *value</code></em>);</pre>
+<p>Retrieves a uint32 value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.14.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> points to the location where the value should be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.14.6"></a><h4>Returns</h4>
+<p> TRUE if the value was retrieved successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-set-uint64"></a><h3>gum_dictionary_set_uint64 ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            gum_dictionary_set_uint64           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><span class="type">guint64</span> value</code></em>);</pre>
-<p>
-Sets or replaces a uint64 value in the dictionary.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-set-uint32"></a><h3>gum_dictionary_set_uint32 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_uint32 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                           <em class="parameter"><code><span class="type">guint32</span> value</code></em>);</pre>
+<p>Sets or replaces a uint32 value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.15.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>key to set. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>value to set</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>TRUE if the value was set or replaced successfully, FALSE otherwise.</td>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>value to set</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.15.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-to-variant"></a><h3>gum_dictionary_to_variant ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          gum_dictionary_to_variant           (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);</pre>
-<p>
-Converts the <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> to a <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. The result can be serialized
-or put into another <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> using <a class="link" href="gumd-GumDictionary.html#gum-dictionary-set" title="gum_dictionary_set ()"><code class="function">gum_dictionary_set()</code></a>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-dictionary-get-int64"></a><h3>gum_dictionary_get_int64 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_get_int64 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                          <em class="parameter"><code><span class="type">gint64</span> *value</code></em>);</pre>
+<p>Retrieves a int64 value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.16.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> object if successful, NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> points to the location where the value should be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.16.6"></a><h4>Returns</h4>
+<p> TRUE if the value was retrieved successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-dictionary-unref"></a><h3>gum_dictionary_unref ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_dictionary_unref                (<em class="parameter"><code><a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a> *dict</code></em>);</pre>
-<p>
-Decrements the reference count of the dictionary structure. If the reference
-count reaches zero, the structure is deallocated and shouldn't be used.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>dict</code></em> :</span></p></td>
-<td>instance of <a class="link" href="gumd-GumDictionary.html#GumDictionary" title="GumDictionary"><span class="type">GumDictionary</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr></tbody>
+<a name="gum-dictionary-set-int64"></a><h3>gum_dictionary_set_int64 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_int64 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                          <em class="parameter"><code><span class="type">gint64</span> value</code></em>);</pre>
+<p>Sets or replaces a int64 value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.17.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>value to set</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.2.7.17.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-get-uint64"></a><h3>gum_dictionary_get_uint64 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_get_uint64 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                           <em class="parameter"><code><span class="type">guint64</span> *value</code></em>);</pre>
+<p>Retrieves a uint64 value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.18.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> points to the location where the value should be set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.18.6"></a><h4>Returns</h4>
+<p> TRUE if the value was retrieved successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-set-uint64"></a><h3>gum_dictionary_set_uint64 ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_uint64 (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                           <em class="parameter"><code><span class="type">guint64</span> value</code></em>);</pre>
+<p>Sets or replaces a uint64 value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.19.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>value to set</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.19.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-get-string"></a><h3>gum_dictionary_get_string ()</h3>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+gum_dictionary_get_string (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
+<p>Retrieves a string value.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.20.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to look up. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.20.6"></a><h4>Returns</h4>
+<p> the value if it was retrieved successfully, NULL
+otherwise. </p>
+<p><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-set-string"></a><h3>gum_dictionary_set_string ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_set_string (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                           <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);</pre>
+<p>Sets or replaces a string value in the dictionary.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.21.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> value to set. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.21.6"></a><h4>Returns</h4>
+<p> TRUE if the value was set or replaced successfully, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-dictionary-remove"></a><h3>gum_dictionary_remove ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
+gum_dictionary_remove (<em class="parameter"><code><span class="type">GumDictionary</span> *dict</code></em>,
+                       <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
+<p>Removes key-value pair in the dictionary as per key.</p>
+<div class="refsect3">
+<a name="id-1.5.2.7.22.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>dict</p></td>
+<td class="parameter_description"><p> instance of <span class="type">GumDictionary</span>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> key which needs to be removed from the dictionary. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.2.7.22.6"></a><h4>Returns</h4>
+<p> TRUE if successful, FALSE otherwise.</p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gumd-GumDictionary.other_details"></a><h2>Types and Values</h2>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

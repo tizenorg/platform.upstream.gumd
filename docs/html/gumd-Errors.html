@@ -2,30 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Errors</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: Errors</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch02.html" title="Common">
 <link rel="prev" href="gumd-Logging.html" title="Logging">
 <link rel="next" href="GumDisposable.html" title="GumDisposable">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="gumd-Logging.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="GumDisposable.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#gumd-Errors.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#gumd-Errors.description" class="shortcut">Description</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#gumd-Errors.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#gumd-Errors.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gumd-Logging.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="GumDisposable.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="gumd-Errors"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -33,495 +30,605 @@
 <h2><span class="refentrytitle"><a name="gumd-Errors.top_of_page"></a>Errors</span></h2>
 <p>Errors — error definitions and utilities</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="gumd-Errors.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-error.h&gt;
-
-#define             <a class="link" href="gumd-Errors.html#GUM-ERROR:CAPS" title="GUM_ERROR">GUM_ERROR</a>
-#define             <a class="link" href="gumd-Errors.html#GUM-GET-ERROR-FOR-ID:CAPS" title="GUM_GET_ERROR_FOR_ID()">GUM_GET_ERROR_FOR_ID</a>                (code,
-                                                         message,
-                                                         ...)
-#define             <a class="link" href="gumd-Errors.html#GUM-RETURN-WITH-ERROR:CAPS" title="GUM_RETURN_WITH_ERROR()">GUM_RETURN_WITH_ERROR</a>               (code,
-                                                         err_str,
-                                                         err,
-                                                         retval)
-#define             <a class="link" href="gumd-Errors.html#GUM-SET-ERROR:CAPS" title="GUM_SET_ERROR()">GUM_SET_ERROR</a>                       (code,
-                                                         err_str,
-                                                         err,
-                                                         retvar,
-                                                         retval)
-enum                <a class="link" href="gumd-Errors.html#GumError" title="enum GumError">GumError</a>;
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> *            <a class="link" href="gumd-Errors.html#gum-error-new-from-variant" title="gum_error_new_from_variant ()">gum_error_new_from_variant</a>          (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *var</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="returnvalue">GQuark</span></a>              <a class="link" href="gumd-Errors.html#gum-error-quark" title="gum_error_quark ()">gum_error_quark</a>                     (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          <a class="link" href="gumd-Errors.html#gum-error-to-variant" title="gum_error_to_variant ()">gum_error_to_variant</a>                (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> *error</code></em>);
+<div class="refsect1">
+<a name="gumd-Errors.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-Errors.html#GUM-ERROR:CAPS" title="GUM_ERROR">GUM_ERROR</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#GUM-GET-ERROR-FOR-ID:CAPS" title="GUM_GET_ERROR_FOR_ID()">GUM_GET_ERROR_FOR_ID</a><span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#GUM-SET-ERROR:CAPS" title="GUM_SET_ERROR()">GUM_SET_ERROR</a><span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#GUM-RETURN-WITH-ERROR:CAPS" title="GUM_RETURN_WITH_ERROR()">GUM_RETURN_WITH_ERROR</a><span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="returnvalue">GQuark</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#gum-error-quark" title="gum_error_quark ()">gum_error_quark</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#gum-error-new-from-variant" title="gum_error_new_from_variant ()">gum_error_new_from_variant</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Errors.html#gum-error-to-variant" title="gum_error_to_variant ()">gum_error_to_variant</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="gumd-Errors.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody><tr>
+<td class="datatype_keyword">enum</td>
+<td class="function_name"><a class="link" href="gumd-Errors.html#GumError" title="enum GumError">GumError</a></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="gumd-Errors.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-Errors.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-error.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="gumd-Errors.description"></a><h2>Description</h2>
-<p>
-This file provides Gum error definitions and utilities.
+<p>This file provides Gum error definitions and utilities.
 When creating an error, use <a class="link" href="gumd-Errors.html#GUM-ERROR:CAPS" title="GUM_ERROR"><span class="type">GUM_ERROR</span></a> for the error domain and errors
-from <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a> for the error code.
-</p>
-<p>
-</p>
+from <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a> for the error code.</p>
 <div class="informalexample"><pre class="programlisting">
     GError* err = g_error_new(GUM_ERROR, GUM_ERROR_USER_ALREADY_EXISTS,
     "User already exists");
 </pre></div>
-<p>
-</p>
+<p></p>
 </div>
 <div class="refsect1">
-<a name="gumd-Errors.details"></a><h2>Details</h2>
+<a name="gumd-Errors.functions_details"></a><h2>Functions</h2>
 <div class="refsect2">
 <a name="GUM-ERROR:CAPS"></a><h3>GUM_ERROR</h3>
 <pre class="programlisting">#define GUM_ERROR   (gum_error_quark())
 </pre>
-<p>
-This macro should be used when creating a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> (for example with
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#g-error-new"><code class="function">g_error_new()</code></a>).
-</p>
+<p>This macro should be used when creating a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> (for example with
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#g-error-new"><code class="function">g_error_new()</code></a>).</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-GET-ERROR-FOR-ID:CAPS"></a><h3>GUM_GET_ERROR_FOR_ID()</h3>
 <pre class="programlisting">#define             GUM_GET_ERROR_FOR_ID(code, message, args...)</pre>
-<p>
-A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<p>A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>code</code></em> :</span></p></td>
-<td>A <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a> specifying the error</td>
+<td class="parameter_name"><p>code</p></td>
+<td class="parameter_description"><p>A <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a> specifying the error</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>message</code></em> :</span></p></td>
-<td>Format string for the error message</td>
+<td class="parameter_name"><p>message</p></td>
+<td class="parameter_description"><p>Format string for the error message</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>...</code></em> :</span></p></td>
-<td>parameters for the error string</td>
+<td class="parameter_name"><p>...</p></td>
+<td class="parameter_description"><p>parameters for the error string</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<hr>
-<div class="refsect2">
-<a name="GUM-RETURN-WITH-ERROR:CAPS"></a><h3>GUM_RETURN_WITH_ERROR()</h3>
-<pre class="programlisting">#define             GUM_RETURN_WITH_ERROR(code, err_str, err, retval)</pre>
-<p>
-A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain, output
-the error message to logs, and returns with specified retval.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>code</code></em> :</span></p></td>
-<td>the error code as listed in <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>err_str</code></em> :</span></p></td>
-<td>the error message to be set for the <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>err</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>retval</code></em> :</span></p></td>
-<td>value to be used on return</td>
-</tr>
-</tbody>
-</table></div>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-SET-ERROR:CAPS"></a><h3>GUM_SET_ERROR()</h3>
 <pre class="programlisting">#define             GUM_SET_ERROR(code, err_str, err, retvar, retval)</pre>
-<p>
-A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain, output
-the error message to logs, and sets the specified retval to retvar.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<p>A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain, output
+the error message to logs, and sets the specified retval to retvar.</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>code</code></em> :</span></p></td>
-<td>the error code as listed in <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a>
-</td>
+<td class="parameter_name"><p>code</p></td>
+<td class="parameter_description"><p>the error code as listed in <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>err_str</code></em> :</span></p></td>
-<td>the error message to be set for the <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
-</td>
+<td class="parameter_name"><p>err_str</p></td>
+<td class="parameter_description"><p>the error message to be set for the <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>err</code></em> :</span></p></td>
-<td>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
-</td>
+<td class="parameter_name"><p>err</p></td>
+<td class="parameter_description"><p>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>retvar</code></em> :</span></p></td>
-<td>return variable to hold the return value</td>
+<td class="parameter_name"><p>retvar</p></td>
+<td class="parameter_description"><p>return variable to hold the return value</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>retval</code></em> :</span></p></td>
-<td>return value to be set to the return variable</td>
+<td class="parameter_name"><p>retval</p></td>
+<td class="parameter_description"><p>return value to be set to the return variable</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="GumError"></a><h3>enum GumError</h3>
-<pre class="programlisting">typedef enum {
-    GUM_ERROR_NONE,
-
-    GUM_ERROR_UNKNOWN = 1,
-    GUM_ERROR_INTERNAL_SERVER,
-    GUM_ERROR_PERMISSION_DENIED,
-
-    GUM_ERROR_USER_ALREADY_EXISTS = 32,
-    GUM_ERROR_USER_GROUP_ADD_FAILURE,
-    GUM_ERROR_USER_UID_NOT_AVAILABLE,
-    GUM_ERROR_USER_INVALID_USER_TYPE,
-    GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE,
-    GUM_ERROR_USER_NOT_FOUND,
-    GUM_ERROR_USER_INVALID_DATA,
-    GUM_ERROR_USER_GROUP_DELETE_FAILURE,
-    GUM_ERROR_USER_SELF_DESTRUCTION,
-    GUM_ERROR_USER_SESSION_TERM_FAILURE,
-    GUM_ERROR_USER_NO_CHANGES,
-    GUM_ERROR_USER_LOCK_FAILURE,
-
-    GUM_ERROR_GROUP_ALREADY_EXISTS = 64,
-    GUM_ERROR_GROUP_GID_NOT_AVAILABLE,
-    GUM_ERROR_GROUP_INVALID_GROUP_TYPE,
-    GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE,
-    GUM_ERROR_GROUP_NOT_FOUND,
-    GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER,
-    GUM_ERROR_GROUP_INVALID_DATA,
-    GUM_ERROR_GROUP_SELF_DESTRUCTION,
-    GUM_ERROR_GROUP_HAS_USER,
-    GUM_ERROR_GROUP_NO_CHANGES,
-
-    GUM_ERROR_DB_ALREADY_LOCKED = 90,
-    GUM_ERROR_FILE_OPEN,
-    GUM_ERROR_FILE_ATTRIBUTE,
-    GUM_ERROR_FILE_MOVE,
-    GUM_ERROR_FILE_WRITE,
-    GUM_ERROR_HOME_DIR_CREATE_FAILURE,
-    GUM_ERROR_HOME_DIR_DELETE_FAILURE,
-    GUM_ERROR_HOME_DIR_COPY_FAILURE,
-
-    GUM_ERROR_INVALID_NAME = 120,
-    GUM_ERROR_INVALID_NICKNAME,
-
-    GUM_ERROR_INVALID_SECRET = 130,
-
-    GUM_ERROR_INVALID_STR = 140,
-    GUM_ERROR_INVALID_STR_LEN,
-
-    GUM_ERROR_INVALID_INPUT = 160,
-
-    GUM_ERROR_USER_ERR = 400
-} GumError;
-</pre>
-<p>
-This enumeration provides a list of errors
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="GUM-RETURN-WITH-ERROR:CAPS"></a><h3>GUM_RETURN_WITH_ERROR()</h3>
+<pre class="programlisting">#define             GUM_RETURN_WITH_ERROR(code, err_str, err, retval)</pre>
+<p>A helper macro that creates a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> with the proper gum domain, output
+the error message to logs, and returns with specified retval.</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.5.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><a name="GUM-ERROR-NONE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_NONE</code></span></p></td>
-<td>No error
-</td>
+<td class="parameter_name"><p>code</p></td>
+<td class="parameter_description"><p>the error code as listed in <a class="link" href="gumd-Errors.html#GumError" title="enum GumError"><span class="type">GumError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><a name="GUM-ERROR-UNKNOWN:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_UNKNOWN</code></span></p></td>
-<td>Catch-all for errors not distinguished by another error
-code
-</td>
+<td class="parameter_name"><p>err_str</p></td>
+<td class="parameter_description"><p>the error message to be set for the <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><a name="GUM-ERROR-INTERNAL-SERVER:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INTERNAL_SERVER</code></span></p></td>
-<td>Server internal error
-</td>
+<td class="parameter_name"><p>err</p></td>
+<td class="parameter_description"><p>a <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a></p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 <tr>
-<td><p><a name="GUM-ERROR-PERMISSION-DENIED:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_PERMISSION_DENIED</code></span></p></td>
-<td>The operation cannot be performed due to
-insufficient client permissions
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-ALREADY-EXISTS:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_ALREADY_EXISTS</code></span></p></td>
-<td>User already exists
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-GROUP-ADD-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_GROUP_ADD_FAILURE</code></span></p></td>
-<td>Adding/creating groups for the user
-failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-UID-NOT-AVAILABLE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_UID_NOT_AVAILABLE</code></span></p></td>
-<td>UID not available in the defined range
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-INVALID-USER-TYPE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_INVALID_USER_TYPE</code></span></p></td>
-<td>Usertype is not set
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-SECRET-ENCRYPT-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE</code></span></p></td>
-<td>Encryption of secret failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-NOT-FOUND:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_NOT_FOUND</code></span></p></td>
-<td>User not found
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-INVALID-DATA:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_INVALID_DATA</code></span></p></td>
-<td>Invalid data provided in the request
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-GROUP-DELETE-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_GROUP_DELETE_FAILURE</code></span></p></td>
-<td>Deleting group for the user failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-SELF-DESTRUCTION:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_SELF_DESTRUCTION</code></span></p></td>
-<td>Self-destruction is not allowed
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-SESSION-TERM-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_SESSION_TERM_FAILURE</code></span></p></td>
-<td>Session termination of a user failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-NO-CHANGES:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_NO_CHANGES</code></span></p></td>
-<td>No changes specified in the user update request
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-LOCK-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_LOCK_FAILURE</code></span></p></td>
-<td>Unable to lock the user account before doing
-any changes
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-ALREADY-EXISTS:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_ALREADY_EXISTS</code></span></p></td>
-<td>Group already exists
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-GID-NOT-AVAILABLE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_GID_NOT_AVAILABLE</code></span></p></td>
-<td>GID mot available in the defined range
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-INVALID-GROUP-TYPE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_INVALID_GROUP_TYPE</code></span></p></td>
-<td>Group type not set
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-SECRET-ENCRYPT-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE</code></span></p></td>
-<td>Encryption of group secret failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-NOT-FOUND:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_NOT_FOUND</code></span></p></td>
-<td>Group not found
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-USER-ALREADY-A-MEMBER:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER</code></span></p></td>
-<td>User is already a member of the group
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-INVALID-DATA:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_INVALID_DATA</code></span></p></td>
-<td>Invalid data is specified in the request
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-SELF-DESTRUCTION:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_SELF_DESTRUCTION</code></span></p></td>
-<td>Self-destruction is not allowed
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-HAS-USER:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_HAS_USER</code></span></p></td>
-<td>Group has (other) user(s)
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-GROUP-NO-CHANGES:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_GROUP_NO_CHANGES</code></span></p></td>
-<td>No changes specified in the group update request
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-DB-ALREADY-LOCKED:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_DB_ALREADY_LOCKED</code></span></p></td>
-<td>Database is already locked
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-FILE-OPEN:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_FILE_OPEN</code></span></p></td>
-<td>File open error
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-FILE-ATTRIBUTE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_FILE_ATTRIBUTE</code></span></p></td>
-<td>File attribute error
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-FILE-MOVE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_FILE_MOVE</code></span></p></td>
-<td>File move error
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-FILE-WRITE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_FILE_WRITE</code></span></p></td>
-<td>File write error
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-HOME-DIR-CREATE-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_HOME_DIR_CREATE_FAILURE</code></span></p></td>
-<td>Directory create failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-HOME-DIR-DELETE-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_HOME_DIR_DELETE_FAILURE</code></span></p></td>
-<td>Directory delete failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-HOME-DIR-COPY-FAILURE:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_HOME_DIR_COPY_FAILURE</code></span></p></td>
-<td>Directory copy failure
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-NAME:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_NAME</code></span></p></td>
-<td>Invalid name specified
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-NICKNAME:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_NICKNAME</code></span></p></td>
-<td>Invalid nickname specified
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-SECRET:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_SECRET</code></span></p></td>
-<td>Invalid secret specified
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-STR:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_STR</code></span></p></td>
-<td>Invalid string specified
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-STR-LEN:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_STR_LEN</code></span></p></td>
-<td>Invalid string length
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-INVALID-INPUT:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_INVALID_INPUT</code></span></p></td>
-<td>Invalid input specified
-</td>
-</tr>
-<tr>
-<td><p><a name="GUM-ERROR-USER-ERR:CAPS"></a><span class="term"><code class="literal">GUM_ERROR_USER_ERR</code></span></p></td>
-<td>Placeholder to rearrange enumeration - User space
-specific
-</td>
+<td class="parameter_name"><p>retval</p></td>
+<td class="parameter_description"><p>value to be used on return</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
 </div>
-<hr>
-<div class="refsect2">
-<a name="gum-error-new-from-variant"></a><h3>gum_error_new_from_variant ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> *            gum_error_new_from_variant          (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *var</code></em>);</pre>
-<p>
-Converts the GVariant to GError.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>var</code></em> :</span></p></td>
-<td>instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> object if successful, NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
-</table></div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="gum-error-quark"></a><h3>gum_error_quark ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="returnvalue">GQuark</span></a>              gum_error_quark                     (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Creates and returns a domain for Gum errors.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-error-quark"></a><h3>gum_error_quark ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="returnvalue">GQuark</span></a>
+gum_error_quark (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>Creates and returns a domain for Gum errors.</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.6.5"></a><h4>Returns</h4>
+<p> <a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> for Gum errors</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-error-new-from-variant"></a><h3>gum_error_new_from_variant ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="returnvalue">GError</span></a> *
+gum_error_new_from_variant (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> *var</code></em>);</pre>
+<p>Converts the GVariant to GError.</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.7.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> for Gum errors</td>
+<td class="parameter_name"><p>var</p></td>
+<td class="parameter_description"><p> instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr></tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.5.8.7.6"></a><h4>Returns</h4>
+<p> <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> object if successful, NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
 <hr>
 <div class="refsect2">
-<a name="gum-error-to-variant"></a><h3>gum_error_to_variant ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *          gum_error_to_variant                (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> *error</code></em>);</pre>
-<p>
-Converts the GError to GVariant.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-error-to-variant"></a><h3>gum_error_to_variant ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="returnvalue">GVariant</span></a> *
+gum_error_to_variant (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a> *error</code></em>);</pre>
+<p>Converts the GError to GVariant.</p>
+<div class="refsect3">
+<a name="id-1.5.5.8.8.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>error</p></td>
+<td class="parameter_description"><p> instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.5.8.8.6"></a><h4>Returns</h4>
+<p> (transfer full) <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> object if successful, NULL otherwise.</p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gumd-Errors.other_details"></a><h2>Types and Values</h2>
+<div class="refsect2">
+<a name="GumError"></a><h3>enum GumError</h3>
+<p>This enumeration provides a list of errors</p>
+<div class="refsect3">
+<a name="id-1.5.5.9.2.4"></a><h4>Members</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col class="enum_members_description">
+<col width="200px" class="enum_members_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>instance of <a href="http://library.gnome.org/devel/glib/unstable/glib-Error-Reporting.html#GError"><span class="type">GError</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
+<td class="enum_member_name"><p><a name="GUM-ERROR-NONE:CAPS"></a>GUM_ERROR_NONE</p></td>
+<td class="enum_member_description">
+<p>No error</p>
 </td>
+<td class="enum_member_annotations"> </td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>(transfer full) <a href="http://library.gnome.org/devel/glib/unstable/glib-GVariant.html#GVariant"><span class="type">GVariant</span></a> object if successful, NULL otherwise.</td>
+<td class="enum_member_name"><p><a name="GUM-ERROR-UNKNOWN:CAPS"></a>GUM_ERROR_UNKNOWN</p></td>
+<td class="enum_member_description">
+<p>Catch-all for errors not distinguished by another error
+code</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INTERNAL-SERVER:CAPS"></a>GUM_ERROR_INTERNAL_SERVER</p></td>
+<td class="enum_member_description">
+<p>Server internal error</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-PERMISSION-DENIED:CAPS"></a>GUM_ERROR_PERMISSION_DENIED</p></td>
+<td class="enum_member_description">
+<p>The operation cannot be performed due to
+insufficient client permissions</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-ALREADY-EXISTS:CAPS"></a>GUM_ERROR_USER_ALREADY_EXISTS</p></td>
+<td class="enum_member_description">
+<p>User already exists</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-GROUP-ADD-FAILURE:CAPS"></a>GUM_ERROR_USER_GROUP_ADD_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Adding/creating groups for the user
+failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-UID-NOT-AVAILABLE:CAPS"></a>GUM_ERROR_USER_UID_NOT_AVAILABLE</p></td>
+<td class="enum_member_description">
+<p>UID not available in the defined range</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-INVALID-USER-TYPE:CAPS"></a>GUM_ERROR_USER_INVALID_USER_TYPE</p></td>
+<td class="enum_member_description">
+<p>Usertype is not set</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-SECRET-ENCRYPT-FAILURE:CAPS"></a>GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Encryption of secret failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-NOT-FOUND:CAPS"></a>GUM_ERROR_USER_NOT_FOUND</p></td>
+<td class="enum_member_description">
+<p>User not found</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-INVALID-DATA:CAPS"></a>GUM_ERROR_USER_INVALID_DATA</p></td>
+<td class="enum_member_description">
+<p>Invalid data provided in the request</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-GROUP-DELETE-FAILURE:CAPS"></a>GUM_ERROR_USER_GROUP_DELETE_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Deleting group for the user failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-SELF-DESTRUCTION:CAPS"></a>GUM_ERROR_USER_SELF_DESTRUCTION</p></td>
+<td class="enum_member_description">
+<p>Self-destruction is not allowed</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-SESSION-TERM-FAILURE:CAPS"></a>GUM_ERROR_USER_SESSION_TERM_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Session termination of a user failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-NO-CHANGES:CAPS"></a>GUM_ERROR_USER_NO_CHANGES</p></td>
+<td class="enum_member_description">
+<p>No changes specified in the user update request</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-LOCK-FAILURE:CAPS"></a>GUM_ERROR_USER_LOCK_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Unable to lock the user account before doing
+any changes</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-ALREADY-EXISTS:CAPS"></a>GUM_ERROR_GROUP_ALREADY_EXISTS</p></td>
+<td class="enum_member_description">
+<p>Group already exists</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-GID-NOT-AVAILABLE:CAPS"></a>GUM_ERROR_GROUP_GID_NOT_AVAILABLE</p></td>
+<td class="enum_member_description">
+<p>GID mot available in the defined range</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-INVALID-GROUP-TYPE:CAPS"></a>GUM_ERROR_GROUP_INVALID_GROUP_TYPE</p></td>
+<td class="enum_member_description">
+<p>Group type not set</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-SECRET-ENCRYPT-FAILURE:CAPS"></a>GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Encryption of group secret failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-NOT-FOUND:CAPS"></a>GUM_ERROR_GROUP_NOT_FOUND</p></td>
+<td class="enum_member_description">
+<p>Group not found</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-USER-ALREADY-A-MEMBER:CAPS"></a>GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER</p></td>
+<td class="enum_member_description">
+<p>User is already a member of the group</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-INVALID-DATA:CAPS"></a>GUM_ERROR_GROUP_INVALID_DATA</p></td>
+<td class="enum_member_description">
+<p>Invalid data is specified in the request</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-SELF-DESTRUCTION:CAPS"></a>GUM_ERROR_GROUP_SELF_DESTRUCTION</p></td>
+<td class="enum_member_description">
+<p>Self-destruction is not allowed</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-HAS-USER:CAPS"></a>GUM_ERROR_GROUP_HAS_USER</p></td>
+<td class="enum_member_description">
+<p>Group has (other) user(s)</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-GROUP-NO-CHANGES:CAPS"></a>GUM_ERROR_GROUP_NO_CHANGES</p></td>
+<td class="enum_member_description">
+<p>No changes specified in the group update request</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-DB-ALREADY-LOCKED:CAPS"></a>GUM_ERROR_DB_ALREADY_LOCKED</p></td>
+<td class="enum_member_description">
+<p>Database is already locked</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-FILE-OPEN:CAPS"></a>GUM_ERROR_FILE_OPEN</p></td>
+<td class="enum_member_description">
+<p>File open error</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-FILE-ATTRIBUTE:CAPS"></a>GUM_ERROR_FILE_ATTRIBUTE</p></td>
+<td class="enum_member_description">
+<p>File attribute error</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-FILE-MOVE:CAPS"></a>GUM_ERROR_FILE_MOVE</p></td>
+<td class="enum_member_description">
+<p>File move error</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-FILE-WRITE:CAPS"></a>GUM_ERROR_FILE_WRITE</p></td>
+<td class="enum_member_description">
+<p>File write error</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-HOME-DIR-CREATE-FAILURE:CAPS"></a>GUM_ERROR_HOME_DIR_CREATE_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Directory create failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-HOME-DIR-DELETE-FAILURE:CAPS"></a>GUM_ERROR_HOME_DIR_DELETE_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Directory delete failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-HOME-DIR-COPY-FAILURE:CAPS"></a>GUM_ERROR_HOME_DIR_COPY_FAILURE</p></td>
+<td class="enum_member_description">
+<p>Directory copy failure</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-NAME:CAPS"></a>GUM_ERROR_INVALID_NAME</p></td>
+<td class="enum_member_description">
+<p>Invalid name specified</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-NICKNAME:CAPS"></a>GUM_ERROR_INVALID_NICKNAME</p></td>
+<td class="enum_member_description">
+<p>Invalid nickname specified</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-SECRET:CAPS"></a>GUM_ERROR_INVALID_SECRET</p></td>
+<td class="enum_member_description">
+<p>Invalid secret specified</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-STR:CAPS"></a>GUM_ERROR_INVALID_STR</p></td>
+<td class="enum_member_description">
+<p>Invalid string specified</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-STR-LEN:CAPS"></a>GUM_ERROR_INVALID_STR_LEN</p></td>
+<td class="enum_member_description">
+<p>Invalid string length</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-INVALID-INPUT:CAPS"></a>GUM_ERROR_INVALID_INPUT</p></td>
+<td class="enum_member_description">
+<p>Invalid input specified</p>
+</td>
+<td class="enum_member_annotations"> </td>
+</tr>
+<tr>
+<td class="enum_member_name"><p><a name="GUM-ERROR-USER-ERR:CAPS"></a>GUM_ERROR_USER_ERR</p></td>
+<td class="enum_member_description">
+<p>Placeholder to rearrange enumeration - User space
+specific</p>
+</td>
+<td class="enum_member_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
+</div>
 </div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

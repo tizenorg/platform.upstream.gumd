@@ -2,32 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>GumConfig</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: GumConfig</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch01.html" title="Daemon (gumd) configuration">
 <link rel="prev" href="ch01.html" title="Daemon (gumd) configuration">
 <link rel="next" href="gumd-General-configuration.html" title="General configuration">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="gumd-General-configuration.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#GumConfig.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#GumConfig.description" class="shortcut">Description</a>
-                   | 
-                  <a href="#GumConfig.object-hierarchy" class="shortcut">Object Hierarchy</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#GumConfig.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#GumConfig.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gumd-General-configuration.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="GumConfig"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -35,63 +30,110 @@
 <h2><span class="refentrytitle"><a name="GumConfig.top_of_page"></a>GumConfig</span></h2>
 <p>GumConfig — gum configuration information</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="GumConfig.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-config.h&gt;
-
-#define             <a class="link" href="GumConfig.html#GUM-UMASK:CAPS" title="GUM_UMASK">GUM_UMASK</a>
-struct              <a class="link" href="GumConfig.html#GumConfig-struct" title="struct GumConfig">GumConfig</a>;
-struct              <a class="link" href="GumConfig.html#GumConfigClass" title="struct GumConfigClass">GumConfigClass</a>;
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="GumConfig.html#gum-config-get-int" title="gum_config_get_int ()">gum_config_get_int</a>                  (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> retval</code></em>);
-const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="GumConfig.html#gum-config-get-string" title="gum_config_get_string ()">gum_config_get_string</a>               (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               <a class="link" href="GumConfig.html#gum-config-get-uint" title="gum_config_get_uint ()">gum_config_get_uint</a>                 (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> retval</code></em>);
-<a class="link" href="GumConfig.html" title="GumConfig"><span class="returnvalue">GumConfig</span></a> *         <a class="link" href="GumConfig.html#gum-config-new" title="gum_config_new ()">gum_config_new</a>                      ();
-<span class="returnvalue">void</span>                <a class="link" href="GumConfig.html#gum-config-set-int" title="gum_config_set_int ()">gum_config_set_int</a>                  (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="GumConfig.html#gum-config-set-string" title="gum_config_set_string ()">gum_config_set_string</a>               (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="GumConfig.html#gum-config-set-uint" title="gum_config_set_uint ()">gum_config_set_uint</a>                 (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> value</code></em>);
-</pre>
+<div class="refsect1">
+<a name="GumConfig.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<a class="link" href="GumConfig.html" title="GumConfig"><span class="returnvalue">GumConfig</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-new" title="gum_config_new ()">gum_config_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-get-int" title="gum_config_get_int ()">gum_config_get_int</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-set-int" title="gum_config_set_int ()">gum_config_set_int</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-get-uint" title="gum_config_get_uint ()">gum_config_get_uint</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-set-uint" title="gum_config_set_uint ()">gum_config_set_uint</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-get-string" title="gum_config_get_string ()">gum_config_get_string</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-set-string" title="gum_config_set_string ()">gum_config_set_string</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="GumConfig.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody><tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="GumConfig.html#GUM-UMASK:CAPS" title="GUM_UMASK">GUM_UMASK</a></td>
+</tr></tbody>
+</table></div>
 </div>
 <div class="refsect1">
 <a name="GumConfig.object-hierarchy"></a><h2>Object Hierarchy</h2>
-<pre class="synopsis">
-  <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject">GObject</a>
-   +----GumConfig
+<pre class="screen">    <a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObject">GObject</a>
+    <span class="lineart">╰──</span> GumConfig
+</pre>
+</div>
+<div class="refsect1">
+<a name="GumConfig.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-config.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="GumConfig.description"></a><h2>Description</h2>
-<p>
-<a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> holds configuration information as a set of keys and values
-(integer or strings). The key names are defined in
+<p><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> holds configuration information as a set of keys and values
+(integer or strings). The key names are defined in</p>
 <a class="link" href="gumd-General-configuration.html" title="General configuration">General config keys</a>,
-and <a class="link" href="gumd-DBus-configuration.html" title="DBus configuration">DBus config keys</a>.
-</p>
-<p>
-The configuration is retrieved from the gum configuration file. See below
-for where the file is searched for.
-</p>
-<p>
-</p>
+<p>and <a class="link" href="gumd-DBus-configuration.html" title="DBus configuration">DBus config keys</a>.</p>
+<p>The configuration is retrieved from the gum configuration file. See below
+for where the file is searched for.</p>
 <div class="refsect1">
-<a name="idp7041232"></a><h2>Usage</h2>
+<a name="id-1.4.2.7.6"></a><h2>Usage</h2>
 </div>
-<p>
-Following code snippet demonstrates how to create and use config object:
-</p>
+<p>Following code snippet demonstrates how to create and use config object:</p>
 <div class="informalexample"><pre class="programlisting">
 
 GumConfig* config = gum_config_new ();
@@ -100,279 +142,280 @@ const gchar *str = gum_config_get_string (config,
 g_object_unref(config);
 
 </pre></div>
-<p>
-</p>
-<p>
-</p>
+<p></p>
 <div class="refsect1">
-<a name="idp5930864"></a><h2>Where the configuration file is searched for</h2>
+<a name="id-1.4.2.7.10"></a><h2>Where the configuration file is searched for</h2>
 </div>
-<p>
-</p>
-<p>
-If gum has been compiled with --enable-debug, then these locations are used,
-in decreasing order of priority:
-</p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<p>If gum has been compiled with --enable-debug, then these locations are used,
+in decreasing order of priority:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>UM_CONF_FILE environment variable</p></li>
-<li class="listitem"><p><a href="http://library.gnome.org/devel/glib/unstable/glib-Miscellaneous-Utility-Functions.html#g-get-user-config-dir"><code class="function">g_get_user_config_dir()</code></a> + "gum.conf"</p></li>
+<li class="listitem"><p>g_get_user_config_dir() + "gum.conf"</p></li>
 <li class="listitem"><p>each of <a href="http://library.gnome.org/devel/glib/unstable/glib-Miscellaneous-Utility-Functions.html#g-get-system-config-dirs"><code class="function">g_get_system_config_dirs()</code></a> + "gum.conf"</p></li>
 </ul></div>
-<p>
-</p>
-<p>
-Otherwise, the config file location is determined at compilation time as
-$(sysconfdir) + "gum.conf"
-</p>
-<p>
-</p>
+<p>Otherwise, the config file location is determined at compilation time as
+$(sysconfdir) + "gum.conf"</p>
 <div class="refsect1">
-<a name="idp7685760"></a><h2>Example configuration file</h2>
+<a name="id-1.4.2.7.14"></a><h2>Example configuration file</h2>
 </div>
-<p>
-</p>
-<p>
-See example configuration file here:
+<p>See example configuration file here:</p>
 <a class="ulink" href="https://github.com/01org/gumd/blob/master/src/common/gum.conf.in" target="_top">
 gum configuration file</a>
-</p>
 </div>
 <div class="refsect1">
-<a name="GumConfig.details"></a><h2>Details</h2>
+<a name="GumConfig.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="gum-config-new"></a><h3>gum_config_new ()</h3>
+<pre class="programlisting"><a class="link" href="GumConfig.html" title="GumConfig"><span class="returnvalue">GumConfig</span></a> *
+gum_config_new ();</pre>
+<p>Create a <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> object.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.2.5"></a><h4>Returns</h4>
+<p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-get-int"></a><h3>gum_config_get_int ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>
+gum_config_get_int (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                    <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                    <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> retval</code></em>);</pre>
+<p>Get an integer configuration value.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p>the key name</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>retval</p></td>
+<td class="parameter_description"><p>value to be returned in case key is not found</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.4.2.8.3.6"></a><h4>Returns</h4>
+<p> the value corresponding to the key as an integer. If the key does
+not exist or cannot be converted to the integer, retval is returned.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-set-int"></a><h3>gum_config_set_int ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_config_set_int (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                    <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                    <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);</pre>
+<p>Sets the configuration value to the provided integer.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p>the key name</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the value</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-get-uint"></a><h3>gum_config_get_uint ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>
+gum_config_get_uint (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                     <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                     <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> retval</code></em>);</pre>
+<p>Get an unsigned integer configuration value.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.5.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p>the key name</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>retval</p></td>
+<td class="parameter_description"><p>value to be returned in case key is not found</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.4.2.8.5.6"></a><h4>Returns</h4>
+<p> the value corresponding to the key as an unsigned integer. If the
+key does not exist or cannot be converted to the integer, retval is returned.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-set-uint"></a><h3>gum_config_set_uint ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_config_set_uint (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                     <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                     <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> value</code></em>);</pre>
+<p>Sets the configuration value to the provided unsigned integer.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.6.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p>the key name</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p>the value</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-get-string"></a><h3>gum_config_get_string ()</h3>
+<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+gum_config_get_string (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                       <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
+<p>Get a string configuration value.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.7.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> the key name. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.4.2.8.7.6"></a><h4>Returns</h4>
+<p> the value corresponding to the key as an string. If the
+key does not exist or cannot be converted to the integer, NULL is returned.</p>
+<p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-set-string"></a><h3>gum_config_set_string ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_config_set_string (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                       <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
+                       <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);</pre>
+<p>Sets the configuration value to the provided string.</p>
+<div class="refsect3">
+<a name="id-1.4.2.8.8.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>key</p></td>
+<td class="parameter_description"><p> the key name. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>value</p></td>
+<td class="parameter_description"><p> the value. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="GumConfig.other_details"></a><h2>Types and Values</h2>
 <div class="refsect2">
 <a name="GUM-UMASK:CAPS"></a><h3>GUM_UMASK</h3>
 <pre class="programlisting">#define GUM_UMASK  022
 </pre>
-<p>
-Value used to set the mode of home directories created for new users.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GumConfig-struct"></a><h3>struct GumConfig</h3>
-<pre class="programlisting">struct GumConfig;</pre>
-<p>
-Opaque structure for the object.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GumConfigClass"></a><h3>struct GumConfigClass</h3>
-<pre class="programlisting">struct GumConfigClass {
-    GObjectClass parent_class;
-};
-</pre>
-<p>
-Opaque structure for the class.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><a href="http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#GObjectClass"><span class="type">GObjectClass</span></a> <em class="structfield"><code><a name="GumConfigClass.parent-class"></a>parent_class</code></em>;</span></p></td>
-<td>parent class object</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-get-int"></a><h3>gum_config_get_int ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                gum_config_get_int                  (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> retval</code></em>);</pre>
-<p>
-Get an integer configuration value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>retval</code></em> :</span></p></td>
-<td>value to be returned in case key is not found</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value corresponding to the key as an integer. If the key does
-not exist or cannot be converted to the integer, retval is returned.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-get-string"></a><h3>gum_config_get_string ()</h3>
-<pre class="programlisting">const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       gum_config_get_string               (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
-<p>
-Get a string configuration value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value corresponding to the key as an string. If the
-key does not exist or cannot be converted to the integer, NULL is returned.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-get-uint"></a><h3>gum_config_get_uint ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="returnvalue">guint</span></a>               gum_config_get_uint                 (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> retval</code></em>);</pre>
-<p>
-Get an unsigned integer configuration value.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>retval</code></em> :</span></p></td>
-<td>value to be returned in case key is not found</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>the value corresponding to the key as an unsigned integer. If the
-key does not exist or cannot be converted to the integer, retval is returned.</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-new"></a><h3>gum_config_new ()</h3>
-<pre class="programlisting"><a class="link" href="GumConfig.html" title="GumConfig"><span class="returnvalue">GumConfig</span></a> *         gum_config_new                      ();</pre>
-<p>
-Create a <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> object.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-set-int"></a><h3>gum_config_set_int ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_config_set_int                  (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);</pre>
-<p>
-Sets the configuration value to the provided integer.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-set-string"></a><h3>gum_config_set_string ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_config_set_string               (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);</pre>
-<p>
-Sets the configuration value to the provided string.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>the value. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-config-set-uint"></a><h3>gum_config_set_uint ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_config_set_uint                 (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>,
-                                                         <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> value</code></em>);</pre>
-<p>
-Sets the configuration value to the provided unsigned integer.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>self</code></em> :</span></p></td>
-<td>an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>key</code></em> :</span></p></td>
-<td>the key name</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>value</code></em> :</span></p></td>
-<td>the value</td>
-</tr>
-</tbody>
-</table></div>
+<p>Value used to set the mode of home directories created for new users.</p>
 </div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

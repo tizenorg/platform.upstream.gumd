@@ -35,232 +35,171 @@
     </sub>
   </chapters>
   <functions>
+    <keyword type="function" name="gum_config_new ()" link="GumConfig.html#gum-config-new"/>
+    <keyword type="function" name="gum_config_get_int ()" link="GumConfig.html#gum-config-get-int"/>
+    <keyword type="function" name="gum_config_set_int ()" link="GumConfig.html#gum-config-set-int"/>
+    <keyword type="function" name="gum_config_get_uint ()" link="GumConfig.html#gum-config-get-uint"/>
+    <keyword type="function" name="gum_config_set_uint ()" link="GumConfig.html#gum-config-set-uint"/>
+    <keyword type="function" name="gum_config_get_string ()" link="GumConfig.html#gum-config-get-string"/>
+    <keyword type="function" name="gum_config_set_string ()" link="GumConfig.html#gum-config-set-string"/>
     <keyword type="macro" name="GUM_UMASK" link="GumConfig.html#GUM-UMASK:CAPS"/>
-    <keyword type="struct" name="struct GumConfig" link="GumConfig.html#GumConfig-struct"/>
-    <keyword type="struct" name="struct GumConfigClass" link="GumConfig.html#GumConfigClass"/>
-    <keyword type="function" name="gum_config_get_int ()" link="GumConfig.html#gum-config-get-int"/>
-    <keyword type="function" name="gum_config_get_string ()" link="GumConfig.html#gum-config-get-string"/>
-    <keyword type="function" name="gum_config_get_uint ()" link="GumConfig.html#gum-config-get-uint"/>
-    <keyword type="function" name="gum_config_new ()" link="GumConfig.html#gum-config-new"/>
-    <keyword type="function" name="gum_config_set_int ()" link="GumConfig.html#gum-config-set-int"/>
-    <keyword type="function" name="gum_config_set_string ()" link="GumConfig.html#gum-config-set-string"/>
-    <keyword type="function" name="gum_config_set_uint ()" link="GumConfig.html#gum-config-set-uint"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_USR_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_ENCRYPT_METHOD" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_GID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MAX:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_GID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MIN:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASSWD_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SHADOW_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_GROUP_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GROUP-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_GSHADOW_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GSHADOW-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_HOME_DIR_PREF" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-HOME-DIR-PREF:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASSWD_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_MAX_DAYS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_MIN_DAYS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_WARN_AGE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_SHADOW_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SHELL" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHELL:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SKEL_DIR" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SKEL-DIR:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_UID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MIN:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_UID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MAX:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_UID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_UID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_GID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MIN:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_GID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MAX:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_MIN_DAYS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_MAX_DAYS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_PASS_WARN_AGE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_UMASK" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UMASK:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_ENCRYPT_METHOD" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SMACK64_NEW_FILES" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SMACK64_USER_FILES" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_GID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_UID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_SYS_UID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_UID_MAX" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MAX:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_UID_MIN" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MIN:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_GENERAL_UMASK" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UMASK:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_DBUS_DAEMON_TIMEOUT" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-DAEMON-TIMEOUT:CAPS"/>
-    <keyword type="macro" name="GUM_CONFIG_DBUS_GROUP_TIMEOUT" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-GROUP-TIMEOUT:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_DBUS_TIMEOUTS" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-TIMEOUTS:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_DBUS_DAEMON_TIMEOUT" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-DAEMON-TIMEOUT:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_DBUS_USER_TIMEOUT" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-USER-TIMEOUT:CAPS"/>
-    <keyword type="typedef" name="GumDictionary" link="gumd-GumDictionary.html#GumDictionary"/>
-    <keyword type="function" name="gum_dictionary_copy ()" link="gumd-GumDictionary.html#gum-dictionary-copy"/>
-    <keyword type="function" name="gum_dictionary_get ()" link="gumd-GumDictionary.html#gum-dictionary-get"/>
-    <keyword type="function" name="gum_dictionary_get_boolean ()" link="gumd-GumDictionary.html#gum-dictionary-get-boolean"/>
-    <keyword type="function" name="gum_dictionary_get_int32 ()" link="gumd-GumDictionary.html#gum-dictionary-get-int32"/>
-    <keyword type="function" name="gum_dictionary_get_int64 ()" link="gumd-GumDictionary.html#gum-dictionary-get-int64"/>
-    <keyword type="function" name="gum_dictionary_get_string ()" link="gumd-GumDictionary.html#gum-dictionary-get-string"/>
-    <keyword type="function" name="gum_dictionary_get_uint32 ()" link="gumd-GumDictionary.html#gum-dictionary-get-uint32"/>
-    <keyword type="function" name="gum_dictionary_get_uint64 ()" link="gumd-GumDictionary.html#gum-dictionary-get-uint64"/>
-    <keyword type="function" name="gum_dictionary_new ()" link="gumd-GumDictionary.html#gum-dictionary-new"/>
-    <keyword type="function" name="gum_dictionary_new_from_variant ()" link="gumd-GumDictionary.html#gum-dictionary-new-from-variant"/>
-    <keyword type="function" name="gum_dictionary_ref ()" link="gumd-GumDictionary.html#gum-dictionary-ref"/>
-    <keyword type="function" name="gum_dictionary_remove ()" link="gumd-GumDictionary.html#gum-dictionary-remove"/>
-    <keyword type="function" name="gum_dictionary_set ()" link="gumd-GumDictionary.html#gum-dictionary-set"/>
-    <keyword type="function" name="gum_dictionary_set_boolean ()" link="gumd-GumDictionary.html#gum-dictionary-set-boolean"/>
-    <keyword type="function" name="gum_dictionary_set_int32 ()" link="gumd-GumDictionary.html#gum-dictionary-set-int32"/>
-    <keyword type="function" name="gum_dictionary_set_int64 ()" link="gumd-GumDictionary.html#gum-dictionary-set-int64"/>
-    <keyword type="function" name="gum_dictionary_set_string ()" link="gumd-GumDictionary.html#gum-dictionary-set-string"/>
-    <keyword type="function" name="gum_dictionary_set_uint32 ()" link="gumd-GumDictionary.html#gum-dictionary-set-uint32"/>
-    <keyword type="function" name="gum_dictionary_set_uint64 ()" link="gumd-GumDictionary.html#gum-dictionary-set-uint64"/>
-    <keyword type="function" name="gum_dictionary_to_variant ()" link="gumd-GumDictionary.html#gum-dictionary-to-variant"/>
-    <keyword type="function" name="gum_dictionary_unref ()" link="gumd-GumDictionary.html#gum-dictionary-unref"/>
-    <keyword type="function" name="gum_crypt_cmp_secret ()" link="gumd-Gum-Crypt.html#gum-crypt-cmp-secret"/>
-    <keyword type="function" name="gum_crypt_encrypt_secret ()" link="gumd-Gum-Crypt.html#gum-crypt-encrypt-secret"/>
-    <keyword type="macro" name="DBG()" link="gumd-Logging.html#DBG:CAPS"/>
-    <keyword type="macro" name="ERR()" link="gumd-Logging.html#ERR:CAPS"/>
-    <keyword type="macro" name="INFO()" link="gumd-Logging.html#INFO:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_DBUS_GROUP_TIMEOUT" link="gumd-DBus-configuration.html#GUM-CONFIG-DBUS-GROUP-TIMEOUT:CAPS"/>
+    <keyword type="function" name="gum_dictionary_new ()" link="gumd-GumDictionary.html#gum-dictionary-new"/>
+    <keyword type="function" name="gum_dictionary_ref ()" link="gumd-GumDictionary.html#gum-dictionary-ref"/>
+    <keyword type="function" name="gum_dictionary_unref ()" link="gumd-GumDictionary.html#gum-dictionary-unref"/>
+    <keyword type="function" name="gum_dictionary_copy ()" link="gumd-GumDictionary.html#gum-dictionary-copy"/>
+    <keyword type="function" name="gum_dictionary_new_from_variant ()" link="gumd-GumDictionary.html#gum-dictionary-new-from-variant"/>
+    <keyword type="function" name="gum_dictionary_to_variant ()" link="gumd-GumDictionary.html#gum-dictionary-to-variant"/>
+    <keyword type="function" name="gum_dictionary_get ()" link="gumd-GumDictionary.html#gum-dictionary-get"/>
+    <keyword type="function" name="gum_dictionary_set ()" link="gumd-GumDictionary.html#gum-dictionary-set"/>
+    <keyword type="function" name="gum_dictionary_get_boolean ()" link="gumd-GumDictionary.html#gum-dictionary-get-boolean"/>
+    <keyword type="function" name="gum_dictionary_set_boolean ()" link="gumd-GumDictionary.html#gum-dictionary-set-boolean"/>
+    <keyword type="function" name="gum_dictionary_get_int32 ()" link="gumd-GumDictionary.html#gum-dictionary-get-int32"/>
+    <keyword type="function" name="gum_dictionary_set_int32 ()" link="gumd-GumDictionary.html#gum-dictionary-set-int32"/>
+    <keyword type="function" name="gum_dictionary_get_uint32 ()" link="gumd-GumDictionary.html#gum-dictionary-get-uint32"/>
+    <keyword type="function" name="gum_dictionary_set_uint32 ()" link="gumd-GumDictionary.html#gum-dictionary-set-uint32"/>
+    <keyword type="function" name="gum_dictionary_get_int64 ()" link="gumd-GumDictionary.html#gum-dictionary-get-int64"/>
+    <keyword type="function" name="gum_dictionary_set_int64 ()" link="gumd-GumDictionary.html#gum-dictionary-set-int64"/>
+    <keyword type="function" name="gum_dictionary_get_uint64 ()" link="gumd-GumDictionary.html#gum-dictionary-get-uint64"/>
+    <keyword type="function" name="gum_dictionary_set_uint64 ()" link="gumd-GumDictionary.html#gum-dictionary-set-uint64"/>
+    <keyword type="function" name="gum_dictionary_get_string ()" link="gumd-GumDictionary.html#gum-dictionary-get-string"/>
+    <keyword type="function" name="gum_dictionary_set_string ()" link="gumd-GumDictionary.html#gum-dictionary-set-string"/>
+    <keyword type="function" name="gum_dictionary_remove ()" link="gumd-GumDictionary.html#gum-dictionary-remove"/>
+    <keyword type="function" name="gum_crypt_encrypt_secret ()" link="gumd-Gum-Crypt.html#gum-crypt-encrypt-secret"/>
+    <keyword type="function" name="gum_crypt_cmp_secret ()" link="gumd-Gum-Crypt.html#gum-crypt-cmp-secret"/>
     <keyword type="macro" name="TRACEBACK" link="gumd-Logging.html#TRACEBACK:CAPS"/>
+    <keyword type="macro" name="ERR()" link="gumd-Logging.html#ERR:CAPS"/>
     <keyword type="macro" name="WARN()" link="gumd-Logging.html#WARN:CAPS"/>
+    <keyword type="macro" name="INFO()" link="gumd-Logging.html#INFO:CAPS"/>
+    <keyword type="macro" name="DBG()" link="gumd-Logging.html#DBG:CAPS"/>
     <keyword type="macro" name="GUM_ERROR" link="gumd-Errors.html#GUM-ERROR:CAPS"/>
     <keyword type="macro" name="GUM_GET_ERROR_FOR_ID()" link="gumd-Errors.html#GUM-GET-ERROR-FOR-ID:CAPS"/>
-    <keyword type="macro" name="GUM_RETURN_WITH_ERROR()" link="gumd-Errors.html#GUM-RETURN-WITH-ERROR:CAPS"/>
     <keyword type="macro" name="GUM_SET_ERROR()" link="gumd-Errors.html#GUM-SET-ERROR:CAPS"/>
+    <keyword type="macro" name="GUM_RETURN_WITH_ERROR()" link="gumd-Errors.html#GUM-RETURN-WITH-ERROR:CAPS"/>
+    <keyword type="function" name="gum_error_quark ()" link="gumd-Errors.html#gum-error-quark"/>
+    <keyword type="function" name="gum_error_new_from_variant ()" link="gumd-Errors.html#gum-error-new-from-variant"/>
+    <keyword type="function" name="gum_error_to_variant ()" link="gumd-Errors.html#gum-error-to-variant"/>
     <keyword type="enum" name="enum GumError" link="gumd-Errors.html#GumError"/>
-    <keyword type="function" name="gum_error_new_from_variant ()" link="gumd-Errors.html#gum-error-new-from-variant"/>
-    <keyword type="function" name="gum_error_quark ()" link="gumd-Errors.html#gum-error-quark"/>
-    <keyword type="function" name="gum_error_to_variant ()" link="gumd-Errors.html#gum-error-to-variant"/>
-    <keyword type="struct" name="struct GumDisposable" link="GumDisposable.html#GumDisposable-struct"/>
-    <keyword type="struct" name="struct GumDisposableClass" link="GumDisposable.html#GumDisposableClass"/>
-    <keyword type="function" name="gum_disposable_delete_later ()" link="GumDisposable.html#gum-disposable-delete-later"/>
-    <keyword type="function" name="gum_disposable_get_auto_dispose ()" link="GumDisposable.html#gum-disposable-get-auto-dispose"/>
-    <keyword type="function" name="gum_disposable_set_auto_dispose ()" link="GumDisposable.html#gum-disposable-set-auto-dispose"/>
-    <keyword type="function" name="gum_disposable_set_timeout ()" link="GumDisposable.html#gum-disposable-set-timeout"/>
-    <keyword type="property" name="The &quot;auto-dispose&quot; property" link="GumDisposable.html#GumDisposable--auto-dispose"/>
-    <keyword type="property" name="The &quot;delete-later&quot; property" link="GumDisposable.html#GumDisposable--delete-later"/>
-    <keyword type="property" name="The &quot;timeout&quot; property" link="GumDisposable.html#GumDisposable--timeout"/>
-    <keyword type="signal" name="The &quot;disposing&quot; signal" link="GumDisposable.html#GumDisposable-disposing"/>
-    <keyword type="function" name="GumFileUpdateCB ()" link="gumd-Gum-File.html#GumFileUpdateCB"/>
+    <keyword type="function" name="gum_disposable_set_auto_dispose ()" link="GumDisposable.html#gum-disposable-set-auto-dispose"/>
+    <keyword type="function" name="gum_disposable_get_auto_dispose ()" link="GumDisposable.html#gum-disposable-get-auto-dispose"/>
+    <keyword type="function" name="gum_disposable_set_timeout ()" link="GumDisposable.html#gum-disposable-set-timeout"/>
+    <keyword type="function" name="gum_disposable_delete_later ()" link="GumDisposable.html#gum-disposable-delete-later"/>
+    <keyword type="property" name="The “auto-dispose” property" link="GumDisposable.html#GumDisposable--auto-dispose"/>
+    <keyword type="property" name="The “delete-later” property" link="GumDisposable.html#GumDisposable--delete-later"/>
+    <keyword type="property" name="The “timeout” property" link="GumDisposable.html#GumDisposable--timeout"/>
+    <keyword type="signal" name="The “disposing” signal" link="GumDisposable.html#GumDisposable-disposing"/>
+    <keyword type="function" name="GumFileUpdateCB ()" link="gumd-Gum-File.html#GumFileUpdateCB"/>
+    <keyword type="function" name="gum_file_update ()" link="gumd-Gum-File.html#gum-file-update"/>
+    <keyword type="function" name="gum_file_open_db_files ()" link="gumd-Gum-File.html#gum-file-open-db-files"/>
+    <keyword type="function" name="gum_file_close_db_files ()" link="gumd-Gum-File.html#gum-file-close-db-files"/>
+    <keyword type="function" name="gum_file_getpwnam ()" link="gumd-Gum-File.html#gum-file-getpwnam"/>
+    <keyword type="function" name="gum_file_getpwuid ()" link="gumd-Gum-File.html#gum-file-getpwuid"/>
+    <keyword type="function" name="gum_file_find_user_by_gid ()" link="gumd-Gum-File.html#gum-file-find-user-by-gid"/>
+    <keyword type="function" name="gum_file_getspnam ()" link="gumd-Gum-File.html#gum-file-getspnam"/>
+    <keyword type="function" name="gum_file_getgrnam ()" link="gumd-Gum-File.html#gum-file-getgrnam"/>
+    <keyword type="function" name="gum_file_getgrgid ()" link="gumd-Gum-File.html#gum-file-getgrgid"/>
+    <keyword type="function" name="gum_file_getsgnam ()" link="gumd-Gum-File.html#gum-file-getsgnam"/>
+    <keyword type="function" name="gum_file_new_path ()" link="gumd-Gum-File.html#gum-file-new-path"/>
+    <keyword type="function" name="gum_file_create_home_dir ()" link="gumd-Gum-File.html#gum-file-create-home-dir"/>
+    <keyword type="function" name="gum_file_delete_home_dir ()" link="gumd-Gum-File.html#gum-file-delete-home-dir"/>
     <keyword type="enum" name="enum GumOpType" link="gumd-Gum-File.html#GumOpType"/>
-    <keyword type="function" name="gum_file_close_db_files ()" link="gumd-Gum-File.html#gum-file-close-db-files"/>
-    <keyword type="function" name="gum_file_create_home_dir ()" link="gumd-Gum-File.html#gum-file-create-home-dir"/>
-    <keyword type="function" name="gum_file_delete_home_dir ()" link="gumd-Gum-File.html#gum-file-delete-home-dir"/>
-    <keyword type="function" name="gum_file_find_user_by_gid ()" link="gumd-Gum-File.html#gum-file-find-user-by-gid"/>
-    <keyword type="function" name="gum_file_getgrgid ()" link="gumd-Gum-File.html#gum-file-getgrgid"/>
-    <keyword type="function" name="gum_file_getgrnam ()" link="gumd-Gum-File.html#gum-file-getgrnam"/>
-    <keyword type="function" name="gum_file_getpwnam ()" link="gumd-Gum-File.html#gum-file-getpwnam"/>
-    <keyword type="function" name="gum_file_getpwuid ()" link="gumd-Gum-File.html#gum-file-getpwuid"/>
-    <keyword type="function" name="gum_file_getsgnam ()" link="gumd-Gum-File.html#gum-file-getsgnam"/>
-    <keyword type="function" name="gum_file_getspnam ()" link="gumd-Gum-File.html#gum-file-getspnam"/>
-    <keyword type="function" name="gum_file_new_path ()" link="gumd-Gum-File.html#gum-file-new-path"/>
-    <keyword type="function" name="gum_file_open_db_files ()" link="gumd-Gum-File.html#gum-file-open-db-files"/>
-    <keyword type="function" name="gum_file_update ()" link="gumd-Gum-File.html#gum-file-update"/>
-    <keyword type="macro" name="GUM_DB_ENTRY_PATTERN" link="gumd-Gum-Validate.html#GUM-DB-ENTRY-PATTERN:CAPS"/>
+    <keyword type="function" name="gum_validate_name ()" link="gumd-Gum-Validate.html#gum-validate-name"/>
+    <keyword type="function" name="gum_validate_generate_username ()" link="gumd-Gum-Validate.html#gum-validate-generate-username"/>
+    <keyword type="function" name="gum_validate_db_string_entry_regx ()" link="gumd-Gum-Validate.html#gum-validate-db-string-entry-regx"/>
+    <keyword type="function" name="gum_validate_db_string_entry ()" link="gumd-Gum-Validate.html#gum-validate-db-string-entry"/>
+    <keyword type="function" name="gum_validate_db_secret_entry ()" link="gumd-Gum-Validate.html#gum-validate-db-secret-entry"/>
     <keyword type="macro" name="GUM_NAME_PATTERN" link="gumd-Gum-Validate.html#GUM-NAME-PATTERN:CAPS"/>
-    <keyword type="function" name="gum_validate_db_secret_entry ()" link="gumd-Gum-Validate.html#gum-validate-db-secret-entry"/>
-    <keyword type="function" name="gum_validate_db_string_entry ()" link="gumd-Gum-Validate.html#gum-validate-db-string-entry"/>
-    <keyword type="function" name="gum_validate_db_string_entry_regx ()" link="gumd-Gum-Validate.html#gum-validate-db-string-entry-regx"/>
-    <keyword type="function" name="gum_validate_generate_username ()" link="gumd-Gum-Validate.html#gum-validate-generate-username"/>
-    <keyword type="function" name="gum_validate_name ()" link="gumd-Gum-Validate.html#gum-validate-name"/>
-    <keyword type="function" name="gum_lock_pwdf_lock ()" link="gumd-Gum-Lock.html#gum-lock-pwdf-lock"/>
-    <keyword type="function" name="gum_lock_pwdf_unlock ()" link="gumd-Gum-Lock.html#gum-lock-pwdf-unlock"/>
-    <keyword type="macro" name="GUM_STR_DUP()" link="gumd-Gum-String-Utils.html#GUM-STR-DUP:CAPS"/>
-    <keyword type="macro" name="GUM_STR_DUPV()" link="gumd-Gum-String-Utils.html#GUM-STR-DUPV:CAPS"/>
+    <keyword type="macro" name="GUM_DB_ENTRY_PATTERN" link="gumd-Gum-Validate.html#GUM-DB-ENTRY-PATTERN:CAPS"/>
+    <keyword type="function" name="gum_lock_pwdf_lock ()" link="gumd-Gum-Lock.html#gum-lock-pwdf-lock"/>
+    <keyword type="function" name="gum_lock_pwdf_unlock ()" link="gumd-Gum-Lock.html#gum-lock-pwdf-unlock"/>
     <keyword type="macro" name="GUM_STR_FREE()" link="gumd-Gum-String-Utils.html#GUM-STR-FREE:CAPS"/>
+    <keyword type="macro" name="GUM_STR_DUP()" link="gumd-Gum-String-Utils.html#GUM-STR-DUP:CAPS"/>
     <keyword type="macro" name="GUM_STR_FREEV()" link="gumd-Gum-String-Utils.html#GUM-STR-FREEV:CAPS"/>
-    <keyword type="function" name="gum_string_utils_append_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-append-string"/>
-    <keyword type="function" name="gum_string_utils_delete_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-delete-string"/>
-    <keyword type="function" name="gum_string_utils_get_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-get-string"/>
-    <keyword type="function" name="gum_string_utils_insert_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-insert-string"/>
-    <keyword type="function" name="gum_string_utils_search_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-search-string"/>
-    <keyword type="function" name="gum_string_utils_search_stringv ()" link="gumd-Gum-String-Utils.html#gum-string-utils-search-stringv"/>
-    <keyword type="function" name="gum_utils_drop_privileges ()" link="gumd-Gum-Utils.html#gum-utils-drop-privileges"/>
-    <keyword type="function" name="gum_utils_gain_privileges ()" link="gumd-Gum-Utils.html#gum-utils-gain-privileges"/>
-    <keyword type="function" name="gum_utils_generate_nonce ()" link="gumd-Gum-Utils.html#gum-utils-generate-nonce"/>
+    <keyword type="macro" name="GUM_STR_DUPV()" link="gumd-Gum-String-Utils.html#GUM-STR-DUPV:CAPS"/>
+    <keyword type="function" name="gum_string_utils_search_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-search-string"/>
+    <keyword type="function" name="gum_string_utils_search_stringv ()" link="gumd-Gum-String-Utils.html#gum-string-utils-search-stringv"/>
+    <keyword type="function" name="gum_string_utils_get_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-get-string"/>
+    <keyword type="function" name="gum_string_utils_insert_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-insert-string"/>
+    <keyword type="function" name="gum_string_utils_delete_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-delete-string"/>
+    <keyword type="function" name="gum_string_utils_append_string ()" link="gumd-Gum-String-Utils.html#gum-string-utils-append-string"/>
+    <keyword type="function" name="gum_utils_generate_nonce ()" link="gumd-Gum-Utils.html#gum-utils-generate-nonce"/>
+    <keyword type="function" name="gum_utils_drop_privileges ()" link="gumd-Gum-Utils.html#gum-utils-drop-privileges"/>
+    <keyword type="function" name="gum_utils_gain_privileges ()" link="gumd-Gum-Utils.html#gum-utils-gain-privileges"/>
     <keyword type="enum" name="enum GumUserType" link="gumd-User-types.html#GumUserType"/>
     <keyword type="enum" name="enum GumGroupType" link="gumd-Group-types.html#GumGroupType"/>
-    <keyword type="struct" name="struct GumUser" link="GumUser.html#GumUser-struct"/>
-    <keyword type="function" name="GumUserCb ()" link="GumUser.html#GumUserCb"/>
-    <keyword type="struct" name="struct GumUserClass" link="GumUser.html#GumUserClass"/>
-    <keyword type="function" name="gum_user_add ()" link="GumUser.html#gum-user-add"/>
-    <keyword type="function" name="gum_user_add_sync ()" link="GumUser.html#gum-user-add-sync"/>
-    <keyword type="function" name="gum_user_create ()" link="GumUser.html#gum-user-create"/>
-    <keyword type="function" name="gum_user_create_sync ()" link="GumUser.html#gum-user-create-sync"/>
-    <keyword type="function" name="gum_user_delete ()" link="GumUser.html#gum-user-delete"/>
-    <keyword type="function" name="gum_user_delete_sync ()" link="GumUser.html#gum-user-delete-sync"/>
-    <keyword type="function" name="gum_user_get ()" link="GumUser.html#gum-user-get"/>
-    <keyword type="function" name="gum_user_get_by_name ()" link="GumUser.html#gum-user-get-by-name"/>
-    <keyword type="function" name="gum_user_get_by_name_sync ()" link="GumUser.html#gum-user-get-by-name-sync"/>
-    <keyword type="function" name="gum_user_get_sync ()" link="GumUser.html#gum-user-get-sync"/>
-    <keyword type="function" name="gum_user_update ()" link="GumUser.html#gum-user-update"/>
-    <keyword type="function" name="gum_user_update_sync ()" link="GumUser.html#gum-user-update-sync"/>
-    <keyword type="property" name="The &quot;gid&quot; property" link="GumUser.html#GumUser--gid"/>
-    <keyword type="property" name="The &quot;homedir&quot; property" link="GumUser.html#GumUser--homedir"/>
-    <keyword type="property" name="The &quot;homephone&quot; property" link="GumUser.html#GumUser--homephone"/>
-    <keyword type="property" name="The &quot;nickname&quot; property" link="GumUser.html#GumUser--nickname"/>
-    <keyword type="property" name="The &quot;office&quot; property" link="GumUser.html#GumUser--office"/>
-    <keyword type="property" name="The &quot;officephone&quot; property" link="GumUser.html#GumUser--officephone"/>
-    <keyword type="property" name="The &quot;realname&quot; property" link="GumUser.html#GumUser--realname"/>
-    <keyword type="property" name="The &quot;secret&quot; property" link="GumUser.html#GumUser--secret"/>
-    <keyword type="property" name="The &quot;shell&quot; property" link="GumUser.html#GumUser--shell"/>
-    <keyword type="property" name="The &quot;uid&quot; property" link="GumUser.html#GumUser--uid"/>
-    <keyword type="property" name="The &quot;username&quot; property" link="GumUser.html#GumUser--username"/>
-    <keyword type="property" name="The &quot;usertype&quot; property" link="GumUser.html#GumUser--usertype"/>
-    <keyword type="struct" name="struct GumGroup" link="GumGroup.html#GumGroup-struct"/>
-    <keyword type="function" name="GumGroupCb ()" link="GumGroup.html#GumGroupCb"/>
-    <keyword type="struct" name="struct GumGroupClass" link="GumGroup.html#GumGroupClass"/>
-    <keyword type="function" name="gum_group_add ()" link="GumGroup.html#gum-group-add"/>
-    <keyword type="function" name="gum_group_add_member ()" link="GumGroup.html#gum-group-add-member"/>
-    <keyword type="function" name="gum_group_add_member_sync ()" link="GumGroup.html#gum-group-add-member-sync"/>
-    <keyword type="function" name="gum_group_add_sync ()" link="GumGroup.html#gum-group-add-sync"/>
-    <keyword type="function" name="gum_group_create ()" link="GumGroup.html#gum-group-create"/>
-    <keyword type="function" name="gum_group_create_sync ()" link="GumGroup.html#gum-group-create-sync"/>
-    <keyword type="function" name="gum_group_delete ()" link="GumGroup.html#gum-group-delete"/>
-    <keyword type="function" name="gum_group_delete_member ()" link="GumGroup.html#gum-group-delete-member"/>
-    <keyword type="function" name="gum_group_delete_member_sync ()" link="GumGroup.html#gum-group-delete-member-sync"/>
-    <keyword type="function" name="gum_group_delete_sync ()" link="GumGroup.html#gum-group-delete-sync"/>
-    <keyword type="function" name="gum_group_get ()" link="GumGroup.html#gum-group-get"/>
-    <keyword type="function" name="gum_group_get_by_name ()" link="GumGroup.html#gum-group-get-by-name"/>
-    <keyword type="function" name="gum_group_get_by_name_sync ()" link="GumGroup.html#gum-group-get-by-name-sync"/>
-    <keyword type="function" name="gum_group_get_sync ()" link="GumGroup.html#gum-group-get-sync"/>
-    <keyword type="function" name="gum_group_update ()" link="GumGroup.html#gum-group-update"/>
-    <keyword type="function" name="gum_group_update_sync ()" link="GumGroup.html#gum-group-update-sync"/>
-    <keyword type="property" name="The &quot;gid&quot; property" link="GumGroup.html#GumGroup--gid"/>
-    <keyword type="property" name="The &quot;groupname&quot; property" link="GumGroup.html#GumGroup--groupname"/>
-    <keyword type="property" name="The &quot;grouptype&quot; property" link="GumGroup.html#GumGroup--grouptype"/>
-    <keyword type="property" name="The &quot;secret&quot; property" link="GumGroup.html#GumGroup--secret"/>
-    <keyword type="constant" name="GUM_ERROR_NONE" link="gumd-Errors.html#GUM-ERROR-NONE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_UNKNOWN" link="gumd-Errors.html#GUM-ERROR-UNKNOWN:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INTERNAL_SERVER" link="gumd-Errors.html#GUM-ERROR-INTERNAL-SERVER:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_PERMISSION_DENIED" link="gumd-Errors.html#GUM-ERROR-PERMISSION-DENIED:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_ALREADY_EXISTS" link="gumd-Errors.html#GUM-ERROR-USER-ALREADY-EXISTS:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_GROUP_ADD_FAILURE" link="gumd-Errors.html#GUM-ERROR-USER-GROUP-ADD-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_UID_NOT_AVAILABLE" link="gumd-Errors.html#GUM-ERROR-USER-UID-NOT-AVAILABLE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_INVALID_USER_TYPE" link="gumd-Errors.html#GUM-ERROR-USER-INVALID-USER-TYPE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_SECRET_ENCRYPT_FAILURE" link="gumd-Errors.html#GUM-ERROR-USER-SECRET-ENCRYPT-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_NOT_FOUND" link="gumd-Errors.html#GUM-ERROR-USER-NOT-FOUND:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_INVALID_DATA" link="gumd-Errors.html#GUM-ERROR-USER-INVALID-DATA:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_GROUP_DELETE_FAILURE" link="gumd-Errors.html#GUM-ERROR-USER-GROUP-DELETE-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_SELF_DESTRUCTION" link="gumd-Errors.html#GUM-ERROR-USER-SELF-DESTRUCTION:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_SESSION_TERM_FAILURE" link="gumd-Errors.html#GUM-ERROR-USER-SESSION-TERM-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_NO_CHANGES" link="gumd-Errors.html#GUM-ERROR-USER-NO-CHANGES:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_LOCK_FAILURE" link="gumd-Errors.html#GUM-ERROR-USER-LOCK-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_ALREADY_EXISTS" link="gumd-Errors.html#GUM-ERROR-GROUP-ALREADY-EXISTS:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_GID_NOT_AVAILABLE" link="gumd-Errors.html#GUM-ERROR-GROUP-GID-NOT-AVAILABLE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_INVALID_GROUP_TYPE" link="gumd-Errors.html#GUM-ERROR-GROUP-INVALID-GROUP-TYPE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_SECRET_ENCRYPT_FAILURE" link="gumd-Errors.html#GUM-ERROR-GROUP-SECRET-ENCRYPT-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_NOT_FOUND" link="gumd-Errors.html#GUM-ERROR-GROUP-NOT-FOUND:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_USER_ALREADY_A_MEMBER" link="gumd-Errors.html#GUM-ERROR-GROUP-USER-ALREADY-A-MEMBER:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_INVALID_DATA" link="gumd-Errors.html#GUM-ERROR-GROUP-INVALID-DATA:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_SELF_DESTRUCTION" link="gumd-Errors.html#GUM-ERROR-GROUP-SELF-DESTRUCTION:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_HAS_USER" link="gumd-Errors.html#GUM-ERROR-GROUP-HAS-USER:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_GROUP_NO_CHANGES" link="gumd-Errors.html#GUM-ERROR-GROUP-NO-CHANGES:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_DB_ALREADY_LOCKED" link="gumd-Errors.html#GUM-ERROR-DB-ALREADY-LOCKED:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_FILE_OPEN" link="gumd-Errors.html#GUM-ERROR-FILE-OPEN:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_FILE_ATTRIBUTE" link="gumd-Errors.html#GUM-ERROR-FILE-ATTRIBUTE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_FILE_MOVE" link="gumd-Errors.html#GUM-ERROR-FILE-MOVE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_FILE_WRITE" link="gumd-Errors.html#GUM-ERROR-FILE-WRITE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_HOME_DIR_CREATE_FAILURE" link="gumd-Errors.html#GUM-ERROR-HOME-DIR-CREATE-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_HOME_DIR_DELETE_FAILURE" link="gumd-Errors.html#GUM-ERROR-HOME-DIR-DELETE-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_HOME_DIR_COPY_FAILURE" link="gumd-Errors.html#GUM-ERROR-HOME-DIR-COPY-FAILURE:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_NAME" link="gumd-Errors.html#GUM-ERROR-INVALID-NAME:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_NICKNAME" link="gumd-Errors.html#GUM-ERROR-INVALID-NICKNAME:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_SECRET" link="gumd-Errors.html#GUM-ERROR-INVALID-SECRET:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_STR" link="gumd-Errors.html#GUM-ERROR-INVALID-STR:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_STR_LEN" link="gumd-Errors.html#GUM-ERROR-INVALID-STR-LEN:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_INVALID_INPUT" link="gumd-Errors.html#GUM-ERROR-INVALID-INPUT:CAPS"/>
-    <keyword type="constant" name="GUM_ERROR_USER_ERR" link="gumd-Errors.html#GUM-ERROR-USER-ERR:CAPS"/>
-    <keyword type="constant" name="GUM_OPTYPE_ADD" link="gumd-Gum-File.html#GUM-OPTYPE-ADD:CAPS"/>
-    <keyword type="constant" name="GUM_OPTYPE_DELETE" link="gumd-Gum-File.html#GUM-OPTYPE-DELETE:CAPS"/>
-    <keyword type="constant" name="GUM_OPTYPE_MODIFY" link="gumd-Gum-File.html#GUM-OPTYPE-MODIFY:CAPS"/>
-    <keyword type="constant" name="GUM_USERTYPE_NONE" link="gumd-User-types.html#GUM-USERTYPE-NONE:CAPS"/>
-    <keyword type="constant" name="GUM_USERTYPE_SYSTEM" link="gumd-User-types.html#GUM-USERTYPE-SYSTEM:CAPS"/>
-    <keyword type="constant" name="GUM_USERTYPE_ADMIN" link="gumd-User-types.html#GUM-USERTYPE-ADMIN:CAPS"/>
-    <keyword type="constant" name="GUM_USERTYPE_GUEST" link="gumd-User-types.html#GUM-USERTYPE-GUEST:CAPS"/>
-    <keyword type="constant" name="GUM_USERTYPE_NORMAL" link="gumd-User-types.html#GUM-USERTYPE-NORMAL:CAPS"/>
-    <keyword type="constant" name="GUM_GROUPTYPE_NONE" link="gumd-Group-types.html#GUM-GROUPTYPE-NONE:CAPS"/>
-    <keyword type="constant" name="GUM_GROUPTYPE_SYSTEM" link="gumd-Group-types.html#GUM-GROUPTYPE-SYSTEM:CAPS"/>
-    <keyword type="constant" name="GUM_GROUPTYPE_USER" link="gumd-Group-types.html#GUM-GROUPTYPE-USER:CAPS"/>
+    <keyword type="function" name="GumUserCb ()" link="GumUser.html#GumUserCb"/>
+    <keyword type="function" name="gum_user_create ()" link="GumUser.html#gum-user-create"/>
+    <keyword type="function" name="gum_user_create_sync ()" link="GumUser.html#gum-user-create-sync"/>
+    <keyword type="function" name="gum_user_get ()" link="GumUser.html#gum-user-get"/>
+    <keyword type="function" name="gum_user_get_sync ()" link="GumUser.html#gum-user-get-sync"/>
+    <keyword type="function" name="gum_user_get_by_name ()" link="GumUser.html#gum-user-get-by-name"/>
+    <keyword type="function" name="gum_user_get_by_name_sync ()" link="GumUser.html#gum-user-get-by-name-sync"/>
+    <keyword type="function" name="gum_user_add ()" link="GumUser.html#gum-user-add"/>
+    <keyword type="function" name="gum_user_add_sync ()" link="GumUser.html#gum-user-add-sync"/>
+    <keyword type="function" name="gum_user_delete ()" link="GumUser.html#gum-user-delete"/>
+    <keyword type="function" name="gum_user_delete_sync ()" link="GumUser.html#gum-user-delete-sync"/>
+    <keyword type="function" name="gum_user_update ()" link="GumUser.html#gum-user-update"/>
+    <keyword type="function" name="gum_user_update_sync ()" link="GumUser.html#gum-user-update-sync"/>
+    <keyword type="property" name="The “gid” property" link="GumUser.html#GumUser--gid"/>
+    <keyword type="property" name="The “homedir” property" link="GumUser.html#GumUser--homedir"/>
+    <keyword type="property" name="The “homephone” property" link="GumUser.html#GumUser--homephone"/>
+    <keyword type="property" name="The “nickname” property" link="GumUser.html#GumUser--nickname"/>
+    <keyword type="property" name="The “office” property" link="GumUser.html#GumUser--office"/>
+    <keyword type="property" name="The “officephone” property" link="GumUser.html#GumUser--officephone"/>
+    <keyword type="property" name="The “realname” property" link="GumUser.html#GumUser--realname"/>
+    <keyword type="property" name="The “secret” property" link="GumUser.html#GumUser--secret"/>
+    <keyword type="property" name="The “shell” property" link="GumUser.html#GumUser--shell"/>
+    <keyword type="property" name="The “uid” property" link="GumUser.html#GumUser--uid"/>
+    <keyword type="property" name="The “username” property" link="GumUser.html#GumUser--username"/>
+    <keyword type="property" name="The “usertype” property" link="GumUser.html#GumUser--usertype"/>
+    <keyword type="function" name="GumGroupCb ()" link="GumGroup.html#GumGroupCb"/>
+    <keyword type="function" name="gum_group_create ()" link="GumGroup.html#gum-group-create"/>
+    <keyword type="function" name="gum_group_create_sync ()" link="GumGroup.html#gum-group-create-sync"/>
+    <keyword type="function" name="gum_group_get ()" link="GumGroup.html#gum-group-get"/>
+    <keyword type="function" name="gum_group_get_sync ()" link="GumGroup.html#gum-group-get-sync"/>
+    <keyword type="function" name="gum_group_get_by_name ()" link="GumGroup.html#gum-group-get-by-name"/>
+    <keyword type="function" name="gum_group_get_by_name_sync ()" link="GumGroup.html#gum-group-get-by-name-sync"/>
+    <keyword type="function" name="gum_group_add ()" link="GumGroup.html#gum-group-add"/>
+    <keyword type="function" name="gum_group_add_sync ()" link="GumGroup.html#gum-group-add-sync"/>
+    <keyword type="function" name="gum_group_delete ()" link="GumGroup.html#gum-group-delete"/>
+    <keyword type="function" name="gum_group_delete_sync ()" link="GumGroup.html#gum-group-delete-sync"/>
+    <keyword type="function" name="gum_group_update ()" link="GumGroup.html#gum-group-update"/>
+    <keyword type="function" name="gum_group_update_sync ()" link="GumGroup.html#gum-group-update-sync"/>
+    <keyword type="function" name="gum_group_add_member ()" link="GumGroup.html#gum-group-add-member"/>
+    <keyword type="function" name="gum_group_add_member_sync ()" link="GumGroup.html#gum-group-add-member-sync"/>
+    <keyword type="function" name="gum_group_delete_member ()" link="GumGroup.html#gum-group-delete-member"/>
+    <keyword type="function" name="gum_group_delete_member_sync ()" link="GumGroup.html#gum-group-delete-member-sync"/>
+    <keyword type="property" name="The “gid” property" link="GumGroup.html#GumGroup--gid"/>
+    <keyword type="property" name="The “groupname” property" link="GumGroup.html#GumGroup--groupname"/>
+    <keyword type="property" name="The “grouptype” property" link="GumGroup.html#GumGroup--grouptype"/>
+    <keyword type="property" name="The “secret” property" link="GumGroup.html#GumGroup--secret"/>
   </functions>
 </book>

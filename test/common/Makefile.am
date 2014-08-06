@@ -14,6 +14,7 @@ commontest_CFLAGS = \
     $(CHECK_CFLAGS) \
     -U G_LOG_DOMAIN \
     -I$(top_srcdir)/src \
+    -I$(top_builddir)/src/ \
     -DG_LOG_DOMAIN=\"gum-test-common\"
 
 commontest_LDADD = \

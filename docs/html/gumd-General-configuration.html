@@ -2,30 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>General configuration</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: General configuration</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch01.html" title="Daemon (gumd) configuration">
 <link rel="prev" href="GumConfig.html" title="GumConfig">
 <link rel="next" href="gumd-DBus-configuration.html" title="DBus configuration">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="GumConfig.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="gumd-DBus-configuration.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#gumd-General-configuration.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#gumd-General-configuration.description" class="shortcut">Description</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#gumd-General-configuration.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#gumd-General-configuration.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="GumConfig.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gumd-DBus-configuration.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="gumd-General-configuration"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -33,299 +30,327 @@
 <h2><span class="refentrytitle"><a name="gumd-General-configuration.top_of_page"></a>General configuration</span></h2>
 <p>General configuration — gum general configuration keys</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="gumd-General-configuration.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-config.h&gt;
-
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL:CAPS" title="GUM_CONFIG_GENERAL">GUM_CONFIG_GENERAL</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS" title="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS">GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS" title="GUM_CONFIG_GENERAL_DEF_USR_GROUPS">GUM_CONFIG_GENERAL_DEF_USR_GROUPS</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS" title="GUM_CONFIG_GENERAL_ENCRYPT_METHOD">GUM_CONFIG_GENERAL_ENCRYPT_METHOD</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MAX:CAPS" title="GUM_CONFIG_GENERAL_GID_MAX">GUM_CONFIG_GENERAL_GID_MAX</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MIN:CAPS" title="GUM_CONFIG_GENERAL_GID_MIN">GUM_CONFIG_GENERAL_GID_MIN</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GROUP-FILE:CAPS" title="GUM_CONFIG_GENERAL_GROUP_FILE">GUM_CONFIG_GENERAL_GROUP_FILE</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GSHADOW-FILE:CAPS" title="GUM_CONFIG_GENERAL_GSHADOW_FILE">GUM_CONFIG_GENERAL_GSHADOW_FILE</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-HOME-DIR-PREF:CAPS" title="GUM_CONFIG_GENERAL_HOME_DIR_PREF">GUM_CONFIG_GENERAL_HOME_DIR_PREF</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS" title="GUM_CONFIG_GENERAL_PASSWD_FILE">GUM_CONFIG_GENERAL_PASSWD_FILE</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS" title="GUM_CONFIG_GENERAL_PASS_MAX_DAYS">GUM_CONFIG_GENERAL_PASS_MAX_DAYS</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS" title="GUM_CONFIG_GENERAL_PASS_MIN_DAYS">GUM_CONFIG_GENERAL_PASS_MIN_DAYS</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS" title="GUM_CONFIG_GENERAL_PASS_WARN_AGE">GUM_CONFIG_GENERAL_PASS_WARN_AGE</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS" title="GUM_CONFIG_GENERAL_SHADOW_FILE">GUM_CONFIG_GENERAL_SHADOW_FILE</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHELL:CAPS" title="GUM_CONFIG_GENERAL_SHELL">GUM_CONFIG_GENERAL_SHELL</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SKEL-DIR:CAPS" title="GUM_CONFIG_GENERAL_SKEL_DIR">GUM_CONFIG_GENERAL_SKEL_DIR</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_NEW_FILES">GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_USER_FILES">GUM_CONFIG_GENERAL_SMACK64_USER_FILES</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MAX">GUM_CONFIG_GENERAL_SYS_GID_MAX</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MIN">GUM_CONFIG_GENERAL_SYS_GID_MIN</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_UID_MAX">GUM_CONFIG_GENERAL_SYS_UID_MAX</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS" title="GUM_CONFIG_GENERAL_SYS_UID_MIN">GUM_CONFIG_GENERAL_SYS_UID_MIN</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MAX:CAPS" title="GUM_CONFIG_GENERAL_UID_MAX">GUM_CONFIG_GENERAL_UID_MAX</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MIN:CAPS" title="GUM_CONFIG_GENERAL_UID_MIN">GUM_CONFIG_GENERAL_UID_MIN</a>
-#define             <a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UMASK:CAPS" title="GUM_CONFIG_GENERAL_UMASK">GUM_CONFIG_GENERAL_UMASK</a>
+<div class="refsect1">
+<a name="gumd-General-configuration.other"></a><h2>Types and Values</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="name">
+<col class="description">
+</colgroup>
+<tbody>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL:CAPS" title="GUM_CONFIG_GENERAL">GUM_CONFIG_GENERAL</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS" title="GUM_CONFIG_GENERAL_DEF_USR_GROUPS">GUM_CONFIG_GENERAL_DEF_USR_GROUPS</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS" title="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS">GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS" title="GUM_CONFIG_GENERAL_PASSWD_FILE">GUM_CONFIG_GENERAL_PASSWD_FILE</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS" title="GUM_CONFIG_GENERAL_SHADOW_FILE">GUM_CONFIG_GENERAL_SHADOW_FILE</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GROUP-FILE:CAPS" title="GUM_CONFIG_GENERAL_GROUP_FILE">GUM_CONFIG_GENERAL_GROUP_FILE</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GSHADOW-FILE:CAPS" title="GUM_CONFIG_GENERAL_GSHADOW_FILE">GUM_CONFIG_GENERAL_GSHADOW_FILE</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-HOME-DIR-PREF:CAPS" title="GUM_CONFIG_GENERAL_HOME_DIR_PREF">GUM_CONFIG_GENERAL_HOME_DIR_PREF</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHELL:CAPS" title="GUM_CONFIG_GENERAL_SHELL">GUM_CONFIG_GENERAL_SHELL</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SKEL-DIR:CAPS" title="GUM_CONFIG_GENERAL_SKEL_DIR">GUM_CONFIG_GENERAL_SKEL_DIR</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MIN:CAPS" title="GUM_CONFIG_GENERAL_UID_MIN">GUM_CONFIG_GENERAL_UID_MIN</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UID-MAX:CAPS" title="GUM_CONFIG_GENERAL_UID_MAX">GUM_CONFIG_GENERAL_UID_MAX</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS" title="GUM_CONFIG_GENERAL_SYS_UID_MIN">GUM_CONFIG_GENERAL_SYS_UID_MIN</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_UID_MAX">GUM_CONFIG_GENERAL_SYS_UID_MAX</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MIN:CAPS" title="GUM_CONFIG_GENERAL_GID_MIN">GUM_CONFIG_GENERAL_GID_MIN</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-GID-MAX:CAPS" title="GUM_CONFIG_GENERAL_GID_MAX">GUM_CONFIG_GENERAL_GID_MAX</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MIN">GUM_CONFIG_GENERAL_SYS_GID_MIN</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS" title="GUM_CONFIG_GENERAL_SYS_GID_MAX">GUM_CONFIG_GENERAL_SYS_GID_MAX</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS" title="GUM_CONFIG_GENERAL_PASS_MIN_DAYS">GUM_CONFIG_GENERAL_PASS_MIN_DAYS</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS" title="GUM_CONFIG_GENERAL_PASS_MAX_DAYS">GUM_CONFIG_GENERAL_PASS_MAX_DAYS</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS" title="GUM_CONFIG_GENERAL_PASS_WARN_AGE">GUM_CONFIG_GENERAL_PASS_WARN_AGE</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-UMASK:CAPS" title="GUM_CONFIG_GENERAL_UMASK">GUM_CONFIG_GENERAL_UMASK</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS" title="GUM_CONFIG_GENERAL_ENCRYPT_METHOD">GUM_CONFIG_GENERAL_ENCRYPT_METHOD</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_NEW_FILES">GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS" title="GUM_CONFIG_GENERAL_SMACK64_USER_FILES">GUM_CONFIG_GENERAL_SMACK64_USER_FILES</a></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="gumd-General-configuration.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-General-configuration.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-config.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="gumd-General-configuration.description"></a><h2>Description</h2>
-<p>
-General configuration keys are defined below. See <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> for how to use
-them.
-</p>
+<p>General configuration keys are defined below. See <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> for how to use
+them.</p>
 </div>
 <div class="refsect1">
-<a name="gumd-General-configuration.details"></a><h2>Details</h2>
+<a name="gumd-General-configuration.functions_details"></a><h2>Functions</h2>
+</div>
+<div class="refsect1">
+<a name="gumd-General-configuration.other_details"></a><h2>Types and Values</h2>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL:CAPS"></a><h3>GUM_CONFIG_GENERAL</h3>
 <pre class="programlisting">#define GUM_CONFIG_GENERAL                  "General"
 </pre>
-<p>
-A prefix for general keys. Should be used only when defining new keys.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS"></a><h3>GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</pre>
-<p>
-Comma separate listed of groups, which admin user will be added to at the
-time of admin account creation. Default value is: ''
-</p>
+<p>A prefix for general keys. Should be used only when defining new keys.</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS"></a><h3>GUM_CONFIG_GENERAL_DEF_USR_GROUPS</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_DEF_USR_GROUPS</pre>
-<p>
-Comma separate listed of groups, which every user (other than system user)
+<p>Comma separate listed of groups, which every user (other than system user)
 will be added to at the time of user account creation. Default value is:
-''
-</p>
+''</p>
 </div>
 <hr>
 <div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS"></a><h3>GUM_CONFIG_GENERAL_ENCRYPT_METHOD</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_ENCRYPT_METHOD</pre>
-<p>
-Value used to set the encryption algorithm. Default
-value is: 'SHA512'. Other supported options are: 'MD5', 'SHA256', 'DES'.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-GID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_GID_MAX</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GID_MAX</pre>
-<p>
-Maximum value for the automatic gid selection. Default value is: 60000
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-GID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_GID_MIN</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GID_MIN</pre>
-<p>
-Minimum value for the automatic gid selection. Default value is: 2000
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-GROUP-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_GROUP_FILE</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GROUP_FILE</pre>
-<p>
-Path to group file which represents group information. Default is /etc/group.
-More information about the file format can be read at the manpages for
-'group'.
-</p>
-<p>
-Can be overriden in debug builds by setting UM_GROUP_FILE
-environment variable.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-GSHADOW-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_GSHADOW_FILE</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GSHADOW_FILE</pre>
-<p>
-Path to group file which represents shadowed group information.
-Default is /etc/gshadow. More information about the file format can be read
-at the manpages for 'gshadow'.
-</p>
-<p>
-Can be overriden in debug builds by setting UM_GSHADOW_FILE
-environment variable.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-HOME-DIR-PREF:CAPS"></a><h3>GUM_CONFIG_GENERAL_HOME_DIR_PREF</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_HOME_DIR_PREF</pre>
-<p>
-Prefix to be used when creating home directory for the user. For example,
-with prefix '/home', user 'newu' home directory will be created as
-'/home/newu'. Default value is '/home'
-</p>
-<p>
-Can be overriden in debug builds by setting UM_HOMEDIR_PREFIX
-environment variable.
-</p>
+<a name="GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS"></a><h3>GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</pre>
+<p>Comma separate listed of groups, which admin user will be added to at the
+time of admin account creation. Default value is: ''</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASSWD_FILE</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASSWD_FILE</pre>
-<p>
-Path to passwd file which represents user information. Default is
+<p>Path to passwd file which represents user information. Default is
 /etc/passwd. More information about the file format can be read at the
-manpages for 'passwd'.
-</p>
-<p>
-Can be overriden in debug builds by setting UM_PASSWD_FILE
-environment variable.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_MAX_DAYS</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_MAX_DAYS</pre>
-<p>
-Maximum number of days allowed between password changes. Default value is:
-99999
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_MIN_DAYS</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_MIN_DAYS</pre>
-<p>
-Minimum number of days a password may be used. Default value is: 0
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_WARN_AGE</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_WARN_AGE</pre>
-<p>
-Number of days warning given before a password expires. Default value is:
-7
-</p>
+manpages for 'passwd'.</p>
+<p>Can be overriden in debug builds by setting UM_PASSWD_FILE
+environment variable.</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_SHADOW_FILE</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_SHADOW_FILE</pre>
-<p>
-Path to shadow file which represents user shadowed password information.
+<p>Path to shadow file which represents user shadowed password information.
 Default is /etc/shadow. More information about the file format can be read
-at the manpages for 'shadow'.
-</p>
-<p>
-Can be overriden in debug builds by setting UM_SHADOW_FILE
-environment variable.
-</p>
+at the manpages for 'shadow'.</p>
+<p>Can be overriden in debug builds by setting UM_SHADOW_FILE
+environment variable.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-GROUP-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_GROUP_FILE</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GROUP_FILE</pre>
+<p>Path to group file which represents group information. Default is /etc/group.
+More information about the file format can be read at the manpages for
+'group'.</p>
+<p>Can be overriden in debug builds by setting UM_GROUP_FILE
+environment variable.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-GSHADOW-FILE:CAPS"></a><h3>GUM_CONFIG_GENERAL_GSHADOW_FILE</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GSHADOW_FILE</pre>
+<p>Path to group file which represents shadowed group information.
+Default is /etc/gshadow. More information about the file format can be read
+at the manpages for 'gshadow'.</p>
+<p>Can be overriden in debug builds by setting UM_GSHADOW_FILE
+environment variable.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-HOME-DIR-PREF:CAPS"></a><h3>GUM_CONFIG_GENERAL_HOME_DIR_PREF</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_HOME_DIR_PREF</pre>
+<p>Prefix to be used when creating home directory for the user. For example,
+with prefix '/home', user 'newu' home directory will be created as
+'/home/newu'. Default value is '/home'</p>
+<p>Can be overriden in debug builds by setting UM_HOMEDIR_PREFIX
+environment variable.</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-SHELL:CAPS"></a><h3>GUM_CONFIG_GENERAL_SHELL</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_SHELL</pre>
-<p>
-Path to user shell executable. Default value is '/bin/bash'
-</p>
+<p>Path to user shell executable. Default value is '/bin/bash'</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-SKEL-DIR:CAPS"></a><h3>GUM_CONFIG_GENERAL_SKEL_DIR</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_SKEL_DIR</pre>
-<p>
-Path to skeleton folder. When new users are created, contents of the skel
-folder is copied to user home directory. Default value is '/etc/skel'
-</p>
-<p>
-Can be overriden in debug builds by setting UM_SKEL_DIR
-environment variable.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</pre>
-<p>
-Value used to set the smack label for newly created files and folders.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_USER_FILES</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_USER_FILES</pre>
-<p>
-Value used to set the smack label for User files and folders.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_GID_MAX</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_GID_MAX</pre>
-<p>
-Maximum value for the automatic gid selection for system user. Default value
-is: 999
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_GID_MIN</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_GID_MIN</pre>
-<p>
-Minimum value for the automatic gid selection for system user. Default value
-is: 200
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_UID_MAX</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_UID_MAX</pre>
-<p>
-Maximum value for the automatic uid selection for system user. Default value
-is: 999
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_UID_MIN</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_UID_MIN</pre>
-<p>
-Minimum value for the automatic uid selection for system user. Default
-value is: 200
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="GUM-CONFIG-GENERAL-UID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_UID_MAX</h3>
-<pre class="programlisting">#define             GUM_CONFIG_GENERAL_UID_MAX</pre>
-<p>
-Maximum value for the automatic uid selection. Default value is: 60000
-</p>
+<p>Path to skeleton folder. When new users are created, contents of the skel
+folder is copied to user home directory. Default value is '/etc/skel'</p>
+<p>Can be overriden in debug builds by setting UM_SKEL_DIR
+environment variable.</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-UID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_UID_MIN</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_UID_MIN</pre>
-<p>
-Minimum value for the automatic uid selection. Default value is: 2000
-</p>
+<p>Minimum value for the automatic uid selection. Default value is: 2000</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-UID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_UID_MAX</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_UID_MAX</pre>
+<p>Maximum value for the automatic uid selection. Default value is: 60000</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SYS-UID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_UID_MIN</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_UID_MIN</pre>
+<p>Minimum value for the automatic uid selection for system user. Default
+value is: 200</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SYS-UID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_UID_MAX</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_UID_MAX</pre>
+<p>Maximum value for the automatic uid selection for system user. Default value
+is: 999</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-GID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_GID_MIN</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GID_MIN</pre>
+<p>Minimum value for the automatic gid selection. Default value is: 2000</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-GID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_GID_MAX</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_GID_MAX</pre>
+<p>Maximum value for the automatic gid selection. Default value is: 60000</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SYS-GID-MIN:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_GID_MIN</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_GID_MIN</pre>
+<p>Minimum value for the automatic gid selection for system user. Default value
+is: 200</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SYS-GID-MAX:CAPS"></a><h3>GUM_CONFIG_GENERAL_SYS_GID_MAX</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SYS_GID_MAX</pre>
+<p>Maximum value for the automatic gid selection for system user. Default value
+is: 999</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-PASS-MIN-DAYS:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_MIN_DAYS</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_MIN_DAYS</pre>
+<p>Minimum number of days a password may be used. Default value is: 0</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-PASS-MAX-DAYS:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_MAX_DAYS</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_MAX_DAYS</pre>
+<p>Maximum number of days allowed between password changes. Default value is:
+99999</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-PASS-WARN-AGE:CAPS"></a><h3>GUM_CONFIG_GENERAL_PASS_WARN_AGE</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_PASS_WARN_AGE</pre>
+<p>Number of days warning given before a password expires. Default value is:
+7</p>
 </div>
 <hr>
 <div class="refsect2">
 <a name="GUM-CONFIG-GENERAL-UMASK:CAPS"></a><h3>GUM_CONFIG_GENERAL_UMASK</h3>
 <pre class="programlisting">#define             GUM_CONFIG_GENERAL_UMASK</pre>
-<p>
-Value used to set the mode of home directories created for new users.
-Default value is: 022
-</p>
+<p>Value used to set the mode of home directories created for new users.
+Default value is: 022</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-ENCRYPT-METHOD:CAPS"></a><h3>GUM_CONFIG_GENERAL_ENCRYPT_METHOD</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_ENCRYPT_METHOD</pre>
+<p>Value used to set the encryption algorithm. Default
+value is: 'SHA512'. Other supported options are: 'MD5', 'SHA256', 'DES'.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SMACK64-NEW-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_NEW_FILES</pre>
+<p>Value used to set the smack label for newly created files and folders.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-SMACK64-USER-FILES:CAPS"></a><h3>GUM_CONFIG_GENERAL_SMACK64_USER_FILES</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_SMACK64_USER_FILES</pre>
+<p>Value used to set the smack label for User files and folders.</p>
 </div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

@@ -2,30 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Gum Utils</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: Gum Utils</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch02.html" title="Common">
 <link rel="prev" href="gumd-Gum-String-Utils.html" title="Gum String Utils">
 <link rel="next" href="gumd-User-types.html" title="User types">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="gumd-Gum-String-Utils.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="gumd-User-types.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#gumd-Gum-Utils.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#gumd-Gum-Utils.description" class="shortcut">Description</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#gumd-Gum-Utils.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#gumd-Gum-Utils.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gumd-Gum-String-Utils.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gumd-User-types.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="gumd-Gum-Utils"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -33,67 +30,107 @@
 <h2><span class="refentrytitle"><a name="gumd-Gum-Utils.top_of_page"></a>Gum Utils</span></h2>
 <p>Gum Utils — Utility functions</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="gumd-Gum-Utils.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-utils.h&gt;
-
-<span class="returnvalue">void</span>                <a class="link" href="gumd-Gum-Utils.html#gum-utils-drop-privileges" title="gum_utils_drop_privileges ()">gum_utils_drop_privileges</a>           ();
-<span class="returnvalue">void</span>                <a class="link" href="gumd-Gum-Utils.html#gum-utils-gain-privileges" title="gum_utils_gain_privileges ()">gum_utils_gain_privileges</a>           ();
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="gumd-Gum-Utils.html#gum-utils-generate-nonce" title="gum_utils_generate_nonce ()">gum_utils_generate_nonce</a>            (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Data-Checksums.html#GChecksumType"><span class="type">GChecksumType</span></a> algorithm</code></em>);
-</pre>
-</div>
 <div class="refsect1">
-<a name="gumd-Gum-Utils.description"></a><h2>Description</h2>
-<p>
-Utility functions
-</p>
-</div>
-<div class="refsect1">
-<a name="gumd-Gum-Utils.details"></a><h2>Details</h2>
-<div class="refsect2">
-<a name="gum-utils-drop-privileges"></a><h3>gum_utils_drop_privileges ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_utils_drop_privileges           ();</pre>
-<p>
-Drops the privileges for the calling process. Effective uid is to real uid.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-utils-gain-privileges"></a><h3>gum_utils_gain_privileges ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                gum_utils_gain_privileges           ();</pre>
-<p>
-Gains the privileges for the calling process. Effective uid is to 0.
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="gum-utils-generate-nonce"></a><h3>gum_utils_generate_nonce ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             gum_utils_generate_nonce            (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Data-Checksums.html#GChecksumType"><span class="type">GChecksumType</span></a> algorithm</code></em>);</pre>
-<p>
-Generates nonce based on hashing algorithm as specified in <em class="parameter"><code>algorithm</code></em>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gumd-Gum-Utils.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>algorithm</code></em> :</span></p></td>
-<td>the <a href="http://library.gnome.org/devel/glib/unstable/glib-Data-Checksums.html#GChecksumType"><span class="type">GChecksumType</span></a> algorithm</td>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Gum-Utils.html#gum-utils-generate-nonce" title="gum_utils_generate_nonce ()">gum_utils_generate_nonce</a> <span class="c_punctuation">()</span>
+</td>
 </tr>
 <tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>generate nonce if successful, NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Gum-Utils.html#gum-utils-drop-privileges" title="gum_utils_drop_privileges ()">gum_utils_drop_privileges</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<span class="returnvalue">void</span>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Gum-Utils.html#gum-utils-gain-privileges" title="gum_utils_gain_privileges ()">gum_utils_gain_privileges</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect1">
+<a name="gumd-Gum-Utils.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Utils.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-utils.h&gt;
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Utils.description"></a><h2>Description</h2>
+<p>Utility functions</p>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Utils.functions_details"></a><h2>Functions</h2>
+<div class="refsect2">
+<a name="gum-utils-generate-nonce"></a><h3>gum_utils_generate_nonce ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+gum_utils_generate_nonce (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Data-Checksums.html#GChecksumType"><span class="type">GChecksumType</span></a> algorithm</code></em>);</pre>
+<p>Generates nonce based on hashing algorithm as specified in <em class="parameter"><code>algorithm</code></em>
+</p>
+<div class="refsect3">
+<a name="id-1.5.11.7.2.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>algorithm</p></td>
+<td class="parameter_description"><p>the <a href="http://library.gnome.org/devel/glib/unstable/glib-Data-Checksums.html#GChecksumType"><span class="type">GChecksumType</span></a> algorithm</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.11.7.2.6"></a><h4>Returns</h4>
+<p> generate nonce if successful, NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-utils-drop-privileges"></a><h3>gum_utils_drop_privileges ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_utils_drop_privileges ();</pre>
+<p>Drops the privileges for the calling process. Effective uid is to real uid.</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-utils-gain-privileges"></a><h3>gum_utils_gain_privileges ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>
+gum_utils_gain_privileges ();</pre>
+<p>Gains the privileges for the calling process. Effective uid is to 0.</p>
+</div>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Utils.other_details"></a><h2>Types and Values</h2>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>

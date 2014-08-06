@@ -2,30 +2,27 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Gum Crypt</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<title>gumd API Reference Manual: Gum Crypt</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="gumd API Reference Manual">
 <link rel="up" href="ch02.html" title="Common">
 <link rel="prev" href="gumd-GumDictionary.html" title="GumDictionary">
 <link rel="next" href="gumd-Logging.html" title="Logging">
-<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.20 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
-<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
-<tr valign="middle">
-<td><a accesskey="p" href="gumd-GumDictionary.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
-<td><a accesskey="u" href="ch02.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
-<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
-<th width="100%" align="center">gumd API Reference Manual</th>
-<td><a accesskey="n" href="gumd-Logging.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
-</tr>
-<tr><td colspan="5" class="shortcuts">
-<a href="#gumd-Gum-Crypt.synopsis" class="shortcut">Top</a>
-                   | 
-                  <a href="#gumd-Gum-Crypt.description" class="shortcut">Description</a>
-</td></tr>
-</table>
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="10"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
+                  <a href="#gumd-Gum-Crypt.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
+                  <a href="#gumd-Gum-Crypt.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="ch02.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gumd-GumDictionary.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gumd-Logging.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
 <div class="refentry">
 <a name="gumd-Gum-Crypt"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
@@ -33,28 +30,50 @@
 <h2><span class="refentrytitle"><a name="gumd-Gum-Crypt.top_of_page"></a>Gum Crypt</span></h2>
 <p>Gum Crypt — Utility functions for encryption</p>
 </td>
-<td valign="top" align="right"></td>
+<td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
-<div class="refsynopsisdiv">
-<a name="gumd-Gum-Crypt.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">
-#include &lt;gum/common/gum-crypt.h&gt;
-
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="gumd-Gum-Crypt.html#gum-crypt-cmp-secret" title="gum_crypt_cmp_secret ()">gum_crypt_cmp_secret</a>                (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *plain_str1</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *enc_str2</code></em>);
-<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="gumd-Gum-Crypt.html#gum-crypt-encrypt-secret" title="gum_crypt_encrypt_secret ()">gum_crypt_encrypt_secret</a>            (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *secret</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *encryp_algo</code></em>);
+<div class="refsect1">
+<a name="gumd-Gum-Crypt.functions"></a><h2>Functions</h2>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="functions_return">
+<col class="functions_name">
+</colgroup>
+<tbody>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Gum-Crypt.html#gum-crypt-encrypt-secret" title="gum_crypt_encrypt_secret ()">gum_crypt_encrypt_secret</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>
+</td>
+<td class="function_name">
+<a class="link" href="gumd-Gum-Crypt.html#gum-crypt-cmp-secret" title="gum_crypt_cmp_secret ()">gum_crypt_cmp_secret</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Crypt.object-hierarchy"></a><h2>Object Hierarchy</h2>
+<pre class="screen">
+</pre>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Crypt.includes"></a><h2>Includes</h2>
+<pre class="synopsis">#include &lt;gum/common/gum-crypt.h&gt;
 </pre>
 </div>
 <div class="refsect1">
 <a name="gumd-Gum-Crypt.description"></a><h2>Description</h2>
-<p>
-Following code snippets shows how a string can be encrypted with any of the
+<p>Following code snippets shows how a string can be encrypted with any of the
 supported encryption algorithm. Moreover, plain and encrypted secrets can be
-compared if needed.
-</p>
-<p>
-</p>
+compared if needed.</p>
 <div class="informalexample"><pre class="programlisting">
   gchar *pass = gum_crypt_encrypt_secret("pas.-s123", "SHA512");
   g_free (pass);
@@ -64,73 +83,90 @@ compared if needed.
   g_free (pass);
 
 </pre></div>
-<p>
-</p>
+<p></p>
 </div>
 <div class="refsect1">
-<a name="gumd-Gum-Crypt.details"></a><h2>Details</h2>
+<a name="gumd-Gum-Crypt.functions_details"></a><h2>Functions</h2>
 <div class="refsect2">
-<a name="gum-crypt-cmp-secret"></a><h3>gum_crypt_cmp_secret ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                gum_crypt_cmp_secret                (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *plain_str1</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *enc_str2</code></em>);</pre>
-<p>
-Encrypts plain string with the same parameters as that of encrypted string
-and then compares both encrypted strings.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-crypt-encrypt-secret"></a><h3>gum_crypt_encrypt_secret ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+gum_crypt_encrypt_secret (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *secret</code></em>,
+                          <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *encryp_algo</code></em>);</pre>
+<p>Encrypts the secret with the specified algorithm <em class="parameter"><code>encryp_algo</code></em>
+.</p>
+<div class="refsect3">
+<a name="id-1.5.3.7.2.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>plain_str1</code></em> :</span></p></td>
-<td>plain string. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>secret</p></td>
+<td class="parameter_description"><p> string to encrypt. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>enc_str2</code></em> :</span></p></td>
-<td>encrypted string. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>0 if enc_str1 == enc_str2, less than 0 if the enc_str1 &lt; enc_str2,
-greater than 0 if enc_str1 &gt; enc_str2.</td>
+<td class="parameter_name"><p>encryp_algo</p></td>
+<td class="parameter_description"><p>algorithm to be used for encryption. 'MD5', 'SHA256', 'SHA512',
+and 'DES' are supported algorithms.</p></td>
+<td class="parameter_annotations"> </td>
 </tr>
 </tbody>
 </table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.5.3.7.2.6"></a><h4>Returns</h4>
+<p> encrypted secret if successful, NULL otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
+</div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="gum-crypt-encrypt-secret"></a><h3>gum_crypt_encrypt_secret ()</h3>
-<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             gum_crypt_encrypt_secret            (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *secret</code></em>,
-                                                         <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *encryp_algo</code></em>);</pre>
-<p>
-Encrypts the secret with the specified algorithm <em class="parameter"><code>encryp_algo</code></em>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
+<a name="gum-crypt-cmp-secret"></a><h3>gum_crypt_cmp_secret ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>
+gum_crypt_cmp_secret (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *plain_str1</code></em>,
+                      <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *enc_str2</code></em>);</pre>
+<p>Encrypts plain string with the same parameters as that of encrypted string
+and then compares both encrypted strings.</p>
+<div class="refsect3">
+<a name="id-1.5.3.7.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>secret</code></em> :</span></p></td>
-<td>string to encrypt. <span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>plain_str1</p></td>
+<td class="parameter_description"><p> plain string. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>encryp_algo</code></em> :</span></p></td>
-<td>algorithm to be used for encryption. 'MD5', 'SHA256', 'SHA512',
-and 'DES' are supported algorithms.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>encrypted secret if successful, NULL otherwise. <span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span>
-</td>
+<td class="parameter_name"><p>enc_str2</p></td>
+<td class="parameter_description"><p> encrypted string. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
 </tr>
 </tbody>
 </table></div>
 </div>
+<div class="refsect3">
+<a name="id-1.5.3.7.3.6"></a><h4>Returns</h4>
+<p> 0 if enc_str1 == enc_str2, less than 0 if the enc_str1 &lt; enc_str2,
+greater than 0 if enc_str1 &gt; enc_str2.</p>
+<p></p>
+</div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gumd-Gum-Crypt.other_details"></a><h2>Types and Values</h2>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.18</div>
+          Generated by GTK-Doc V1.20</div>
 </body>
 </html>
