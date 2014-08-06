@@ -1,0 +1,48 @@
+* Tue Aug 12 2014 Imran Zaman <imran.zaman@intel.com>
+- Fix access permissions for user home directory
+
+* Tue Aug 05 2014 Imran Zaman <imran.zaman@intel.com>
+- Log only when logging is enabled
+- Fixed p2p stream descriptor leak
+
+* Thu May 22 2014 Imran Zaman <imran.zaman@intel.com>
+- Renamed gum-example as gum-utils to be used as command line utility
+
+* Wed May 21 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed Bug # TIVI-2988
+- Updated logs
+
+* Tue May 20 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug#TIVI-3170 (fixed smack labels for newly created files and folders
+  as reported in https://bugs.tizen.org/jira/browse/TIVI-3170)
+
+* Wed Feb 12 2014 Imran Zaman <imran.zaman@intel.com>
+- Simplified gumd packages for Tizen and SUSE
+- Simplified gumd packages
+- fix uninstalled pkgconfig files
+
+* Fri Feb 07 2014 Patrick McCarty <patrick.mccarty@linux.intel.com> fe07066
+- Move the packaging files into the packaging/ directory, since a symlink with
+  the same name does not work with 'gbs build'. (DEVT-148)
+
+* Fri Dec 27 2013 Imran Zaman <imran.zaman@intel.com>
+- Obsoletes gum package as the package is renamed to gumd
+
+* Mon Dec 23 2013 Imran Zaman <imran.zaman@intel.com>
+- added test cases for error and dictionary objects
+- utilized dictionary functions for get/set key-value pairs
+- clean up generated coverage files on make clean
+- enable tests by default if coverage is enabled
+- exclude external and generated dbus files from code coverage calculation
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Corrected spec and changes file names
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Removed dist spec packaging folder from main source tree
+
+* Fri Dec 20 2013 Imran Zaman <imran.zaman@intel.com>
+- Release 0.0.1  (First release)
+
+* Mon Sep 02 2013 Imran Zaman <imran.zaman@intel.com>
+- Initial RPM packaging
