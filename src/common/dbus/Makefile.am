@@ -13,9 +13,9 @@ DBUS_BUILT_SOURCES = \
 
 DBUS_BUILT_DOCS = \
     gum-dbus-user-doc-gen-org.tizen.SecurityAccounts.gUserManagement.User.xml \
-    gum-dbus-user-doc-gen-org.tizen.SecurityAccounts.gUserManagement.UserService.xml \
+    gum-dbus-user-service-doc-gen-org.tizen.SecurityAccounts.gUserManagement.UserService.xml \
     gum-dbus-group-doc-gen-org.tizen.SecurityAccounts.gUserManagement.Group.xml \
-    gum-dbus-user-doc-gen-org.tizen.SecurityAccounts.gUserManagement.GroupService.xml \
+    gum-dbus-group-service-doc-gen-org.tizen.SecurityAccounts.gUserManagement.GroupService.xml \
     $(NULL)
 
 DBUS_INTERFACE_PREFIX="org.tizen.SecurityAccounts.gUserManagement."
@@ -56,13 +56,14 @@ noinst_LTLIBRARIES = libgum-dbus-glue.la
 libgum_dbus_glue_la_CPPFLAGS = \
     $(GUM_COMMON_INCLUDES) \
     $(GUM_COMMON_CFLAGS) \
+    $(top_builddir)/src/ \
     $(NULL)
 
 libgum_dbus_glue_la_LIBADD = \
     $(GUM_COMMON_LIBS) \
     $(NULL)
 
-libgum_dbus_glue_la_SOURCES =  \
+nodist_libgum_dbus_glue_la_SOURCES = \
    $(DBUS_BUILT_SOURCES) \
    $(NULL)
 
