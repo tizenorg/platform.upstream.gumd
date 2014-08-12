@@ -37,7 +37,7 @@
  *
  * Value used to set the mode of home directories created for new users.
  */
-#define GUM_UMASK  022
+#define GUM_UMASK  077
 
 G_BEGIN_DECLS
 
