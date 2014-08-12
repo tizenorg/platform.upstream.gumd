@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.3
+Version: 0.0.4
 Release: 1
 Group: System/Daemons
 License: LGPL-2.1+
@@ -131,6 +131,9 @@ groupadd -f -r gumd
 
 
 %changelog
+* Tue Aug 12 2014 Imran Zaman <imran.zaman@intel.com>
+- Fix access permissions for user home directory
+
 * Tue Aug 05 2014 Imran Zaman <imran.zaman@intel.com>
 - Log only when logging is enabled
 - Fixed p2p stream descriptor leak
