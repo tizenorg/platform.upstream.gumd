@@ -1,5 +1,7 @@
+* Tue Aug 12 2014 Imran Zaman <imran.zaman@intel.com>
+- Fix access permissions for user home directory
+
 * Tue Aug 05 2014 Imran Zaman <imran.zaman@intel.com>
-- Release 0.0.3
 - Log only when logging is enabled
 - Fixed p2p stream descriptor leak
 
