@@ -174,6 +174,7 @@ _trigger_callback (
         (group->priv->op->callback)(group, group->priv->op->error,
                 group->priv->op->user_data);
     }
+    group->priv->op->cb_id = 0;
     return FALSE;
 }
 

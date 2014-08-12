@@ -182,6 +182,7 @@ _trigger_callback (
         (user->priv->op->callback)(user, user->priv->op->error,
                 user->priv->op->user_data);
     }
+    user->priv->op->cb_id = 0;
     return FALSE;
 }
 
