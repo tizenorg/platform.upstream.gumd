@@ -38,7 +38,7 @@ BuildRequires: pkgconfig(gmodule-2.0)
 
 %package -n libgum
 Summary:    User management client library
-Group:      Security/Accounts
+Group:      Security/Libraries
 
 
 %description -n libgum
@@ -47,7 +47,7 @@ Group:      Security/Accounts
 
 %package -n libgum-devel
 Summary:    Development files for user management client library
-Group:      SDK/Libraries
+Group:      Security/Development
 Requires:   libgum = %{version}-%{release}
 
 
@@ -57,7 +57,7 @@ Requires:   libgum = %{version}-%{release}
 
 %package doc
 Summary:    Documentation files for %{name}
-Group:      SDK/Documentation
+Group:      Security/Documentation
 Requires:   libgum = %{version}-%{release}
 
 
