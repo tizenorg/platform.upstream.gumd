@@ -7,7 +7,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.4
-Release: 1
+Release: 2
 Group: Security/Accounts
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -38,7 +38,7 @@ BuildRequires: pkgconfig(gmodule-2.0)
 
 %package -n libgum
 Summary:    User management client library
-Group:      Security/Accounts
+Group:      Security/Libraries
 
 
 %description -n libgum
@@ -47,7 +47,7 @@ Group:      Security/Accounts
 
 %package -n libgum-devel
 Summary:    Development files for user management client library
-Group:      SDK/Libraries
+Group:      Security/Development
 Requires:   libgum = %{version}-%{release}
 
 
@@ -57,7 +57,7 @@ Requires:   libgum = %{version}-%{release}
 
 %package doc
 Summary:    Documentation files for %{name}
-Group:      SDK/Documentation
+Group:      Security/Documentation
 Requires:   libgum = %{version}-%{release}
 
 
@@ -85,13 +85,17 @@ rm -rf %{buildroot}
 %make_install
 cp -a %{SOURCE1001} %{buildroot}%{_datadir}/%{name}.manifest
 cp -a %{SOURCE1002} %{buildroot}%{_datadir}/libgum.manifest
-cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}.conf
+cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
 
 %post
 /sbin/ldconfig
-chmod u+s %{_bindir}/%{name}
-getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
+/usr/bin/chmod u+s %{_bindir}/%{name}
+/usr/bin/getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
+/usr/bin/mkdir -p %{_sysconfdir}/%{name}/useradd.d
+/usr/bin/mkdir -p %{_sysconfdir}/%{name}/userdel.d
+/usr/bin/mkdir -p %{_sysconfdir}/%{name}/groupadd.d
+/usr/bin/mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %postun -p /sbin/ldconfig
@@ -119,7 +123,8 @@ getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 %manifest %{_datadir}/%{name}.manifest
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}.conf
+%dir %{_sysconfdir}/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 %if %{dbus_type} == "session"
 %dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service

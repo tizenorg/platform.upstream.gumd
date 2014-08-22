@@ -43,6 +43,7 @@
 #include "common/gum-defines.h"
 #include "common/gum-log.h"
 #include "common/gum-error.h"
+#include "common/gum-utils.h"
 
 struct _GumdDaemonUserPrivate
 {
@@ -1515,6 +1516,17 @@ gumd_daemon_user_add (
         *uid = self->priv->pw->pw_uid;
     }
 
+    const gchar *scrip_dir = USERADD_SCRIPT_DIR;
+#   ifdef ENABLE_DEBUG
+    const gchar *env_val = g_getenv("UM_USERADD_DIR");
+    if (env_val)
+        scrip_dir = env_val;
+#   endif
+
+    gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
+            self->priv->pw->pw_uid, self->priv->pw->pw_gid,
+            self->priv->pw->pw_dir);
+
     gum_lock_pwdf_unlock ();
     return TRUE;
 }
@@ -1582,6 +1594,17 @@ gumd_daemon_user_delete (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
                 "unable to terminate user active sessions", error, FALSE);
     }
+
+    const gchar *scrip_dir = USERDEL_SCRIPT_DIR;
+#   ifdef ENABLE_DEBUG
+    const gchar *env_val = g_getenv("UM_USERDEL_DIR");
+    if (env_val)
+        scrip_dir = env_val;
+#   endif
+
+    gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
+            self->priv->pw->pw_uid, self->priv->pw->pw_gid,
+            self->priv->pw->pw_dir);
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateCB)_update_passwd_entry,

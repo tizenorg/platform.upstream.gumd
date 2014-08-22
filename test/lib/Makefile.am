@@ -2,7 +2,11 @@ include $(top_srcdir)/test/test_common.mk
 
 TESTS = clienttest
 TESTS_ENVIRONMENT += \
-    UM_BIN_DIR=$(top_builddir)/src/daemon/.libs
+    UM_BIN_DIR=$(top_builddir)/src/daemon/.libs \
+    UM_USERADD_DIR=$(abs_top_srcdir)/test/data/useradd.d \
+    UM_USERDEL_DIR=$(abs_top_srcdir)/test/data/userdel.d \
+    UM_GROUPADD_DIR=$(abs_top_srcdir)/test/data/groupadd.d \
+    UM_GROUPDEL_DIR=$(abs_top_srcdir)/test/data/groupdel.d
 
 VALGRIND_TESTS_DISABLE=
 
