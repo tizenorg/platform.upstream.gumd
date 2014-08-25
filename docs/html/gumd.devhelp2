@@ -153,6 +153,8 @@
     <keyword type="function" name="gum_utils_generate_nonce ()" link="gumd-Gum-Utils.html#gum-utils-generate-nonce"/>
     <keyword type="function" name="gum_utils_drop_privileges ()" link="gumd-Gum-Utils.html#gum-utils-drop-privileges"/>
     <keyword type="function" name="gum_utils_gain_privileges ()" link="gumd-Gum-Utils.html#gum-utils-gain-privileges"/>
+    <keyword type="function" name="gum_utils_run_user_scripts ()" link="gumd-Gum-Utils.html#gum-utils-run-user-scripts"/>
+    <keyword type="function" name="gum_utils_run_group_scripts ()" link="gumd-Gum-Utils.html#gum-utils-run-group-scripts"/>
     <keyword type="enum" name="enum GumUserType" link="gumd-User-types.html#GumUserType"/>
     <keyword type="enum" name="enum GumGroupType" link="gumd-Group-types.html#GumGroupType"/>
     <keyword type="function" name="GumUserCb ()" link="GumUser.html#GumUserCb"/>

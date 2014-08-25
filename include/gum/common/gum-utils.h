@@ -28,6 +28,7 @@
 #define _GUM_UTILS_H_
 
 #include <glib.h>
+#include <pwd.h>
 
 G_BEGIN_DECLS
 
@@ -40,6 +41,20 @@ gum_utils_drop_privileges ();
 
 void
 gum_utils_gain_privileges ();
+
+gboolean
+gum_utils_run_user_scripts (
+        const gchar *script_dir,
+        const gchar *username,
+        uid_t uid,
+        gid_t gid,
+        const gchar *homedir);
+
+gboolean
+gum_utils_run_group_scripts (
+        const gchar *script_dir,
+        const gchar *groupname,
+        gid_t gid);
 
 G_END_DECLS
 
