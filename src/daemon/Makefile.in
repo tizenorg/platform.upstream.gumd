@@ -95,7 +95,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = gumd.conf
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sysconfdir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(gumdconfdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
 am_gumd_OBJECTS = gumd-main.$(OBJEXT) gumd-gumd-daemon.$(OBJEXT) \
@@ -189,7 +189,7 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-DATA = $(sysconf_DATA)
+DATA = $(gumdconf_DATA)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 am__recursive_targets = \
@@ -414,6 +414,10 @@ gumd_CFLAGS = \
     $(GUMD_INCLUDES) \
     $(GUMD_CFLAGS) \
     -I$(top_srcdir)/src \
+    -DUSERADD_SCRIPT_DIR='"${sysconfdir}/gumd/useradd.d"' \
+    -DUSERDEL_SCRIPT_DIR='"${sysconfdir}/gumd/userdel.d"' \
+    -DGROUPADD_SCRIPT_DIR='"${sysconfdir}/gumd/groupadd.d"' \
+    -DGROUPDEL_SCRIPT_DIR='"${sysconfdir}/gumd/groupdel.d"' \
     $(NULL)
 
 gumd_LDADD = \
@@ -425,7 +429,8 @@ gumd_LDADD = \
 EXTRA_DIST = \
       gumd.conf.in
 
-sysconf_DATA = gumd.conf
+gumdconfdir = ${sysconfdir}/gumd
+gumdconf_DATA = gumd.conf
 CLEANFILES = *.gcno *.gcda
 all: all-recursive
 
@@ -613,27 +618,27 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-sysconfDATA: $(sysconf_DATA)
+install-gumdconfDATA: $(gumdconf_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(sysconf_DATA)'; test -n "$(sysconfdir)" || list=; \
+	@list='$(gumdconf_DATA)'; test -n "$(gumdconfdir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(sysconfdir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(sysconfdir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(gumdconfdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(gumdconfdir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(sysconfdir)'"; \
-	  $(INSTALL_DATA) $$files "$(DESTDIR)$(sysconfdir)" || exit $$?; \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(gumdconfdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(gumdconfdir)" || exit $$?; \
 	done
 
-uninstall-sysconfDATA:
+uninstall-gumdconfDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(sysconf_DATA)'; test -n "$(sysconfdir)" || list=; \
+	@list='$(gumdconf_DATA)'; test -n "$(gumdconfdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(sysconfdir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(gumdconfdir)'; $(am__uninstall_files_from_dir)
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.
@@ -794,7 +799,7 @@ check: check-recursive
 all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sysconfdir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(gumdconfdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-recursive
@@ -851,13 +856,13 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-gumdconfDATA
 
 install-dvi: install-dvi-recursive
 
 install-dvi-am:
 
-install-exec-am: install-binPROGRAMS install-sysconfDATA
+install-exec-am: install-binPROGRAMS
 	@$(NORMAL_INSTALL)
 	$(MAKE) $(AM_MAKEFLAGS) install-exec-hook
 install-html: install-html-recursive
@@ -898,7 +903,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-sysconfDATA
+uninstall-am: uninstall-binPROGRAMS uninstall-gumdconfDATA
 
 .MAKE: $(am__recursive_targets) install-am install-exec-am \
 	install-strip
@@ -910,14 +915,14 @@ uninstall-am: uninstall-binPROGRAMS uninstall-sysconfDATA
 	dvi-am html html-am info info-am install install-am \
 	install-binPROGRAMS install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-exec-hook \
-	install-html install-html-am install-info install-info-am \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip install-sysconfDATA installcheck \
+	install-gumdconfDATA install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
 	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS \
-	uninstall-sysconfDATA
+	uninstall-gumdconfDATA
 
 
 @SET_PERMISSIONS_TRUE@install-exec-hook:
