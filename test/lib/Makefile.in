@@ -529,7 +529,11 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS_ENVIRONMENT = G_MESSAGES_DEBUG="all" \
 	LD_LIBRARY_PATH="$(top_builddir)/src/common/.libs:$(top_builddir)/src/daemon/.libs:$(top_builddir)/src/daemon/dbus/.libs" \
-	UM_BIN_DIR=$(top_builddir)/src/daemon/.libs
+	UM_BIN_DIR=$(top_builddir)/src/daemon/.libs \
+	UM_USERADD_DIR=$(abs_top_srcdir)/test/data/useradd.d \
+	UM_USERDEL_DIR=$(abs_top_srcdir)/test/data/userdel.d \
+	UM_GROUPADD_DIR=$(abs_top_srcdir)/test/data/groupadd.d \
+	UM_GROUPDEL_DIR=$(abs_top_srcdir)/test/data/groupdel.d
 TEST_CFLAGS = -DGUM_TEST_DATA_DIR=\"$(abs_top_srcdir)/test/data/\"
 VALGRIND_TESTS_DISABLE = 
 SUPPRESSIONS = $(top_srcdir)/test/valgrind.supp
