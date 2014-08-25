@@ -1,3 +1,10 @@
+gumd (0.0.4-2) unstable; urgency=low
+
+  * Added support for scripts which can be run after a user/group is added
+  or before a user/group is deleted
+
+ -- Imran Zaman <imran.zaman@intel.com>  Thu, 21 Aug  2014 16:31:03 +0300
+
 gumd (0.0.4-1) unstable; urgency=low
 
   * Fix access permissions for user home directory
