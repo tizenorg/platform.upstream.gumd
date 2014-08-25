@@ -1,4 +1,4 @@
 /usr/bin/gumd
-/etc/gumd.conf
+/etc/gumd/gumd.conf
 /usr/share/dbus-1/system-services/*UserManagement*.service
 /etc/dbus-1/system.d/gumd-dbus.conf

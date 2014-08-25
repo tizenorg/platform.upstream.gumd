@@ -22,6 +22,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <gshadow.h>
@@ -37,6 +39,7 @@
 #include "common/gum-defines.h"
 #include "common/gum-log.h"
 #include "common/gum-error.h"
+#include "common/gum-utils.h"
 
 struct _GumdDaemonGroupPrivate
 {
@@ -866,6 +869,16 @@ gumd_daemon_group_add (
         *gid = self->priv->group->gr_gid;
     }
 
+    const gchar *scrip_dir = GROUPADD_SCRIPT_DIR;
+#   ifdef ENABLE_DEBUG
+    const gchar *env_val = g_getenv("UM_GROUPADD_DIR");
+    if (env_val)
+        scrip_dir = env_val;
+#   endif
+
+    gum_utils_run_group_scripts (scrip_dir, self->priv->group->gr_name,
+            self->priv->group->gr_gid);
+
     gum_lock_pwdf_unlock ();
     return TRUE;
 }
@@ -911,6 +924,16 @@ gumd_daemon_group_delete (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_HAS_USER,
                 "Group is a primary group of an existing user", error, FALSE);
     }
+
+    const gchar *scrip_dir = GROUPDEL_SCRIPT_DIR;
+#   ifdef ENABLE_DEBUG
+    const gchar *env_val = g_getenv("UM_GROUPDEL_DIR");
+    if (env_val)
+        scrip_dir = env_val;
+#   endif
+
+    gum_utils_run_group_scripts (scrip_dir, self->priv->group->gr_name,
+            self->priv->group->gr_gid);
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateCB)_update_daemon_group_entry,

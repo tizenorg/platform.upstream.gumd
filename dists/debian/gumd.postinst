@@ -23,6 +23,10 @@ case "$1" in
         ldconfig
     groupadd -f -r gumd
     chmod 4755 /usr/bin/gumd
+    mkdir -p /etc/gumd/useradd.d
+    mkdir -p /etc/gumd/userdel.d
+    mkdir -p /etc/gumd/groupadd.d
+    mkdir -p /etc/gumd/groupdel.d
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

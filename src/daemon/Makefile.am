@@ -18,6 +18,10 @@ gumd_CFLAGS = \
     $(GUMD_INCLUDES) \
     $(GUMD_CFLAGS) \
     -I$(top_srcdir)/src \
+    -DUSERADD_SCRIPT_DIR='"${sysconfdir}/gumd/useradd.d"' \
+    -DUSERDEL_SCRIPT_DIR='"${sysconfdir}/gumd/userdel.d"' \
+    -DGROUPADD_SCRIPT_DIR='"${sysconfdir}/gumd/groupadd.d"' \
+    -DGROUPDEL_SCRIPT_DIR='"${sysconfdir}/gumd/groupdel.d"' \
     $(NULL)
 
 gumd_LDADD = \
@@ -29,7 +33,8 @@ gumd_LDADD = \
 EXTRA_DIST = \
       gumd.conf.in
 
-sysconf_DATA = gumd.conf
+gumdconfdir = ${sysconfdir}/gumd
+gumdconf_DATA = gumd.conf
 
 if SET_PERMISSIONS
 install-exec-hook:
