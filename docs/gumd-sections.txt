@@ -252,6 +252,8 @@ GumUserType
 gum_utils_generate_nonce
 gum_utils_drop_privileges
 gum_utils_gain_privileges
+gum_utils_run_user_scripts
+gum_utils_run_group_scripts
 </SECTION>
 
 <SECTION>
