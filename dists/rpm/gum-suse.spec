@@ -8,7 +8,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.4
-Release: 1
+Release: 2
 Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -86,6 +86,10 @@ rm -rf %{buildroot}
 /sbin/ldconfig
 chmod u+s %{_bindir}/%{name}
 groupadd -f -r gumd
+mkdir -p %{_sysconfdir}/%{name}/useradd.d
+mkdir -p %{_sysconfdir}/%{name}/userdel.d
+mkdir -p %{_sysconfdir}/%{name}/groupadd.d
+mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %postun -p /sbin/ldconfig
@@ -112,7 +116,7 @@ groupadd -f -r gumd
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING.LIB INSTALL NEWS README
 %{_bindir}/%{name}
-%config(noreplace) %{_sysconfdir}/gumd.conf
+%config(noreplace) %{_sysconfdir}/%{name}/gumd.conf
 %if %{dbus_type} == "session"
 %dir %{_datadir}/dbus-1/services
 %{_datadir}/dbus-1/services/*UserManagement*.service
@@ -131,6 +135,10 @@ groupadd -f -r gumd
 
 
 %changelog
+* Thu Aug 21 2014 Imran Zaman <imran.zaman@intel.com>
+- Added support for scripts which can be run after a user/group is added
+  or before a user/group is deleted
+
 * Tue Aug 12 2014 Imran Zaman <imran.zaman@intel.com>
 - Fix access permissions for user home directory
 

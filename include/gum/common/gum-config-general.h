@@ -245,7 +245,7 @@
  * GUM_CONFIG_GENERAL_UMASK:
  *
  * Value used to set the mode of home directories created for new users.
- * Default value is: 022
+ * Default value is: 077
  */
 #define GUM_CONFIG_GENERAL_UMASK            GUM_CONFIG_GENERAL \
 	                                          "/UMASK"
