@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.tizen.SecurityAccounts.gUserManagement
-Exec=/home/imran/work/um/gumd/src/daemon/gumd

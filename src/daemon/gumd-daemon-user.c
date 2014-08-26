@@ -792,16 +792,14 @@ _set_secret (
     if (!self->priv->pw->pw_passwd) {
         if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
             self->priv->shadow->sp_pwdp = g_strdup ("*");
+        else if (self->priv->user_type == GUM_USERTYPE_GUEST)
+            self->priv->shadow->sp_pwdp = g_strdup ("");
         else
             self->priv->shadow->sp_pwdp = g_strdup ("!");
         _set_secret_property (self, "x");
         return TRUE;
     }
 
-    /* TODO: The encrypted password field may be blank, in which
-     * case no password is required to authenticate as the specified
-     * login name.
-     */
     self->priv->shadow->sp_pwdp = gum_crypt_encrypt_secret (
             self->priv->pw->pw_passwd, gum_config_get_string (
                     self->priv->config, GUM_CONFIG_GENERAL_ENCRYPT_METHOD));
