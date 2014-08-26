@@ -199,18 +199,18 @@ _print_user_prop (
     g_object_get (G_OBJECT (guser), "shell", &user->shell, NULL);
     g_object_get (G_OBJECT (guser), "secret", &user->secret, NULL);
 
-    DBG ("uid : %u", user->uid);
-    DBG ("gid : %u", user->gid);
-    DBG ("username : %s", user->user_name ? user->user_name : "UNKNOWN");
-    DBG ("nickname : %s", user->nick_name ? user->nick_name : "UNKNOWN");
-    DBG ("realname : %s", user->real_name ? user->real_name : "UNKNOWN");
-    DBG ("office : %s", user->office ? user->office : "UNKNOWN");
-    DBG ("officephone : %s",
+    WARN ("uid : %u", user->uid);
+    WARN ("gid : %u", user->gid);
+    WARN ("username : %s", user->user_name ? user->user_name : "UNKNOWN");
+    WARN ("nickname : %s", user->nick_name ? user->nick_name : "UNKNOWN");
+    WARN ("realname : %s", user->real_name ? user->real_name : "UNKNOWN");
+    WARN ("office : %s", user->office ? user->office : "UNKNOWN");
+    WARN ("officephone : %s",
     		user->office_phone ? user->office_phone : "UNKNOWN");
-    DBG ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
-    DBG ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
-    DBG ("shell : %s", user->shell ? user->shell : "UNKNOWN");
-    DBG ("secret : %s", user->secret ? user->secret : "UNKNOWN");
+    WARN ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
+    WARN ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
+    WARN ("shell : %s", user->shell ? user->shell : "UNKNOWN");
+    WARN ("secret : %s", user->secret ? user->secret : "UNKNOWN");
 
     _free_test_user (user);
 }
@@ -297,7 +297,7 @@ _handle_user_add (
 
     _print_user_prop (guser);
 
-    DBG ("User added successfully");
+    WARN ("User added successfully");
 
     if (write_nfc) {
         _handle_write_nfc(guser);
@@ -321,7 +321,7 @@ _handle_user_del (
         return;
     }
 
-    DBG ("User deleted successfully");
+    WARN ("User deleted successfully");
 
     g_object_unref (guser);
 }
@@ -359,7 +359,7 @@ _handle_user_up (
         g_error_free (op_error);
     } else {
     	_print_user_prop (guser);
-        DBG ("User updated successfully");
+        WARN ("User updated successfully");
     }
 
     if (write_nfc) {
@@ -378,7 +378,7 @@ _handle_user_get (
     guser = gum_user_get_sync (user->uid);
     if (!guser) return;
 
-    DBG ("User retrieved successfully");
+    WARN ("User retrieved successfully");
     _print_user_prop (guser);
 
     if (guser) {
@@ -402,7 +402,7 @@ _handle_user_get_by_name (
         		op_error->message);
         g_error_free (op_error);
     } else {
-        DBG ("User retrieved by name successfully");
+        WARN ("User retrieved by name successfully");
         _print_user_prop (guser);
     }
 
@@ -448,9 +448,9 @@ _print_group_prop (
     g_object_get (G_OBJECT (grp), "groupname", &group->group_name, NULL);
     g_object_get (G_OBJECT (grp), "secret", &group->grp_secret, NULL);
 
-    DBG ("gid : %u", group->gid);
-    DBG ("groupname : %s", group->group_name ? group->group_name : "UNKNOWN");
-    DBG ("secret : %s", group->grp_secret ? group->grp_secret : "UNKNOWN");
+    WARN ("gid : %u", group->gid);
+    WARN ("groupname : %s", group->group_name ? group->group_name : "UNKNOWN");
+    WARN ("secret : %s", group->grp_secret ? group->grp_secret : "UNKNOWN");
 
     _free_test_group (group);
 }
@@ -473,7 +473,7 @@ _handle_group_add (
     }
 
     _print_group_prop (grp);
-    DBG ("Group added successfully");
+    WARN ("Group added successfully");
 
     g_object_unref (grp);
 }
@@ -493,7 +493,7 @@ _handle_group_del (
         return;
     }
 
-    DBG ("Group deleted successfully");
+    WARN ("Group deleted successfully");
     g_object_unref (grp);
 }
 
@@ -529,7 +529,7 @@ _handle_group_up (
         g_error_free (op_error);
     } else {
         _print_group_prop (grp);
-        DBG ("Group updated successfully");
+        WARN ("Group updated successfully");
     }
 
     g_object_unref (grp);
@@ -550,7 +550,7 @@ _handle_group_get (
         WARN ("Failed group get -- %d:%s", op_error->code, op_error->message);
         g_error_free (op_error);
     } else {
-        DBG ("Group retrieved successfully");
+        WARN ("Group retrieved successfully");
         _print_group_prop (grp);
     }
 
@@ -568,7 +568,7 @@ _handle_group_get_by_name (
     grp = gum_group_get_by_name_sync (group->group_name);
     if (!grp) return;
 
-    DBG ("Group retrieved by name successfully");
+    WARN ("Group retrieved by name successfully");
     _print_group_prop (grp);
 
     if (grp) {
@@ -591,7 +591,7 @@ _handle_group_add_mem (
         return;
     }
 
-    DBG ("Group mem added successfully");
+    WARN ("Group mem added successfully");
     g_object_unref (grp);
 }
 
@@ -624,7 +624,7 @@ _handle_group_del_mem (
         		op_error->message);
         g_error_free (op_error);
     } else {
-        DBG ("Group mem deleted successfully");
+        WARN ("Group mem deleted successfully");
     }
 
     g_object_unref (grp);
