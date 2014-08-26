@@ -8,7 +8,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.4
-Release: 2
+Release: 3
 Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -135,6 +135,10 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Tue Aug 26 2014 Imran Zaman <imran.zaman@intel.com>
+- Made gum-utils logs printible always
+- Fixed bug for guest user which can login without authentication
+
 * Thu Aug 21 2014 Imran Zaman <imran.zaman@intel.com>
 - Added support for scripts which can be run after a user/group is added
   or before a user/group is deleted
