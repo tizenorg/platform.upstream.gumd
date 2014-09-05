@@ -135,6 +135,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Fri Sep 05 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug TC-1580 which fixes user's folder and file access permissions
+
 * Tue Aug 26 2014 Imran Zaman <imran.zaman@intel.com>
 - Made gum-utils logs printible always
 - Fixed bug for guest user which can login without authentication
