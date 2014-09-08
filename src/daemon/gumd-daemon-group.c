@@ -527,7 +527,7 @@ _update_gshadow_entry (
                 if (g_strcmp0 (self->priv->gshadow->sg_namp,
                         entry->sg_namp) == 0) {
                     GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_ALREADY_EXISTS,
-                            "File write failure", error, FALSE);
+                            "Group already exists", error, FALSE);
                 }
                 break;
             case GUM_OPTYPE_DELETE:
