@@ -8,7 +8,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.4
-Release: 3
+Release: 5
 Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -135,6 +135,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Mon Sep 08 2014 Imran Zaman <imran.zaman@intel.com>
+- Added primary group name for new user in the configuration file
+
 * Fri Sep 05 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed bug TC-1580 which fixes user's folder and file access permissions
 

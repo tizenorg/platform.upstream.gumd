@@ -45,6 +45,7 @@
     <keyword type="macro" name="GUM_UMASK" link="GumConfig.html#GUM-UMASK:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_USR_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS"/>
+    <keyword type="macro" name="GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-USR-PRIMARY-GRPNAME:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_PASSWD_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-PASSWD-FILE:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_SHADOW_FILE" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-SHADOW-FILE:CAPS"/>

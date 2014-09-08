@@ -1,3 +1,6 @@
+* Mon Sep 08 2014 Imran Zaman <imran.zaman@intel.com>
+- Added primary group name for new user in the configuration file
+
 * Fri Sep 05 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed bug TC-1580 which fixes user's folder and file access permissions
 
