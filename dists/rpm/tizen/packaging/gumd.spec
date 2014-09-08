@@ -7,7 +7,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.4
-Release: 3
+Release: 4
 Group: Security/Accounts
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -71,7 +71,7 @@ Requires:   libgum = %{version}-%{release}
 
 %build
 %if %{debug_build} == 1
-%configure --enable-dbus-type=%{dbus_type} %{_enable_debug}
+%configure --enable-dbus-type=%{dbus_type} --enable-debug
 %else
 %configure --enable-dbus-type=%{dbus_type}
 %endif
