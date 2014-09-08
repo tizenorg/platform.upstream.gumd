@@ -50,6 +50,10 @@
 </tr>
 <tr>
 <td class="define_keyword">#define</td>
+<td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-USR-PRIMARY-GRPNAME:CAPS" title="GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME">GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME</a></td>
+</tr>
+<tr>
+<td class="define_keyword">#define</td>
 <td class="function_name"><a class="link" href="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-ADMIN-GROUPS:CAPS" title="GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS">GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS</a></td>
 </tr>
 <tr>
@@ -176,6 +180,14 @@ them.</p>
 <p>Comma separate listed of groups, which every user (other than system user)
 will be added to at the time of user account creation. Default value is:
 ''</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GUM-CONFIG-GENERAL-USR-PRIMARY-GRPNAME:CAPS"></a><h3>GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME</h3>
+<pre class="programlisting">#define             GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME</pre>
+<p>Primary group name for the new user. If the primary group does not
+exist, it will be created otherwise user gid will be set accordingly.
+Default primary group name is same as name of the user.</p>
 </div>
 <hr>
 <div class="refsect2">

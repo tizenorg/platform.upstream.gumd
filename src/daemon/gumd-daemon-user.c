@@ -1079,9 +1079,11 @@ _set_group (
         GumdDaemonUser *self,
         GError **error)
 {
-    gboolean added = FALSE;
+    gboolean group_exists = FALSE;
     GumdDaemonGroup *group = NULL;
     gid_t gid = GUM_GROUP_INVALID_GID;
+    const gchar *primary_gname = NULL;
+    struct group *grp = NULL;
 
     group = gumd_daemon_group_new (self->priv->config);
     if (!group) {
@@ -1091,17 +1093,33 @@ _set_group (
 
     GumGroupType grp_type = self->priv->user_type == GUM_USERTYPE_SYSTEM ?
             GUM_GROUPTYPE_SYSTEM : GUM_GROUPTYPE_USER;
-    g_object_set (G_OBJECT(group), "groupname", self->priv->pw->pw_name,
-            "grouptype", grp_type, NULL);
-    if (!(added = gumd_daemon_group_add (group, (gid_t)self->priv->pw->pw_uid,
-            &gid, error))) {
-        goto _finished;
+
+    primary_gname = gum_config_get_string (self->priv->config,
+            GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME);
+    if (primary_gname) {
+        grp = gum_file_getgrnam (primary_gname,
+                gum_config_get_string (self->priv->config,
+                        GUM_CONFIG_GENERAL_GROUP_FILE));
     }
+
+    if (!grp) {
+        g_object_set (G_OBJECT(group), "groupname",
+                primary_gname ? primary_gname : self->priv->pw->pw_name,
+                        "grouptype", grp_type, NULL);
+        if (!(group_exists = gumd_daemon_group_add (group,
+                (gid_t)self->priv->pw->pw_uid, &gid, error))) {
+            goto _finished;
+        }
+    } else {
+        gid = grp->gr_gid;
+        group_exists = TRUE;
+    }
+
     _set_gid_property (self, gid);
 
 _finished:
     g_object_unref (group);
-    return added;
+    return group_exists;
 }
 
 gboolean

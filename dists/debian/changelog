@@ -1,8 +1,14 @@
+gumd (0.0.4-5) unstable; urgency=low
+
+  * Added primary group name for new user in the configuration file
+
+ -- Imran Zaman <imran.zaman@intel.com>  Mon, 08 Sep  2014 18:00:03 +0300
+
 gumd (0.0.4-4) unstable; urgency=low
 
   * Fixed bug TC-1580 which fixes user's folder and file access permissions
 
- -- Imran Zaman <imran.zaman@intel.com>  Tue, 26 Aug  2014 18:00:03 +0300
+ -- Imran Zaman <imran.zaman@intel.com>  Fri, 05 Sep  2014 18:00:03 +0300
 
 gumd (0.0.4-3) unstable; urgency=low
 

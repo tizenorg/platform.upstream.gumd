@@ -54,6 +54,16 @@
                                               "/DEFAULT_USR_GROUPS"
 
 /**
+ * GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME:
+ *
+ * Primary group name for the new user. If the primary group does not
+ * exist, it will be created otherwise user gid will be set accordingly.
+ * Default primary group name is same as name of the user.
+ */
+#define GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME   GUM_CONFIG_GENERAL \
+                                              "/USR_PRIMARY_GRPNAME"
+
+/**
  * GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS:
  *
  * Comma separate listed of groups, which admin user will be added to at the
