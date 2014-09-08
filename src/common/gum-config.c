@@ -148,8 +148,7 @@ _load_config (
     }
 
     if (!self->priv->config_file_path) {
-        gchar *filename = g_build_filename ("%s/gumd/%s", GUM_SYSCONF_DIR,
-                "gumd.conf", NULL);
+        gchar *filename = g_strdup_printf ("%s/gumd", GUM_SYSCONF_DIR);
         self->priv->config_file_path = _check_config_file (filename);
         g_free (filename);
     }
@@ -172,8 +171,7 @@ _load_config (
 #   ifndef GUM_SYSCONF_DIR
 #   error "System configuration directory not defined!"
 #   endif
-    gchar *filename = g_build_filename ("%s/gumd/%s", GUM_SYSCONF_DIR,
-            "gumd.conf", NULL);
+    gchar *filename = g_strdup_printf ("%s/gumd", GUM_SYSCONF_DIR);
     self->priv->config_file_path = _check_config_file (filename);
     g_free (filename);
 #   endif  /* ENABLE_DEBUG */
