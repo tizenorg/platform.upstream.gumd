@@ -1,3 +1,6 @@
+* Fri Sep 19 2014 Imran Zaman <imran.zaman@intel.com>
+- Add support for overriding the bus type using environment variable
+
 * Mon Sep 08 2014 Imran Zaman <imran.zaman@intel.com>
 - Added primary group name for new user in the configuration file
 

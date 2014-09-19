@@ -3,7 +3,7 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2013 Intel Corporation.
+ * Copyright (C) 2013 - 2014 Intel Corporation.
  *
  * Contact: Imran Zaman <imran.zaman@intel.com>
  *
@@ -31,6 +31,12 @@
 
 #include "gum-group-service.h"
 
+static const gchar *_bus_type =
+#ifdef GUM_BUS_TYPE_P2P
+    "p2p";
+#else
+    "system";
+#endif
 static GHashTable *group_service_objects = NULL;
 static GMutex mutex;
 
@@ -99,6 +105,7 @@ _on_group_service_destroyed (
 GumDbusGroupService *
 gum_group_service_get_instance ()
 {
+    const gchar *env;
     GumDbusGroupService *group_service = NULL;
     GDBusConnection *connection = NULL;
     GError *error = NULL;
@@ -109,16 +116,19 @@ gum_group_service_get_instance ()
         return group_service;
     }
 
-#ifdef GUM_BUS_TYPE_P2P
-    gchar *bus_address = g_strdup_printf (GUM_DBUS_ADDRESS,
+    env = getenv ("GUM_BUS_TYPE");
+    if (env)
+        _bus_type = env;
+    if (g_strcmp0 (_bus_type, "p2p") == 0) {
+        gchar *bus_address = g_strdup_printf (GUM_DBUS_ADDRESS,
             g_get_user_runtime_dir());
-    connection = g_dbus_connection_new_for_address_sync (bus_address,
+        connection = g_dbus_connection_new_for_address_sync (bus_address,
             G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT, NULL, NULL, &error);
-    g_free (bus_address);
-#else
-    connection = g_bus_get_sync (GUM_BUS_TYPE, NULL, &error);
-    bus_name = GUM_SERVICE;
-#endif
+        g_free (bus_address);
+    } else {
+        connection = g_bus_get_sync (GUM_BUS_TYPE, NULL, &error);
+        bus_name = GUM_SERVICE;
+    }
 
     group_service = gum_dbus_group_service_proxy_new_sync (connection,
             G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES, bus_name,
