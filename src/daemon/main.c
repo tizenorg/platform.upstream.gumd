@@ -3,7 +3,7 @@
 /*
  * This file is part of gumd
  *
- * Copyright (C) 2012 - 2013 Intel Corporation.
+ * Copyright (C) 2012 - 2014 Intel Corporation.
  *
  * Contact: Amarnath Valluri <amarnath.valluri@linux.intel.com>
  *          Imran Zaman <imran.zaman@intel.com>
@@ -41,6 +41,12 @@
 #include "dbus/gumd-dbus-server-msg-bus.h"
 #include "dbus/gumd-dbus-server-p2p.h"
 
+static const gchar *_bus_type =
+#ifdef GUM_BUS_TYPE_P2P
+    "p2p";
+#else
+    "system";
+#endif
 static GumdDbusServer *_server = NULL;
 static guint _sig_source_id[3];
 
@@ -70,12 +76,15 @@ static gboolean
 _start_dbus_server (
 		GMainLoop *main_loop)
 {
+    const gchar *env;
 
-#ifdef GUM_BUS_TYPE_P2P
-    _server = GUMD_DBUS_SERVER (gumd_dbus_server_p2p_new ());
-#else
-    _server = GUMD_DBUS_SERVER (gumd_dbus_server_msg_bus_new ());
-#endif
+    env = getenv ("GUM_BUS_TYPE");
+    if (env)
+        _bus_type = env;
+    if (g_strcmp0 (_bus_type, "p2p") == 0)
+        _server = GUMD_DBUS_SERVER (gumd_dbus_server_p2p_new ());
+    else
+        _server = GUMD_DBUS_SERVER (gumd_dbus_server_msg_bus_new ());
 
     if (!_server) {
     	return FALSE;
