@@ -1,3 +1,7 @@
+* Mon Sep 21 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug related to primary group deletion, as it needs not to be deleted
+  if other users have that group as primary group.
+
 * Fri Sep 19 2014 Imran Zaman <imran.zaman@intel.com>
 - Add support for overriding the bus type using environment variable
 
