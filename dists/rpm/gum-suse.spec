@@ -8,7 +8,7 @@
 Name: gumd
 Summary: User management daemon and client library
 Version: 0.0.5
-Release: 1
+Release: 2
 Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -135,6 +135,10 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Mon Sep 21 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug related to primary group deletion, as it needs not to be deleted
+  if other users have that group as primary group.
+
 * Fri Sep 19 2014 Imran Zaman <imran.zaman@intel.com>
 - Add support for overriding the bus type using environment variable
 
