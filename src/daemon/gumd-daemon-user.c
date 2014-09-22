@@ -1206,11 +1206,8 @@ _delete_group (
                         error, FALSE);
     }
 
-    g_object_set (G_OBJECT(group), "groupname", self->priv->pw->pw_name,
-            "gid", self->priv->pw->pw_gid, NULL);
+    g_object_set (G_OBJECT(group), "gid", self->priv->pw->pw_gid, NULL);
     if (!(deleted = gumd_daemon_group_delete (group, error))) {
-        GUM_SET_ERROR (GUM_ERROR_USER_GROUP_DELETE_FAILURE,
-                        "Group delete failure", error, deleted, FALSE);
         goto _finished;
     }
 
