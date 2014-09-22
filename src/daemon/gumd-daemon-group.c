@@ -921,8 +921,9 @@ gumd_daemon_group_delete (
             gum_config_get_string (self->priv->config,
                     GUM_CONFIG_GENERAL_PASSWD_FILE)) != NULL) {
         gum_lock_pwdf_unlock ();
-        GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_HAS_USER,
-                "Group is a primary group of an existing user", error, FALSE);
+        WARN ("Not deleting the group as it is a primary group another"
+                " existing user");
+        return TRUE;
     }
 
     const gchar *scrip_dir = GROUPDEL_SCRIPT_DIR;
