@@ -7,8 +7,8 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.5
-Release: 2
+Version: 0.0.6
+Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -135,6 +135,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Fri Oct 17 2014 Imran Zaman <imran.zaman@intel.com>
+- Added offline support to gumd to add/update etc user/group
+
 * Mon Sep 21 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed bug related to primary group deletion, as it needs not to be deleted
   if other users have that group as primary group.
