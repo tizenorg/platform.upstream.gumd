@@ -1,4 +1,4 @@
-# define used dbus type [p2p, session, system]
+# define used dbus type [p2p, system]
 %define dbus_type system
 # enable debug features such as control environment variables
 # WARNING! do not use for production builds as it will break security
@@ -6,8 +6,8 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.5
-Release: 2
+Version: 0.0.6
+Release: 0
 Group: Security/Accounts
 License: LGPL-2.1+
 Source: %{name}-%{version}.tar.gz
@@ -90,7 +90,6 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
 %post
 /sbin/ldconfig
-/usr/bin/chmod u+s %{_bindir}/%{name}
 /usr/bin/getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
 /usr/bin/mkdir -p %{_sysconfdir}/%{name}/useradd.d
 /usr/bin/mkdir -p %{_sysconfdir}/%{name}/userdel.d
@@ -125,10 +124,7 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 %{_bindir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%if %{dbus_type} == "session"
-%dir %{_datadir}/dbus-1/services
-%{_datadir}/dbus-1/services/*UserManagement*.service
-%else if %{dbus_type} == "system"
+%if %{dbus_type} == "system"
 %dir %{_datadir}/dbus-1/system-services
 %{_datadir}/dbus-1/system-services/*UserManagement*.service
 %dir %{_sysconfdir}/dbus-1

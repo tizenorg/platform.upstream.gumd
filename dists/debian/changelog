@@ -1,3 +1,9 @@
+gumd (0.0.6-0) unstable; urgency=low
+
+  * Added offline support to gumd to add/update etc user/group.
+
+ -- Imran Zaman <imran.zaman@intel.com>  Fri, 17 Oct  2014 16:00:00 +0300
+
 gumd (0.0.5-2) unstable; urgency=low
 
   * Fixed bug related to primary group deletion, as it needs not to be deleted

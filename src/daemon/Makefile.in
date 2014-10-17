@@ -100,7 +100,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
 am_gumd_OBJECTS = gumd-main.$(OBJEXT) gumd-gumd-daemon.$(OBJEXT) \
 	gumd-gumd-daemon-user.$(OBJEXT) \
-	gumd-gumd-daemon-group.$(OBJEXT) $(am__objects_1)
+	gumd-gumd-daemon-group.$(OBJEXT) \
+	gumd-gumd-daemon-offline.$(OBJEXT) $(am__objects_1)
 gumd_OBJECTS = $(am_gumd_OBJECTS)
 am__DEPENDENCIES_1 =
 gumd_DEPENDENCIES = $(top_builddir)/src/common/libgum-common.la \
@@ -407,6 +408,8 @@ gumd_SOURCES = \
     gumd-daemon-user.h \
     gumd-daemon-group.c \
     gumd-daemon-group.h \
+    gumd-daemon-offline.c \
+    gumd-daemon-offline.h \
     gumd-types.h \
     $(NULL)
 
@@ -529,6 +532,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-group.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-offline.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-user.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-main.Po@am__quote@
@@ -612,6 +616,20 @@ gumd-gumd-daemon-group.obj: gumd-daemon-group.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-group.c' object='gumd-gumd-daemon-group.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-group.obj `if test -f 'gumd-daemon-group.c'; then $(CYGPATH_W) 'gumd-daemon-group.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-group.c'; fi`
+
+gumd-gumd-daemon-offline.o: gumd-daemon-offline.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-offline.o -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-offline.Tpo -c -o gumd-gumd-daemon-offline.o `test -f 'gumd-daemon-offline.c' || echo '$(srcdir)/'`gumd-daemon-offline.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-offline.Tpo $(DEPDIR)/gumd-gumd-daemon-offline.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-offline.c' object='gumd-gumd-daemon-offline.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-offline.o `test -f 'gumd-daemon-offline.c' || echo '$(srcdir)/'`gumd-daemon-offline.c
+
+gumd-gumd-daemon-offline.obj: gumd-daemon-offline.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-offline.obj -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-offline.Tpo -c -o gumd-gumd-daemon-offline.obj `if test -f 'gumd-daemon-offline.c'; then $(CYGPATH_W) 'gumd-daemon-offline.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-offline.c'; fi`
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-offline.Tpo $(DEPDIR)/gumd-gumd-daemon-offline.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-offline.c' object='gumd-gumd-daemon-offline.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-offline.obj `if test -f 'gumd-daemon-offline.c'; then $(CYGPATH_W) 'gumd-daemon-offline.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-offline.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -927,7 +945,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-gumdconfDATA
 
 @SET_PERMISSIONS_TRUE@install-exec-hook:
 @SET_PERMISSIONS_TRUE@	chown root $(DESTDIR)$(bindir)/gumd || true
-@SET_PERMISSIONS_TRUE@	chmod u+s $(DESTDIR)$(bindir)/gumd || true
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
