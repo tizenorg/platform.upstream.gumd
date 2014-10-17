@@ -197,7 +197,6 @@ _print_user_prop (
     g_object_get (G_OBJECT (guser), "homephone", &user->home_phone, NULL);
     g_object_get (G_OBJECT (guser), "homedir", &user->home_dir, NULL);
     g_object_get (G_OBJECT (guser), "shell", &user->shell, NULL);
-    g_object_get (G_OBJECT (guser), "secret", &user->secret, NULL);
 
     WARN ("uid : %u", user->uid);
     WARN ("gid : %u", user->gid);
@@ -210,7 +209,6 @@ _print_user_prop (
     WARN ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
     WARN ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
     WARN ("shell : %s", user->shell ? user->shell : "UNKNOWN");
-    WARN ("secret : %s", user->secret ? user->secret : "UNKNOWN");
 
     _free_test_user (user);
 }
@@ -446,11 +444,9 @@ _print_group_prop (
 
 	g_object_get (G_OBJECT (grp), "gid", &group->gid, NULL);
     g_object_get (G_OBJECT (grp), "groupname", &group->group_name, NULL);
-    g_object_get (G_OBJECT (grp), "secret", &group->grp_secret, NULL);
 
     WARN ("gid : %u", group->gid);
     WARN ("groupname : %s", group->group_name ? group->group_name : "UNKNOWN");
-    WARN ("secret : %s", group->grp_secret ? group->grp_secret : "UNKNOWN");
 
     _free_test_group (group);
 }
