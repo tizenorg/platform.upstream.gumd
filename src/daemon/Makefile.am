@@ -11,6 +11,8 @@ gumd_SOURCES = \
     gumd-daemon-user.h \
     gumd-daemon-group.c \
     gumd-daemon-group.h \
+    gumd-daemon-offline.c \
+    gumd-daemon-offline.h \
     gumd-types.h \
     $(NULL)
 
@@ -39,7 +41,6 @@ gumdconf_DATA = gumd.conf
 if SET_PERMISSIONS
 install-exec-hook:
 	chown root $(DESTDIR)$(bindir)/gumd || true
-	chmod u+s $(DESTDIR)$(bindir)/gumd || true
 endif
 
 CLEANFILES = *.gcno *.gcda
