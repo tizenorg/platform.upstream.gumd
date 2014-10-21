@@ -6,7 +6,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.6
+Version: 0.0.7
 Release: 0
 Group: Security/Accounts
 License: LGPL-2.1+

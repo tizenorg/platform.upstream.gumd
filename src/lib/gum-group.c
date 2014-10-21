@@ -29,6 +29,8 @@
 #include "common/gum-group-types.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
 #include "common/dbus/gum-dbus-group-gen.h"
+#include "daemon/core/gumd-daemon.h"
+#include "daemon/core/gumd-daemon-group.h"
 
 #include "gum-group.h"
 #include "gum-group-service.h"
@@ -49,7 +51,7 @@
  * |[
  *  GumGroup *group = NULL;
  *
- *  group = gum_group_create_sync ();
+ *  group = gum_group_create_sync (FALSE);
  *
  *  // use the object
  *
@@ -62,7 +64,7 @@
  *  GumGroup *group = NULL;
  *  gboolean rval = FALSE;
  *
- *  group = gum_group_create_sync ();
+ *  group = gum_group_create_sync (FALSE);
  *
  *  // set group properties
  *  g_object_set (G_OBJECT (group), "groupname", "group1", "secret", "123456",
@@ -115,6 +117,8 @@ struct _GumGroupPrivate
 {
     GumDbusGroupService *dbus_service;
     GumDbusGroup *dbus_group;
+    GumdDaemon *offline_service;
+    GumdDaemonGroup *offline_group;
     GCancellable *cancellable;
     GumGroupOp *op;
 };
@@ -131,6 +135,7 @@ enum
     PROP_GID,
     PROP_GROUPNAME,
     PROP_SECRET,
+    PROP_OFFLINE,
 
     N_PROPERTIES
 };
@@ -212,9 +217,21 @@ _set_property (
         GParamSpec *pspec)
 {
     GumGroup *self = GUM_GROUP (object);
-    if (self->priv->dbus_group) {
-        g_object_set_property (G_OBJECT(self->priv->dbus_group), pspec->name,
-                value);
+    switch (property_id) {
+        case PROP_OFFLINE: {
+            if (g_value_get_boolean (value))
+                self->priv->offline_service = gumd_daemon_new ();
+            break;
+        }
+        default: {
+            if (self->priv->offline_group) {
+                g_object_set_property (G_OBJECT(self->priv->offline_group),
+                        pspec->name, value);
+            } else if (self->priv->dbus_group) {
+                g_object_set_property (G_OBJECT(self->priv->dbus_group),
+                        pspec->name, value);
+            }
+        }
     }
 }
 
@@ -226,9 +243,20 @@ _get_property (
         GParamSpec *pspec)
 {
     GumGroup *self = GUM_GROUP (object);
-    if (self->priv->dbus_group) {
-        g_object_get_property (G_OBJECT(self->priv->dbus_group), pspec->name,
-                value);
+    switch (property_id) {
+        case PROP_OFFLINE: {
+            g_value_set_boolean (value, self->priv->offline_service != NULL);
+            break;
+        }
+        default: {
+            if (self->priv->offline_group) {
+                g_object_get_property (G_OBJECT(self->priv->offline_group),
+                        pspec->name, value);
+            } else if (self->priv->dbus_group) {
+                g_object_get_property (G_OBJECT(self->priv->dbus_group),
+                        pspec->name, value);
+            }
+        }
     }
 }
 
@@ -258,6 +286,10 @@ _dispose (GObject *object)
 
     GUM_OBJECT_UNREF (self->priv->dbus_service);
 
+    GUM_OBJECT_UNREF (self->priv->offline_group);
+
+    GUM_OBJECT_UNREF (self->priv->offline_service);
+
     G_OBJECT_CLASS (gum_group_parent_class)->dispose (object);
 }
 
@@ -277,8 +309,14 @@ gum_group_init (
 {
     self->priv = GUM_GROUP_PRIV (self);
     self->priv->dbus_group = NULL;
-    self->priv->cancellable = g_cancellable_new ();
-    self->priv->dbus_service = gum_group_service_get_instance ();
+    self->priv->offline_group = NULL;
+    if (!self->priv->offline_service) {
+        self->priv->cancellable = g_cancellable_new ();
+        self->priv->dbus_service = gum_group_service_get_instance ();
+    } else {
+        self->priv->cancellable = NULL;
+        self->priv->dbus_service = NULL;
+    }
     self->priv->op = NULL;
 }
 
@@ -352,6 +390,20 @@ gum_group_class_init (
             "" /* default value */,
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
+
+    /**
+     * GumUser:offline:
+     *
+     * This property is used to define the behaviour of synchronous operation
+     * performed on the object. If it is set to TRUE, then the object performs
+     * the operation without daemon (dbus/gumd) otherwise 'gumd' daemon will be
+     * used for the required synchronous functionality.
+     */
+    properties[PROP_OFFLINE] =  g_param_spec_boolean ("offline",
+            "Offline",
+            "Operational mode for the Group object",
+            FALSE,
+            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
             properties);
@@ -670,18 +722,31 @@ gum_group_create (
 
 /**
  * gum_group_create_sync:
+ * @offline: enables or disables the offline mode
  *
- * This method creates a new remote group object over the DBus synchronously.
+ * This method creates a new remote group object. In case offline mode is
+ * enabled, then the object is created directly without using dbus otherwise
+ * the objects gets created over the DBus synchronously.
  *
  * Returns: (transfer full): #GumGroup newly created object
  */
 GumGroup *
-gum_group_create_sync ()
+gum_group_create_sync (
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
 
-    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, "offline",
+            offline, NULL));
+    if (!group) return NULL;
+
+    if (group->priv->offline_service) {
+        group->priv->offline_group = gumd_daemon_group_new (
+                gumd_daemon_get_config (group->priv->offline_service));
+        return group;
+    }
+
     g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
 
     if (gum_dbus_group_service_call_create_new_group_sync (
@@ -734,29 +799,38 @@ gum_group_get (
 /**
  * gum_group_get_sync:
  * @gid: group id for the group
+ * @offline: enables or disables the offline mode
  *
- * This method gets the group object attached to gid over the DBus
- * synchronously.
+ * This method gets the group object attached to gid. In case offline mode is
+ * enabled, then the object is retrieved directly without using dbus otherwise
+ * the objects gets retrieved over the DBus synchronously.
  *
  * Returns: (transfer full): #GumGroup object
  */
 GumGroup *
 gum_group_get_sync (
-        gid_t gid)
+        gid_t gid,
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
 
-    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
-    g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, "offline",
+            offline, NULL));
+    if (!group) return NULL;
 
-    if (gum_dbus_group_service_call_get_group_sync (
-            group->priv->dbus_service, gid, &object_path,
-            group->priv->cancellable, &error)) {
-        _create_dbus_group (group, object_path, error);
+    if (group->priv->offline_service) {
+        group->priv->offline_group = gumd_daemon_get_group (
+                group->priv->offline_service, gid, &error);
+    } else if (group->priv->dbus_service) {
+
+        if (gum_dbus_group_service_call_get_group_sync (
+                group->priv->dbus_service, gid, &object_path,
+                group->priv->cancellable, &error)) {
+            _create_dbus_group (group, object_path, error);
+        }
+        g_free (object_path);
     }
-
-    g_free (object_path);
 
     if (error) {
         WARN ("Failed with error %d:%s", error->code, error->message);
@@ -803,34 +877,44 @@ gum_group_get_by_name (
 /**
  * gum_group_get_by_name_sync:
  * @groupname: name of the group
+ * @offline: enables or disables the offline mode
  *
- * This method gets the group object attached to groupname over the DBus
- * synchronously.
+ * This method gets the group object attached to groupname. In case offline mode
+ * is enabled, then the object is retrieved directly without using dbus
+ * otherwise the objects gets retrieved over the DBus synchronously.
  *
  * Returns: (transfer full): #GumGroup object
  */
 GumGroup *
 gum_group_get_by_name_sync (
-        const gchar *groupname)
+        const gchar *groupname,
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
-
-    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, NULL));
-    g_return_val_if_fail (group->priv->dbus_service != NULL, NULL);
 
     if (!groupname) {
         WARN ("groupname not specified");
         return NULL;
     }
 
-    if (gum_dbus_group_service_call_get_group_by_name_sync (
-            group->priv->dbus_service, groupname, &object_path,
-            group->priv->cancellable, &error)) {
-        _create_dbus_group (group, object_path, error);
-    }
+    GumGroup *group = GUM_GROUP (g_object_new (GUM_TYPE_GROUP, "offline",
+            offline, NULL));
+    if (!group) return NULL;
 
-    g_free (object_path);
+    if (group->priv->offline_service) {
+
+        group->priv->offline_group = gumd_daemon_get_group_by_name (
+                group->priv->offline_service, groupname, &error);
+    } else if (group->priv->dbus_service) {
+
+        if (gum_dbus_group_service_call_get_group_by_name_sync (
+                group->priv->dbus_service, groupname, &object_path,
+                group->priv->cancellable, &error)) {
+            _create_dbus_group (group, object_path, error);
+        }
+        g_free (object_path);
+    }
 
     if (error) {
         WARN ("Failed with error %d:%s", error->code, error->message);
@@ -881,7 +965,9 @@ gum_group_add (
  * @self: #GumGroup object to be added; object should have valid
  * #GumGroup:groupname and #GumGroup:grouptype properties.
  *
- * This method adds the group over the DBus synchronously.
+ * This method adds the group. In case offline mode is enabled, then the group
+ * is added directly without using dbus otherwise the group is added over the
+ * DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -891,26 +977,26 @@ gum_group_add_sync (
 {
     GError *error = NULL;
     gid_t gid = GUM_GROUP_INVALID_GID;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
-    if (!self->priv->dbus_group) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_group) {
+        rval = gumd_daemon_add_group (self->priv->offline_service,
+                self->priv->offline_group, &error);
+    } else if (self->priv->dbus_group) {
+        rval = gum_dbus_group_call_add_group_sync (self->priv->dbus_group,
+                GUM_GROUP_INVALID_GID, &gid, self->priv->cancellable, &error);
+        if (rval) _sync_properties (self);
     }
 
-    if (!gum_dbus_group_call_add_group_sync (self->priv->dbus_group,
-            GUM_GROUP_INVALID_GID, &gid, self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return _sync_properties (self);
+    return rval;
 }
 
 /**
@@ -951,7 +1037,9 @@ gum_group_delete (
  * @self: #GumGroup object to be deleted; object should have valid
  * #GumGroup:gid property.
  *
- * This method deletes the group over the DBus synchronously.
+ * This method deletes the group. In case offline mode is enabled, then group
+ * is deleted directly without using dbus otherwise the group is deleted over
+ * DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -960,26 +1048,25 @@ gum_group_delete_sync (
         GumGroup *self)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
-    if (!self->priv->dbus_group) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_group) {
+        rval = gumd_daemon_delete_group (self->priv->offline_service,
+                self->priv->offline_group, &error);
+    } else if (self->priv->dbus_group) {
+        rval = gum_dbus_group_call_delete_group_sync (self->priv->dbus_group,
+                self->priv->cancellable, &error);
     }
 
-    if (!gum_dbus_group_call_delete_group_sync (self->priv->dbus_group,
-            self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return TRUE;
+    return rval;
 }
 
 /**
@@ -1021,8 +1108,10 @@ gum_group_update (
  * @self: #GumGroup object to be updated; object should have valid
  * #GumGroup:gid property.
  *
- * This method updates the group over the DBus synchronously. The properties
- * which can be updated are: secret.
+ * This method updates the group. In case offline mode is enabled, then group
+ * is updated directly without using dbus otherwise the group is updated over
+ * DBus synchronously.
+ * The properties which can be updated are: secret.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -1031,26 +1120,26 @@ gum_group_update_sync (
         GumGroup *self)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
-    if (!self->priv->dbus_group) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_group) {
+        rval = gumd_daemon_update_group (self->priv->offline_service,
+                self->priv->offline_group, &error);
+    } else if (self->priv->dbus_group) {
+        rval = gum_dbus_group_call_update_group_sync (self->priv->dbus_group,
+                self->priv->cancellable, &error);
+        if (rval) _sync_properties (self);
     }
 
-    if (!gum_dbus_group_call_update_group_sync (self->priv->dbus_group,
-            self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return _sync_properties (self);
+    return rval;
 }
 
 /**
@@ -1100,7 +1189,9 @@ gum_group_add_member (
  * @add_as_admin: user will be added with admin privileges for the group if set
  * to TRUE
  *
- * This method adds new member to the group over the DBus synchronously.
+ * This method adds new member to the group. In case offline mode is enabled,
+ * then group member is added directly without using dbus otherwise member is
+ * added over DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -1111,26 +1202,25 @@ gum_group_add_member_sync (
         gboolean add_as_admin)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
-    if (!self->priv->dbus_group) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_group) {
+        rval = gumd_daemon_add_group_member (self->priv->offline_service,
+                self->priv->offline_group, uid, add_as_admin, &error);
+    } else if (self->priv->dbus_group) {
+        rval = gum_dbus_group_call_add_member_sync (self->priv->dbus_group, uid,
+                add_as_admin, self->priv->cancellable, &error);
     }
 
-    if (!gum_dbus_group_call_add_member_sync (self->priv->dbus_group, uid,
-            add_as_admin, self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return TRUE;
+    return rval;
 }
 
 /**
@@ -1174,7 +1264,9 @@ gum_group_delete_member (
  * have valid #GumGroup:gid property.
  * @uid: user id of the member to be deleted from the group
  *
- * This method deletes new member from the group over the DBus synchronously.
+ * This method deletes new member from the group. In case offline mode is
+ * enabled, then group member is deleted directly without using dbus otherwise
+ * member is deleted over DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -1184,24 +1276,23 @@ gum_group_delete_member_sync (
         uid_t uid)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_GROUP (self), FALSE);
 
-    if (!self->priv->dbus_group) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_group) {
+        rval = gumd_daemon_delete_group_member (self->priv->offline_service,
+                self->priv->offline_group, uid, &error);
+    } else if (self->priv->dbus_group) {
+        rval = gum_dbus_group_call_delete_member_sync (self->priv->dbus_group,
+                uid, self->priv->cancellable, &error);
     }
 
-    if (!gum_dbus_group_call_delete_member_sync (self->priv->dbus_group, uid,
-            self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return TRUE;
+    return rval;
 }

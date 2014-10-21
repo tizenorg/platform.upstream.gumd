@@ -41,7 +41,7 @@
 #include "gumd-dbus-user-service-adapter.h"
 #include "gumd-dbus-group-adapter.h"
 #include "gumd-dbus-group-service-adapter.h"
-#include "daemon/gumd-daemon.h"
+#include "daemon/core/gumd-daemon.h"
 
 enum
 {

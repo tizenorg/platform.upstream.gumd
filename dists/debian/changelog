@@ -1,3 +1,9 @@
+gumd (0.0.7-0) unstable; urgency=low
+
+  * Added offline support to libgum/gum-utils to add/update etc user/group.
+
+ -- Imran Zaman <imran.zaman@intel.com>  Mon, 20 Oct  2014 18:00:00 +0300
+
 gumd (0.0.6-0) unstable; urgency=low
 
   * Added offline support to gumd to add/update etc user/group.

@@ -340,8 +340,12 @@ START_TEST (test_create_new_user)
     g_object_unref (user);
     g_object_unref (user2);
 
-    user2 = gum_user_create_sync ();
+    user2 = gum_user_create_sync (FALSE);
     fail_if (user2 == NULL, "failed to create new user sync");
+    g_object_unref (user2);
+
+    user2 = gum_user_create_sync (TRUE);
+    fail_if (user2 == NULL, "failed to create new user sync -- offline");
     g_object_unref (user2);
 }
 END_TEST
@@ -384,7 +388,7 @@ START_TEST(test_add_user)
     g_object_unref (user);
 
     /* case 4: use sync method to add user*/
-    user = gum_user_create_sync ();
+    user = gum_user_create_sync (TRUE);
     fail_if (user == NULL, "failed to create new user");
 
     g_object_set (G_OBJECT (user), "username", "test_adduser2",
@@ -432,20 +436,20 @@ START_TEST(test_get_user_by_uid)
     g_object_unref (user);
 
     /* case 3: get user sync */
-    user = gum_user_create_sync ();
-    fail_if (user == NULL, "failed to create new user");
+    user = gum_user_create_sync (TRUE);
+    fail_if (user == NULL, "failed to create new user -- offline");
 
     g_object_set (G_OBJECT (user), "username", "test_getuser2",
             "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
     rval = gum_user_add_sync (user);
-    fail_if (rval == FALSE, "failed to add user sync");
+    fail_if (rval == FALSE, "failed to add user sync -- offline");
 
     g_object_get (G_OBJECT (user), "uid", &uid, NULL);
     fail_if (uid == GUM_USER_INVALID_UID, "Invalid uid for the user");
 
     g_object_unref (user);
 
-    user = gum_user_get_sync (uid);
+    user = gum_user_get_sync (uid, FALSE);
     fail_if (user == NULL, "failed to get user sync");
 
     g_object_unref (user);
@@ -485,7 +489,7 @@ START_TEST(test_get_user_by_name)
     g_object_unref (user);
 
     /* case 3: get user sync */
-    user = gum_user_create_sync ();
+    user = gum_user_create_sync (FALSE);
     fail_if (user == NULL, "failed to create new user");
 
     g_object_set (G_OBJECT (user), "username", "test_getuser_byname2",
@@ -494,7 +498,7 @@ START_TEST(test_get_user_by_name)
     fail_if (rval == FALSE, "failed to add user sync");
     g_object_unref (user);
 
-    user = gum_user_get_by_name_sync ("test_getuser_byname2");
+    user = gum_user_get_by_name_sync ("test_getuser_byname2", FALSE);
     fail_if (user == NULL, "failed to get user by name sync");
     g_object_unref (user);
 }
@@ -544,7 +548,7 @@ START_TEST (test_delete_user)
     g_object_unref (user);
 
     /* case 4: use sync method to delete user*/
-    user = gum_user_create_sync ();
+    user = gum_user_create_sync (FALSE);
     fail_if (user == NULL, "failed to create new user");
 
     g_object_set (G_OBJECT (user), "username", "test_deluser3",
@@ -589,8 +593,8 @@ START_TEST (test_update_user)
     g_object_unref (user);
 
     /* case 3: use sync method to update user*/
-    user = gum_user_create_sync ();
-    fail_if (user == NULL, "failed to create new user");
+    user = gum_user_create_sync (TRUE);
+    fail_if (user == NULL, "failed to create new user --offline");
 
     g_object_set (G_OBJECT (user), "username", "test_upuser2",
             "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);
@@ -625,8 +629,12 @@ START_TEST (test_create_new_group)
     g_object_unref (group);
     g_object_unref (group2);
 
-    group2 = gum_group_create_sync ();
+    group2 = gum_group_create_sync (FALSE);
     fail_if (group2 == NULL, "failed to create new group2 sync");
+    g_object_unref (group2);
+
+    group2 = gum_group_create_sync (TRUE);
+    fail_if (group2 == NULL, "failed to create new group2 sync -- offline");
     g_object_unref (group2);
 }
 END_TEST
@@ -657,13 +665,13 @@ START_TEST(test_add_group)
     g_object_unref (group);
 
     /* case 3: add group sync */
-    group = gum_group_create_sync ();
-    fail_if (group == NULL, "failed to create new group");
+    group = gum_group_create_sync (TRUE);
+    fail_if (group == NULL, "failed to create new group --offline");
 
     g_object_set (G_OBJECT (group), "groupname", "test_addgroup2",
             "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
     rval = gum_group_add_sync (group);
-    fail_if (rval == FALSE, "failed to add already existing group");
+    fail_if (rval == FALSE, "failed to add already existing group --offline");
 
     g_object_unref (group);
 }
@@ -705,7 +713,7 @@ START_TEST(test_get_group_by_gid)
     g_object_unref (group);
 
     /* case 3: get group sync */
-    group = gum_group_create_sync ();
+    group = gum_group_create_sync (FALSE);
     fail_if (group == NULL, "failed to create new group");
 
     g_object_set (G_OBJECT (group), "groupname", "test_getgroup2",
@@ -717,7 +725,7 @@ START_TEST(test_get_group_by_gid)
     fail_if (gid == GUM_GROUP_INVALID_GID, "Invalid gid for the group");
     g_object_unref (group);
 
-    group = gum_group_get_sync (gid);
+    group = gum_group_get_sync (gid, FALSE);
     fail_if (group == NULL, "failed to get group");
 
     g_object_unref (group);
@@ -758,17 +766,17 @@ START_TEST(test_get_group_by_name)
     g_object_unref (group);
 
     /* case 3: get group by name sync */
-    group = gum_group_create_sync ();
-    fail_if (group == NULL, "failed to create new group");
+    group = gum_group_create_sync (TRUE);
+    fail_if (group == NULL, "failed to create new group -- offline");
 
     g_object_set (G_OBJECT (group), "groupname", "test_getgroup_byname2",
             "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
     rval = gum_group_add_sync (group);
-    fail_if (rval == FALSE, "failed to add group");
+    fail_if (rval == FALSE, "failed to add group -- offline");
     g_object_unref (group);
 
-    group = gum_group_get_by_name_sync ("test_getgroup_byname2");
-    fail_if (group == NULL, "failed to get group by name sync");
+    group = gum_group_get_by_name_sync ("test_getgroup_byname2", TRUE);
+    fail_if (group == NULL, "failed to get group by name sync -- offline");
 
     g_object_unref (group);
 
@@ -804,7 +812,7 @@ START_TEST (test_delete_group)
     g_object_unref (group);
 
     /* case 2: delete group sync */
-    group = gum_group_create_sync ();
+    group = gum_group_create_sync (FALSE);
     fail_if (group == NULL, "failed to create new group");
 
     g_object_set (G_OBJECT (group), "groupname", "test_delgroup2",
@@ -849,8 +857,8 @@ START_TEST (test_update_group)
     g_object_unref (group);
 
     /* case 3: update group sync */
-    group = gum_group_create_sync ();
-    fail_if (group == NULL, "failed to create new group");
+    group = gum_group_create_sync (TRUE);
+    fail_if (group == NULL, "failed to create new group -- offline");
 
     g_object_set (G_OBJECT (group), "groupname", "test_upgroup2",
             "secret", "123456", "grouptype", GUM_GROUPTYPE_USER, NULL);
@@ -909,7 +917,7 @@ START_TEST (test_add_group_member)
     g_object_unref (user);
 
     /* case 3: add group mem sync */
-    user = gum_user_create_sync ();
+    user = gum_user_create_sync (FALSE);
     fail_if (user == NULL, "failed to create new user");
 
     g_object_set (G_OBJECT (user), "username", "test_addgrpmem_user2",
@@ -975,8 +983,8 @@ START_TEST (test_delete_group_member)
     g_object_unref (user);
 
     /* case 3: add group mem sync */
-    user = gum_user_create_sync ();
-    fail_if (user == NULL, "failed to create new user");
+    user = gum_user_create_sync (TRUE);
+    fail_if (user == NULL, "failed to create new user -- offline");
 
     g_object_set (G_OBJECT (user), "username", "test_delgrpmem_user2",
             "secret", "123456", "usertype", GUM_USERTYPE_NORMAL, NULL);

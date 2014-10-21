@@ -75,7 +75,8 @@ gum_group_create (
         gpointer user_data);
 
 GumGroup *
-gum_group_create_sync ();
+gum_group_create_sync (
+        gboolean offline);
 
 GumGroup *
 gum_group_get (
@@ -85,7 +86,8 @@ gum_group_get (
 
 GumGroup *
 gum_group_get_sync (
-        gid_t gid);
+        gid_t gid,
+        gboolean offline);
 
 GumGroup *
 gum_group_get_by_name (
@@ -95,7 +97,8 @@ gum_group_get_by_name (
 
 GumGroup *
 gum_group_get_by_name_sync (
-        const gchar *groupname);
+        const gchar *groupname,
+        gboolean offline);
 
 gboolean
 gum_group_add (

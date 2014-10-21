@@ -3,7 +3,7 @@ NULL=
 
 lib_LTLIBRARIES = libgum.la
 
-libgum_la_CPPFLAGS = \
+libgum_la_CFLAGS = \
     -I$(top_builddir)/src \
     -I$(top_srcdir)/src \
     $(LIBGUM_INCLUDES) \
@@ -15,6 +15,7 @@ libgum_la_DEPENDENCIES = \
 
 libgum_la_LIBADD = \
     $(top_builddir)/src/common/libgum-common.la \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(LIBGUM_LIBS) \
     $(NULL)
 

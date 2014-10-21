@@ -75,7 +75,8 @@ gum_user_create (
         gpointer user_data);
 
 GumUser *
-gum_user_create_sync ();
+gum_user_create_sync (
+        gboolean offline);
 
 GumUser *
 gum_user_get (
@@ -85,7 +86,8 @@ gum_user_get (
 
 GumUser *
 gum_user_get_sync (
-        uid_t uid);
+        uid_t uid,
+        gboolean offline);
 
 GumUser *
 gum_user_get_by_name (
@@ -95,7 +97,8 @@ gum_user_get_by_name (
 
 GumUser *
 gum_user_get_by_name_sync (
-        const gchar *username);
+        const gchar *username,
+        gboolean offline);
 
 gboolean
 gum_user_add (

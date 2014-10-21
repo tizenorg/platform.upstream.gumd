@@ -413,14 +413,14 @@ _get_property (
             break;
         }
         case PROP_REALNAME: {
-        	if (self->priv->pw->pw_gecos) {
-        		gchar *str = gum_string_utils_get_string (
-        		        self->priv->pw->pw_gecos, ",", 0);
-        		if (str) {
-        		    g_value_set_string (value, str);
-        		    g_free (str);
-        		}
-        	}
+            if (self->priv->pw->pw_gecos) {
+                gchar *str = gum_string_utils_get_string (
+                        self->priv->pw->pw_gecos, ",", 0);
+                if (str) {
+                    g_value_set_string (value, str);
+                    g_free (str);
+                }
+            }
             break;
         }
         case PROP_OFFICE: {
@@ -491,12 +491,12 @@ _finalize (GObject *object)
     GUM_STR_FREE (self->priv->nick_name);
 
     if (self->priv->shadow) {
-    	_free_shadow_entry (self->priv->shadow);
-    	self->priv->shadow = NULL;
+        _free_shadow_entry (self->priv->shadow);
+        self->priv->shadow = NULL;
     }
 
     if (self->priv->pw) {
-    	_free_passwd_entry (self->priv->pw);
+        _free_passwd_entry (self->priv->pw);
         self->priv->pw = NULL;
     }
 
@@ -628,7 +628,7 @@ gumd_daemon_user_class_init (
             G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
-    		properties);
+            properties);
 
 }
 
@@ -650,10 +650,10 @@ _set_daemon_user_name (
             return FALSE;
 
         tname = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",", 0);
-    	if (!tname) {
-    	    _set_realname_property (self, self->priv->pw->pw_name);
-    	}
-    	g_free (tname);
+        if (!tname) {
+            _set_realname_property (self, self->priv->pw->pw_name);
+        }
+        g_free (tname);
         return TRUE;
     } else if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
@@ -856,65 +856,65 @@ _update_passwd_entry (
 	struct passwd *entry;
 
 	while ((entry = fgetpwent (source_file)) != NULL) {
-        if (!done) {
-            switch (op) {
-            case GUM_OPTYPE_ADD:
-                if (self->priv->pw->pw_uid < entry->pw_uid) {
-                	if (putpwent (self->priv->pw, dup_file) < 0) {
-                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
-                				"File write failure", error, FALSE);
-                	}
-                	done = TRUE;
-                }
-                break;
-            case GUM_OPTYPE_DELETE:
-                if (self->priv->pw->pw_uid == entry->pw_uid &&
-                	self->priv->pw->pw_gid == entry->pw_gid &&
-                	g_strcmp0 (self->priv->pw->pw_name, entry->pw_name) == 0) {
-                    done = TRUE;
-                    continue;
-                }
-                break;
-            case GUM_OPTYPE_MODIFY: {
-                gchar *old_name = user_data ? (gchar *)user_data :
-                        self->priv->pw->pw_name;
-                if (self->priv->pw->pw_uid == entry->pw_uid &&
-                	self->priv->pw->pw_gid == entry->pw_gid &&
-                    g_strcmp0 (old_name, entry->pw_name) == 0) {
-                	if (putpwent (self->priv->pw, dup_file) < 0) {
-                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
-                				"File write failure", error, FALSE);
-                	}
-                    done = TRUE;
-                    continue;
-                }
+	    if (!done) {
+	        switch (op) {
+	        case GUM_OPTYPE_ADD:
+	            if (self->priv->pw->pw_uid < entry->pw_uid) {
+	                if (putpwent (self->priv->pw, dup_file) < 0) {
+	                    GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+	                            "File write failure", error, FALSE);
+	                }
+	                done = TRUE;
+	            }
+	            break;
+	        case GUM_OPTYPE_DELETE:
+	            if (self->priv->pw->pw_uid == entry->pw_uid &&
+	                    self->priv->pw->pw_gid == entry->pw_gid &&
+	                    g_strcmp0 (self->priv->pw->pw_name, entry->pw_name) == 0) {
+	                done = TRUE;
+	                continue;
+	            }
+	            break;
+	        case GUM_OPTYPE_MODIFY: {
+	            gchar *old_name = user_data ? (gchar *)user_data :
+	                    self->priv->pw->pw_name;
+	            if (self->priv->pw->pw_uid == entry->pw_uid &&
+	                    self->priv->pw->pw_gid == entry->pw_gid &&
+	                    g_strcmp0 (old_name, entry->pw_name) == 0) {
+	                if (putpwent (self->priv->pw, dup_file) < 0) {
+	                    GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+	                            "File write failure", error, FALSE);
+	                }
+	                done = TRUE;
+	                continue;
+	            }
+	            break;
+	        }
+	        default:
                 break;
             }
-            default:
-                break;
-            }
-        }
-        if (putpwent (entry, dup_file) < 0) {
-        	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
-        			error, FALSE);
-        }
-    }
+	    }
+	    if (putpwent (entry, dup_file) < 0) {
+	        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+	                error, FALSE);
+	    }
+	}
 
-    /* Write entry to file in case it is first entry in the file */
-    if (!done && op == GUM_OPTYPE_ADD) {
-    	if (putpwent (self->priv->pw, dup_file) < 0) {
-    		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
-    				error, FALSE);
-    	}
-    	done = TRUE;
-    }
+	/* Write entry to file in case it is first entry in the file */
+	if (!done && op == GUM_OPTYPE_ADD) {
+	    if (putpwent (self->priv->pw, dup_file) < 0) {
+	        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
+	                error, FALSE);
+	    }
+	    done = TRUE;
+	}
 
-    if (!done) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
-    	        error, FALSE);
-    }
+	if (!done) {
+	    GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+	            error, FALSE);
+	}
 
-    return TRUE;
+	return TRUE;
 }
 
 static gboolean
@@ -1013,11 +1013,11 @@ _update_shadow_entry (
 		gpointer user_data,
 		GError **error)
 {
-	/* Loop all entries */
-	gboolean done = FALSE;
-	struct spwd *entry = NULL;
+    /* Loop all entries */
+    gboolean done = FALSE;
+    struct spwd *entry = NULL;
 
-	while ((entry = fgetspent (source_file)) != NULL) {
+    while ((entry = fgetspent (source_file)) != NULL) {
         if (!done) {
             switch (op) {
             case GUM_OPTYPE_ADD:
@@ -1029,7 +1029,7 @@ _update_shadow_entry (
                 break;
             case GUM_OPTYPE_DELETE:
                 if (g_strcmp0 (self->priv->shadow->sp_namp,
-                		entry->sp_namp) == 0) {
+                        entry->sp_namp) == 0) {
                     done = TRUE;
                     continue;
                 }
@@ -1038,10 +1038,10 @@ _update_shadow_entry (
                 gchar *old_name = user_data ? (gchar *)user_data :
                         self->priv->shadow->sp_namp;
                 if (g_strcmp0 (old_name, entry->sp_namp) == 0) {
-                	if (putspent (self->priv->shadow, dup_file) < 0) {
-                		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
-                				"File write failure", error, FALSE);
-                	}
+                    if (putspent (self->priv->shadow, dup_file) < 0) {
+                        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE,
+                                "File write failure", error, FALSE);
+                    }
                     done = TRUE;
                     continue;
                 }
@@ -1052,23 +1052,23 @@ _update_shadow_entry (
             }
         }
         if (putspent (entry, dup_file) < 0) {
-        	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
-        			error, FALSE);
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "File write failure",
+                    error, FALSE);
         }
     }
 
     /* Write entry to file in case it is first entry in the file */
     if (!done && op == GUM_OPTYPE_ADD) {
-    	if (putspent (self->priv->shadow, dup_file) < 0) {
-    		GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
-    				error, FALSE);
-    	}
-    	done = TRUE;
+        if (putspent (self->priv->shadow, dup_file) < 0) {
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Add entry failure",
+                    error, FALSE);
+        }
+        done = TRUE;
     }
 
     if (!done) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
-    	        error, FALSE);
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_WRITE, "Operation did not complete",
+                error, FALSE);
     }
 
     return TRUE;
@@ -1134,8 +1134,8 @@ _set_default_groups (
         return TRUE;
 
     if (self->priv->user_type == GUM_USERTYPE_ADMIN)
-    	def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
-    			GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS), ",", -1);
+        def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
+                GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS), ",", -1);
     else
         def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
                 GUM_CONFIG_GENERAL_DEF_USR_GROUPS), ",", -1);
@@ -1492,8 +1492,8 @@ gumd_daemon_user_add (
     }
 
     if (!gum_lock_pwdf_lock ()) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
-    			"Database already locked", error, FALSE);
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+                "Database already locked", error, FALSE);
     }
 
     if (!_set_uid (self, error)) {
@@ -1521,8 +1521,8 @@ gumd_daemon_user_add (
 
     if (!_set_default_groups (self, error) ||
         !_create_home_dir (self, error)) {
-    	gum_lock_pwdf_unlock ();
-    	return FALSE;
+        gum_lock_pwdf_unlock ();
+        return FALSE;
     }
 
     if (uid) {
@@ -1563,8 +1563,8 @@ gumd_daemon_user_delete (
     gboolean lock = TRUE;
 
     if (!gum_lock_pwdf_lock ()) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
-    			"Database already locked", error, FALSE);
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+                "Database already locked", error, FALSE);
     }
 
     if (self->priv->pw->pw_uid == GUM_USER_INVALID_UID) {
@@ -1583,7 +1583,7 @@ gumd_daemon_user_delete (
     if (self->priv->pw->pw_uid == geteuid ()) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SELF_DESTRUCTION,
-        		"Self-destruction not possible", error, FALSE);
+                "Self-destruction not possible", error, FALSE);
     }
 
     /* lock the user */
@@ -1646,8 +1646,8 @@ gumd_daemon_user_delete (
     }
 
     if (rem_home_dir && !_delete_home_dir (self, error)) {
-    	gum_lock_pwdf_unlock ();
-    	return FALSE;
+        gum_lock_pwdf_unlock ();
+        return FALSE;
     }
 
     gum_lock_pwdf_unlock ();

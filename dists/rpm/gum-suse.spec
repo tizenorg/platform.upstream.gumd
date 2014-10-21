@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 0.0.6
+Version: 0.0.7
 Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
@@ -135,6 +135,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Mon Oct 20 2014 Imran Zaman <imran.zaman@intel.com>
+- Added offline support to libgum/gum-utils to add/update etc user/group
+
 * Fri Oct 17 2014 Imran Zaman <imran.zaman@intel.com>
 - Added offline support to gumd to add/update etc user/group
 
