@@ -49,9 +49,9 @@
 #include "common/dbus/gum-dbus-user-gen.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
 #include "common/dbus/gum-dbus-group-gen.h"
-#include "daemon/gumd-daemon.h"
-#include "daemon/gumd-daemon-user.h"
-#include "daemon/gumd-daemon-group.h"
+#include "daemon/core/gumd-daemon.h"
+#include "daemon/core/gumd-daemon-user.h"
+#include "daemon/core/gumd-daemon-group.h"
 
 #ifdef GUM_BUS_TYPE_P2P
 #  ifdef GUM_SERVICE

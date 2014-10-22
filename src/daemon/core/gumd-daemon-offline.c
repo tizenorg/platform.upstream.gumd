@@ -80,21 +80,21 @@ _create_offline_group ()
 
 static void
 _free_offline_user (
-		OfflineUser *user)
+        OfflineUser *user)
 {
-	if (user) {
-		g_free (user->user_name); g_free (user->secret);
-		g_free (user->nick_name); g_free (user->real_name);
-		g_free (user->office); g_free (user->office_phone);
-		g_free (user->home_phone); g_free (user->home_dir);
-		g_free (user->shell);
-		g_free (user);
-	}
+    if (user) {
+        g_free (user->user_name); g_free (user->secret);
+        g_free (user->nick_name); g_free (user->real_name);
+        g_free (user->office); g_free (user->office_phone);
+        g_free (user->home_phone); g_free (user->home_dir);
+        g_free (user->shell);
+        g_free (user);
+    }
 }
 
 static void
 _free_offline_group (
-		OfflineGroup *group)
+        OfflineGroup *group)
 {
     if (group) {
         g_free (group->group_name); g_free (group->grp_secret);
@@ -107,7 +107,6 @@ _set_user_update_prop (
         GumdDaemonUser *guser,
         OfflineUser *user)
 {
-
     if (user->real_name) {
         g_object_set (G_OBJECT (guser), "realname", user->real_name, NULL);
     }
@@ -127,35 +126,33 @@ _set_user_update_prop (
     if (user->secret) {
         g_object_set (G_OBJECT (guser), "secret", user->secret, NULL);
     }
-
 }
 
 static void
 _set_user_prop (
-		GumdDaemonUser *guser,
-		OfflineUser *user)
+        GumdDaemonUser *guser,
+        OfflineUser *user)
 {
-
-	g_object_set (G_OBJECT (guser), "usertype", user->usertype, NULL);
-	if (user->user_name) {
-		g_object_set (G_OBJECT (guser), "username", user->user_name, NULL);
-	}
-	if (user->nick_name) {
-		g_object_set (G_OBJECT (guser), "nickname", user->nick_name, NULL);
-	}
-	if (user->home_dir) {
-		g_object_set (G_OBJECT (guser), "homedir", user->home_dir, NULL);
-	}
-	_set_user_update_prop (guser, user);
+    g_object_set (G_OBJECT (guser), "usertype", user->usertype, NULL);
+    if (user->user_name) {
+        g_object_set (G_OBJECT (guser), "username", user->user_name, NULL);
+    }
+    if (user->nick_name) {
+        g_object_set (G_OBJECT (guser), "nickname", user->nick_name, NULL);
+    }
+    if (user->home_dir) {
+        g_object_set (G_OBJECT (guser), "homedir", user->home_dir, NULL);
+    }
+    _set_user_update_prop (guser, user);
 }
 
 static void
 _print_user_prop (
-		GumdDaemonUser *guser)
+        GumdDaemonUser *guser)
 {
-	OfflineUser *user = _create_offline_user ();
-	g_object_get (G_OBJECT (guser), "uid", &user->uid, NULL);
-	g_object_get (G_OBJECT (guser), "gid", &user->gid, NULL);
+    OfflineUser *user = _create_offline_user ();
+    g_object_get (G_OBJECT (guser), "uid", &user->uid, NULL);
+    g_object_get (G_OBJECT (guser), "gid", &user->gid, NULL);
     g_object_get (G_OBJECT (guser), "username", &user->user_name, NULL);
     g_object_get (G_OBJECT (guser), "nickname", &user->nick_name, NULL);
     g_object_get (G_OBJECT (guser), "realname", &user->real_name, NULL);
@@ -212,8 +209,8 @@ _handle_user_add (
 
 static gboolean
 _handle_user_del (
-		OfflineUser *user,
-		GumdDaemon *daemon)
+        OfflineUser *user,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonUser *guser = NULL;
@@ -238,8 +235,8 @@ _handle_user_del (
 
 static gboolean
 _handle_user_up (
-		OfflineUser *user,
-		GumdDaemon *daemon)
+        OfflineUser *user,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonUser *guser = NULL;
@@ -268,8 +265,8 @@ _handle_user_up (
 
 static gboolean
 _handle_user_get (
-		OfflineUser *user,
-		GumdDaemon *daemon)
+        OfflineUser *user,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonUser *guser = NULL;
@@ -289,8 +286,8 @@ _handle_user_get (
 
 static gboolean
 _handle_user_get_by_name (
-		OfflineUser *user,
-		GumdDaemon *daemon)
+        OfflineUser *user,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonUser *guser = NULL;
@@ -320,23 +317,23 @@ _set_group_update_prop (
 
 static void
 _set_group_prop (
-		GumdDaemonGroup *grp,
-		OfflineGroup *group)
+        GumdDaemonGroup *grp,
+        OfflineGroup *group)
 {
-	g_object_set (G_OBJECT (grp), "grouptype", group->grouptype, NULL);
-	if (group->group_name) {
-		g_object_set (G_OBJECT (grp), "groupname", group->group_name, NULL);
-	}
-	_set_group_update_prop (grp, group);
+    g_object_set (G_OBJECT (grp), "grouptype", group->grouptype, NULL);
+    if (group->group_name) {
+        g_object_set (G_OBJECT (grp), "groupname", group->group_name, NULL);
+    }
+    _set_group_update_prop (grp, group);
 }
 
 static void
 _print_group_prop (
-		GumdDaemonGroup *grp)
+        GumdDaemonGroup *grp)
 {
-	OfflineGroup *group = _create_offline_group ();
+    OfflineGroup *group = _create_offline_group ();
 
-	g_object_get (G_OBJECT (grp), "gid", &group->gid, NULL);
+    g_object_get (G_OBJECT (grp), "gid", &group->gid, NULL);
     g_object_get (G_OBJECT (grp), "groupname", &group->group_name, NULL);
 
     WARN ("gid : %u", group->gid);
@@ -432,8 +429,8 @@ _handle_group_up (
 
 static gboolean
 _handle_group_get (
-		OfflineGroup *group,
-		GumdDaemon *daemon)
+        OfflineGroup *group,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonGroup *grp = NULL;
@@ -453,8 +450,8 @@ _handle_group_get (
 
 static gboolean
 _handle_group_get_by_name (
-		OfflineGroup *group,
-		GumdDaemon *daemon)
+        OfflineGroup *group,
+        GumdDaemon *daemon)
 {
     GError *error = NULL;
     GumdDaemonGroup *grp = NULL;

@@ -40,7 +40,7 @@
 #include "dbus/gumd-dbus-server-interface.h"
 #include "dbus/gumd-dbus-server-msg-bus.h"
 #include "dbus/gumd-dbus-server-p2p.h"
-#include "gumd-daemon-offline.h"
+#include "core/gumd-daemon-offline.h"
 
 static const gchar *_bus_type =
 #ifdef GUM_BUS_TYPE_P2P

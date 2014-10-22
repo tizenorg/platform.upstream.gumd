@@ -27,11 +27,11 @@
 
 #include "gum-user.h"
 #include "common/gum-log.h"
+#include "common/gum-defines.h"
 #include "common/gum-error.h"
 #include "common/gum-user-types.h"
 #include "gum-group.h"
 #include "common/gum-group-types.h"
-#include "common/gum-defines.h"
 #include "config.h"
 
 #ifdef HAVE_LIBTLM_NFC
@@ -51,7 +51,7 @@ typedef struct {
     gchar *home_dir;
     gchar *shell;
     gchar *secret;
-} TestUser;
+} InputUser;
 
 typedef struct {
     gid_t gid;
@@ -60,24 +60,23 @@ typedef struct {
     gchar *grp_secret;
 
     uid_t mem_uid; /*used in adding/deleting a member from the group*/
-} TestGroup;
+} InputGroup;
 
-static GMainLoop *main_loop = NULL;
-static GError *op_error = NULL;
+static gboolean offline_mode = FALSE;
 
-static TestUser *
+static InputUser *
 _create_test_user ()
 {
-    TestUser *user = g_malloc0 (sizeof (TestUser));
+    InputUser *user = g_malloc0 (sizeof (InputUser));
     user->uid = GUM_USER_INVALID_UID;
     user->gid = GUM_GROUP_INVALID_GID;
     return user;
 }
 
-static TestGroup *
+static InputGroup *
 _create_test_group ()
 {
-    TestGroup *group = g_malloc0 (sizeof (TestGroup));
+    InputGroup *group = g_malloc0 (sizeof (InputGroup));
     group->gid = GUM_GROUP_INVALID_GID;
     group->mem_uid = GUM_USER_INVALID_UID;
     return group;
@@ -85,7 +84,7 @@ _create_test_group ()
 
 static void
 _free_test_user (
-		TestUser *user)
+		InputUser *user)
 {
 	if (user) {
 		g_free (user->user_name); g_free (user->secret);
@@ -99,7 +98,7 @@ _free_test_user (
 
 static void
 _free_test_group (
-		TestGroup *group)
+		InputGroup *group)
 {
     if (group) {
         g_free (group->group_name); g_free (group->grp_secret);
@@ -108,84 +107,54 @@ _free_test_group (
 }
 
 static void
-_stop_mainloop ()
+_set_user_update_prop (
+        GumUser *guser,
+        InputUser *user)
 {
-    if (main_loop) {
-        g_main_loop_quit (main_loop);
+    if (user->real_name) {
+        g_object_set (G_OBJECT (guser), "realname", user->real_name, NULL);
     }
-}
-
-static void
-_create_mainloop ()
-{
-    if (main_loop == NULL) {
-        main_loop = g_main_loop_new (NULL, FALSE);
+    if (user->office) {
+        g_object_set (G_OBJECT (guser), "office", user->office, NULL);
     }
-}
-
-static void
-_run_mainloop ()
-{
-    if (main_loop) {
-        g_main_loop_run (main_loop);
+    if (user->office_phone) {
+        g_object_set (G_OBJECT (guser), "officephone", user->office_phone,
+                NULL);
     }
-}
-
-static void
-_on_user_op (
-        GumUser *user,
-        const GError *error,
-        gpointer user_data)
-{
-    _stop_mainloop ();
-
-    if (error) {
-        op_error = g_error_copy (error);
+    if (user->home_phone) {
+        g_object_set (G_OBJECT (guser), "homephone", user->home_phone, NULL);
+    }
+    if (user->shell) {
+        g_object_set (G_OBJECT (guser), "shell", user->shell, NULL);
+    }
+    if (user->secret) {
+        g_object_set (G_OBJECT (guser), "secret", user->secret, NULL);
     }
 }
 
 static void
 _set_user_prop (
-		GumUser *guser,
-		TestUser *user)
+        GumUser *guser,
+        InputUser *user)
 {
-	g_object_set (G_OBJECT (guser), "usertype", user->usertype, NULL);
-	if (user->user_name) {
-		g_object_set (G_OBJECT (guser), "username", user->user_name, NULL);
-	}
-	if (user->nick_name) {
-		g_object_set (G_OBJECT (guser), "nickname", user->nick_name, NULL);
-	}
-	if (user->real_name) {
-		g_object_set (G_OBJECT (guser), "realname", user->real_name, NULL);
-	}
-	if (user->office) {
-		g_object_set (G_OBJECT (guser), "office", user->office, NULL);
-	}
-	if (user->office_phone) {
-		g_object_set (G_OBJECT (guser), "officephone", user->office_phone,
-				NULL);
-	}
-	if (user->home_phone) {
-		g_object_set (G_OBJECT (guser), "homephone", user->home_phone, NULL);
-	}
-	if (user->home_dir) {
-		g_object_set (G_OBJECT (guser), "homedir", user->home_dir, NULL);
-	}
-	if (user->shell) {
-		g_object_set (G_OBJECT (guser), "shell", user->shell, NULL);
-	}
-	if (user->secret) {
-		g_object_set (G_OBJECT (guser), "secret", user->secret, NULL);
-	}
-
+    g_object_set (G_OBJECT (guser), "usertype", user->usertype, NULL);
+    if (user->user_name) {
+        g_object_set (G_OBJECT (guser), "username", user->user_name, NULL);
+    }
+    if (user->nick_name) {
+        g_object_set (G_OBJECT (guser), "nickname", user->nick_name, NULL);
+    }
+    if (user->home_dir) {
+        g_object_set (G_OBJECT (guser), "homedir", user->home_dir, NULL);
+    }
+    _set_user_update_prop (guser, user);
 }
 
 static void
 _print_user_prop (
 		GumUser *guser)
 {
-	TestUser *user = _create_test_user ();
+	InputUser *user = _create_test_user ();
 	g_object_get (G_OBJECT (guser), "uid", &user->uid, NULL);
 	g_object_get (G_OBJECT (guser), "gid", &user->gid, NULL);
     g_object_get (G_OBJECT (guser), "username", &user->user_name, NULL);
@@ -254,8 +223,8 @@ static void
 _handle_write_nfc (
         GumUser *user)
 {
-    g_print("Writing the username and password to NFC tag; please place a tag next \
-to the NFC adapter\n");
+    g_print("Writing the username and password to NFC tag; please"
+            " place a tag next to the NFC adapter\n");
 
     GTlmNfc* tlm_nfc = g_object_new(G_TYPE_TLM_NFC, NULL);
     G_IS_TLM_NFC(tlm_nfc);
@@ -277,12 +246,11 @@ _handle_write_nfc (
 
 static void
 _handle_user_add (
-        TestUser *user,
-        gboolean write_nfc
-                 )
+        InputUser *user,
+        gboolean write_nfc)
 {
     GumUser *guser = NULL;
-    guser = gum_user_create_sync ();
+    guser = gum_user_create_sync (offline_mode);
     if (!guser) return;
 
     _set_user_prop (guser, user);
@@ -293,24 +261,22 @@ _handle_user_add (
         return;
     }
 
-    _print_user_prop (guser);
-
     WARN ("User added successfully");
+    _print_user_prop (guser);
 
     if (write_nfc) {
         _handle_write_nfc(guser);
     }
-
     g_object_unref (guser);
 }
 
 static void
 _handle_user_del (
-		TestUser *user)
+		InputUser *user)
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get_sync (user->uid);
+    guser = gum_user_get_sync (user->uid, offline_mode);
     if (!guser) return;
 
     if (!gum_user_delete_sync (guser, TRUE)) {
@@ -320,127 +286,95 @@ _handle_user_del (
     }
 
     WARN ("User deleted successfully");
-
     g_object_unref (guser);
 }
 
 static void
 _handle_user_up (
-		TestUser *user,
+		InputUser *user,
                 gboolean write_nfc
                 )
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get (user->uid, _on_user_op, NULL);
+    guser = gum_user_get_sync (user->uid, offline_mode);
     if (!guser) return;
 
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed get user for uid %d -- %d:%s", user->uid, op_error->code,
-                op_error->message);
-        g_object_unref (guser);
-        g_error_free (op_error);
-        return;
-    }
+    _set_user_update_prop (guser, user);
 
-    _set_user_prop (guser, user);
-
-    if (!gum_user_update (guser, _on_user_op, NULL)) {
+    if (!gum_user_update_sync (guser)) {
         WARN ("Failed user update setup");
         g_object_unref (guser);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed user update -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-    	_print_user_prop (guser);
-        WARN ("User updated successfully");
-    }
+
+    WARN ("User updated successfully");
+    _print_user_prop (guser);
 
     if (write_nfc) {
         _handle_write_nfc(guser);
     }
-
     g_object_unref (guser);
 }
 
 static void
 _handle_user_get (
-		TestUser *user)
+		InputUser *user)
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get_sync (user->uid);
+    guser = gum_user_get_sync (user->uid, offline_mode);
     if (!guser) return;
 
     WARN ("User retrieved successfully");
     _print_user_prop (guser);
 
-    if (guser) {
-    	g_object_unref (guser);
-    }
+    g_object_unref (guser);
 }
 
 static void
 _handle_user_get_by_name (
-		TestUser *user)
+		InputUser *user)
 {
     GumUser *guser = NULL;
 
-    guser = gum_user_get_by_name (user->user_name, _on_user_op, NULL);
+    guser = gum_user_get_by_name_sync (user->user_name, offline_mode);
     if (!guser) return;
 
-    _run_mainloop ();
+    WARN ("User retrieved by name successfully");
+    _print_user_prop (guser);
 
-    if (op_error) {
-        WARN ("Failed user get by name -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        WARN ("User retrieved by name successfully");
-        _print_user_prop (guser);
-    }
-
-    if (guser) {
-    	g_object_unref (guser);
-    }
+    g_object_unref (guser);
 }
 
 static void
-_on_group_op (
-        GumGroup *group,
-        const GError *error,
-        gpointer user_data)
+_set_group_update_prop (
+        GumGroup *grp,
+        InputGroup *group)
 {
-    _stop_mainloop ();
-
-    if (error) {
-        op_error = g_error_copy (error);
+    if (group->grp_secret) {
+        g_object_set (G_OBJECT (grp), "secret", group->grp_secret, NULL);
     }
 }
 
 static void
 _set_group_prop (
-		GumGroup *grp,
-		TestGroup *group)
+        GumGroup *grp,
+        InputGroup *group)
 {
-	g_object_set (G_OBJECT (grp), "grouptype", group->grouptype, NULL);
-	if (group->group_name) {
-		g_object_set (G_OBJECT (grp), "groupname", group->group_name, NULL);
-	}
-	if (group->grp_secret) {
-		g_object_set (G_OBJECT (grp), "secret", group->grp_secret, NULL);
-	}
+    g_object_set (G_OBJECT (grp), "grouptype", group->grouptype, NULL);
+    if (group->group_name) {
+        g_object_set (G_OBJECT (grp), "groupname", group->group_name, NULL);
+    }
+    _set_group_update_prop (grp, group);
 }
+
 
 static void
 _print_group_prop (
 		GumGroup *grp)
 {
-	TestGroup *group = _create_test_group ();
+	InputGroup *group = _create_test_group ();
 
 	g_object_get (G_OBJECT (grp), "gid", &group->gid, NULL);
     g_object_get (G_OBJECT (grp), "groupname", &group->group_name, NULL);
@@ -453,11 +387,11 @@ _print_group_prop (
 
 static void
 _handle_group_add (
-        TestGroup *group)
+        InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_create_sync ();
+    grp = gum_group_create_sync (offline_mode);
     if (!grp) return;
 
     _set_group_prop (grp, group);
@@ -468,19 +402,19 @@ _handle_group_add (
         return;
     }
 
-    _print_group_prop (grp);
     WARN ("Group added successfully");
+    _print_group_prop (grp);
 
     g_object_unref (grp);
 }
 
 static void
 _handle_group_del (
-        TestGroup *group)
+        InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get_sync (group->gid);
+    grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
     if (!gum_group_delete_sync (grp)) {
@@ -495,90 +429,64 @@ _handle_group_del (
 
 static void
 _handle_group_up (
-        TestGroup *group)
+        InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get (group->gid, _on_group_op, NULL);
+    grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group get for add -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (grp);
-        g_error_free (op_error);
-        return;
-    }
+    _set_group_update_prop (grp, group);
 
-    _set_group_prop (grp, group);
-
-    if (!gum_group_update (grp, _on_group_op, NULL)) {
+    if (!gum_group_update_sync (grp)) {
         WARN ("Failed group update setup");
         g_object_unref (grp);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group update -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        _print_group_prop (grp);
-        WARN ("Group updated successfully");
-    }
+
+    WARN ("Group updated successfully");
+    _print_group_prop (grp);
 
     g_object_unref (grp);
 }
 
 static void
 _handle_group_get (
-		TestGroup *group)
+		InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get (group->gid, _on_group_op, NULL);
+    grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
-    _run_mainloop ();
+    WARN ("Group retrieved successfully");
+    _print_group_prop (grp);
 
-    if (op_error) {
-        WARN ("Failed group get -- %d:%s", op_error->code, op_error->message);
-        g_error_free (op_error);
-    } else {
-        WARN ("Group retrieved successfully");
-        _print_group_prop (grp);
-    }
-
-    if (grp) {
-    	g_object_unref (grp);
-    }
+    g_object_unref (grp);
 }
 
 static void
 _handle_group_get_by_name (
-		TestGroup *group)
+		InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get_by_name_sync (group->group_name);
+    grp = gum_group_get_by_name_sync (group->group_name, offline_mode);
     if (!grp) return;
 
     WARN ("Group retrieved by name successfully");
     _print_group_prop (grp);
 
-    if (grp) {
-    	g_object_unref (grp);
-    }
+    g_object_unref (grp);
 }
 
 static void
 _handle_group_add_mem (
-        TestGroup *group)
+        InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get_sync (group->gid);
+    grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
     if (!gum_group_add_member_sync (grp, group->mem_uid, TRUE)) {
@@ -593,35 +501,19 @@ _handle_group_add_mem (
 
 static void
 _handle_group_del_mem (
-        TestGroup *group)
+        InputGroup *group)
 {
     GumGroup *grp = NULL;
 
-    grp = gum_group_get (group->gid, _on_group_op, NULL);
+    grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group get for delmem -- %d:%s", op_error->code,
-                op_error->message);
-        g_object_unref (grp);
-        g_error_free (op_error);
-        return;
-    }
-
-    if (!gum_group_delete_member (grp, group->mem_uid, _on_group_op, NULL)) {
+    if (!gum_group_delete_member_sync (grp, group->mem_uid)) {
         WARN ("Failed group delmem setup");
         g_object_unref (grp);
         return;
     }
-    _run_mainloop ();
-    if (op_error) {
-        WARN ("Failed group delmem -- %d:%s", op_error->code,
-        		op_error->message);
-        g_error_free (op_error);
-    } else {
-        WARN ("Group mem deleted successfully");
-    }
+    WARN ("Group mem deleted successfully");
 
     g_object_unref (grp);
 }
@@ -629,17 +521,15 @@ _handle_group_del_mem (
 int
 main (int argc, char *argv[])
 {
-   
     GError *error = NULL;
-    GOptionContext *context;
-    GMainLoop* main_loop = NULL;
+    GOptionContext *context = NULL;
     gboolean rval = FALSE;
-    
+
     gboolean is_user_add_op = FALSE, is_user_del_op = FALSE;
     gboolean is_user_up_op = FALSE, is_user_get_op = FALSE;
     gboolean is_user_get_by_name_op = FALSE;
     GOptionGroup* user_option = NULL;
-    TestUser *user = NULL;
+    InputUser *user = NULL;
     
     gboolean is_group_add_op = FALSE, is_group_del_op = FALSE;
     gboolean is_group_up_op = FALSE, is_group_get_op = FALSE;
@@ -647,13 +537,18 @@ main (int argc, char *argv[])
     gboolean is_group_del_mem_op = FALSE;
     gboolean is_write_nfc = FALSE;
     GOptionGroup* group_option = NULL;
-    TestGroup *group = NULL;
+    InputGroup *group = NULL;
 
     user = _create_test_user();
     group = _create_test_group();
 
     GOptionEntry main_entries[] =
     {
+        { "offline", 'o', 0, G_OPTION_ARG_NONE, &offline_mode,
+                "when gum-utils is invoked in offline mode, it triggers "
+                "synchronous APIs in offline mode. Effectively libgum will "
+                "perform the sync op add/delete/update/get without (dbus) gumd",
+                NULL},
         { "add-user", 'a', 0, G_OPTION_ARG_NONE, &is_user_add_op, "add user"
                 " -- username (or nickname) and usertype is mandatory", NULL},
         { "delete-user", 'd', 0, G_OPTION_ARG_NONE, &is_user_del_op,
@@ -686,7 +581,8 @@ main (int argc, char *argv[])
         { "delete-member", 'n', 0, G_OPTION_ARG_NONE, &is_group_del_mem_op,
                 "group delete member -- gid and mem_uid are mandatory", NULL},
         { "write-nfc", 0, 0, G_OPTION_ARG_NONE, &is_write_nfc,
-                "write username and secret to an NFC tag when creating or updating a user", NULL},
+                "write username and secret to an NFC tag when creating or"
+                " updating a user", NULL},
         { NULL }
     };
     
@@ -736,8 +632,10 @@ main (int argc, char *argv[])
     g_type_init ();
 #endif   
     
-    context = g_option_context_new (" [Application Option]\n"
-            "  e.g. To delete a user, ./gum-utils --uid=2001 -v");
+    context = g_option_context_new ("\n"
+            "  To add user in non-offline mode, gum-utils -a --username=user1 "
+            "  --usertype=4\n"
+            "  To delete user in offline mode, gum-utils -o -d --uid=2001\n");
     g_option_context_add_main_entries (context, main_entries, NULL);
 
     user_option = g_option_group_new("user-options", "User specific options",
@@ -758,8 +656,6 @@ main (int argc, char *argv[])
         g_free (group);
         exit (1);
     }
-    
-    _create_mainloop ();
     
     if (is_user_add_op) {
         _handle_user_add (user, is_write_nfc);
@@ -790,10 +686,6 @@ main (int argc, char *argv[])
     	_handle_group_del_mem (group);
     } else {
         WARN ("No option specified");
-    }
-
-    if (main_loop) {
-        g_main_loop_unref (main_loop);
     }
 
     _free_test_user (user);

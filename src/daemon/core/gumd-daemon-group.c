@@ -266,12 +266,12 @@ _finalize (GObject *object)
     GumdDaemonGroup *self = GUMD_DAEMON_GROUP (object);
 
     if (self->priv->gshadow) {
-    	_free_gshadow_entry (self->priv->gshadow);
-    	self->priv->gshadow = NULL;
+        _free_gshadow_entry (self->priv->gshadow);
+        self->priv->gshadow = NULL;
     }
 
     if (self->priv->group) {
-    	_free_daemon_group_entry (self->priv->group);
+        _free_daemon_group_entry (self->priv->group);
         self->priv->group = NULL;
     }
 
@@ -350,7 +350,7 @@ gumd_daemon_group_class_init (
             G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
-    		properties);
+            properties);
 }
 
 static gboolean
@@ -837,8 +837,8 @@ gumd_daemon_group_add (
     }
 
     if (!gum_lock_pwdf_lock ()) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
-    	        "Database already locked", error, FALSE);
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+                "Database already locked", error, FALSE);
     }
 
     if (!_set_gid (self, preferred_gid, error) ||
@@ -892,8 +892,8 @@ gumd_daemon_group_delete (
     const gchar *shadow_file = NULL;
 
     if (!gum_lock_pwdf_lock ()) {
-    	GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
-    	        "Database already locked", error, FALSE);
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+                "Database already locked", error, FALSE);
     }
 
     if (self->priv->group->gr_gid == GUM_GROUP_INVALID_GID) {
@@ -910,7 +910,7 @@ gumd_daemon_group_delete (
     if (self->priv->group->gr_gid == getegid ()) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_GROUP_SELF_DESTRUCTION,
-        		"Self-destruction not possible", error, FALSE);
+                "Self-destruction not possible", error, FALSE);
     }
 
     /* We can remove this group, if it is not the primary group of any

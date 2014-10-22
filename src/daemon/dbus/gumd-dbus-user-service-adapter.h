@@ -30,7 +30,7 @@
 #include <glib.h>
 #include <common/gum-disposable.h>
 #include "common/dbus/gum-dbus-user-service-gen.h"
-#include "daemon/gumd-daemon.h"
+#include "daemon/core/gumd-daemon.h"
 #include "gumd-dbus-server-interface.h"
 
 G_BEGIN_DECLS

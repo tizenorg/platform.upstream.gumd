@@ -29,7 +29,7 @@
 #include <glib.h>
 #include <common/gum-disposable.h>
 #include "common/dbus/gum-dbus-user-gen.h"
-#include "daemon/gumd-daemon-user.h"
+#include "daemon/core/gumd-daemon-user.h"
 
 G_BEGIN_DECLS
 

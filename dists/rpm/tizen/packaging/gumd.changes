@@ -1,3 +1,6 @@
+* Mon Oct 20 2014 Imran Zaman <imran.zaman@intel.com>
+- Added offline support to libgum/gum-utils to add/update etc user/group
+
 * Fri Oct 17 2014 Imran Zaman <imran.zaman@intel.com>
 - Added offline support to gumd to add/update etc user/group
 

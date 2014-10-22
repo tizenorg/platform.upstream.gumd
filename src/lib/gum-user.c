@@ -29,6 +29,8 @@
 #include "common/gum-user-types.h"
 #include "common/dbus/gum-dbus-user-service-gen.h"
 #include "common/dbus/gum-dbus-user-gen.h"
+#include "daemon/core/gumd-daemon.h"
+#include "daemon/core/gumd-daemon-user.h"
 
 #include "gum-user.h"
 #include "gum-user-service.h"
@@ -49,7 +51,7 @@
  * |[
  *  GumUser *user = NULL;
  *
- *  user = gum_user_create_sync ();
+ *  user = gum_user_create_sync (FALSE);
  *
  *  // use the object
  *
@@ -62,7 +64,7 @@
  *  GumUser *user = NULL;
  *  gboolean rval = FALSE;
  *
- *  user = gum_user_create_sync ();
+ *  user = gum_user_create_sync (FALSE);
  *
  *  // set user properties
  *  g_object_set (G_OBJECT (user), "username", "user1", "secret", "123456",
@@ -115,6 +117,8 @@ struct _GumUserPrivate
 {
     GumDbusUserService *dbus_service;
     GumDbusUser *dbus_user;
+    GumdDaemon *offline_service;
+    GumdDaemonUser *offline_user;
     GCancellable *cancellable;
     GumUserOp *op;
 };
@@ -139,6 +143,7 @@ enum
     PROP_HOMEPHONE,
     PROP_HOMEDIR,
     PROP_SHELL,
+    PROP_OFFLINE,
 
     N_PROPERTIES
 };
@@ -220,9 +225,21 @@ _set_property (
         GParamSpec *pspec)
 {
     GumUser *self = GUM_USER (object);
-    if (self->priv->dbus_user) {
-        g_object_set_property (G_OBJECT(self->priv->dbus_user), pspec->name,
-                value);
+    switch (property_id) {
+        case PROP_OFFLINE: {
+            if (g_value_get_boolean (value))
+                self->priv->offline_service = gumd_daemon_new ();
+            break;
+        }
+        default: {
+            if (self->priv->offline_user) {
+                g_object_set_property (G_OBJECT(self->priv->offline_user),
+                        pspec->name, value);
+            } else if (self->priv->dbus_user) {
+                g_object_set_property (G_OBJECT(self->priv->dbus_user),
+                        pspec->name, value);
+            }
+        }
     }
 }
 
@@ -234,9 +251,20 @@ _get_property (
         GParamSpec *pspec)
 {
     GumUser *self = GUM_USER (object);
-    if (self->priv->dbus_user) {
-        g_object_get_property (G_OBJECT(self->priv->dbus_user), pspec->name,
-                value);
+    switch (property_id) {
+        case PROP_OFFLINE: {
+            g_value_set_boolean (value, self->priv->offline_service != NULL);
+            break;
+        }
+        default: {
+            if (self->priv->offline_user) {
+                g_object_get_property (G_OBJECT(self->priv->offline_user),
+                        pspec->name, value);
+            } else if (self->priv->dbus_user) {
+                g_object_get_property (G_OBJECT(self->priv->dbus_user),
+                        pspec->name, value);
+            }
+        }
     }
 }
 
@@ -266,6 +294,10 @@ _dispose (GObject *object)
 
     GUM_OBJECT_UNREF (self->priv->dbus_service);
 
+    GUM_OBJECT_UNREF (self->priv->offline_user);
+
+    GUM_OBJECT_UNREF (self->priv->offline_service);
+
     G_OBJECT_CLASS (gum_user_parent_class)->dispose (object);
 }
 
@@ -285,8 +317,14 @@ gum_user_init (
 {
     self->priv = GUM_USER_PRIV (self);
     self->priv->dbus_user = NULL;
-    self->priv->cancellable = g_cancellable_new ();
-    self->priv->dbus_service = gum_user_service_get_instance ();
+    self->priv->offline_user = NULL;
+    if (!self->priv->offline_service) {
+        self->priv->cancellable = g_cancellable_new ();
+        self->priv->dbus_service = gum_user_service_get_instance ();
+    } else {
+        self->priv->cancellable = NULL;
+        self->priv->dbus_service = NULL;
+    }
     self->priv->op = NULL;
 }
 
@@ -479,6 +517,20 @@ gum_user_class_init (
             "" /* default value */,
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
+
+    /**
+     * GumUser:offline:
+     *
+     * This property is used to define the behaviour of synchronous operation
+     * performed on the object. If it is set to TRUE, then the object performs
+     * the operation without daemon (dbus/gumd) otherwise 'gumd' daemon will be
+     * used for the required synchronous functionality.
+     */
+    properties[PROP_OFFLINE] =  g_param_spec_boolean ("offline",
+            "Offline",
+            "Operational mode for the User object",
+            FALSE,
+            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
             properties);
@@ -741,9 +793,10 @@ gum_user_create (
         GumUserCb callback,
         gpointer user_data)
 {
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
-    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, "offline", FALSE,
+            NULL));
 
+    g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
     _create_op (user, callback, user_data);
     gum_dbus_user_service_call_create_new_user (user->priv->dbus_service,
             user->priv->cancellable, _on_new_user_cb, user);
@@ -752,18 +805,32 @@ gum_user_create (
 
 /**
  * gum_user_create_sync:
+ * @offline: enables or disables the offline mode
  *
- * This method creates a new remote user object over the DBus synchronously.
+ * This method creates a new remote user object. In case offline mode is
+ * enabled, then the object is created directly without using dbus otherwise
+ * the objects gets created over the DBus synchronously.
  *
  * Returns: (transfer full): #GumUser newly created object
  */
 GumUser *
-gum_user_create_sync ()
+gum_user_create_sync (
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
 
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER,  "offline", offline,
+            NULL));
+
+    if (!user) return NULL;
+
+    if (user->priv->offline_service) {
+        user->priv->offline_user = gumd_daemon_user_new (
+                gumd_daemon_get_config (user->priv->offline_service));
+        return user;
+    }
+
     g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
 
     if (gum_dbus_user_service_call_create_new_user_sync (
@@ -803,40 +870,54 @@ gum_user_get (
         GumUserCb callback,
         gpointer user_data)
 {
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
-    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, "offline", FALSE,
+            NULL));
+
+    g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
 
     _create_op (user, callback, user_data);
-    gum_dbus_user_service_call_get_user (user->priv->dbus_service, uid,
+     gum_dbus_user_service_call_get_user (user->priv->dbus_service, uid,
             user->priv->cancellable, _on_get_user_cb, user);
+
     return user;
 }
 
 /**
  * gum_user_get_sync:
  * @uid: user id for the user
+ * @offline: enables or disables the offline mode
  *
- * This method gets the user object attached to uid over the DBus
- * synchronously.
+ * This method gets the user object attached to uid. In case offline mode is
+ * enabled, then the object is retrieved directly without using dbus otherwise
+ * the objects gets retrieved over the DBus synchronously.
  *
  * Returns: (transfer full): #GumUser object
  */
 GumUser *
 gum_user_get_sync (
-        uid_t uid)
+        uid_t uid,
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
 
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
-    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER,  "offline", offline,
+            NULL));
 
-    if (gum_dbus_user_service_call_get_user_sync (user->priv->dbus_service,
-            uid, &object_path, user->priv->cancellable, &error)) {
-        _create_dbus_user (user, object_path, error);
+    if (!user) return NULL;
+
+    if (user->priv->offline_service) {
+
+        user->priv->offline_user = gumd_daemon_get_user (
+                user->priv->offline_service, uid, &error);
+    } else if (user->priv->dbus_service) {
+
+        if (gum_dbus_user_service_call_get_user_sync (user->priv->dbus_service,
+                uid, &object_path, user->priv->cancellable, &error)) {
+            _create_dbus_user (user, object_path, error);
+        }
+        g_free (object_path);
     }
-
-    g_free (object_path);
 
     if (error) {
         WARN ("Failed with error %d:%s", error->code, error->message);
@@ -845,7 +926,6 @@ gum_user_get_sync (
         g_object_unref (user);
         user = NULL;
     }
-
     return user;
 }
 
@@ -867,12 +947,16 @@ gum_user_get_by_name (
         GumUserCb callback,
         gpointer user_data)
 {
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
-    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
+    GumUser *user = NULL;
+
     if (!username) {
         WARN ("username not specified");
         return NULL;
     }
+
+    user = GUM_USER (g_object_new (GUM_TYPE_USER, "offline", FALSE, NULL));
+
+    g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
 
     _create_op (user, callback, user_data);
     gum_dbus_user_service_call_get_user_by_name (user->priv->dbus_service,
@@ -883,33 +967,44 @@ gum_user_get_by_name (
 /**
  * gum_user_get_by_name_sync:
  * @username: name of the user
+ * @offline: enables or disables the offline mode
  *
- * This method gets the user object attached to username over the DBus
- * synchronously.
+ * This method gets the user object attached to username. In case offline mode
+ * is enabled, then the object is retrieved directly without using dbus
+ * otherwise the objects gets retrieved over the DBus synchronously.
  *
  * Returns: (transfer full): #GumUser object
  */
 GumUser *
 gum_user_get_by_name_sync (
-        const gchar *username)
+        const gchar *username,
+        gboolean offline)
 {
     GError *error = NULL;
     gchar *object_path = NULL;
+    GumUser *user = NULL;
 
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, NULL));
-    g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
     if (!username) {
         WARN ("username not specified");
         return NULL;
     }
 
-    if (gum_dbus_user_service_call_get_user_by_name_sync (
-            user->priv->dbus_service, username, &object_path,
-            user->priv->cancellable,  &error)) {
-        _create_dbus_user (user, object_path, error);
-    }
+    user = GUM_USER (g_object_new (GUM_TYPE_USER,  "offline", offline, NULL));
 
-    g_free (object_path);
+    if (!user) return NULL;
+
+    if (user->priv->offline_service) {
+        user->priv->offline_user = gumd_daemon_get_user_by_name (
+                user->priv->offline_service, username, &error);
+
+    } else if (user->priv->dbus_service) {
+        if (gum_dbus_user_service_call_get_user_by_name_sync (
+                user->priv->dbus_service, username, &object_path,
+                user->priv->cancellable,  &error)) {
+            _create_dbus_user (user, object_path, error);
+        }
+        g_free (object_path);
+    }
 
     if (error) {
         WARN ("Failed with error %d:%s", error->code, error->message);
@@ -918,7 +1013,6 @@ gum_user_get_by_name_sync (
         g_object_unref (user);
         user = NULL;
     }
-
     return user;
 }
 
@@ -962,7 +1056,9 @@ gum_user_add (
  * #GumUser:username or #GumUser:nickname in addition to valid
  * #GumUser:usertype.
  *
- * This method adds the user over the DBus synchronously.
+ * This method adds the user. In case offline mode is enabled, then the user is
+ * added directly without using dbus otherwise the user is added over the
+ * DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -971,26 +1067,27 @@ gum_user_add_sync (
         GumUser *self)
 {
     GError *error = NULL;
+    uid_t uid = GUM_USER_INVALID_UID;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
-    uid_t uid = GUM_USER_INVALID_UID;
 
-    if (!self->priv->dbus_user) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_user) {
+        rval = gumd_daemon_add_user (self->priv->offline_service,
+                self->priv->offline_user, &error);
+    } else if (self->priv->dbus_user) {
+        rval = gum_dbus_user_call_add_user_sync (self->priv->dbus_user,
+                &uid, self->priv->cancellable,  &error);
+        if (rval) _sync_properties (self);
     }
 
-    if (!gum_dbus_user_call_add_user_sync (
-            self->priv->dbus_user, &uid, self->priv->cancellable,  &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-    return _sync_properties (self);
+    return rval;
 }
 
 /**
@@ -1034,7 +1131,9 @@ gum_user_delete (
  * property.
  * @rem_home_dir: deletes home directory of the user if set to TRUE
  *
- * This method deletes the user over the DBus synchronously.
+ * This method deletes the user. In case offline mode is enabled, then the user
+ * is deleted directly without using dbus otherwise the user is deleted over the
+ * DBus synchronously.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -1044,27 +1143,25 @@ gum_user_delete_sync (
         gboolean rem_home_dir)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
-    if (!self->priv->dbus_user) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_user) {
+        rval = gumd_daemon_delete_user (self->priv->offline_service,
+                self->priv->offline_user, rem_home_dir, &error);
+    } else if (self->priv->dbus_user) {
+        rval = gum_dbus_user_call_delete_user_sync (self->priv->dbus_user,
+                rem_home_dir, self->priv->cancellable,  &error);
     }
 
-    if (!gum_dbus_user_call_delete_user_sync (
-            self->priv->dbus_user, rem_home_dir, self->priv->cancellable,
-            &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-
-    return TRUE;
+    return rval;
 }
 
 /**
@@ -1106,9 +1203,11 @@ gum_user_update (
  * @self: #GumUser object to be updated; object should have valid #GumUser:uid
  * property.
  *
- * This method updates the user over the DBus synchronously. The properties
- * which can be updated are: secret, realname, office, officephone, homephone
- * and shell.
+ * This method updates the user. In case offline mode is enabled, then the user
+ * is updated directly without using dbus otherwise the user is updated over the
+ * DBus synchronously.
+ * The properties which can be updated are: secret, realname, office,
+ * officephone, homephone and shell.
  *
  * Returns: returns TRUE if successful, FALSE otherwise.
  */
@@ -1117,23 +1216,24 @@ gum_user_update_sync (
         GumUser *self)
 {
     GError *error = NULL;
+    gboolean rval = FALSE;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
-    if (!self->priv->dbus_user) {
-        WARN ("Remote dbus object not valid");
-        return FALSE;
+    if (self->priv->offline_user) {
+        rval = gumd_daemon_update_user (self->priv->offline_service,
+                self->priv->offline_user, &error);
+    } else if (self->priv->dbus_user) {
+        rval = gum_dbus_user_call_update_user_sync (self->priv->dbus_user,
+                self->priv->cancellable,  &error);
+        if (rval) _sync_properties (self);
     }
 
-    if (!gum_dbus_user_call_update_user_sync (
-            self->priv->dbus_user, self->priv->cancellable, &error)) {
-        if (error) {
-            WARN ("Failed with error %d:%s", error->code, error->message);
-            g_error_free (error);
-            error = NULL;
-        }
-        return FALSE;
+    if (!rval && error) {
+        WARN ("Failed with error %d:%s", error->code, error->message);
+        g_error_free (error);
+        error = NULL;
     }
-    return _sync_properties (self);
+    return rval;
 }
