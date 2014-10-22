@@ -27,6 +27,7 @@
 
 #include "gum-user.h"
 #include "common/gum-log.h"
+#include "common/gum-config.h"
 #include "common/gum-defines.h"
 #include "common/gum-error.h"
 #include "common/gum-user-types.h"
@@ -524,6 +525,8 @@ main (int argc, char *argv[])
     GError *error = NULL;
     GOptionContext *context = NULL;
     gboolean rval = FALSE;
+    GumConfig *config = NULL;
+    gchar *sysroot = NULL;
 
     gboolean is_user_add_op = FALSE, is_user_del_op = FALSE;
     gboolean is_user_up_op = FALSE, is_user_get_op = FALSE;
@@ -549,6 +552,8 @@ main (int argc, char *argv[])
                 "synchronous APIs in offline mode. Effectively libgum will "
                 "perform the sync op add/delete/update/get without (dbus) gumd",
                 NULL},
+        { "sysroot", 0, 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
+                "[Offline mode ONLY]", "sysroot"},
         { "add-user", 'a', 0, G_OPTION_ARG_NONE, &is_user_add_op, "add user"
                 " -- username (or nickname) and usertype is mandatory", NULL},
         { "delete-user", 'd', 0, G_OPTION_ARG_NONE, &is_user_del_op,
@@ -651,11 +656,18 @@ main (int argc, char *argv[])
     rval = g_option_context_parse (context, &argc, &argv, &error);
     g_option_context_free(context);
     if (!rval) {
-        g_print ("option parsing failed: %s\n", error->message);
+        WARN ("option parsing failed: %s\n", error->message);
         g_free (user);
         g_free (group);
         exit (1);
     }
+
+    if (!offline_mode && sysroot) {
+        WARN ("sysroot is ONLY supported in offline mode\n");
+        g_free (sysroot); sysroot = NULL;
+    }
+
+    config = gum_config_new (sysroot);
     
     if (is_user_add_op) {
         _handle_user_add (user, is_write_nfc);
@@ -688,6 +700,7 @@ main (int argc, char *argv[])
         WARN ("No option specified");
     }
 
+    if (config) g_object_unref (config);
     _free_test_user (user);
     _free_test_group (group);
 

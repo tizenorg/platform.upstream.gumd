@@ -117,7 +117,7 @@ _set_smack64_attr (
     GumConfig *config = NULL;
     ssize_t len = 0;
 
-    config = gum_config_new ();
+    config = gum_config_new (NULL);
     const gchar *smack_label = gum_config_get_string (config, key);
     if (smack_label) {
         len = strlen (smack_label);
@@ -799,7 +799,7 @@ gum_file_create_home_dir (
                     "Home directory chown failure", error, FALSE);
         }
 
-        config = gum_config_new ();
+        config = gum_config_new (NULL);
         retval = _copy_dir_recursively (gum_config_get_string (config,
             GUM_CONFIG_GENERAL_SKEL_DIR), home_dir, uid, gid, umask, error);
         g_object_unref (config);

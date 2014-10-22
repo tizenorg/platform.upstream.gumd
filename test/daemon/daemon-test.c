@@ -398,7 +398,7 @@ START_TEST (test_daemon_user)
 
     gchar *encr_secret = gum_crypt_encrypt_secret ("pass123", "SHA512");
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
 
     GumdDaemonUser* user = gumd_daemon_user_new (config);
@@ -1136,7 +1136,7 @@ START_TEST (test_daemon_group)
 
     gchar *encr_secret = gum_crypt_encrypt_secret ("grouppass123", "SHA512");
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
 
     GumdDaemonGroup* group = gumd_daemon_group_new (config);
