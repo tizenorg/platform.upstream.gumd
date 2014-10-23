@@ -36,6 +36,7 @@
   </chapters>
   <functions>
     <keyword type="function" name="gum_config_new ()" link="GumConfig.html#gum-config-new"/>
+    <keyword type="function" name="gum_config_prepend_sysroot ()" link="GumConfig.html#gum-config-prepend-sysroot"/>
     <keyword type="function" name="gum_config_get_int ()" link="GumConfig.html#gum-config-get-int"/>
     <keyword type="function" name="gum_config_set_int ()" link="GumConfig.html#gum-config-set-int"/>
     <keyword type="function" name="gum_config_get_uint ()" link="GumConfig.html#gum-config-get-uint"/>
@@ -43,6 +44,7 @@
     <keyword type="function" name="gum_config_get_string ()" link="GumConfig.html#gum-config-get-string"/>
     <keyword type="function" name="gum_config_set_string ()" link="GumConfig.html#gum-config-set-string"/>
     <keyword type="macro" name="GUM_UMASK" link="GumConfig.html#GUM-UMASK:CAPS"/>
+    <keyword type="property" name="The “sysroot” property" link="GumConfig.html#GumConfig--sysroot"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_DEF_USR_GROUPS" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-DEF-USR-GROUPS:CAPS"/>
     <keyword type="macro" name="GUM_CONFIG_GENERAL_USR_PRIMARY_GRPNAME" link="gumd-General-configuration.html#GUM-CONFIG-GENERAL-USR-PRIMARY-GRPNAME:CAPS"/>
@@ -177,6 +179,7 @@
     <keyword type="property" name="The “nickname” property" link="GumUser.html#GumUser--nickname"/>
     <keyword type="property" name="The “office” property" link="GumUser.html#GumUser--office"/>
     <keyword type="property" name="The “officephone” property" link="GumUser.html#GumUser--officephone"/>
+    <keyword type="property" name="The “offline” property" link="GumUser.html#GumUser--offline"/>
     <keyword type="property" name="The “realname” property" link="GumUser.html#GumUser--realname"/>
     <keyword type="property" name="The “secret” property" link="GumUser.html#GumUser--secret"/>
     <keyword type="property" name="The “shell” property" link="GumUser.html#GumUser--shell"/>
@@ -203,6 +206,7 @@
     <keyword type="property" name="The “gid” property" link="GumGroup.html#GumGroup--gid"/>
     <keyword type="property" name="The “groupname” property" link="GumGroup.html#GumGroup--groupname"/>
     <keyword type="property" name="The “grouptype” property" link="GumGroup.html#GumGroup--grouptype"/>
+    <keyword type="property" name="The “offline” property" link="GumGroup.html#GumGroup--offline"/>
     <keyword type="property" name="The “secret” property" link="GumGroup.html#GumGroup--secret"/>
   </functions>
 </book>

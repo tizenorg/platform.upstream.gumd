@@ -137,6 +137,9 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+libgum_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libgum_la_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -288,6 +291,9 @@ GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUMD_CFLAGS = @GUMD_CFLAGS@
+GUMD_CORE_CFLAGS = @GUMD_CORE_CFLAGS@
+GUMD_CORE_INCLUDES = @GUMD_CORE_INCLUDES@
+GUMD_CORE_LIBS = @GUMD_CORE_LIBS@
 GUMD_INCLUDES = @GUMD_INCLUDES@
 GUMD_LIBS = @GUMD_LIBS@
 GUM_CFLAGS = @GUM_CFLAGS@
@@ -398,7 +404,7 @@ top_srcdir = @top_srcdir@
 SUBDIRS = 
 NULL = 
 lib_LTLIBRARIES = libgum.la
-libgum_la_CPPFLAGS = \
+libgum_la_CFLAGS = \
     -I$(top_builddir)/src \
     -I$(top_srcdir)/src \
     $(LIBGUM_INCLUDES) \
@@ -410,6 +416,7 @@ libgum_la_DEPENDENCIES = \
 
 libgum_la_LIBADD = \
     $(top_builddir)/src/common/libgum-common.la \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(LIBGUM_LIBS) \
     $(NULL)
 
@@ -514,7 +521,7 @@ clean-libLTLIBRARIES:
 	}
 
 libgum.la: $(libgum_la_OBJECTS) $(libgum_la_DEPENDENCIES) $(EXTRA_libgum_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libgum_la_OBJECTS) $(libgum_la_LIBADD) $(LIBS)
+	$(AM_V_CCLD)$(libgum_la_LINK) -rpath $(libdir) $(libgum_la_OBJECTS) $(libgum_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -552,32 +559,32 @@ distclean-compile:
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
 libgum_la-gum-user-service.lo: gum-user-service.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgum_la-gum-user-service.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-user-service.Tpo -c -o libgum_la-gum-user-service.lo `test -f 'gum-user-service.c' || echo '$(srcdir)/'`gum-user-service.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -MT libgum_la-gum-user-service.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-user-service.Tpo -c -o libgum_la-gum-user-service.lo `test -f 'gum-user-service.c' || echo '$(srcdir)/'`gum-user-service.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgum_la-gum-user-service.Tpo $(DEPDIR)/libgum_la-gum-user-service.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-user-service.c' object='libgum_la-gum-user-service.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-user-service.lo `test -f 'gum-user-service.c' || echo '$(srcdir)/'`gum-user-service.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-user-service.lo `test -f 'gum-user-service.c' || echo '$(srcdir)/'`gum-user-service.c
 
 libgum_la-gum-user.lo: gum-user.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgum_la-gum-user.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-user.Tpo -c -o libgum_la-gum-user.lo `test -f 'gum-user.c' || echo '$(srcdir)/'`gum-user.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -MT libgum_la-gum-user.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-user.Tpo -c -o libgum_la-gum-user.lo `test -f 'gum-user.c' || echo '$(srcdir)/'`gum-user.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgum_la-gum-user.Tpo $(DEPDIR)/libgum_la-gum-user.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-user.c' object='libgum_la-gum-user.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-user.lo `test -f 'gum-user.c' || echo '$(srcdir)/'`gum-user.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-user.lo `test -f 'gum-user.c' || echo '$(srcdir)/'`gum-user.c
 
 libgum_la-gum-group-service.lo: gum-group-service.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgum_la-gum-group-service.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-group-service.Tpo -c -o libgum_la-gum-group-service.lo `test -f 'gum-group-service.c' || echo '$(srcdir)/'`gum-group-service.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -MT libgum_la-gum-group-service.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-group-service.Tpo -c -o libgum_la-gum-group-service.lo `test -f 'gum-group-service.c' || echo '$(srcdir)/'`gum-group-service.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgum_la-gum-group-service.Tpo $(DEPDIR)/libgum_la-gum-group-service.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-group-service.c' object='libgum_la-gum-group-service.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-group-service.lo `test -f 'gum-group-service.c' || echo '$(srcdir)/'`gum-group-service.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-group-service.lo `test -f 'gum-group-service.c' || echo '$(srcdir)/'`gum-group-service.c
 
 libgum_la-gum-group.lo: gum-group.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgum_la-gum-group.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-group.Tpo -c -o libgum_la-gum-group.lo `test -f 'gum-group.c' || echo '$(srcdir)/'`gum-group.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -MT libgum_la-gum-group.lo -MD -MP -MF $(DEPDIR)/libgum_la-gum-group.Tpo -c -o libgum_la-gum-group.lo `test -f 'gum-group.c' || echo '$(srcdir)/'`gum-group.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgum_la-gum-group.Tpo $(DEPDIR)/libgum_la-gum-group.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-group.c' object='libgum_la-gum-group.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-group.lo `test -f 'gum-group.c' || echo '$(srcdir)/'`gum-group.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libgum_la_CFLAGS) $(CFLAGS) -c -o libgum_la-gum-group.lo `test -f 'gum-group.c' || echo '$(srcdir)/'`gum-group.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

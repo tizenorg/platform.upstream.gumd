@@ -6,12 +6,14 @@
 <ANCHOR id="building-packages" href="gumd/um-building.html#building-packages">
 <ANCHOR id="GumConfig" href="gumd/GumConfig.html">
 <ANCHOR id="GumConfig.functions" href="gumd/GumConfig.html#GumConfig.functions">
+<ANCHOR id="GumConfig.properties" href="gumd/GumConfig.html#GumConfig.properties">
 <ANCHOR id="GumConfig.other" href="gumd/GumConfig.html#GumConfig.other">
 <ANCHOR id="GumConfig.object-hierarchy" href="gumd/GumConfig.html#GumConfig.object-hierarchy">
 <ANCHOR id="GumConfig.includes" href="gumd/GumConfig.html#GumConfig.includes">
 <ANCHOR id="GumConfig.description" href="gumd/GumConfig.html#GumConfig.description">
 <ANCHOR id="GumConfig.functions_details" href="gumd/GumConfig.html#GumConfig.functions_details">
 <ANCHOR id="gum-config-new" href="gumd/GumConfig.html#gum-config-new">
+<ANCHOR id="gum-config-prepend-sysroot" href="gumd/GumConfig.html#gum-config-prepend-sysroot">
 <ANCHOR id="gum-config-get-int" href="gumd/GumConfig.html#gum-config-get-int">
 <ANCHOR id="gum-config-set-int" href="gumd/GumConfig.html#gum-config-set-int">
 <ANCHOR id="gum-config-get-uint" href="gumd/GumConfig.html#gum-config-get-uint">
@@ -20,6 +22,8 @@
 <ANCHOR id="gum-config-set-string" href="gumd/GumConfig.html#gum-config-set-string">
 <ANCHOR id="GumConfig.other_details" href="gumd/GumConfig.html#GumConfig.other_details">
 <ANCHOR id="GUM-UMASK:CAPS" href="gumd/GumConfig.html#GUM-UMASK:CAPS">
+<ANCHOR id="GumConfig.property-details" href="gumd/GumConfig.html#GumConfig.property-details">
+<ANCHOR id="GumConfig--sysroot" href="gumd/GumConfig.html#GumConfig--sysroot">
 <ANCHOR id="gumd-General-configuration" href="gumd/gumd-General-configuration.html">
 <ANCHOR id="gumd-General-configuration.other" href="gumd/gumd-General-configuration.html#gumd-General-configuration.other">
 <ANCHOR id="gumd-General-configuration.object-hierarchy" href="gumd/gumd-General-configuration.html#gumd-General-configuration.object-hierarchy">
@@ -266,6 +270,7 @@
 <ANCHOR id="GumUser--nickname" href="gumd/GumUser.html#GumUser--nickname">
 <ANCHOR id="GumUser--office" href="gumd/GumUser.html#GumUser--office">
 <ANCHOR id="GumUser--officephone" href="gumd/GumUser.html#GumUser--officephone">
+<ANCHOR id="GumUser--offline" href="gumd/GumUser.html#GumUser--offline">
 <ANCHOR id="GumUser--realname" href="gumd/GumUser.html#GumUser--realname">
 <ANCHOR id="GumUser--secret" href="gumd/GumUser.html#GumUser--secret">
 <ANCHOR id="GumUser--shell" href="gumd/GumUser.html#GumUser--shell">
@@ -301,6 +306,7 @@
 <ANCHOR id="GumGroup--gid" href="gumd/GumGroup.html#GumGroup--gid">
 <ANCHOR id="GumGroup--groupname" href="gumd/GumGroup.html#GumGroup--groupname">
 <ANCHOR id="GumGroup--grouptype" href="gumd/GumGroup.html#GumGroup--grouptype">
+<ANCHOR id="GumGroup--offline" href="gumd/GumGroup.html#GumGroup--offline">
 <ANCHOR id="GumGroup--secret" href="gumd/GumGroup.html#GumGroup--secret">
 <ANCHOR id="gumd-utils" href="gumd/gumd-utils.html">
 <ANCHOR id="intro" href="gumd/gumd-utils.html#intro">

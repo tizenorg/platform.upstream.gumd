@@ -40,7 +40,6 @@
 #include "dbus/gumd-dbus-server-interface.h"
 #include "dbus/gumd-dbus-server-msg-bus.h"
 #include "dbus/gumd-dbus-server-p2p.h"
-#include "gumd-daemon-offline.h"
 
 static const gchar *_bus_type =
 #ifdef GUM_BUS_TYPE_P2P
@@ -150,9 +149,13 @@ _install_sighandlers (
 int
 main (int argc, char **argv)
 {
+    GError *error = NULL;
     GMainLoop *main_loop = NULL;
     gboolean retval = FALSE;
-    gboolean offline = FALSE;
+    GOptionContext *opt_context = NULL;
+    GOptionEntry opt_entries[] = {
+        {NULL }
+    };
 
     gid_t daemon_gid;
     struct group *daemon_group = NULL;
@@ -165,13 +168,14 @@ main (int argc, char **argv)
     g_log_set_always_fatal (G_LOG_LEVEL_ERROR | G_LOG_LEVEL_CRITICAL);
 #endif
 
-    retval = gumd_daemon_offline_handle_op (argc, argv, &offline);
-    if (offline) {
-        if (!retval) {
-            WARN ("Operation failed in gumd when running in offline mode");
-            return -1;
-        }
-        return 0;
+    opt_context = g_option_context_new ("User Management daemon");
+    g_option_context_add_main_entries (opt_context, opt_entries, NULL);
+    retval = g_option_context_parse (opt_context, &argc, &argv, &error);
+    g_option_context_free (opt_context);
+    if (!retval) {
+        WARN ("Error parsing options: %s", error->message);
+        g_error_free (error);
+        return -1;
     }
 
     DBG ("Before set: r-gid %d e-gid %d", getgid (), getegid ());

@@ -22,8 +22,7 @@ daemontest_CFLAGS = \
     -DG_LOG_DOMAIN=\"gum-test-daemon\"
 
 daemontest_LDADD = \
-    $(top_builddir)/src/daemon/gumd-gumd-daemon-user.o \
-    $(top_builddir)/src/daemon/gumd-gumd-daemon-group.o \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(top_builddir)/src/common/libgum-common.la \
     $(GUMD_LIBS) \
     $(CHECK_LIBS)

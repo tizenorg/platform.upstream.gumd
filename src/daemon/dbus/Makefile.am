@@ -12,6 +12,7 @@ libgumd_dbus_la_CPPFLAGS = \
 
 libgumd_dbus_la_LIBADD = \
     $(top_builddir)/src/common/libgum-common.la \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(GUMD_LIBS) \
     $(NULL)
 

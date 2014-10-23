@@ -160,7 +160,7 @@ gumd_daemon_init (
         GumdDaemon *self)
 {
     self->priv = GUMD_DAEMON_PRIV (self);
-    self->priv->config = gum_config_new ();
+    self->priv->config = gum_config_new (NULL);
     self->priv->users = g_hash_table_new_full (g_direct_hash, g_direct_equal,
             NULL, NULL);
     self->priv->groups = g_hash_table_new_full (g_direct_hash, g_direct_equal,

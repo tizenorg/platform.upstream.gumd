@@ -100,8 +100,7 @@ am_daemontest_OBJECTS = daemontest-daemon-test.$(OBJEXT)
 daemontest_OBJECTS = $(am_daemontest_OBJECTS)
 am__DEPENDENCIES_1 =
 daemontest_DEPENDENCIES =  \
-	$(top_builddir)/src/daemon/gumd-gumd-daemon-user.o \
-	$(top_builddir)/src/daemon/gumd-gumd-daemon-group.o \
+	$(top_builddir)/src/daemon/core/libgumd-core.la \
 	$(top_builddir)/src/common/libgum-common.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -422,6 +421,9 @@ GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUMD_CFLAGS = @GUMD_CFLAGS@
+GUMD_CORE_CFLAGS = @GUMD_CORE_CFLAGS@
+GUMD_CORE_INCLUDES = @GUMD_CORE_INCLUDES@
+GUMD_CORE_LIBS = @GUMD_CORE_LIBS@
 GUMD_INCLUDES = @GUMD_INCLUDES@
 GUMD_LIBS = @GUMD_LIBS@
 GUM_CFLAGS = @GUM_CFLAGS@
@@ -547,8 +549,7 @@ daemontest_CFLAGS = \
     -DG_LOG_DOMAIN=\"gum-test-daemon\"
 
 daemontest_LDADD = \
-    $(top_builddir)/src/daemon/gumd-gumd-daemon-user.o \
-    $(top_builddir)/src/daemon/gumd-gumd-daemon-group.o \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(top_builddir)/src/common/libgum-common.la \
     $(GUMD_LIBS) \
     $(CHECK_LIBS)

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([gumd], [0.0.6],[],[],[https://github.com/01org/gumd])
+AC_INIT([gumd], [1.0.0],[],[],[https://github.com/01org/gumd])
 AC_CONFIG_SRCDIR([src/daemon/main.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -271,6 +271,14 @@ AC_SUBST(GUM_COMMON_LIBS)
 GUM_COMMON_INCLUDES='$(GUM_INCLUDES) -I$(top_srcdir)/include/gum'
 AC_SUBST(GUM_COMMON_INCLUDES)
 
+# Gumd core lib cflags, libs, includes
+GUMD_CORE_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gumd-core\"'
+AC_SUBST(GUMD_CORE_CFLAGS)
+GUMD_CORE_LIBS='$(GLIB_LIBS) $(GCOV_LIBS)'
+AC_SUBST(GUMD_CORE_LIBS)
+GUMD_CORE_INCLUDES='$(GUM_COMMON_INCLUDES)'
+AC_SUBST(GUMD_CORE_INCLUDES)
+
 # Gum daemon cflags, libs, includes
 GUMD_CFLAGS='$(GUM_CFLAGS) -DG_LOG_DOMAIN=\"gumd\"'
 AC_SUBST(GUMD_CFLAGS)
@@ -293,6 +301,7 @@ src/Makefile
 src/common/Makefile
 src/common/dbus/Makefile
 src/daemon/Makefile
+src/daemon/core/Makefile
 src/daemon/dbus/Makefile
 src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service
 src/daemon/gumd.conf

@@ -3,6 +3,7 @@
 <TITLE>GumConfig</TITLE>
 GUM_UMASK
 gum_config_new
+gum_config_prepend_sysroot
 gum_config_get_int
 gum_config_set_int
 gum_config_get_uint

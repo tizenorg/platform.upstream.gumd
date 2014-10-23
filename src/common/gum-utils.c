@@ -35,6 +35,7 @@
 
 #include "common/gum-utils.h"
 #include "common/gum-log.h"
+#include "common/gum-config.h"
 
 /**
  * SECTION:gum-utils
@@ -196,7 +197,7 @@ _run_script (const gchar *script_dir,
 
 gboolean
 _run_scripts (
-        const gchar *script_dir,
+        const gchar *sdir,
         gchar **args)
 {
     GDir *dir = NULL;
@@ -206,20 +207,26 @@ _run_scripts (
     GSequence *scripts = NULL;
     GSequenceIter *scripts_iter = NULL;
     gboolean stop = FALSE;
+    gchar *script_dir = NULL;
 
     DBG ("");
+    GumConfig *config = gum_config_new (NULL);
+    script_dir = gum_config_prepend_sysroot (config, sdir);
+    if (config) g_object_unref (config);
 
     if (!script_dir ||
         !g_file_test(script_dir, G_FILE_TEST_EXISTS) ||
         !g_file_test (script_dir, G_FILE_TEST_IS_DIR)) {
         DBG ("script dir check failed %s", script_dir);
         g_strfreev (args);
+        g_free (script_dir);
         return FALSE;
     }
     dir = g_dir_open (script_dir, 0, NULL);
     if (!dir) {
         DBG ("unable to open script dir %s", script_dir);
         g_strfreev (args);
+        g_free (script_dir);
         return FALSE;
     }
 
@@ -255,6 +262,7 @@ _free_data:
 
     if (!scripts) {
         g_strfreev (args);
+        g_free (script_dir);
         return FALSE;
     }
 
@@ -268,6 +276,7 @@ _free_data:
     args[0] = tmp;
     g_sequence_free (scripts);
     g_strfreev (args);
+    g_free (script_dir);
     return TRUE;
 }
 

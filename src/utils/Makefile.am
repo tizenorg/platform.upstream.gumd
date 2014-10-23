@@ -2,7 +2,7 @@
 
 bin_PROGRAMS = gum-utils
 
-gum_utils_SOURCES = gum-utils.c
+gum_utils_SOURCES = gumd-utils.c
 gum_utils_CPPFLAGS = \
     -I$(top_builddir)/src \
     -I$(top_srcdir)/src \
@@ -11,7 +11,7 @@ gum_utils_CPPFLAGS = \
     $(DEPS_CFLAGS)
 	
 gum_utils_LDADD = \
-	$(DEPS_LIBS) \
+  $(top_builddir)/src/common/libgum-common.la \
 	$(top_builddir)/src/lib/libgum.la \
 	$(LIBGUM_LIBS)
 

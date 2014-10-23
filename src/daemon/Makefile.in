@@ -98,13 +98,11 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(gumdconfdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 =
-am_gumd_OBJECTS = gumd-main.$(OBJEXT) gumd-gumd-daemon.$(OBJEXT) \
-	gumd-gumd-daemon-user.$(OBJEXT) \
-	gumd-gumd-daemon-group.$(OBJEXT) \
-	gumd-gumd-daemon-offline.$(OBJEXT) $(am__objects_1)
+am_gumd_OBJECTS = gumd-main.$(OBJEXT) $(am__objects_1)
 gumd_OBJECTS = $(am_gumd_OBJECTS)
 am__DEPENDENCIES_1 =
 gumd_DEPENDENCIES = $(top_builddir)/src/common/libgum-common.la \
+	$(top_builddir)/src/daemon/core/libgumd-core.la \
 	$(top_builddir)/src/daemon/dbus/libgumd-dbus.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -291,6 +289,9 @@ GTKDOC_DEPS_LIBS = @GTKDOC_DEPS_LIBS@
 GTKDOC_MKPDF = @GTKDOC_MKPDF@
 GTKDOC_REBASE = @GTKDOC_REBASE@
 GUMD_CFLAGS = @GUMD_CFLAGS@
+GUMD_CORE_CFLAGS = @GUMD_CORE_CFLAGS@
+GUMD_CORE_INCLUDES = @GUMD_CORE_INCLUDES@
+GUMD_CORE_LIBS = @GUMD_CORE_LIBS@
 GUMD_INCLUDES = @GUMD_INCLUDES@
 GUMD_LIBS = @GUMD_LIBS@
 GUM_CFLAGS = @GUM_CFLAGS@
@@ -398,33 +399,21 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = dbus
+SUBDIRS = core dbus
 NULL = 
 gumd_SOURCES = \
     main.c \
-    gumd-daemon.c \
-    gumd-daemon.h \
-    gumd-daemon-user.c \
-    gumd-daemon-user.h \
-    gumd-daemon-group.c \
-    gumd-daemon-group.h \
-    gumd-daemon-offline.c \
-    gumd-daemon-offline.h \
-    gumd-types.h \
     $(NULL)
 
 gumd_CFLAGS = \
     $(GUMD_INCLUDES) \
     $(GUMD_CFLAGS) \
     -I$(top_srcdir)/src \
-    -DUSERADD_SCRIPT_DIR='"${sysconfdir}/gumd/useradd.d"' \
-    -DUSERDEL_SCRIPT_DIR='"${sysconfdir}/gumd/userdel.d"' \
-    -DGROUPADD_SCRIPT_DIR='"${sysconfdir}/gumd/groupadd.d"' \
-    -DGROUPDEL_SCRIPT_DIR='"${sysconfdir}/gumd/groupdel.d"' \
     $(NULL)
 
 gumd_LDADD = \
     $(top_builddir)/src/common/libgum-common.la \
+    $(top_builddir)/src/daemon/core/libgumd-core.la \
     $(top_builddir)/src/daemon/dbus/libgumd-dbus.la \
     $(GUMD_LIBS) \
     $(NULL)
@@ -531,10 +520,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-group.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-offline.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon-user.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-gumd-daemon.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gumd-main.Po@am__quote@
 
 .c.o:
@@ -574,62 +559,6 @@ gumd-main.obj: main.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='main.c' object='gumd-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
-
-gumd-gumd-daemon.o: gumd-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon.o -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon.Tpo -c -o gumd-gumd-daemon.o `test -f 'gumd-daemon.c' || echo '$(srcdir)/'`gumd-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon.Tpo $(DEPDIR)/gumd-gumd-daemon.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon.c' object='gumd-gumd-daemon.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon.o `test -f 'gumd-daemon.c' || echo '$(srcdir)/'`gumd-daemon.c
-
-gumd-gumd-daemon.obj: gumd-daemon.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon.obj -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon.Tpo -c -o gumd-gumd-daemon.obj `if test -f 'gumd-daemon.c'; then $(CYGPATH_W) 'gumd-daemon.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon.Tpo $(DEPDIR)/gumd-gumd-daemon.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon.c' object='gumd-gumd-daemon.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon.obj `if test -f 'gumd-daemon.c'; then $(CYGPATH_W) 'gumd-daemon.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon.c'; fi`
-
-gumd-gumd-daemon-user.o: gumd-daemon-user.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-user.o -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-user.Tpo -c -o gumd-gumd-daemon-user.o `test -f 'gumd-daemon-user.c' || echo '$(srcdir)/'`gumd-daemon-user.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-user.Tpo $(DEPDIR)/gumd-gumd-daemon-user.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-user.c' object='gumd-gumd-daemon-user.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-user.o `test -f 'gumd-daemon-user.c' || echo '$(srcdir)/'`gumd-daemon-user.c
-
-gumd-gumd-daemon-user.obj: gumd-daemon-user.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-user.obj -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-user.Tpo -c -o gumd-gumd-daemon-user.obj `if test -f 'gumd-daemon-user.c'; then $(CYGPATH_W) 'gumd-daemon-user.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-user.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-user.Tpo $(DEPDIR)/gumd-gumd-daemon-user.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-user.c' object='gumd-gumd-daemon-user.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-user.obj `if test -f 'gumd-daemon-user.c'; then $(CYGPATH_W) 'gumd-daemon-user.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-user.c'; fi`
-
-gumd-gumd-daemon-group.o: gumd-daemon-group.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-group.o -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-group.Tpo -c -o gumd-gumd-daemon-group.o `test -f 'gumd-daemon-group.c' || echo '$(srcdir)/'`gumd-daemon-group.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-group.Tpo $(DEPDIR)/gumd-gumd-daemon-group.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-group.c' object='gumd-gumd-daemon-group.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-group.o `test -f 'gumd-daemon-group.c' || echo '$(srcdir)/'`gumd-daemon-group.c
-
-gumd-gumd-daemon-group.obj: gumd-daemon-group.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-group.obj -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-group.Tpo -c -o gumd-gumd-daemon-group.obj `if test -f 'gumd-daemon-group.c'; then $(CYGPATH_W) 'gumd-daemon-group.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-group.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-group.Tpo $(DEPDIR)/gumd-gumd-daemon-group.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-group.c' object='gumd-gumd-daemon-group.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-group.obj `if test -f 'gumd-daemon-group.c'; then $(CYGPATH_W) 'gumd-daemon-group.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-group.c'; fi`
-
-gumd-gumd-daemon-offline.o: gumd-daemon-offline.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-offline.o -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-offline.Tpo -c -o gumd-gumd-daemon-offline.o `test -f 'gumd-daemon-offline.c' || echo '$(srcdir)/'`gumd-daemon-offline.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-offline.Tpo $(DEPDIR)/gumd-gumd-daemon-offline.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-offline.c' object='gumd-gumd-daemon-offline.o' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-offline.o `test -f 'gumd-daemon-offline.c' || echo '$(srcdir)/'`gumd-daemon-offline.c
-
-gumd-gumd-daemon-offline.obj: gumd-daemon-offline.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -MT gumd-gumd-daemon-offline.obj -MD -MP -MF $(DEPDIR)/gumd-gumd-daemon-offline.Tpo -c -o gumd-gumd-daemon-offline.obj `if test -f 'gumd-daemon-offline.c'; then $(CYGPATH_W) 'gumd-daemon-offline.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-offline.c'; fi`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/gumd-gumd-daemon-offline.Tpo $(DEPDIR)/gumd-gumd-daemon-offline.Po
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gumd-daemon-offline.c' object='gumd-gumd-daemon-offline.obj' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gumd_CFLAGS) $(CFLAGS) -c -o gumd-gumd-daemon-offline.obj `if test -f 'gumd-daemon-offline.c'; then $(CYGPATH_W) 'gumd-daemon-offline.c'; else $(CYGPATH_W) '$(srcdir)/gumd-daemon-offline.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

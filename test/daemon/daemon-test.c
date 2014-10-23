@@ -49,9 +49,9 @@
 #include "common/dbus/gum-dbus-user-gen.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
 #include "common/dbus/gum-dbus-group-gen.h"
-#include "daemon/gumd-daemon.h"
-#include "daemon/gumd-daemon-user.h"
-#include "daemon/gumd-daemon-group.h"
+#include "daemon/core/gumd-daemon.h"
+#include "daemon/core/gumd-daemon-user.h"
+#include "daemon/core/gumd-daemon-group.h"
 
 #ifdef GUM_BUS_TYPE_P2P
 #  ifdef GUM_SERVICE
@@ -398,7 +398,7 @@ START_TEST (test_daemon_user)
 
     gchar *encr_secret = gum_crypt_encrypt_secret ("pass123", "SHA512");
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
 
     GumdDaemonUser* user = gumd_daemon_user_new (config);
@@ -1136,7 +1136,7 @@ START_TEST (test_daemon_group)
 
     gchar *encr_secret = gum_crypt_encrypt_secret ("grouppass123", "SHA512");
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
 
     GumdDaemonGroup* group = gumd_daemon_group_new (config);
