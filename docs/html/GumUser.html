@@ -193,6 +193,11 @@
 <td class="property_flags">Read / Write</td>
 </tr>
 <tr>
+<td class="property_type"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></td>
+<td class="property_name"><a class="link" href="GumUser.html#GumUser--offline" title="The “offline” property">offline</a></td>
+<td class="property_flags">Read / Write / Construct Only</td>
+</tr>
+<tr>
 <td class="property_type">
 <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</td>
 <td class="property_name"><a class="link" href="GumUser.html#GumUser--realname" title="The “realname” property">realname</a></td>
@@ -250,7 +255,7 @@ communication with the user management daemon.</p>
 <div class="informalexample"><pre class="programlisting">
  GumUser *user = NULL;
 
- user = gum_user_create_sync ();
+ user = gum_user_create_sync (FALSE);
 
  // use the object
 
@@ -263,7 +268,7 @@ communication with the user management daemon.</p>
  GumUser *user = NULL;
  gboolean rval = FALSE;
 
- user = gum_user_create_sync ();
+ user = gum_user_create_sync (FALSE);
 
  // set user properties
  g_object_set (G_OBJECT (user), "username", "user1", "secret", "123456",
@@ -360,10 +365,27 @@ accessible.</p>
 <div class="refsect2">
 <a name="gum-user-create-sync"></a><h3>gum_user_create_sync ()</h3>
 <pre class="programlisting"><a class="link" href="GumUser.html" title="GumUser"><span class="returnvalue">GumUser</span></a> *
-gum_user_create_sync ();</pre>
-<p>This method creates a new remote user object over the DBus synchronously.</p>
+gum_user_create_sync (<em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> offline</code></em>);</pre>
+<p>This method creates a new remote user object. In case offline mode is
+enabled, then the object is created directly without using dbus otherwise
+the objects gets created over the DBus synchronously.</p>
 <div class="refsect3">
-<a name="id-1.6.2.8.4.5"></a><h4>Returns</h4>
+<a name="id-1.6.2.8.4.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>offline</p></td>
+<td class="parameter_description"><p>enables or disables the offline mode</p></td>
+<td class="parameter_annotations"> </td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.6.2.8.4.6"></a><h4>Returns</h4>
 <p> <a class="link" href="GumUser.html" title="GumUser"><span class="type">GumUser</span></a> newly created object. </p>
 <p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
 </div>
@@ -415,9 +437,11 @@ created and accessible.</p>
 <div class="refsect2">
 <a name="gum-user-get-sync"></a><h3>gum_user_get_sync ()</h3>
 <pre class="programlisting"><a class="link" href="GumUser.html" title="GumUser"><span class="returnvalue">GumUser</span></a> *
-gum_user_get_sync (<em class="parameter"><code><span class="type">uid_t</span> uid</code></em>);</pre>
-<p>This method gets the user object attached to uid over the DBus
-synchronously.</p>
+gum_user_get_sync (<em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
+                   <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> offline</code></em>);</pre>
+<p>This method gets the user object attached to uid. In case offline mode is
+enabled, then the object is retrieved directly without using dbus otherwise
+the objects gets retrieved over the DBus synchronously.</p>
 <div class="refsect3">
 <a name="id-1.6.2.8.6.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
@@ -426,11 +450,18 @@ synchronously.</p>
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>uid</p></td>
 <td class="parameter_description"><p>user id for the user</p></td>
 <td class="parameter_annotations"> </td>
-</tr></tbody>
+</tr>
+<tr>
+<td class="parameter_name"><p>offline</p></td>
+<td class="parameter_description"><p>enables or disables the offline mode</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -486,9 +517,11 @@ created and accessible.</p>
 <div class="refsect2">
 <a name="gum-user-get-by-name-sync"></a><h3>gum_user_get_by_name_sync ()</h3>
 <pre class="programlisting"><a class="link" href="GumUser.html" title="GumUser"><span class="returnvalue">GumUser</span></a> *
-gum_user_get_by_name_sync (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *username</code></em>);</pre>
-<p>This method gets the user object attached to username over the DBus
-synchronously.</p>
+gum_user_get_by_name_sync (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *username</code></em>,
+                           <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> offline</code></em>);</pre>
+<p>This method gets the user object attached to username. In case offline mode
+is enabled, then the object is retrieved directly without using dbus
+otherwise the objects gets retrieved over the DBus synchronously.</p>
 <div class="refsect3">
 <a name="id-1.6.2.8.8.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
@@ -497,11 +530,18 @@ synchronously.</p>
 <col class="parameters_description">
 <col width="200px" class="parameters_annotations">
 </colgroup>
-<tbody><tr>
+<tbody>
+<tr>
 <td class="parameter_name"><p>username</p></td>
 <td class="parameter_description"><p>name of the user</p></td>
 <td class="parameter_annotations"> </td>
-</tr></tbody>
+</tr>
+<tr>
+<td class="parameter_name"><p>offline</p></td>
+<td class="parameter_description"><p>enables or disables the offline mode</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+</tbody>
 </table></div>
 </div>
 <div class="refsect3">
@@ -561,7 +601,9 @@ function returns FALSE.</p>
 <a name="gum-user-add-sync"></a><h3>gum_user_add_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
 gum_user_add_sync (<em class="parameter"><code><a class="link" href="GumUser.html" title="GumUser"><span class="type">GumUser</span></a> *self</code></em>);</pre>
-<p>This method adds the user over the DBus synchronously.</p>
+<p>This method adds the user. In case offline mode is enabled, then the user is
+added directly without using dbus otherwise the user is added over the
+DBus synchronously.</p>
 <div class="refsect3">
 <a name="id-1.6.2.8.10.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
@@ -642,7 +684,9 @@ function returns FALSE.</p>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
 gum_user_delete_sync (<em class="parameter"><code><a class="link" href="GumUser.html" title="GumUser"><span class="type">GumUser</span></a> *self</code></em>,
                       <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> rem_home_dir</code></em>);</pre>
-<p>This method deletes the user over the DBus synchronously.</p>
+<p>This method deletes the user. In case offline mode is enabled, then the user
+is deleted directly without using dbus otherwise the user is deleted over the
+DBus synchronously.</p>
 <div class="refsect3">
 <a name="id-1.6.2.8.12.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
@@ -723,9 +767,11 @@ function returns FALSE.</p>
 <a name="gum-user-update-sync"></a><h3>gum_user_update_sync ()</h3>
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
 gum_user_update_sync (<em class="parameter"><code><a class="link" href="GumUser.html" title="GumUser"><span class="type">GumUser</span></a> *self</code></em>);</pre>
-<p>This method updates the user over the DBus synchronously. The properties
-which can be updated are: secret, realname, office, officephone, homephone
-and shell.</p>
+<p>This method updates the user. In case offline mode is enabled, then the user
+is updated directly without using dbus otherwise the user is updated over the
+DBus synchronously.
+The properties which can be updated are: secret, realname, office,
+officephone, homephone and shell.</p>
 <div class="refsect3">
 <a name="id-1.6.2.8.14.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
@@ -814,6 +860,17 @@ should not contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c)
 or colon (':' 0x3A).</p>
 <p>Flags: Read / Write</p>
 <p>Default value: ""</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GumUser--offline"></a><h3>The <code class="literal">“offline”</code> property</h3>
+<pre class="programlisting">  “offline”                  <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a></pre>
+<p>This property is used to define the behaviour of synchronous operation
+performed on the object. If it is set to TRUE, then the object performs
+the operation without daemon (dbus/gumd) otherwise 'gumd' daemon will be
+used for the required synchronous functionality.</p>
+<p>Flags: Read / Write / Construct Only</p>
+<p>Default value: FALSE</p>
 </div>
 <hr>
 <div class="refsect2">

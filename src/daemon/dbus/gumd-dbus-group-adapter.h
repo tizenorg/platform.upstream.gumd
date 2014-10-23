@@ -29,7 +29,7 @@
 #include <glib.h>
 #include <common/gum-disposable.h>
 #include "common/dbus/gum-dbus-group-gen.h"
-#include "daemon/gumd-daemon-group.h"
+#include "daemon/core/gumd-daemon-group.h"
 
 G_BEGIN_DECLS
 

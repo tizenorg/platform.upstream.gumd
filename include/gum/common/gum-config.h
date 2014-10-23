@@ -74,7 +74,13 @@ GType
 gum_config_get_type (void) G_GNUC_CONST;
 
 GumConfig *
-gum_config_new ();
+gum_config_new (
+        const gchar* sysroot);
+
+gchar *
+gum_config_prepend_sysroot (
+        GumConfig *self,
+        const gchar *string);
 
 gint
 gum_config_get_int (

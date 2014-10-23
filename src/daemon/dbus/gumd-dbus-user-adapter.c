@@ -29,7 +29,7 @@
 #include "common/gum-error.h"
 
 #include "gumd-dbus-user-adapter.h"
-#include "daemon/gumd-daemon.h"
+#include "daemon/core/gumd-daemon.h"
 
 enum
 {

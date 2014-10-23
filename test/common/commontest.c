@@ -127,7 +127,7 @@ START_TEST (test_config)
 {
     DBG("");
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
     fail_if (gum_config_get_int (config,
             GUM_CONFIG_DBUS_DAEMON_TIMEOUT, 0) != 0);
@@ -136,14 +136,14 @@ START_TEST (test_config)
     fail_if (g_setenv ("UM_CONF_FILE", GUM_TEST_DATA_DIR, TRUE) == FALSE);
     fail_if (g_setenv ("UM_DAEMON_TIMEOUT", "6", TRUE) == FALSE);
 
-    config = gum_config_new ();
+    config = gum_config_new (NULL);
     fail_if(config == NULL);
     fail_if (gum_config_get_int (config,
             GUM_CONFIG_DBUS_DAEMON_TIMEOUT, -1) != 6);
     g_object_unref(config);
     g_unsetenv ("UM_DAEMON_TIMEOUT");
 
-    config = gum_config_new ();
+    config = gum_config_new (NULL);
     fail_if(config == NULL);
     fail_if (gum_config_get_int (config,
             GUM_CONFIG_DBUS_DAEMON_TIMEOUT, -1) != 7);
@@ -336,7 +336,7 @@ START_TEST (test_file)
     gid_t gid;
     GObject* user = NULL;
 
-    GumConfig* config = gum_config_new ();
+    GumConfig* config = gum_config_new (NULL);
     fail_if(config == NULL);
 
     origfn = gum_config_get_string (config, GUM_CONFIG_GENERAL_PASSWD_FILE);

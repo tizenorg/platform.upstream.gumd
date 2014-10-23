@@ -16,7 +16,8 @@
 <td width="100%" align="left" class="shortcuts">
 <a href="#" class="shortcut">Top</a><span id="nav_description"> <span class="dim">|</span> 
                   <a href="#GumConfig.description" class="shortcut">Description</a></span><span id="nav_hierarchy"> <span class="dim">|</span> 
-                  <a href="#GumConfig.object-hierarchy" class="shortcut">Object Hierarchy</a></span>
+                  <a href="#GumConfig.object-hierarchy" class="shortcut">Object Hierarchy</a></span><span id="nav_properties"> <span class="dim">|</span> 
+                  <a href="#GumConfig.properties" class="shortcut">Properties</a></span>
 </td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
@@ -28,7 +29,7 @@
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
 <h2><span class="refentrytitle"><a name="GumConfig.top_of_page"></a>GumConfig</span></h2>
-<p>GumConfig — gum configuration information</p>
+<p>GumConfig — gum configuration information (singleton object)</p>
 </td>
 <td class="gallery_image" valign="top" align="right"></td>
 </tr></table></div>
@@ -46,6 +47,14 @@
 </td>
 <td class="function_name">
 <a class="link" href="GumConfig.html#gum-config-new" title="gum_config_new ()">gum_config_new</a> <span class="c_punctuation">()</span>
+</td>
+</tr>
+<tr>
+<td class="function_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+</td>
+<td class="function_name">
+<a class="link" href="GumConfig.html#gum-config-prepend-sysroot" title="gum_config_prepend_sysroot ()">gum_config_prepend_sysroot</a> <span class="c_punctuation">()</span>
 </td>
 </tr>
 <tr>
@@ -99,6 +108,22 @@
 </table></div>
 </div>
 <div class="refsect1">
+<a name="GumConfig.properties"></a><h2>Properties</h2>
+<div class="informaltable"><table border="0">
+<colgroup>
+<col width="150px" class="properties_type">
+<col width="300px" class="properties_name">
+<col width="200px" class="properties_flags">
+</colgroup>
+<tbody><tr>
+<td class="property_type">
+<a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</td>
+<td class="property_name"><a class="link" href="GumConfig.html#GumConfig--sysroot" title="The “sysroot” property">sysroot</a></td>
+<td class="property_flags">Read / Write / Construct Only</td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect1">
 <a name="GumConfig.other"></a><h2>Types and Values</h2>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
@@ -131,12 +156,12 @@
 <p>The configuration is retrieved from the gum configuration file. See below
 for where the file is searched for.</p>
 <div class="refsect1">
-<a name="id-1.4.2.7.6"></a><h2>Usage</h2>
+<a name="id-1.4.2.8.6"></a><h2>Usage</h2>
 </div>
 <p>Following code snippet demonstrates how to create and use config object:</p>
 <div class="informalexample"><pre class="programlisting">
 
-GumConfig* config = gum_config_new ();
+GumConfig* config = gum_config_new (sysroot_path);
 const gchar *str = gum_config_get_string (config,
  GUM_CONFIG_GENERAL_SKEL_DIR, 0);
 g_object_unref(config);
@@ -144,7 +169,7 @@ g_object_unref(config);
 </pre></div>
 <p></p>
 <div class="refsect1">
-<a name="id-1.4.2.7.10"></a><h2>Where the configuration file is searched for</h2>
+<a name="id-1.4.2.8.10"></a><h2>Where the configuration file is searched for</h2>
 </div>
 <p>If gum has been compiled with --enable-debug, then these locations are used,
 in decreasing order of priority:</p>
@@ -156,7 +181,7 @@ in decreasing order of priority:</p>
 <p>Otherwise, the config file location is determined at compilation time as
 $(sysconfdir) + "gum.conf"</p>
 <div class="refsect1">
-<a name="id-1.4.2.7.14"></a><h2>Example configuration file</h2>
+<a name="id-1.4.2.8.14"></a><h2>Example configuration file</h2>
 </div>
 <p>See example configuration file here:</p>
 <a class="ulink" href="https://github.com/01org/gumd/blob/master/src/common/gum.conf.in" target="_top">
@@ -167,12 +192,65 @@ gum configuration file</a>
 <div class="refsect2">
 <a name="gum-config-new"></a><h3>gum_config_new ()</h3>
 <pre class="programlisting"><a class="link" href="GumConfig.html" title="GumConfig"><span class="returnvalue">GumConfig</span></a> *
-gum_config_new ();</pre>
-<p>Create a <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> object.</p>
+gum_config_new (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sysroot</code></em>);</pre>
+<p>Create a singleton <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> object, which means 'sysroot' has to be
+passed on in the first call to this function.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.2.5"></a><h4>Returns</h4>
-<p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>.</p>
+<a name="id-1.4.2.9.2.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody><tr>
+<td class="parameter_name"><p>sysroot</p></td>
+<td class="parameter_description"><p> sysroot property value. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.4.2.9.2.6"></a><h4>Returns</h4>
+<p> a singleton instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>.</p>
 <p></p>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gum-config-prepend-sysroot"></a><h3>gum_config_prepend_sysroot ()</h3>
+<pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *
+gum_config_prepend_sysroot (<em class="parameter"><code><a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a> *self</code></em>,
+                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>);</pre>
+<p>Prepends the sysroot path to the end of the 'string'.
+If sysroot is NULL or empty, then 'string' is duplicated and returned.</p>
+<div class="refsect3">
+<a name="id-1.4.2.9.3.5"></a><h4>Parameters</h4>
+<div class="informaltable"><table width="100%" border="0">
+<colgroup>
+<col width="150px" class="parameters_name">
+<col class="parameters_description">
+<col width="200px" class="parameters_annotations">
+</colgroup>
+<tbody>
+<tr>
+<td class="parameter_name"><p>self</p></td>
+<td class="parameter_description"><p> an instance of <a class="link" href="GumConfig.html" title="GumConfig"><span class="type">GumConfig</span></a>. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+<tr>
+<td class="parameter_name"><p>string</p></td>
+<td class="parameter_description"><p> string to append. </p></td>
+<td class="parameter_annotations"><span class="annotation">[<acronym title="Don't free data after the code is done."><span class="acronym">transfer none</span></acronym>]</span></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect3">
+<a name="id-1.4.2.9.3.6"></a><h4>Returns</h4>
+<p> concatenated string if successful, NULL
+otherwise. </p>
+<p><span class="annotation">[<acronym title="Free data after the code is done."><span class="acronym">transfer full</span></acronym>]</span></p>
 </div>
 </div>
 <hr>
@@ -184,7 +262,7 @@ gum_config_get_int (<em class="parameter"><code><a class="link" href="GumConfig.
                     <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> retval</code></em>);</pre>
 <p>Get an integer configuration value.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.3.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.4.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -211,7 +289,7 @@ gum_config_get_int (<em class="parameter"><code><a class="link" href="GumConfig.
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.4.2.8.3.6"></a><h4>Returns</h4>
+<a name="id-1.4.2.9.4.6"></a><h4>Returns</h4>
 <p> the value corresponding to the key as an integer. If the key does
 not exist or cannot be converted to the integer, retval is returned.</p>
 <p></p>
@@ -226,7 +304,7 @@ gum_config_set_int (<em class="parameter"><code><a class="link" href="GumConfig.
                     <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gint"><span class="type">gint</span></a> value</code></em>);</pre>
 <p>Sets the configuration value to the provided integer.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.4.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.5.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -262,7 +340,7 @@ gum_config_get_uint (<em class="parameter"><code><a class="link" href="GumConfig
                      <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> retval</code></em>);</pre>
 <p>Get an unsigned integer configuration value.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.5.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.6.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -289,7 +367,7 @@ gum_config_get_uint (<em class="parameter"><code><a class="link" href="GumConfig
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.4.2.8.5.6"></a><h4>Returns</h4>
+<a name="id-1.4.2.9.6.6"></a><h4>Returns</h4>
 <p> the value corresponding to the key as an unsigned integer. If the
 key does not exist or cannot be converted to the integer, retval is returned.</p>
 <p></p>
@@ -304,7 +382,7 @@ gum_config_set_uint (<em class="parameter"><code><a class="link" href="GumConfig
                      <em class="parameter"><code><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#guint"><span class="type">guint</span></a> value</code></em>);</pre>
 <p>Sets the configuration value to the provided unsigned integer.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.6.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.7.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -339,7 +417,7 @@ gum_config_get_string (<em class="parameter"><code><a class="link" href="GumConf
                        <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *key</code></em>);</pre>
 <p>Get a string configuration value.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.7.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.8.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -361,7 +439,7 @@ gum_config_get_string (<em class="parameter"><code><a class="link" href="GumConf
 </table></div>
 </div>
 <div class="refsect3">
-<a name="id-1.4.2.8.7.6"></a><h4>Returns</h4>
+<a name="id-1.4.2.9.8.6"></a><h4>Returns</h4>
 <p> the value corresponding to the key as an string. If the
 key does not exist or cannot be converted to the integer, NULL is returned.</p>
 <p></p>
@@ -376,7 +454,7 @@ gum_config_set_string (<em class="parameter"><code><a class="link" href="GumConf
                        <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *value</code></em>);</pre>
 <p>Sets the configuration value to the provided string.</p>
 <div class="refsect3">
-<a name="id-1.4.2.8.8.5"></a><h4>Parameters</h4>
+<a name="id-1.4.2.9.9.5"></a><h4>Parameters</h4>
 <div class="informaltable"><table width="100%" border="0">
 <colgroup>
 <col width="150px" class="parameters_name">
@@ -411,6 +489,20 @@ gum_config_set_string (<em class="parameter"><code><a class="link" href="GumConf
 <pre class="programlisting">#define GUM_UMASK  077
 </pre>
 <p>Value used to set the mode of home directories created for new users.</p>
+</div>
+</div>
+<div class="refsect1">
+<a name="GumConfig.property-details"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="GumConfig--sysroot"></a><h3>The <code class="literal">“sysroot”</code> property</h3>
+<pre class="programlisting">  “sysroot”                  <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *</pre>
+<p>This property holds the shell path of the user. Shell path should not
+contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+colon (':' 0x3A). For new user, it is recommended to let the underlying
+framework to set the home directory of the user based on the
+configuration.</p>
+<p>Flags: Read / Write / Construct Only</p>
+<p>Default value: NULL</p>
 </div>
 </div>
 </div>
