@@ -23,8 +23,6 @@ libgumd_core_la_SOURCES = \
    gumd-daemon-user.h \
    gumd-daemon-group.c \
    gumd-daemon-group.h \
-   gumd-daemon-offline.c \
-   gumd-daemon-offline.h \
    gumd-types.h \
 	$(NULL)
 

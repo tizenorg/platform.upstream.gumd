@@ -36,7 +36,7 @@
 
 /**
  * SECTION:gum-config
- * @short_description: gum configuration information
+ * @short_description: gum configuration information (singleton object)
  * @include: gum/common/gum-config.h
  *
  * #GumConfig holds configuration information as a set of keys and values
@@ -51,7 +51,7 @@
  * Following code snippet demonstrates how to create and use config object:
  * |[
  *
- * GumConfig* config = gum_config_new ();
+ * GumConfig* config = gum_config_new (sysroot_path);
  * const gchar *str = gum_config_get_string (config,
  *  GUM_CONFIG_GENERAL_SKEL_DIR, 0);
  * g_object_unref(config);
@@ -95,6 +95,7 @@ struct _GumConfigPrivate
 {
     gchar *config_file_path;
     GumDictionary *config_table;
+    gchar *sysroot;
 };
 
 #define GUM_CONFIG_PRIV(obj) G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -116,11 +117,67 @@ G_DEFINE_TYPE (GumConfig, gum_config, G_TYPE_OBJECT);
 #define PASS_MIN_DAYS  0
 #define PASS_WARN_AGE  7
 
+static GumConfig *glob_config = NULL;
+
+enum {
+    PROP_0,
+    PROP_SYSROOT,
+    N_PROPERTIES
+};
+
+static GParamSpec *properties[N_PROPERTIES];
+
+static void
+_set_property (
+        GObject *object,
+        guint property_id,
+        const GValue *value,
+        GParamSpec *pspec)
+{
+    g_return_if_fail (object && GUM_IS_CONFIG (object));
+
+    GumConfig *self = GUM_CONFIG (object);
+
+    switch (property_id) {
+    case PROP_SYSROOT:
+        self->priv->sysroot = g_strdup (g_value_get_string (value));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+static void
+_get_property (
+        GObject *object,
+        guint property_id,
+        GValue *value,
+        GParamSpec *pspec)
+{
+    g_return_if_fail (object && GUM_IS_CONFIG (object));
+
+    GumConfig *self = GUM_CONFIG (object);
+
+    switch (property_id) {
+    case PROP_SYSROOT:
+        g_value_set_string (value, self->priv->sysroot);
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
 static gchar *
 _check_config_file (
-        const gchar *path)
+        const gchar *path,
+        const gchar *sysroot)
 {
-    gchar *filename = g_build_filename (path, "gumd.conf", NULL);
+    gchar *filename = NULL;
+
+    if (sysroot && sysroot[0] != '\0')
+        filename = g_build_filename (sysroot, path, "gumd.conf", NULL);
+    else
+        filename = g_build_filename (path, "gumd.conf", NULL);
     DBG ("check config file at %s", filename);
     if (g_access (filename, R_OK) == 0)
         return filename;
@@ -144,23 +201,27 @@ _load_config (
     if (!self->priv->config_file_path) {
         const gchar *def_config = g_getenv ("UM_CONF_FILE");
         if (def_config)
-            self->priv->config_file_path = _check_config_file (def_config);
+            self->priv->config_file_path = _check_config_file (def_config,
+                    NULL);
     }
 
     if (!self->priv->config_file_path) {
         gchar *filename = g_strdup_printf ("%s/gumd", GUM_SYSCONF_DIR);
-        self->priv->config_file_path = _check_config_file (filename);
+        self->priv->config_file_path = _check_config_file (filename,
+                self->priv->sysroot);
         g_free (filename);
     }
 
     if (!self->priv->config_file_path) {
-        self->priv->config_file_path = _check_config_file (GUM_SYSCONF_DIR);
+        self->priv->config_file_path = _check_config_file (GUM_SYSCONF_DIR,
+                self->priv->sysroot);
     }
 
     if (!self->priv->config_file_path) {
         sysconfdirs = g_get_system_config_dirs ();
         while (*sysconfdirs != NULL) {
-            self->priv->config_file_path = _check_config_file (*sysconfdirs);
+            self->priv->config_file_path = _check_config_file (*sysconfdirs,
+                    self->priv->sysroot);
             if (self->priv->config_file_path) {
                 break;
             }
@@ -172,7 +233,8 @@ _load_config (
 #   error "System configuration directory not defined!"
 #   endif
     gchar *filename = g_strdup_printf ("%s/gumd", GUM_SYSCONF_DIR);
-    self->priv->config_file_path = _check_config_file (filename);
+    self->priv->config_file_path = _check_config_file (filename,
+            self->priv->sysroot);
     g_free (filename);
 #   endif  /* ENABLE_DEBUG */
 
@@ -405,6 +467,18 @@ gum_config_set_string (
 {
     g_return_if_fail (self && GUM_IS_CONFIG (self));
 
+    if ((self->priv->sysroot && self->priv->sysroot[0] != '\0') &&
+        (g_strcmp0 (key, GUM_CONFIG_GENERAL_PASSWD_FILE) == 0 ||
+         g_strcmp0 (key, GUM_CONFIG_GENERAL_SHADOW_FILE) == 0 ||
+         g_strcmp0 (key, GUM_CONFIG_GENERAL_GROUP_FILE) == 0 ||
+         g_strcmp0 (key, GUM_CONFIG_GENERAL_GSHADOW_FILE) == 0 ||
+         g_strcmp0 (key, GUM_CONFIG_GENERAL_SKEL_DIR) == 0 ||
+         g_strcmp0 (key, GUM_CONFIG_GENERAL_HOME_DIR_PREF) == 0)) {
+         gchar *sysval = g_build_filename (self->priv->sysroot, value, NULL);
+         gum_dictionary_set_string (self->priv->config_table, key, sysval);
+         g_free (sysval);
+         return;
+    }
     gum_dictionary_set_string (self->priv->config_table, key, value);
 }
 
@@ -414,6 +488,7 @@ gum_config_dispose (
 {
     GumConfig *self = 0;
     g_return_if_fail (object && GUM_IS_CONFIG (object));
+    glob_config = NULL;
 
     self = GUM_CONFIG (object);
 
@@ -439,6 +514,10 @@ gum_config_finalize (
         self->priv->config_file_path = NULL;
     }
 
+    if (self->priv->sysroot) {
+        g_free (self->priv->sysroot);
+        self->priv->sysroot = NULL;
+    }
     G_OBJECT_CLASS (gum_config_parent_class)->finalize (object);
 }
 
@@ -505,24 +584,79 @@ gum_config_class_init (
         GumConfigClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
     g_type_class_add_private (object_class, sizeof (GumConfigPrivate));
 
+    object_class->get_property = _get_property;
+    object_class->set_property = _set_property;
     object_class->dispose = gum_config_dispose;
     object_class->finalize = gum_config_finalize;
 
+    /**
+     * GumConfig:sysroot:
+     *
+     * This property holds the shell path of the user. Shell path should not
+     * contain any control chars (0x00-0x1F,0x7F), comma (',' 0x2c) or
+     * colon (':' 0x3A). For new user, it is recommended to let the underlying
+     * framework to set the home directory of the user based on the
+     * configuration.
+     */
+    properties[PROP_SYSROOT] = g_param_spec_string ("sysroot",
+            "Sysroot",
+            "sysroot path",
+            NULL, /* default value */
+            G_PARAM_READWRITE |
+            G_PARAM_CONSTRUCT_ONLY);
+
+    g_object_class_install_properties (object_class, N_PROPERTIES,
+            properties);
 }
 
 /**
  * gum_config_new:
+ * @sysroot: (transfer none): sysroot property value
  *
- * Create a #GumConfig object.
+ * Create a singleton #GumConfig object, which means 'sysroot' has to be
+ * passed on in the first call to this function.
  *
- * Returns: an instance of #GumConfig.
+ * Returns: a singleton instance of #GumConfig.
  */
 GumConfig *
-gum_config_new ()
+gum_config_new (
+        const gchar *sysroot)
 {
-    return GUM_CONFIG (g_object_new (GUM_TYPE_CONFIG, NULL));
+    if (!glob_config) {
+        glob_config = GUM_CONFIG (g_object_new (GUM_TYPE_CONFIG, "sysroot",
+                sysroot, NULL));
+    } else {
+        g_object_ref (glob_config);
+    }
+
+    return glob_config;
 }
 
+/**
+ * gum_config_prepend_sysroot:
+ * @self: (transfer none): an instance of #GumConfig
+ * @string: (transfer none): string to append
+ *
+ * Prepends the sysroot path to the end of the 'string'.
+ * If sysroot is NULL or empty, then 'string' is duplicated and returned.
+ *
+ * Returns: (transfer full): concatenated string if successful, NULL
+ * otherwise.
+ */
+gchar *
+gum_config_prepend_sysroot (
+        GumConfig *self,
+        const gchar *string)
+{
+    gchar *dest = NULL;
+    g_return_val_if_fail (self && GUM_IS_CONFIG (self) && string, NULL);
+
+    if (self->priv->sysroot && self->priv->sysroot[0] != '\0')
+        dest = g_build_filename(self->priv->sysroot, string, NULL);
+    else
+        dest = g_strdup (string);
+
+    return dest;
+}
