@@ -1,3 +1,9 @@
+gumd (1.0.1-0) unstable; urgency=low
+
+  * Fixed bug where gum-utils hangs in offline mode
+
+ -- Imran Zaman <imran.zaman@intel.com>  Fri, 24 Oct  2014 18:00:00 +0300
+
 gumd (1.0.0-0) unstable; urgency=low
 
   * Added sysroot support (in offline mode) to gum-utils.

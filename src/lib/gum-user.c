@@ -227,8 +227,12 @@ _set_property (
     GumUser *self = GUM_USER (object);
     switch (property_id) {
         case PROP_OFFLINE: {
-            if (g_value_get_boolean (value))
+            if (g_value_get_boolean (value)) {
                 self->priv->offline_service = gumd_daemon_new ();
+            } else {
+                self->priv->cancellable = g_cancellable_new ();
+                self->priv->dbus_service = gum_user_service_get_instance ();
+            }
             break;
         }
         default: {
@@ -318,13 +322,8 @@ gum_user_init (
     self->priv = GUM_USER_PRIV (self);
     self->priv->dbus_user = NULL;
     self->priv->offline_user = NULL;
-    if (!self->priv->offline_service) {
-        self->priv->cancellable = g_cancellable_new ();
-        self->priv->dbus_service = gum_user_service_get_instance ();
-    } else {
-        self->priv->cancellable = NULL;
-        self->priv->dbus_service = NULL;
-    }
+    self->priv->cancellable = NULL;
+    self->priv->dbus_service = NULL;
     self->priv->op = NULL;
 }
 
@@ -820,7 +819,7 @@ gum_user_create_sync (
     GError *error = NULL;
     gchar *object_path = NULL;
 
-    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER,  "offline", offline,
+    GumUser *user = GUM_USER (g_object_new (GUM_TYPE_USER, "offline", offline,
             NULL));
 
     if (!user) return NULL;

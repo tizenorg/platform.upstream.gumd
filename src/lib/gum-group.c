@@ -219,8 +219,12 @@ _set_property (
     GumGroup *self = GUM_GROUP (object);
     switch (property_id) {
         case PROP_OFFLINE: {
-            if (g_value_get_boolean (value))
+            if (g_value_get_boolean (value)) {
                 self->priv->offline_service = gumd_daemon_new ();
+            } else {
+                self->priv->cancellable = g_cancellable_new ();
+                self->priv->dbus_service = gum_group_service_get_instance ();
+            }
             break;
         }
         default: {
@@ -310,13 +314,8 @@ gum_group_init (
     self->priv = GUM_GROUP_PRIV (self);
     self->priv->dbus_group = NULL;
     self->priv->offline_group = NULL;
-    if (!self->priv->offline_service) {
-        self->priv->cancellable = g_cancellable_new ();
-        self->priv->dbus_service = gum_group_service_get_instance ();
-    } else {
-        self->priv->cancellable = NULL;
-        self->priv->dbus_service = NULL;
-    }
+    self->priv->cancellable = NULL;
+    self->priv->dbus_service = NULL;
     self->priv->op = NULL;
 }
 
