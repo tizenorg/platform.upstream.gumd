@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 1.0.0
+Version: 1.0.1
 Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
@@ -135,6 +135,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Fri Oct 24 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed bug where gum-utils hangs in offline mode
+
 * Thu Oct 23 2014 Imran Zaman <imran.zaman@intel.com>
 - Added sysroot support (in offline mode) to gum-utils
 - Removed offline support from gumd as it is moved to libgum/gum-utils 

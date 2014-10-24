@@ -532,7 +532,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 TESTS_ENVIRONMENT = G_MESSAGES_DEBUG="all" \
-	LD_LIBRARY_PATH="$(top_builddir)/src/common/.libs:$(top_builddir)/src/daemon/.libs:$(top_builddir)/src/daemon/dbus/.libs" \
+	LD_LIBRARY_PATH="$(top_builddir)/src/common/.libs:$(top_builddir)/src/daemon/core/.libs:$(top_builddir)/src/daemon/.libs:$(top_builddir)/src/daemon/dbus/.libs" \
 	UM_BIN_DIR=$(top_builddir)/src/daemon/.libs
 TEST_CFLAGS = -DGUM_TEST_DATA_DIR=\"$(abs_top_srcdir)/test/data/\"
 VALGRIND_TESTS_DISABLE = 
