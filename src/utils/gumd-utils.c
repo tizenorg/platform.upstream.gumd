@@ -168,17 +168,17 @@ _print_user_prop (
     g_object_get (G_OBJECT (guser), "homedir", &user->home_dir, NULL);
     g_object_get (G_OBJECT (guser), "shell", &user->shell, NULL);
 
-    WARN ("uid : %u", user->uid);
-    WARN ("gid : %u", user->gid);
-    WARN ("username : %s", user->user_name ? user->user_name : "UNKNOWN");
-    WARN ("nickname : %s", user->nick_name ? user->nick_name : "UNKNOWN");
-    WARN ("realname : %s", user->real_name ? user->real_name : "UNKNOWN");
-    WARN ("office : %s", user->office ? user->office : "UNKNOWN");
-    WARN ("officephone : %s",
+    INFO ("uid : %u", user->uid);
+    INFO ("gid : %u", user->gid);
+    INFO ("username : %s", user->user_name ? user->user_name : "UNKNOWN");
+    INFO ("nickname : %s", user->nick_name ? user->nick_name : "UNKNOWN");
+    INFO ("realname : %s", user->real_name ? user->real_name : "UNKNOWN");
+    INFO ("office : %s", user->office ? user->office : "UNKNOWN");
+    INFO ("officephone : %s",
     		user->office_phone ? user->office_phone : "UNKNOWN");
-    WARN ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
-    WARN ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
-    WARN ("shell : %s", user->shell ? user->shell : "UNKNOWN");
+    INFO ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
+    INFO ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
+    INFO ("shell : %s", user->shell ? user->shell : "UNKNOWN");
 
     _free_test_user (user);
 }
@@ -257,12 +257,12 @@ _handle_user_add (
     _set_user_prop (guser, user);
 
     if (!gum_user_add_sync (guser)) {
-        WARN ("Failed user add setup");
+        INFO ("Failed user add setup");
         g_object_unref (guser);
         return;
     }
 
-    WARN ("User added successfully");
+    INFO ("User added successfully");
     _print_user_prop (guser);
 
     if (write_nfc) {
@@ -281,12 +281,12 @@ _handle_user_del (
     if (!guser) return;
 
     if (!gum_user_delete_sync (guser, TRUE)) {
-        WARN ("Failed user update setup");
+        INFO ("Failed user update setup");
         g_object_unref (guser);
         return;
     }
 
-    WARN ("User deleted successfully");
+    INFO ("User deleted successfully");
     g_object_unref (guser);
 }
 
@@ -304,12 +304,12 @@ _handle_user_up (
     _set_user_update_prop (guser, user);
 
     if (!gum_user_update_sync (guser)) {
-        WARN ("Failed user update setup");
+        INFO ("Failed user update setup");
         g_object_unref (guser);
         return;
     }
 
-    WARN ("User updated successfully");
+    INFO ("User updated successfully");
     _print_user_prop (guser);
 
     if (write_nfc) {
@@ -327,7 +327,7 @@ _handle_user_get (
     guser = gum_user_get_sync (user->uid, offline_mode);
     if (!guser) return;
 
-    WARN ("User retrieved successfully");
+    INFO ("User retrieved successfully");
     _print_user_prop (guser);
 
     g_object_unref (guser);
@@ -342,7 +342,7 @@ _handle_user_get_by_name (
     guser = gum_user_get_by_name_sync (user->user_name, offline_mode);
     if (!guser) return;
 
-    WARN ("User retrieved by name successfully");
+    INFO ("User retrieved by name successfully");
     _print_user_prop (guser);
 
     g_object_unref (guser);
@@ -380,8 +380,8 @@ _print_group_prop (
 	g_object_get (G_OBJECT (grp), "gid", &group->gid, NULL);
     g_object_get (G_OBJECT (grp), "groupname", &group->group_name, NULL);
 
-    WARN ("gid : %u", group->gid);
-    WARN ("groupname : %s", group->group_name ? group->group_name : "UNKNOWN");
+    INFO ("gid : %u", group->gid);
+    INFO ("groupname : %s", group->group_name ? group->group_name : "UNKNOWN");
 
     _free_test_group (group);
 }
@@ -398,12 +398,12 @@ _handle_group_add (
     _set_group_prop (grp, group);
 
     if (!gum_group_add_sync (grp)) {
-        WARN ("Failed group add setup");
+        INFO ("Failed group add setup");
         g_object_unref (grp);
         return;
     }
 
-    WARN ("Group added successfully");
+    INFO ("Group added successfully");
     _print_group_prop (grp);
 
     g_object_unref (grp);
@@ -419,12 +419,12 @@ _handle_group_del (
     if (!grp) return;
 
     if (!gum_group_delete_sync (grp)) {
-        WARN ("Failed group delete setup");
+        INFO ("Failed group delete setup");
         g_object_unref (grp);
         return;
     }
 
-    WARN ("Group deleted successfully");
+    INFO ("Group deleted successfully");
     g_object_unref (grp);
 }
 
@@ -440,12 +440,12 @@ _handle_group_up (
     _set_group_update_prop (grp, group);
 
     if (!gum_group_update_sync (grp)) {
-        WARN ("Failed group update setup");
+        INFO ("Failed group update setup");
         g_object_unref (grp);
         return;
     }
 
-    WARN ("Group updated successfully");
+    INFO ("Group updated successfully");
     _print_group_prop (grp);
 
     g_object_unref (grp);
@@ -460,7 +460,7 @@ _handle_group_get (
     grp = gum_group_get_sync (group->gid, offline_mode);
     if (!grp) return;
 
-    WARN ("Group retrieved successfully");
+    INFO ("Group retrieved successfully");
     _print_group_prop (grp);
 
     g_object_unref (grp);
@@ -475,7 +475,7 @@ _handle_group_get_by_name (
     grp = gum_group_get_by_name_sync (group->group_name, offline_mode);
     if (!grp) return;
 
-    WARN ("Group retrieved by name successfully");
+    INFO ("Group retrieved by name successfully");
     _print_group_prop (grp);
 
     g_object_unref (grp);
@@ -491,12 +491,12 @@ _handle_group_add_mem (
     if (!grp) return;
 
     if (!gum_group_add_member_sync (grp, group->mem_uid, TRUE)) {
-        WARN ("Failed group addmem setup");
+        INFO ("Failed group addmem setup");
         g_object_unref (grp);
         return;
     }
 
-    WARN ("Group mem added successfully");
+    INFO ("Group mem added successfully");
     g_object_unref (grp);
 }
 
@@ -510,11 +510,11 @@ _handle_group_del_mem (
     if (!grp) return;
 
     if (!gum_group_delete_member_sync (grp, group->mem_uid)) {
-        WARN ("Failed group delmem setup");
+        INFO ("Failed group delmem setup");
         g_object_unref (grp);
         return;
     }
-    WARN ("Group mem deleted successfully");
+    INFO ("Group mem deleted successfully");
 
     g_object_unref (grp);
 }
@@ -656,14 +656,14 @@ main (int argc, char *argv[])
     rval = g_option_context_parse (context, &argc, &argv, &error);
     g_option_context_free(context);
     if (!rval) {
-        WARN ("option parsing failed: %s\n", error->message);
+        INFO ("option parsing failed: %s\n", error->message);
         g_free (user);
         g_free (group);
         exit (1);
     }
 
     if (!offline_mode && sysroot) {
-        WARN ("sysroot is ONLY supported in offline mode\n");
+        INFO ("sysroot is ONLY supported in offline mode\n");
         g_free (sysroot); sysroot = NULL;
     }
 
@@ -697,7 +697,7 @@ main (int argc, char *argv[])
     } else if (is_group_del_mem_op) {
     	_handle_group_del_mem (group);
     } else {
-        WARN ("No option specified");
+        INFO ("No option specified");
     }
 
     if (config) g_object_unref (config);
