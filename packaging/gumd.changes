@@ -1,3 +1,7 @@
+* Thu Oct 30 2014 Imran Zaman <imran.zaman@intel.com>
+- gum-utils is split into separate package
+- Converted warnings to info messsages for gum-utils
+
 * Fri Oct 24 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed bug where gum-utils hangs in offline mode
 

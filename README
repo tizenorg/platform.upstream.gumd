@@ -1,0 +1,6 @@
+gumd and libgum together provides a framework for creating, deleting
+and modifying user and groups in the system. gumd is a daemon that
+implements the functionality that provides access to user/group
+database and libgum is a client library for applications to communicate
+with this system.
+

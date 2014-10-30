@@ -6,7 +6,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 1.0.1
+Version: 1.0.2
 Release: 0
 Group: Security/Accounts
 License: LGPL-2.1+
@@ -15,8 +15,8 @@ URL: https://github.com/01org/gumd
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
 Source1003:     %{name}-tizen.conf
-Obsoletes: gum
 Requires:   libgum = %{version}-%{release}
+Conflicts: gum
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
 %endif
@@ -33,26 +33,37 @@ BuildRequires: pkgconfig(gmodule-2.0)
 
 
 %description
-%{summary}.
+%{summary} files
 
 
 %package -n libgum
 Summary:    User management client library
 Group:      Security/Libraries
+Requires:   %{name} = %{version}-%{release}
 
 
 %description -n libgum
-%{summary}.
+%{summary} files
+
+
+%package -n gum-utils
+Summary:    User management utility tool
+Group:      Security/Libraries
+Requires:   libgum = %{version}-%{release}
+
+
+%description -n gum-utils
+%{summary} files
 
 
 %package -n libgum-devel
 Summary:    Development files for user management client library
-Group:      Security/Development
+Group:      Security/Libraries
 Requires:   libgum = %{version}-%{release}
 
 
 %description -n libgum-devel
-%{summary}.
+%{summary} files
 
 
 %package doc
@@ -62,7 +73,7 @@ Requires:   libgum = %{version}-%{release}
 
 
 %description doc
-%{summary}.
+%{summary} files
 
 
 %prep
@@ -104,6 +115,15 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 %defattr(-,root,root,-)
 %manifest %{_datadir}/libgum.manifest
 %{_libdir}/libgum*.so.*
+
+
+%post -n libgum -p /sbin/ldconfig
+%postun -n libgum -p /sbin/ldconfig
+
+
+%files -n gum-utils
+%defattr(-,root,root,-)
+%manifest %{_datadir}/%{name}.manifest
 %{_bindir}/gum-utils
 
 
@@ -120,7 +140,7 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 %files
 %defattr(-,root,root,-)
 %manifest %{_datadir}/%{name}.manifest
-%doc AUTHORS COPYING.LIB INSTALL NEWS README
+%doc AUTHORS COPYING.LIB NEWS README
 %{_bindir}/%{name}
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
