@@ -7,19 +7,24 @@ Standards-Version: 3.9.2
 Vcs-Git: https://github.com/01org/gumd.git
 Vcs-Browser: https://github.com/01org/gumd
 
-Package: libgum
+Package: gumd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: User management daemon
+ User management daemon provides interface to add/delete/update users/groups
+
+Package: libgum
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, gumd (= ${source:Version})
 Description: Client library for user management
+
+Package: gum-utils
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgum (= ${source:Version})
+Description: User management utility tool.
 
 Package: libgum-dev
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libgum (= ${source:Version})
 Description: development files for client library
  Headers and libraries.
-
-Package: gumd
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libgum (= ${source:Version})
-Description: User management daemon
- User management daemon provides interface to add/delete/update users/groups

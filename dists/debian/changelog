@@ -1,3 +1,10 @@
+gumd (1.0.2-0) unstable; urgency=low
+
+  * gum-utils is split into separate package
+  * Converted warnings to info messsages for gum-utils
+
+ -- Imran Zaman <imran.zaman@intel.com>  Thu, 30 Oct  2014 18:00:00 +0300
+
 gumd (1.0.1-0) unstable; urgency=low
 
   * Fixed bug where gum-utils hangs in offline mode
