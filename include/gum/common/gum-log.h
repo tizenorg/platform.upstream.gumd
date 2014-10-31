@@ -87,7 +87,6 @@
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
 
-#ifdef ENABLE_DEBUG
 /**
  * INFO:
  * @frmt: format string for the message
@@ -100,6 +99,7 @@
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
 
+#ifdef ENABLE_DEBUG
 /**
  * DBG:
  * @frmt: format string for the message
@@ -112,7 +112,6 @@
         g_get_monotonic_time()*1.0e-6, __FILE__, __LINE__, \
         __PRETTY_FUNCTION__, ##args)
 #else
-# define INFO(frmt, args...)
 # define DBG(frmt, args...)
 #endif
 

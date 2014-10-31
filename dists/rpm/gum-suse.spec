@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 1.0.1
+Version: 1.0.2
 Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
@@ -36,9 +36,20 @@ BuildRequires: pkgconfig(gmodule-2.0)
 %package -n libgum
 Summary:    User management client library
 Group:      System/Libraries
+Requires:   %{name} = %{version}-%{release}
 
 
 %description -n libgum
+%{summary}.
+
+
+%package -n gum-utils
+Summary:    User management utility tool
+Group:      System/Libraries
+Requires:   libgum = %{version}-%{release}
+
+
+%description -n gum-utils
 %{summary}.
 
 
@@ -98,6 +109,10 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 %files -n libgum
 %defattr(-,root,root,-)
 %{_libdir}/libgum*.so.*
+
+
+%files -n gum-utils
+%defattr(-,root,root,-)
 %{_bindir}/gum-utils
 
 
@@ -135,6 +150,10 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Thu Oct 30 2014 Imran Zaman <imran.zaman@intel.com>
+- gum-utils is split into separate package
+- Converted warnings to info messsages for gum-utils
+
 * Fri Oct 24 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed bug where gum-utils hangs in offline mode
 
