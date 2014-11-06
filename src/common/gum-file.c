@@ -233,34 +233,54 @@ gum_file_open_db_files (
         FILE **dup_file,
         GError **error)
 {
-    if (!source_file_path || !source_file ||
-        !(*source_file = _open_file (source_file_path, "r"))) {
+    FILE *source = NULL;
+    FILE *dup = NULL;
+    gboolean retval = TRUE;
+
+    if (!source_file || !dup_file || !source_file_path || !dup_file_path) {
+        GUM_RETURN_WITH_ERROR(GUM_ERROR_FILE_OPEN, "Invalid arguments",
+            error, FALSE);
+    }
+
+    if (!(source = _open_file (source_file_path, "r"))) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open orig file",
                 error, FALSE);
     }
 
-    if (!dup_file_path || !dup_file ||
-        !(*dup_file = _open_file (dup_file_path, "w+"))) {
-        if (*source_file) fclose (*source_file);
-        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open new file",
-                error, FALSE);
+    if (!(dup = _open_file (dup_file_path, "w+"))) {
+        GUM_SET_ERROR (GUM_ERROR_FILE_OPEN, "Unable to open new file",
+                error, retval, FALSE);
+        goto _fail;
     }
 
     if (!_copy_file_attributes (source_file_path, dup_file_path)) {
-        if (*source_file) fclose (*source_file);
-        if (*dup_file) fclose (*dup_file);
-        g_unlink (dup_file_path);
-        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
-                "Unable to get/set file attributes", error, FALSE);
+        GUM_SET_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                "Unable to get/set file attributes", error, retval, FALSE);
+        goto _fail;
     }
 
     if (!_set_smack64_attr (dup_file_path,
             GUM_CONFIG_GENERAL_SMACK64_NEW_FILES)) {
-        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
-                 "Unable to set smack file attributes", error, FALSE);
+        GUM_SET_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                 "Unable to set smack file attributes", error, retval, FALSE);
+        goto _fail;
     }
 
-    return TRUE;
+    *source_file = source;
+    *dup_file = dup;
+
+    return retval;
+
+_fail:
+    if (source) fclose(source);
+    if (dup) {
+        fclose(dup);
+        g_unlink(dup_file_path);
+    }
+    *source_file = NULL;
+    *dup_file = NULL;
+
+    return FALSE;
 }
 
 /**
@@ -286,41 +306,51 @@ gum_file_close_db_files (
         GError **error)
 {
     gboolean retval = TRUE;
-    gchar *old_file = NULL;
+    gchar *old_file_path = NULL;
+
+    if (source_file) fclose (source_file);
 
     if (!dup_file ||
-        !dup_file_path ||
         fflush (dup_file) != 0 ||
         fsync (fileno (dup_file)) != 0 ||
         fclose (dup_file) != 0) {
         GUM_SET_ERROR (GUM_ERROR_FILE_WRITE, "File write failure", error,
                 retval, FALSE);
-        goto _close_new;
-    }
-    dup_file = NULL;
-
-    /* Move source file to old file and dup file as updated file */
-    old_file = g_strdup_printf ("%s.old", source_file_path);
-    if (!old_file) {
-        GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to create old file", error,
-                retval, FALSE);
-        goto _close_new;
+        goto _fail;
     }
 
-    g_unlink (old_file);
-    if (link (source_file_path, old_file) != 0 ||
-        g_rename (dup_file_path, source_file_path) != 0) {
+    if (!source_file_path) {
+        GUM_SET_ERROR(GUM_ERROR_FILE_WRITE, "null source file path", error,
+             retval, FALSE);
+        goto _fail;
+    }
+
+    if (!dup_file_path) {
+        GUM_RETURN_WITH_ERROR(GUM_ERROR_FILE_WRITE, "null dest file path",
+             error, FALSE);
+    }
+
+    if ((old_file_path = g_strdup_printf ("%s.old", source_file_path))) {
+        /* delete obsolote backup file if any */
+        g_unlink (old_file_path);
+        /* Move source file to old file and dup file as updated file */
+        if (link (source_file_path, old_file_path) != 0) {
+            WARN("Could not create a backup file for '%s'", source_file_path);
+        }
+    } else {
+        WARN("Could not create a backup file for '%s'", source_file_path);
+    }
+
+    if (g_rename (dup_file_path, source_file_path) != 0) {
         GUM_SET_ERROR (GUM_ERROR_FILE_MOVE, "Unable to move file", error,
                 retval, FALSE);
+        g_unlink(old_file_path);
     }
 
-_close_new:
-    if (dup_file) fclose (dup_file);
-    g_unlink (dup_file_path);
+    g_free (old_file_path);
 
-    if (source_file) fclose (source_file);
-
-    g_free (old_file);
+_fail:
+    if (dup_file_path) g_unlink (dup_file_path);
 
     return retval;
 }
@@ -374,6 +404,8 @@ gum_file_update (
 
     retval = gum_file_close_db_files (source_file_path, dup_file_path,
             source_file,  dup_file, error);
+
+    goto _finished;
 
 _close:
     if (!retval) {
