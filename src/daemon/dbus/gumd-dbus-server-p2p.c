@@ -393,7 +393,10 @@ _gumd_dbus_server_p2p_start (
         g_dbus_server_start (server->priv->bus_server);
         path = g_strstr_len(server->priv->address, -1, "unix:path=") + 10;
         if (path) {
-            g_chmod (path, S_IRUSR | S_IWUSR);
+            if (g_chmod (path, S_IRUSR | S_IWUSR) < 0) {
+                WARN("Setting server socket permission failed with error '%s'",
+                    strerror(errno));
+            }
         }
     }
     DBG("Dbus server started at : %s", server->priv->address);
