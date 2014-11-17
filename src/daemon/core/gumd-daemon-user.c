@@ -1590,7 +1590,7 @@ gumd_daemon_user_delete (
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
             (GumFileUpdateCB)_lock_shadow_entry,
             gum_config_get_string (self->priv->config,
-            GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, error)) {
+            GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL)) {
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_LOCK_FAILURE,
                 "unable to lock user to login", error, FALSE);
@@ -1599,10 +1599,12 @@ gumd_daemon_user_delete (
     if (!_terminate_user (self->priv->pw->pw_uid)) {
         /* unlock the user */
         lock = FALSE;
-        gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+        if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
                     (GumFileUpdateCB)_lock_shadow_entry,
                     gum_config_get_string (self->priv->config,
-                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
+                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL)) {
+            WARN("Failed to unlock shadow entry");
+        }
         gum_lock_pwdf_unlock ();
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_SESSION_TERM_FAILURE,
                 "unable to terminate user active sessions", error, FALSE);
@@ -1630,10 +1632,12 @@ gumd_daemon_user_delete (
 
         /* unlock the user */
         lock = FALSE;
-        gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
+        if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_MODIFY,
                     (GumFileUpdateCB)_lock_shadow_entry,
                     gum_config_get_string (self->priv->config,
-                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL);
+                    GUM_CONFIG_GENERAL_SHADOW_FILE), &lock, NULL)) {
+            WARN("Failed to unlock shadow entry");
+        }
         gum_lock_pwdf_unlock ();
         return FALSE;
     }

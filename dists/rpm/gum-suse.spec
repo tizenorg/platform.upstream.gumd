@@ -150,6 +150,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Mon Nov 17 2014 Imran Zaman <imran.zaman@intel.com>
+- Fixed coverity issues
+
 * Thu Oct 30 2014 Imran Zaman <imran.zaman@intel.com>
 - gum-utils is split into separate package
 - Converted warnings to info messsages for gum-utils
