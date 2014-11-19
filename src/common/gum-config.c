@@ -28,6 +28,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <glib/gstdio.h>
+#include <limits.h>
+#include <string.h>
+#include <errno.h>
+#include <ctype.h>
 
 #include "config.h"
 #include "common/gum-config.h"
@@ -186,6 +190,71 @@ _check_config_file (
 }
 
 static gboolean
+_convert_strtol(
+        const gchar *str,
+        gchar **endptr,
+        gint base,
+        long *val)
+{
+    char *end = NULL;
+    long v;
+    int prev_errno = errno;
+
+    if (!str || !val)
+        return FALSE;
+    if (!endptr)
+        endptr = &end;
+
+    errno = 0;
+    v = strtol(str, endptr, base);
+    if (errno != 0 || *endptr == str || **endptr != '\0')
+        return FALSE;
+
+    errno = prev_errno;
+    *val = v;
+    return TRUE;
+}
+
+static gboolean
+_convert_strtoul (
+        const gchar *str,
+        gchar **endptr,
+        gint base,
+        unsigned long *val)
+{
+    char *end = NULL;
+    unsigned long v;
+    int i = 0;
+    int prev_errno = errno;
+
+    if (!str || !val)
+        return FALSE;
+
+    /* check for negative numbers */
+    while (str[i]) {
+        if (!isspace(str[i])) {
+            if (str[i] == '-')
+                return FALSE;
+            else
+                break;
+        }
+        i++;
+    }
+
+    if (!endptr)
+        endptr = &end;
+
+    errno = 0;
+    v = strtoul(str, endptr, base);
+    if (errno != 0 || *endptr == str || **endptr != '\0')
+        return FALSE;
+
+    errno = prev_errno;
+    *val = v;
+    return TRUE;
+}
+
+static gboolean
 _load_config (
         GumConfig *self)
 {
@@ -280,11 +349,36 @@ _load_config (
             }
 
             DBG ("found config : '%s/%s' - '%s'", groups[i], keys[j], value);
-
             if (g_strcmp0 (GUM_CONFIG_DBUS_DAEMON_TIMEOUT, key) == 0 ||
                 g_strcmp0 (GUM_CONFIG_DBUS_USER_TIMEOUT, key) == 0 ||
+                g_strcmp0 (GUM_CONFIG_GENERAL_PASS_MAX_DAYS, key) == 0 ||
+                g_strcmp0 (GUM_CONFIG_GENERAL_PASS_MIN_DAYS, key) == 0 ||
+                g_strcmp0 (GUM_CONFIG_GENERAL_PASS_WARN_AGE, key) == 0 ||
                 g_strcmp0 (GUM_CONFIG_DBUS_GROUP_TIMEOUT, key) == 0) {
-                gum_config_set_int (self, key, atoi (value));
+                long cv;
+                if (_convert_strtol (value, NULL, 10, &cv) &&
+                    cv <= INT_MAX &&
+                    cv >= INT_MIN)
+                    gum_config_set_int (self, key, (gint)cv);
+                else
+                    WARN ("Conversion to int failed for key '%s' and"
+                            " value '%s'", key, value);
+            } else if (g_strcmp0 (GUM_CONFIG_GENERAL_UID_MIN, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_UID_MAX, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SYS_UID_MIN, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SYS_UID_MAX, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_GID_MIN, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_GID_MAX, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SYS_GID_MIN, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SYS_GID_MAX, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_UMASK, key) == 0) {
+                    unsigned long cv;
+                    if (_convert_strtoul (value, NULL, 10, &cv) &&
+                        cv <= UINT_MAX)
+                        gum_config_set_uint (self, key, (guint)cv);
+                    else
+                        WARN ("Conversion to uint failed for key '%s' and"
+                                " value '%s'", key, value);
             } else {
                 gum_config_set_string (self, key, value);
             }
