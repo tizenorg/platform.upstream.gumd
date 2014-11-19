@@ -1,5 +1,11 @@
 gumd (1.0.2-0) unstable; urgency=low
 
+  * Fixed Bug TC-2131 where gumd was not able to handle config changes
+
+ -- Imran Zaman <imran.zaman@intel.com>  Wed, 19 Nov  2014 18:00:00 +0300
+
+gumd (1.0.2-0) unstable; urgency=low
+
   * gum-utils is split into separate package
   * Converted warnings to info messsages for gum-utils
 
