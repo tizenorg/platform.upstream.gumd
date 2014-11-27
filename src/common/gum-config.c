@@ -616,14 +616,9 @@ gum_config_finalize (
 }
 
 static void
-gum_config_init (
+_gum_config_initialize (
         GumConfig *self)
 {
-    self->priv = GUM_CONFIG_PRIV (self);
-
-    self->priv->config_file_path = NULL;
-    self->priv->config_table = gum_dictionary_new ();
-
     gum_config_set_string (self, GUM_CONFIG_GENERAL_PASSWD_FILE,
     		GUM_PASSWD_FILE);
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SHADOW_FILE,
@@ -674,6 +669,16 @@ gum_config_init (
 }
 
 static void
+gum_config_init (
+        GumConfig *self)
+{
+    self->priv = GUM_CONFIG_PRIV (self);
+
+    self->priv->config_file_path = NULL;
+    self->priv->config_table = gum_dictionary_new ();
+}
+
+static void
 gum_config_class_init (
         GumConfigClass *klass)
 {
@@ -721,6 +726,7 @@ gum_config_new (
     if (!glob_config) {
         glob_config = GUM_CONFIG (g_object_new (GUM_TYPE_CONFIG, "sysroot",
                 sysroot, NULL));
+        _gum_config_initialize (glob_config);
     } else {
         g_object_ref (glob_config);
     }
