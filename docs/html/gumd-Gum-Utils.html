@@ -148,7 +148,8 @@ gum_utils_run_user_scripts (<em class="parameter"><code>const <a href="http://li
                             <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *username</code></em>,
                             <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>,
                             <em class="parameter"><code><span class="type">gid_t</span> gid</code></em>,
-                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *homedir</code></em>);</pre>
+                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *homedir</code></em>,
+                            <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *usertype</code></em>);</pre>
 <p>Runs the user scripts in sorted order.</p>
 <div class="refsect3">
 <a name="id-1.5.11.7.5.5"></a><h4>Parameters</h4>
@@ -184,6 +185,11 @@ gum_utils_run_user_scripts (<em class="parameter"><code>const <a href="http://li
 <td class="parameter_description"><p>home directory of the user</p></td>
 <td class="parameter_annotations"> </td>
 </tr>
+<tr>
+<td class="parameter_name"><p>usertype</p></td>
+<td class="parameter_description"><p>type of the user</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
 </tbody>
 </table></div>
 </div>
@@ -199,7 +205,8 @@ gum_utils_run_user_scripts (<em class="parameter"><code>const <a href="http://li
 <pre class="programlisting"><a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>
 gum_utils_run_group_scripts (<em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *script_dir</code></em>,
                              <em class="parameter"><code>const <a href="http://library.gnome.org/devel/glib/unstable/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *groupname</code></em>,
-                             <em class="parameter"><code><span class="type">gid_t</span> gid</code></em>);</pre>
+                             <em class="parameter"><code><span class="type">gid_t</span> gid</code></em>,
+                             <em class="parameter"><code><span class="type">uid_t</span> uid</code></em>);</pre>
 <p>Runs the group scripts in sorted order.</p>
 <div class="refsect3">
 <a name="id-1.5.11.7.6.5"></a><h4>Parameters</h4>
@@ -223,6 +230,11 @@ gum_utils_run_group_scripts (<em class="parameter"><code>const <a href="http://l
 <tr>
 <td class="parameter_name"><p>gid</p></td>
 <td class="parameter_description"><p>gid of the group</p></td>
+<td class="parameter_annotations"> </td>
+</tr>
+<tr>
+<td class="parameter_name"><p>uid</p></td>
+<td class="parameter_description"><p>uid of the calling process</p></td>
 <td class="parameter_annotations"> </td>
 </tr>
 </tbody>

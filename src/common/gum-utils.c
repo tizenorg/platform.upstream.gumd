@@ -287,6 +287,7 @@ _free_data:
  * @uid: uid of the user
  * @gid: gid of the user
  * @homedir: home directory of the user
+ * @usertype: type of the user
  *
  * Runs the user scripts in sorted order.
  *
@@ -298,7 +299,8 @@ gum_utils_run_user_scripts (
         const gchar *username,
         uid_t uid,
         gid_t gid,
-        const gchar *homedir)
+        const gchar *homedir,
+        const gchar *usertype)
 {
     gchar **args = NULL;
     DBG ("");
@@ -307,12 +309,13 @@ gum_utils_run_user_scripts (
         DBG ("script invalid username/homedir for script dir");
         return FALSE;
     }
-    args = g_new0 (gchar *, 6);
+    args = g_new0 (gchar *, 7);
     args[0] = g_strdup (""); /* script path to be added later on */
     args[1] = g_strdup (username);
     args[2] = g_strdup_printf ("%u", uid);
     args[3] = g_strdup_printf ("%u", gid);
     args[4] = g_strdup (homedir);
+    args[5] = g_strdup (usertype);
     /* ownership of 'args' is transferred to _run_scripts */
     return _run_scripts (script_dir, args);;
 }
@@ -322,6 +325,7 @@ gum_utils_run_user_scripts (
  * @script_dir: path to the scripts directory
  * @groupname: name of the group
  * @gid: gid of the group
+ * @uid: uid of the calling process
  *
  * Runs the group scripts in sorted order.
  *
@@ -331,7 +335,8 @@ gboolean
 gum_utils_run_group_scripts (
         const gchar *script_dir,
         const gchar *groupname,
-        gid_t gid)
+        gid_t gid,
+        uid_t uid)
 {
     gchar **args = NULL;
     DBG ("");
@@ -340,10 +345,11 @@ gum_utils_run_group_scripts (
         DBG ("script invalid groupname for script dir");
         return FALSE;
     }
-    args = g_new0 (gchar *, 4);
+    args = g_new0 (gchar *, 5);
     args[0] = g_strdup (""); /* script path to be added later on */
     args[1] = g_strdup (groupname);
     args[2] = g_strdup_printf ("%u", gid);
+    args[3] = g_strdup_printf ("%u", uid);
     /* ownership of 'args' is transferred to _run_scripts */
     return _run_scripts (script_dir, args);;
 }
