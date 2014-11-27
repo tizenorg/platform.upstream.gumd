@@ -1,3 +1,9 @@
+gumd (1.0.3-0) unstable; urgency=low
+
+  * Updated inputs for scripts e.g. usertype to useradd script
+
+ -- Imran Zaman <imran.zaman@intel.com>  Thu, 21 Nov  2014 18:00:00 +0300
+
 gumd (1.0.2-0) unstable; urgency=low
 
   * Fixed Bug TC-2131 where gumd was not able to handle config changes

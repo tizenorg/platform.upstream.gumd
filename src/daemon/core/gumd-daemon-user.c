@@ -1406,6 +1406,29 @@ _finished:
     return retval;
 }
 
+
+static const gchar *
+_usertype_to_string (
+        GumUserType type)
+{
+    switch (type) {
+    case GUM_USERTYPE_SYSTEM:
+        return "system";
+    case GUM_USERTYPE_ADMIN:
+        return "admin";
+    case GUM_USERTYPE_GUEST:
+        return "guest";
+    case GUM_USERTYPE_NORMAL:
+        return "normal";
+    case GUM_USERTYPE_NONE:
+    default:
+        WARN ("undefined user type");
+        break;
+    }
+    return NULL;
+}
+
+
 GumdDaemonUser *
 gumd_daemon_user_new (
         GumConfig *config)
@@ -1536,9 +1559,11 @@ gumd_daemon_user_add (
         scrip_dir = env_val;
 #   endif
 
+
     gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
             self->priv->pw->pw_uid, self->priv->pw->pw_gid,
-            self->priv->pw->pw_dir);
+            self->priv->pw->pw_dir,
+            _usertype_to_string (self->priv->user_type));
 
     gum_lock_pwdf_unlock ();
     return TRUE;
@@ -1619,7 +1644,7 @@ gumd_daemon_user_delete (
 
     gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
             self->priv->pw->pw_uid, self->priv->pw->pw_gid,
-            self->priv->pw->pw_dir);
+            self->priv->pw->pw_dir, NULL);
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateCB)_update_passwd_entry,

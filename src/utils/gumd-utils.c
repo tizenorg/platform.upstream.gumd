@@ -552,7 +552,7 @@ main (int argc, char *argv[])
                 "synchronous APIs in offline mode. Effectively libgum will "
                 "perform the sync op add/delete/update/get without (dbus) gumd",
                 NULL},
-        { "sysroot", 0, 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
+        { "sysroot", 'q', 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
                 "[Offline mode ONLY]", "sysroot"},
         { "add-user", 'a', 0, G_OPTION_ARG_NONE, &is_user_add_op, "add user"
                 " -- username (or nickname) and usertype is mandatory", NULL},
@@ -573,7 +573,7 @@ main (int argc, char *argv[])
         { "delete-group", 'h', 0, G_OPTION_ARG_NONE, &is_group_del_op,
                 "delete group -- gid is mandatory", NULL},
         { "update-group", 'i', 0, G_OPTION_ARG_NONE, &is_group_up_op,
-                "update group -- gid is mandatory; possible props that can be"
+                "update group -- gid is mandatory; possible props that can be "
                 "updated are secret", NULL},
         { "get-group", 'j', 0, G_OPTION_ARG_NONE, &is_group_get_op, "get group"
                 " -- gid is mandatory",
@@ -585,7 +585,7 @@ main (int argc, char *argv[])
                 "group add member -- gid and mem_uid are mandatory", NULL},
         { "delete-member", 'n', 0, G_OPTION_ARG_NONE, &is_group_del_mem_op,
                 "group delete member -- gid and mem_uid are mandatory", NULL},
-        { "write-nfc", 0, 0, G_OPTION_ARG_NONE, &is_write_nfc,
+        { "write-nfc", 'p', 0, G_OPTION_ARG_NONE, &is_write_nfc,
                 "write username and secret to an NFC tag when creating or"
                 " updating a user", NULL},
         { NULL }
@@ -596,8 +596,8 @@ main (int argc, char *argv[])
         { "username", 0, 0, G_OPTION_ARG_STRING, &user->user_name,
                 "user name", "name"},
         { "usertype", 0, 0, G_OPTION_ARG_INT, &user->usertype,
-                "usertype can be system(1), admin(2), guest(3), normal(4). ",
-                "type"},
+                "usertype can be 1 (system), 2 (admin), 3 (guest), 4 (normal) ",
+                "type; only integer is accepted as type."},
         { "uid", 0, 0, G_OPTION_ARG_INT, &user->uid, "user id", "uid"},
         { "ugid", 0, 0, G_OPTION_ARG_INT, &user->gid, "group id", "gid"},
         { "usecret", 0, 0, G_OPTION_ARG_STRING, &user->secret,
@@ -624,7 +624,8 @@ main (int argc, char *argv[])
         { "groupname", 0, 0, G_OPTION_ARG_STRING, &group->group_name,
                 "group name", "name"},
         { "grouptype", 0, 0, G_OPTION_ARG_INT, &group->grouptype,
-                "group type can be system(1), user(2).", "type"},
+                "group type can be 1 (system), 2 (user). Only integer is "
+                "accepted as type.", "type"},
         { "gid", 0, 0, G_OPTION_ARG_INT, &group->gid, "group id", "gid"},
         { "gsecret", 0, 0, G_OPTION_ARG_STRING, &group->grp_secret,
                 "group secret in plain text", "secret"},
@@ -640,7 +641,8 @@ main (int argc, char *argv[])
     context = g_option_context_new ("\n"
             "  To add user in non-offline mode, gum-utils -a --username=user1 "
             "  --usertype=4\n"
-            "  To delete user in offline mode, gum-utils -o -d --uid=2001\n");
+            "  To delete user in offline mode, gum-utils -o -d --uid=2001\n"
+            "  NOTE: Only one command can be run at one time.");
     g_option_context_add_main_entries (context, main_entries, NULL);
 
     user_option = g_option_group_new("user-options", "User specific options",
