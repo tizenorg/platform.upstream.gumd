@@ -48,13 +48,15 @@ gum_utils_run_user_scripts (
         const gchar *username,
         uid_t uid,
         gid_t gid,
-        const gchar *homedir);
+        const gchar *homedir,
+        const gchar *usertype);
 
 gboolean
 gum_utils_run_group_scripts (
         const gchar *script_dir,
         const gchar *groupname,
-        gid_t gid);
+        gid_t gid,
+        uid_t uid);
 
 G_END_DECLS
 

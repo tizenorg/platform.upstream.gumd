@@ -877,7 +877,7 @@ gumd_daemon_group_add (
 #   endif
 
     gum_utils_run_group_scripts (scrip_dir, self->priv->group->gr_name,
-            self->priv->group->gr_gid);
+            self->priv->group->gr_gid, getuid());
 
     gum_lock_pwdf_unlock ();
     return TRUE;
@@ -934,7 +934,7 @@ gumd_daemon_group_delete (
 #   endif
 
     gum_utils_run_group_scripts (scrip_dir, self->priv->group->gr_name,
-            self->priv->group->gr_gid);
+            self->priv->group->gr_gid, getuid());
 
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateCB)_update_daemon_group_entry,

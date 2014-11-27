@@ -150,6 +150,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Thu Nov 27 2014 Imran Zaman <imran.zaman@intel.com>
+- Updated inputs for scripts e.g. usertype to useradd script
+
 * Wed Nov 19 2014 Imran Zaman <imran.zaman@intel.com>
 - Fixed Bug TC-2131 where gumd was not able to handle config changes
 
