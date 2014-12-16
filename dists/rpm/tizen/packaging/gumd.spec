@@ -4,18 +4,18 @@
 # WARNING! do not use for production builds as it will break security
 %define debug_build 0
 
-Name: gumd
+Name:    gumd
 Summary: User management daemon and client library
 Version: 1.0.3
 Release: 0
-Group: Security/Accounts
+Group:   Security/Accounts
 License: LGPL-2.1+
-Source: %{name}-%{version}.tar.gz
-URL: https://github.com/01org/gumd
+URL:     https://github.com/01org/gumd
+Source:  %{name}-%{version}.tar.gz
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
 Source1003:     %{name}-tizen.conf
-Requires:   libgum = %{version}-%{release}
+Requires:       libgum = %{version}-%{release}
 Conflicts: gum
 %if %{dbus_type} != "p2p"
 Requires: dbus-1
@@ -78,7 +78,8 @@ Requires:   libgum = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-
+cp -a %{SOURCE1001} %{name}.manifest
+cp -a %{SOURCE1002} libgum.manifest
 
 %build
 %if %{debug_build} == 1
@@ -86,49 +87,40 @@ Requires:   libgum = %{version}-%{release}
 %else
 %configure --enable-dbus-type=%{dbus_type}
 %endif
-
-
-make %{?_smp_mflags}
-
+%__make %{?_smp_mflags}
 
 %install
 rm -rf %{buildroot}
 %make_install
-cp -a %{SOURCE1001} %{buildroot}%{_datadir}/%{name}.manifest
-cp -a %{SOURCE1002} %{buildroot}%{_datadir}/libgum.manifest
 cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 
-
 %post
-/sbin/ldconfig
-/usr/bin/getent group gumd > /dev/null || /usr/sbin/groupadd -r gumd
-/usr/bin/mkdir -p %{_sysconfdir}/%{name}/useradd.d
-/usr/bin/mkdir -p %{_sysconfdir}/%{name}/userdel.d
-/usr/bin/mkdir -p %{_sysconfdir}/%{name}/groupadd.d
-/usr/bin/mkdir -p %{_sysconfdir}/%{name}/groupdel.d
+ldconfig
+getent group gumd > /dev/null || groupadd -r gumd
+mkdir -p %{_sysconfdir}/%{name}/useradd.d
+mkdir -p %{_sysconfdir}/%{name}/userdel.d
+mkdir -p %{_sysconfdir}/%{name}/groupadd.d
+mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %postun -p /sbin/ldconfig
 
-
-%files -n libgum
-%defattr(-,root,root,-)
-%manifest %{_datadir}/libgum.manifest
-%{_libdir}/libgum*.so.*
-
-
 %post -n libgum -p /sbin/ldconfig
 %postun -n libgum -p /sbin/ldconfig
 
+%files -n libgum
+%defattr(-,root,root,-)
+%manifest libgum.manifest
+%{_libdir}/libgum*.so.*
 
 %files -n gum-utils
 %defattr(-,root,root,-)
-%manifest %{_datadir}/%{name}.manifest
+%manifest %{name}.manifest
 %{_bindir}/gum-utils
-
 
 %files -n libgum-devel
 %defattr(-,root,root,-)
+%manifest %{name}.manifest
 %{_includedir}/gum/*
 %{_libdir}/libgum*.so
 %{_libdir}/pkgconfig/libgum.pc
@@ -136,10 +128,9 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 %{_datadir}/dbus-1/interfaces/*UserManagement*.xml
 %endif
 
-
 %files
 %defattr(-,root,root,-)
-%manifest %{_datadir}/%{name}.manifest
+%manifest %{name}.manifest
 %doc AUTHORS COPYING.LIB NEWS README
 %{_bindir}/%{name}
 %dir %{_sysconfdir}/%{name}
@@ -152,7 +143,7 @@ cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/gumd-dbus.conf
 %endif
 
-
 %files doc
 %defattr(-,root,root,-)
+%manifest %{name}.manifest
 %{_datadir}/gtk-doc/html/gumd/*
