@@ -374,7 +374,7 @@ ACLOCAL_AMFLAGS = -I m4
 AM_DISTCHECK_CONFIGURE_FLAGS = --enable-distcheck \
 	--enable-dbus-type=p2p --enable-tests --enable-gtk-doc \
 	$(am__append_1)
-SUBDIRS = src test docs
+SUBDIRS = src data test docs
 EXTRA_DIST = dists tools
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
