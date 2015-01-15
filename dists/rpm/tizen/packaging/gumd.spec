@@ -6,7 +6,7 @@
 
 Name:    gumd
 Summary: User management daemon and client library
-Version: 1.0.3
+Version: 1.0.4
 Release: 0
 Group:   Security/Accounts
 License: LGPL-2.1+
@@ -14,7 +14,6 @@ URL:     https://github.com/01org/gumd
 Source:  %{name}-%{version}.tar.gz
 Source1001:     %{name}.manifest
 Source1002:     libgum.manifest
-Source1003:     %{name}-tizen.conf
 Requires:       libgum = %{version}-%{release}
 Conflicts: gum
 %if %{dbus_type} != "p2p"
@@ -92,7 +91,14 @@ cp -a %{SOURCE1002} libgum.manifest
 %install
 rm -rf %{buildroot}
 %make_install
-cp -a %{SOURCE1003} %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+rm -f %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+install -m 755 -d %{buildroot}%{_sysconfdir}/%{name}
+
+%if "%{profile}" != "ivi"
+install -m 644 data/tizen/etc/%{name}/%{name}-tizen-common.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+%else
+install -m 644 data/tizen/etc/%{name}/%{name}-tizen-ivi.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+%endif
 
 %post
 ldconfig
@@ -133,7 +139,6 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 %manifest %{name}.manifest
 %doc AUTHORS COPYING.LIB NEWS README
 %{_bindir}/%{name}
-%dir %{_sysconfdir}/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
 %if %{dbus_type} == "system"
 %dir %{_datadir}/dbus-1/system-services
