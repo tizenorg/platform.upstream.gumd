@@ -1,3 +1,10 @@
+gumd (1.0.4-0) unstable; urgency=low
+
+  * Added separate configuration file Tizen IVI
+  * Newly created users are added to weston-launch group for Tizen IVI
+
+ -- Imran Zaman <imran.zaman@intel.com>  Thu, 15 Jan  2015 18:00:00 +0300
+
 gumd (1.0.3-0) unstable; urgency=low
 
   * Updated inputs for scripts e.g. usertype to useradd script
