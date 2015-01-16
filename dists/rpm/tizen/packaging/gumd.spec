@@ -103,10 +103,10 @@ install -m 644 data/tizen/etc/%{name}/%{name}-tizen-ivi.conf %{buildroot}%{_sysc
 %post
 ldconfig
 getent group gumd > /dev/null || groupadd -r gumd
-mkdir -p %{_sysconfdir}/%{name}/useradd.d
-mkdir -p %{_sysconfdir}/%{name}/userdel.d
-mkdir -p %{_sysconfdir}/%{name}/groupadd.d
-mkdir -p %{_sysconfdir}/%{name}/groupdel.d
+install -d -m 755 %{_sysconfdir}/%{name}/useradd.d
+install -d -m 755 %{_sysconfdir}/%{name}/userdel.d
+install -d -m 755 %{_sysconfdir}/%{name}/groupadd.d
+install -d -m 755 %{_sysconfdir}/%{name}/groupdel.d
 
 
 %postun -p /sbin/ldconfig
