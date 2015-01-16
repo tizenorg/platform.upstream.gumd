@@ -20,12 +20,6 @@ gumd_LDADD = \
     $(GUMD_LIBS) \
     $(NULL)
 
-EXTRA_DIST = \
-      gumd.conf.in
-
-gumdconfdir = ${sysconfdir}/gumd
-gumdconf_DATA = gumd.conf
-
 if SET_PERMISSIONS
 install-exec-hook:
 	chown root $(DESTDIR)$(bindir)/gumd || true
