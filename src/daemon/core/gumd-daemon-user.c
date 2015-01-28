@@ -48,13 +48,12 @@
 struct _GumdDaemonUserPrivate
 {
     GumConfig *config;
-    guint16 user_type;
     gchar *nick_name;
 
     /* passwd file entries format:
 	 * name:passwd:uid:gid:gecos:dir:shell
 	 * whereas gecos contain the following comma(',') separated values
-	 * realname,officelocation,officephone,homephone
+	 * realname,officelocation,officephone,homephone,usertype
 	 */
     struct passwd *pw;
 
@@ -94,6 +93,17 @@ enum
     N_PROPERTIES
 };
 
+typedef enum
+{
+    GECOS_FIELD_REALNAME = 0,
+    GECOS_FIELD_OFFICE,
+    GECOS_FIELD_OFFICEPHONE,
+    GECOS_FIELD_HOMEPHONE,
+    GECOS_FIELD_USERTYPE,
+
+    GECOS_FIELD_COUNT
+}GecosField;
+
 static GParamSpec *properties[N_PROPERTIES];
 
 static void
@@ -119,6 +129,20 @@ _free_shadow_entry (
         g_free (shadow->sp_pwdp);
         g_free (shadow);
     }
+}
+
+static GumUserType
+_get_usertype_from_gecos (
+        struct passwd *pw)
+{
+    if (pw && pw->pw_gecos) {
+        gchar *str = gum_string_utils_get_string (pw->pw_gecos, ",",
+                GECOS_FIELD_USERTYPE);
+        GumUserType ut = gum_user_type_from_string (str);
+        g_free (str);
+        return ut;
+    }
+    return GUM_USERTYPE_NONE;
 }
 
 static void
@@ -162,10 +186,18 @@ _set_usertype_property (
         GumdDaemonUser *self,
         GumUserType value)
 {
-    if (self->priv->user_type != value) {
-        self->priv->user_type = value;
-        g_object_notify_by_pspec (G_OBJECT (self),
-                properties[PROP_USERTYPE]);
+    if (value > GUM_USERTYPE_NONE && value < GUM_USERTYPE_MAX_VALUE) {
+        GumUserType ut = _get_usertype_from_gecos (self->priv->pw);
+        if (ut != value) {
+            gchar *gecos = gum_string_utils_insert_string (
+                    self->priv->pw->pw_gecos, ",",
+                    gum_user_type_to_string (value), GECOS_FIELD_USERTYPE,
+                    GECOS_FIELD_COUNT);
+            GUM_STR_FREE (self->priv->pw->pw_gecos);
+            self->priv->pw->pw_gecos = gecos;
+            g_object_notify_by_pspec (G_OBJECT (self),
+                    properties[PROP_USERTYPE]);
+        }
     }
 }
 
@@ -215,11 +247,12 @@ _set_realname_property (
         const gchar *value)
 {
     gchar *str = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
-            0);
+            GECOS_FIELD_REALNAME);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
         gchar *gecos = gum_string_utils_insert_string (
-                self->priv->pw->pw_gecos, ",", value, 0, 4);
+                self->priv->pw->pw_gecos, ",", value, GECOS_FIELD_REALNAME,
+                GECOS_FIELD_COUNT);
         GUM_STR_FREE (self->priv->pw->pw_gecos);
         self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_REALNAME]);
@@ -233,11 +266,12 @@ _set_office_property (
         const gchar *value)
 {
     gchar *str = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
-            1);
+            GECOS_FIELD_OFFICE);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
         gchar *gecos = gum_string_utils_insert_string (
-                self->priv->pw->pw_gecos, ",", value, 1, 4);
+                self->priv->pw->pw_gecos, ",", value, GECOS_FIELD_OFFICE,
+                GECOS_FIELD_COUNT);
         GUM_STR_FREE (self->priv->pw->pw_gecos);
         self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFICE]);
@@ -251,11 +285,12 @@ _set_officephone_property (
         const gchar *value)
 {
     gchar *str = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
-            2);
+            GECOS_FIELD_OFFICEPHONE);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
         gchar *gecos = gum_string_utils_insert_string (
-                self->priv->pw->pw_gecos, ",", value, 2, 4);
+                self->priv->pw->pw_gecos, ",", value, GECOS_FIELD_OFFICEPHONE,
+                GECOS_FIELD_COUNT);
         GUM_STR_FREE (self->priv->pw->pw_gecos);
         self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFICEPHONE]);
@@ -269,11 +304,12 @@ _set_homephone_property (
         const gchar *value)
 {
     gchar *str = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
-            3);
+            GECOS_FIELD_HOMEPHONE);
     if (g_strcmp0 (value, str) != 0 &&
         gum_validate_db_string_entry (value, NULL)) {
         gchar *gecos = gum_string_utils_insert_string (
-                self->priv->pw->pw_gecos, ",", value, 3, 4);
+                self->priv->pw->pw_gecos, ",", value, GECOS_FIELD_HOMEPHONE,
+                GECOS_FIELD_COUNT);
         GUM_STR_FREE (self->priv->pw->pw_gecos);
         self->priv->pw->pw_gecos = gecos;
         g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HOMEPHONE]);
@@ -397,7 +433,8 @@ _get_property (
             break;
         }
         case PROP_USERTYPE: {
-            g_value_set_uint (value, (guint)self->priv->user_type);
+            g_value_set_uint (value,
+                    (guint)_get_usertype_from_gecos(self->priv->pw));
             break;
         }
         case PROP_NICKNAME: {
@@ -415,7 +452,7 @@ _get_property (
         case PROP_REALNAME: {
             if (self->priv->pw->pw_gecos) {
                 gchar *str = gum_string_utils_get_string (
-                        self->priv->pw->pw_gecos, ",", 0);
+                        self->priv->pw->pw_gecos, ",", GECOS_FIELD_REALNAME);
                 if (str) {
                     g_value_set_string (value, str);
                     g_free (str);
@@ -426,7 +463,7 @@ _get_property (
         case PROP_OFFICE: {
             if (self->priv->pw->pw_gecos) {
                 gchar *str = gum_string_utils_get_string (
-                        self->priv->pw->pw_gecos, ",", 1);
+                        self->priv->pw->pw_gecos, ",", GECOS_FIELD_OFFICE);
                 if (str) {
                     g_value_set_string (value, str);
                     g_free (str);
@@ -437,7 +474,7 @@ _get_property (
         case PROP_OFFICEPHONE: {
             if (self->priv->pw->pw_gecos) {
                 gchar *str = gum_string_utils_get_string (
-                        self->priv->pw->pw_gecos, ",", 2);
+                        self->priv->pw->pw_gecos, ",", GECOS_FIELD_OFFICEPHONE);
                 if (str) {
                     g_value_set_string (value, str);
                     g_free (str);
@@ -448,7 +485,7 @@ _get_property (
         case PROP_HOMEPHONE: {
             if (self->priv->pw->pw_gecos) {
                 gchar *str = gum_string_utils_get_string (
-                        self->priv->pw->pw_gecos, ",", 3);
+                        self->priv->pw->pw_gecos, ",", GECOS_FIELD_HOMEPHONE);
                 if (str) {
                     g_value_set_string (value, str);
                     g_free (str);
@@ -655,7 +692,8 @@ _set_daemon_user_name (
         }
         g_free (tname);
         return TRUE;
-    } else if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
+    } else if (_get_usertype_from_gecos (self->priv->pw) ==
+            GUM_USERTYPE_SYSTEM) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_NAME,
                 "System user name must exist with pattern "
                 GUM_NAME_PATTERN, error, FALSE);
@@ -683,22 +721,23 @@ _set_daemon_user_name (
 
 static gboolean
 _get_default_uid_range (
-        GumdDaemonUser *self,
+        GumUserType ut,
+        GumConfig *config,
         uid_t *min,
         uid_t *max)
 {
-    if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
-        *min = (uid_t) gum_config_get_uint (self->priv->config,
+    if (ut == GUM_USERTYPE_SYSTEM)
+        *min = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_SYS_UID_MIN, GUM_USER_INVALID_UID);
     else
-        *min = (uid_t) gum_config_get_uint (self->priv->config,
+        *min = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_UID_MIN, GUM_USER_INVALID_UID);
 
-    if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
-        *max = (uid_t) gum_config_get_uint (self->priv->config,
+    if (ut == GUM_USERTYPE_SYSTEM)
+        *max = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_SYS_UID_MAX, GUM_USER_INVALID_UID);
     else
-        *max = (uid_t) gum_config_get_uint (self->priv->config,
+        *max = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_UID_MAX, GUM_USER_INVALID_UID);
 
     return (*min < *max);
@@ -711,7 +750,8 @@ _find_free_uid (
 {
     uid_t tmp_uid, uid_min, uid_max;
 
-    if (!_get_default_uid_range (self, &uid_min, &uid_max))
+    if (!_get_default_uid_range (_get_usertype_from_gecos (self->priv->pw),
+            self->priv->config, &uid_min, &uid_max))
         return FALSE;
 
     /* Select the first available uid */
@@ -750,7 +790,7 @@ _set_uid (
     }
     _set_uid_property (self, uid);
 
-    if (self->priv->user_type != GUM_USERTYPE_SYSTEM)  {
+    if (_get_usertype_from_gecos (self->priv->pw) != GUM_USERTYPE_SYSTEM)  {
         gchar *dir = g_strdup_printf ("%s/%s",
                 gum_config_get_string (self->priv->config,
                         GUM_CONFIG_GENERAL_HOME_DIR_PREF),
@@ -762,27 +802,6 @@ _set_uid (
 }
 
 static gboolean
-_check_daemon_user_type (
-        GumdDaemonUser *self,
-        GError **error)
-{
-	switch (self->priv->user_type) {
-		case GUM_USERTYPE_ADMIN:
-		case GUM_USERTYPE_NORMAL:
-		case GUM_USERTYPE_GUEST:
-		case GUM_USERTYPE_SYSTEM:
-			break;
-		case GUM_USERTYPE_NONE:
-		default:
-			GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
-					"Invalid user type", error, FALSE);
-			break;
-	}
-
-    return TRUE;
-}
-
-static gboolean
 _set_secret (
         GumdDaemonUser *self,
         GError **error)
@@ -790,9 +809,10 @@ _set_secret (
     GUM_STR_FREE (self->priv->shadow->sp_pwdp);
 
     if (!self->priv->pw->pw_passwd) {
-        if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
+        GumUserType ut = _get_usertype_from_gecos (self->priv->pw);
+        if (ut == GUM_USERTYPE_SYSTEM)
             self->priv->shadow->sp_pwdp = g_strdup ("*");
-        else if (self->priv->user_type == GUM_USERTYPE_GUEST)
+        else if (ut == GUM_USERTYPE_GUEST)
             self->priv->shadow->sp_pwdp = g_strdup ("");
         else
             self->priv->shadow->sp_pwdp = g_strdup ("!");
@@ -1090,8 +1110,8 @@ _set_group (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
                         "Group add failure", error, FALSE);
     }
-
-    GumGroupType grp_type = self->priv->user_type == GUM_USERTYPE_SYSTEM ?
+    GumUserType ut = _get_usertype_from_gecos (self->priv->pw);
+    GumGroupType grp_type = (ut == GUM_USERTYPE_SYSTEM) ?
             GUM_GROUPTYPE_SYSTEM : GUM_GROUPTYPE_USER;
 
     primary_gname = gum_config_get_string (self->priv->config,
@@ -1130,10 +1150,11 @@ _set_default_groups (
     gboolean added = TRUE;
     gchar **def_groupsv = NULL;
 
-    if (self->priv->user_type == GUM_USERTYPE_SYSTEM)
+    GumUserType ut = _get_usertype_from_gecos (self->priv->pw);
+    if (ut == GUM_USERTYPE_SYSTEM)
         return TRUE;
 
-    if (self->priv->user_type == GUM_USERTYPE_ADMIN)
+    if (ut == GUM_USERTYPE_ADMIN)
         def_groupsv = g_strsplit (gum_config_get_string (self->priv->config,
                 GUM_CONFIG_GENERAL_DEF_ADMIN_GROUPS), ",", -1);
     else
@@ -1169,11 +1190,11 @@ _create_home_dir (
         GumdDaemonUser *self,
         GError **error)
 {
-	if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
-		return TRUE;
-	}
+    if (_get_usertype_from_gecos (self->priv->pw) == GUM_USERTYPE_SYSTEM) {
+        return TRUE;
+    }
 
-	return gum_file_create_home_dir (self->priv->pw->pw_dir,
+    return gum_file_create_home_dir (self->priv->pw->pw_dir,
 	        self->priv->pw->pw_uid, self->priv->pw->pw_gid,
 	        gum_config_get_uint (self->priv->config,
 		            GUM_CONFIG_GENERAL_UMASK, GUM_UMASK), error);
@@ -1184,11 +1205,11 @@ _delete_home_dir (
         GumdDaemonUser *self,
         GError **error)
 {
-	if (self->priv->user_type == GUM_USERTYPE_SYSTEM) {
-		return TRUE;
-	}
+    if (_get_usertype_from_gecos (self->priv->pw) == GUM_USERTYPE_SYSTEM) {
+        return TRUE;
+    }
 
-	return gum_file_delete_home_dir (self->priv->pw->pw_dir, error);
+    return gum_file_delete_home_dir (self->priv->pw->pw_dir, error);
 }
 
 gboolean
@@ -1265,21 +1286,26 @@ _copy_passwd_struct (
     _set_uid_property (dest, src->pw_uid);
     _set_gid_property (dest, src->pw_gid);
 
-    str = gum_string_utils_get_string (src->pw_gecos, ",", 0);
+    str = gum_string_utils_get_string (src->pw_gecos, ",",
+            GECOS_FIELD_REALNAME);
     _set_realname_property (dest, str);
     g_free (str);
 
-    str = gum_string_utils_get_string (src->pw_gecos, ",", 1);
+    str = gum_string_utils_get_string (src->pw_gecos, ",", GECOS_FIELD_OFFICE);
     _set_office_property (dest, str);
     g_free (str);
 
-    str = gum_string_utils_get_string (src->pw_gecos, ",", 2);
+    str = gum_string_utils_get_string (src->pw_gecos, ",",
+            GECOS_FIELD_OFFICEPHONE);
     _set_officephone_property (dest, str);
     g_free (str);
 
-    str = gum_string_utils_get_string (src->pw_gecos, ",", 3);
+    str = gum_string_utils_get_string (src->pw_gecos, ",",
+            GECOS_FIELD_HOMEPHONE);
     _set_homephone_property (dest, str);
     g_free (str);
+
+    _set_usertype_property (dest, _get_usertype_from_gecos (src));
 
     _set_homedir_property (dest, src->pw_dir);
     _set_shell_property (dest, src->pw_shell);
@@ -1406,29 +1432,6 @@ _finished:
     return retval;
 }
 
-
-static const gchar *
-_usertype_to_string (
-        GumUserType type)
-{
-    switch (type) {
-    case GUM_USERTYPE_SYSTEM:
-        return "system";
-    case GUM_USERTYPE_ADMIN:
-        return "admin";
-    case GUM_USERTYPE_GUEST:
-        return "guest";
-    case GUM_USERTYPE_NORMAL:
-        return "normal";
-    case GUM_USERTYPE_NONE:
-    default:
-        WARN ("undefined user type");
-        break;
-    }
-    return NULL;
-}
-
-
 GumdDaemonUser *
 gumd_daemon_user_new (
         GumConfig *config)
@@ -1505,8 +1508,9 @@ gumd_daemon_user_add (
      *** copy skel files and set permissions
      * unlock db
      */
-    if (!_check_daemon_user_type (self, error)) {
-        return FALSE;
+    if (_get_usertype_from_gecos (self->priv->pw) == GUM_USERTYPE_NONE) {
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
+                            "Invalid user type", error, FALSE);
     }
 
     if (!self->priv->pw->pw_shell) {
@@ -1559,12 +1563,12 @@ gumd_daemon_user_add (
         scrip_dir = env_val;
 #   endif
 
-
+    gchar *ut = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
+                    GECOS_FIELD_USERTYPE);
     gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
             self->priv->pw->pw_uid, self->priv->pw->pw_gid,
-            self->priv->pw->pw_dir,
-            _usertype_to_string (self->priv->user_type));
-
+            self->priv->pw->pw_dir, ut);
+    g_free (ut);
     gum_lock_pwdf_unlock ();
     return TRUE;
 }
@@ -1683,6 +1687,43 @@ gumd_daemon_user_delete (
     return TRUE;
 }
 
+static void
+_update_gecos_field (
+        struct passwd *src,
+        GumdDaemonUser *dest,
+        GecosField field)
+{
+    gchar *str = NULL;
+    str = gum_string_utils_get_string (dest->priv->pw->pw_gecos, ",", field);
+    if (str && strlen(str) > 0) {
+        g_free(str);
+        return;
+    }
+    g_free(str);
+
+    str = gum_string_utils_get_string (src->pw_gecos, ",", field);
+    switch (field) {
+    case GECOS_FIELD_REALNAME:
+        _set_realname_property (dest, str);
+        break;
+    case GECOS_FIELD_OFFICE:
+        _set_office_property (dest, str);
+        break;
+    case GECOS_FIELD_OFFICEPHONE:
+        _set_officephone_property (dest, str);
+        break;
+    case GECOS_FIELD_HOMEPHONE:
+        _set_homephone_property (dest, str);
+        break;
+    case GECOS_FIELD_USERTYPE:
+        _set_usertype_property (dest, gum_user_type_from_string (str));
+        break;
+    default:
+        break;
+    }
+    g_free(str);
+}
+
 gboolean
 gumd_daemon_user_update (
         GumdDaemonUser *self,
@@ -1729,6 +1770,12 @@ gumd_daemon_user_update (
     _set_gid_property (self, pw->pw_gid);
     _set_homedir_property (self, pw->pw_dir);
 
+    _update_gecos_field (pw, self, GECOS_FIELD_REALNAME);
+    _update_gecos_field (pw, self, GECOS_FIELD_OFFICE);
+    _update_gecos_field (pw, self, GECOS_FIELD_OFFICEPHONE);
+    _update_gecos_field (pw, self, GECOS_FIELD_HOMEPHONE);
+    _update_gecos_field (pw, self, GECOS_FIELD_USERTYPE);
+
     if (self->priv->pw->pw_passwd &&
         g_strcmp0 (self->priv->pw->pw_passwd, "x") != 0 &&
         gum_crypt_cmp_secret (self->priv->pw->pw_passwd,
@@ -1745,8 +1792,22 @@ gumd_daemon_user_update (
 
     if (self->priv->pw->pw_gecos &&
         g_strcmp0 (pw->pw_gecos, self->priv->pw->pw_gecos) != 0) {
+        gchar *str1 = NULL, *str2 = NULL;
         DBG ("old gecos %s :: new gecos %s", pw->pw_gecos,
                 self->priv->pw->pw_gecos);
+        //usertype cannot change
+        str1 = gum_string_utils_get_string (self->priv->pw->pw_gecos, ",",
+                GECOS_FIELD_USERTYPE);
+        str2 = gum_string_utils_get_string (pw->pw_gecos, ",",
+                GECOS_FIELD_USERTYPE);
+        if (g_strcmp0 (str1, str2) != 0) {
+            gum_lock_pwdf_unlock ();
+            g_free (str1); g_free (str2);
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
+                            "User type cannot be updated", error, FALSE);
+        }
+        g_free (str1); g_free (str2);
+        //realname, office, officephone, homephone can change
         change++;
     }
 
@@ -1800,4 +1861,78 @@ gumd_daemon_user_get_uid_by_name (
         }
     }
     return uid;
+}
+
+GVariant *
+gumd_daemon_user_get_user_list (
+        const gchar *types,
+        GumConfig *config,
+        GError **error)
+{
+    GVariantBuilder builder;
+    GVariant *users = NULL;
+    struct passwd *pent = NULL;
+    FILE *fp = NULL;
+    guint16 in_types = GUM_USERTYPE_NONE;
+    GumUserType ut;
+    uid_t sys_uid_min, sys_uid_max;
+    const gchar *fn = NULL;
+    DBG ("get user list %s", types);
+
+    /* If user type is NULL or empty string, then return all users */
+    if (!types || g_strcmp0 (types, "") == 0)
+        in_types = GUM_USERTYPE_SYSTEM | GUM_USERTYPE_ADMIN |
+        GUM_USERTYPE_GUEST | GUM_USERTYPE_NORMAL;
+    else
+        in_types = gum_user_type_users_to_integer (types);
+
+    if (in_types == GUM_USERTYPE_NONE) {
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
+                "Invalid user type specified", error, NULL);
+    }
+
+    DBG ("get user list in types %d", in_types);
+    if (!gum_lock_pwdf_lock ()) {
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_DB_ALREADY_LOCKED,
+                "Database already locked", error, NULL);
+    }
+
+    fn = gum_config_get_string (config, GUM_CONFIG_GENERAL_PASSWD_FILE);
+    if (!fn || !(fp = fopen (fn, "r"))) {
+        gum_lock_pwdf_unlock ();
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_OPEN,
+                "Opening passwd file failed", error, NULL);
+    }
+
+    sys_uid_min = (uid_t) gum_config_get_uint (config,
+            GUM_CONFIG_GENERAL_SYS_UID_MIN, GUM_USER_INVALID_UID);
+
+    sys_uid_max = (uid_t) gum_config_get_uint (config,
+            GUM_CONFIG_GENERAL_SYS_UID_MAX, GUM_USER_INVALID_UID);
+
+    g_variant_builder_init (&builder, (const GVariantType *)"a(u)");
+    while ((pent = fgetpwent (fp)) != NULL) {
+        /* If type is an empty string, all users are fetched. User type is
+         * first compared with usertype in gecos field. If gecos field for
+         * usertype does not exist, then all the users are considered as
+         * normal users other than system users which are filtered out based
+         * on system min and max uids
+         * */
+        ut = _get_usertype_from_gecos (pent);
+        if (ut == GUM_USERTYPE_NONE) {
+            if (pent->pw_uid >=sys_uid_min && pent->pw_uid <= sys_uid_max)
+                ut = GUM_USERTYPE_SYSTEM;
+            else
+                ut = GUM_USERTYPE_NORMAL;
+        }
+        if (ut & in_types) {
+            g_variant_builder_add (&builder, "(u)", pent->pw_uid);
+        }
+        pent = NULL;
+    }
+    users = g_variant_builder_end (&builder);
+    fclose (fp);
+
+    gum_lock_pwdf_unlock ();
+    return users;
 }

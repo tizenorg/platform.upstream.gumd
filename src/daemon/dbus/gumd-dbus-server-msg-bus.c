@@ -83,12 +83,12 @@ _close_server (
 }
 
 static void
-_on_bus_acquired (
+_on_name_acquired (
         GDBusConnection *connection,
         const gchar *name,
         gpointer user_data)
 {
-    INFO ("Bus aquired on connection '%p'", connection);
+    INFO ("Name acquired %s on connection '%p'", name, connection);
 }
 
 static void
@@ -136,12 +136,12 @@ _on_group_interface_dispose (
 }
 
 static void
-_on_name_acquired (
+_on_bus_acquired (
         GDBusConnection *connection,
         const gchar *name,
         gpointer user_data)
 {
-    INFO ("Acquired the name %s on connection '%p'", name, connection);
+    INFO ("Bus acquired the name %s on connection '%p'", name, connection);
     GumdDbusServerMsgBus *server = GUMD_DBUS_SERVER_MSG_BUS (user_data);
 
     DBG("Export user service interface");

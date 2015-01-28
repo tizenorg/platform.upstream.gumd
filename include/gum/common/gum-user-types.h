@@ -3,7 +3,7 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2013 Intel Corporation.
+ * Copyright (C) 2015 Intel Corporation.
  *
  * Contact: Imran Zaman <imran.zaman@intel.com>
  *
@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 
 /**
  * GumUserType:
- * @GUM_USERTYPE_NONE: user type not defined/set
+ * @GUM_USERTYPE_NONE: user type not defined/set/invalid
  * @GUM_USERTYPE_SYSTEM: no home directory will be created for system user.
  * System user is not able to use login/logout functionality as
  * its primary usage is limited to system daemons. Uid will be chosen between
@@ -63,15 +63,43 @@ G_BEGIN_DECLS
  * This enumeration lists users types.
  */
 
+/**
+ * GUM_USERTYPE_COUNT:
+ *
+ * Defines total number of types of the users.
+ */
+#define GUM_USERTYPE_COUNT   5
+
+/**
+ * GUM_USERTYPE_MAX_VALUE:
+ *
+ * Defines the maximum value of the user type in #GumUserType.
+ */
+#define GUM_USERTYPE_MAX_VALUE   (0x1 << (GUM_USERTYPE_COUNT-1))
+
 typedef enum {
-
-    GUM_USERTYPE_NONE = 0,
-    GUM_USERTYPE_SYSTEM = 1,
-    GUM_USERTYPE_ADMIN = 2,
-    GUM_USERTYPE_GUEST = 3,
-    GUM_USERTYPE_NORMAL = 4
-
+    GUM_USERTYPE_NONE = 0x00,
+    GUM_USERTYPE_SYSTEM = 0x01,
+    GUM_USERTYPE_ADMIN = 0x02,
+    GUM_USERTYPE_GUEST = 0x04,
+    GUM_USERTYPE_NORMAL = 0x08
 } GumUserType;
+
+const gchar *
+gum_user_type_to_string (
+        GumUserType type);
+
+GumUserType
+gum_user_type_from_string (
+        const gchar *type);
+
+gchar *
+gum_user_type_users_to_string (
+        guint16 types);
+
+guint16
+gum_user_type_users_to_integer (
+        const gchar *types);
 
 G_END_DECLS
 
