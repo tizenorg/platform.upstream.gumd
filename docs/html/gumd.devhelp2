@@ -13,14 +13,14 @@
       <sub name="GumDictionary" link="gumd-GumDictionary.html"/>
       <sub name="Gum Crypt" link="gumd-Gum-Crypt.html"/>
       <sub name="Logging" link="gumd-Logging.html"/>
-      <sub name="Errors" link="gumd-Errors.html"/>
+      <sub name="Gum Error" link="gumd-Gum-Error.html"/>
       <sub name="GumDisposable" link="GumDisposable.html"/>
       <sub name="Gum File" link="gumd-Gum-File.html"/>
       <sub name="Gum Validate" link="gumd-Gum-Validate.html"/>
       <sub name="Gum Lock" link="gumd-Gum-Lock.html"/>
       <sub name="Gum String Utils" link="gumd-Gum-String-Utils.html"/>
       <sub name="Gum Utils" link="gumd-Gum-Utils.html"/>
-      <sub name="User types" link="gumd-User-types.html"/>
+      <sub name="Gum User Types" link="gumd-Gum-User-Types.html"/>
       <sub name="Group types" link="gumd-Group-types.html"/>
     </sub>
     <sub name="Client library (libgum) interface" link="ch03.html">
@@ -103,14 +103,14 @@
     <keyword type="macro" name="WARN()" link="gumd-Logging.html#WARN:CAPS"/>
     <keyword type="macro" name="INFO()" link="gumd-Logging.html#INFO:CAPS"/>
     <keyword type="macro" name="DBG()" link="gumd-Logging.html#DBG:CAPS"/>
-    <keyword type="macro" name="GUM_ERROR" link="gumd-Errors.html#GUM-ERROR:CAPS"/>
-    <keyword type="macro" name="GUM_GET_ERROR_FOR_ID()" link="gumd-Errors.html#GUM-GET-ERROR-FOR-ID:CAPS"/>
-    <keyword type="macro" name="GUM_SET_ERROR()" link="gumd-Errors.html#GUM-SET-ERROR:CAPS"/>
-    <keyword type="macro" name="GUM_RETURN_WITH_ERROR()" link="gumd-Errors.html#GUM-RETURN-WITH-ERROR:CAPS"/>
-    <keyword type="function" name="gum_error_quark ()" link="gumd-Errors.html#gum-error-quark"/>
-    <keyword type="function" name="gum_error_new_from_variant ()" link="gumd-Errors.html#gum-error-new-from-variant"/>
-    <keyword type="function" name="gum_error_to_variant ()" link="gumd-Errors.html#gum-error-to-variant"/>
-    <keyword type="enum" name="enum GumError" link="gumd-Errors.html#GumError"/>
+    <keyword type="macro" name="GUM_ERROR" link="gumd-Gum-Error.html#GUM-ERROR:CAPS"/>
+    <keyword type="macro" name="GUM_GET_ERROR_FOR_ID()" link="gumd-Gum-Error.html#GUM-GET-ERROR-FOR-ID:CAPS"/>
+    <keyword type="macro" name="GUM_SET_ERROR()" link="gumd-Gum-Error.html#GUM-SET-ERROR:CAPS"/>
+    <keyword type="macro" name="GUM_RETURN_WITH_ERROR()" link="gumd-Gum-Error.html#GUM-RETURN-WITH-ERROR:CAPS"/>
+    <keyword type="function" name="gum_error_quark ()" link="gumd-Gum-Error.html#gum-error-quark"/>
+    <keyword type="function" name="gum_error_new_from_variant ()" link="gumd-Gum-Error.html#gum-error-new-from-variant"/>
+    <keyword type="function" name="gum_error_to_variant ()" link="gumd-Gum-Error.html#gum-error-to-variant"/>
+    <keyword type="enum" name="enum GumError" link="gumd-Gum-Error.html#GumError"/>
     <keyword type="function" name="gum_disposable_set_auto_dispose ()" link="GumDisposable.html#gum-disposable-set-auto-dispose"/>
     <keyword type="function" name="gum_disposable_get_auto_dispose ()" link="GumDisposable.html#gum-disposable-get-auto-dispose"/>
     <keyword type="function" name="gum_disposable_set_timeout ()" link="GumDisposable.html#gum-disposable-set-timeout"/>
@@ -158,7 +158,13 @@
     <keyword type="function" name="gum_utils_gain_privileges ()" link="gumd-Gum-Utils.html#gum-utils-gain-privileges"/>
     <keyword type="function" name="gum_utils_run_user_scripts ()" link="gumd-Gum-Utils.html#gum-utils-run-user-scripts"/>
     <keyword type="function" name="gum_utils_run_group_scripts ()" link="gumd-Gum-Utils.html#gum-utils-run-group-scripts"/>
-    <keyword type="enum" name="enum GumUserType" link="gumd-User-types.html#GumUserType"/>
+    <keyword type="macro" name="GUM_USERTYPE_MAX_VALUE" link="gumd-Gum-User-Types.html#GUM-USERTYPE-MAX-VALUE:CAPS"/>
+    <keyword type="function" name="gum_user_type_to_string ()" link="gumd-Gum-User-Types.html#gum-user-type-to-string"/>
+    <keyword type="function" name="gum_user_type_from_string ()" link="gumd-Gum-User-Types.html#gum-user-type-from-string"/>
+    <keyword type="function" name="gum_user_type_users_to_string ()" link="gumd-Gum-User-Types.html#gum-user-type-users-to-string"/>
+    <keyword type="function" name="gum_user_type_users_to_integer ()" link="gumd-Gum-User-Types.html#gum-user-type-users-to-integer"/>
+    <keyword type="macro" name="GUM_USERTYPE_COUNT" link="gumd-Gum-User-Types.html#GUM-USERTYPE-COUNT:CAPS"/>
+    <keyword type="enum" name="enum GumUserType" link="gumd-Gum-User-Types.html#GumUserType"/>
     <keyword type="enum" name="enum GumGroupType" link="gumd-Group-types.html#GumGroupType"/>
     <keyword type="function" name="GumUserCb ()" link="GumUser.html#GumUserCb"/>
     <keyword type="function" name="gum_user_create ()" link="GumUser.html#gum-user-create"/>

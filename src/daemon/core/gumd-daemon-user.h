@@ -101,6 +101,12 @@ gumd_daemon_user_get_uid_by_name (
         const gchar *username,
         GumConfig *config);
 
+GVariant *
+gumd_daemon_user_get_user_list (
+        const gchar *types,
+        GumConfig *config,
+        GError **error);
+
 G_END_DECLS
 
 #endif /* __GUMD_DAEMON_USER_H_ */
