@@ -31,7 +31,7 @@
 /**
  * SECTION:gum-error
  * @short_description: error definitions and utilities
- * @title: Errors
+ * @title: Gum Error
  * @include: gum/common/gum-error.h
  *
  * This file provides Gum error definitions and utilities.

@@ -18,7 +18,7 @@ case "$1" in
     install)
     ;;
     upgrade)
-        cp -a /etc/gumd.conf /etc/gumd.conf.orig
+        cp -a /etc/gumd/gumd.conf /etc/gumd/gumd.conf.orig
     ;;
 
     abort-upgrade)
