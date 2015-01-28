@@ -49,6 +49,7 @@ libgum_common_la_SOURCES = \
     gum-string-utils.c \
     gum-utils.c \
     gum-validate.c \
+    gum-user-types.c \
     $(NULL)
 
 dist_libgum_common_la_SOURCES = \

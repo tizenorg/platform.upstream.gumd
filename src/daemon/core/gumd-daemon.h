@@ -112,6 +112,12 @@ gumd_daemon_update_user (
         GumdDaemonUser *user,
         GError **error);
 
+GVariant *
+gumd_daemon_get_user_list (
+        GumdDaemon *self,
+        const gchar *types,
+        GError **error);
+
 guint
 gumd_daemon_get_user_timeout (
         GumdDaemon *self) G_GNUC_CONST;
