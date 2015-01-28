@@ -93,13 +93,13 @@ GumUserType
 gum_user_type_from_string (
         const gchar *type);
 
-gchar *
-gum_user_type_users_to_string (
+gchar **
+gum_user_type_to_strv (
         guint16 types);
 
 guint16
-gum_user_type_users_to_integer (
-        const gchar *types);
+gum_user_type_from_strv (
+        const gchar *const *types);
 
 G_END_DECLS
 

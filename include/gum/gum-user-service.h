@@ -89,14 +89,14 @@ gum_user_service_create_sync (
 gboolean
 gum_user_service_get_user_list (
         GumUserService *self,
-        const gchar *types,
+        const gchar *const *types,
         GumUserServiceListCb callback,
         gpointer user_data);
 
 GumUserList *
 gum_user_service_get_user_list_sync (
         GumUserService *self,
-        const gchar *types);
+        const gchar *const *types);
 
 void
 gum_user_service_list_free (

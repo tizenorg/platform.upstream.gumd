@@ -103,7 +103,7 @@ gumd_daemon_user_get_uid_by_name (
 
 GVariant *
 gumd_daemon_user_get_user_list (
-        const gchar *types,
+        const gchar *const *types,
         GumConfig *config,
         GError **error);
 

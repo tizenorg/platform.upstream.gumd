@@ -3,7 +3,7 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2015 Intel Corporation.
+ * Copyright (C) 2013 - 2015 Intel Corporation.
  *
  * Contact: Imran Zaman <imran.zaman@intel.com>
  *
@@ -414,7 +414,7 @@ _uids_variant_to_user_list(
 
         g_variant_iter_init (&iter, uids);
         while ((value = g_variant_iter_next_value (&iter))) {
-            g_variant_get (value, "(u)", &uid);
+            uid = g_variant_get_uint32 (value);
             if (uid != GUM_USER_INVALID_UID) {
                 user = gum_user_get_sync (uid, offline);
                 if (user)
@@ -644,8 +644,7 @@ gum_user_service_create_sync (
 /**
  * gum_user_service_get_user_list:
  * @self: #GumUserService object
- * @types: (transfer none): a string with comma separated value of the
- * user types e.g. "guest,system" or "normal"
+ * @types: (transfer none): a string array of user types (e.g admin, normal etc)
  * @callback: #GumUserServiceListCb to be invoked when user list is retrieved
  * @user_data: user data
  *
@@ -659,7 +658,7 @@ gum_user_service_create_sync (
 gboolean
 gum_user_service_get_user_list (
         GumUserService *self,
-        const gchar *types,
+        const gchar *const *types,
         GumUserServiceListCb callback,
         gpointer user_data)
 {
@@ -680,8 +679,7 @@ gum_user_service_get_user_list (
 /**
  * gum_user_service_get_user_list_sync:
  * @self: #GumUserService object
- * @types: (transfer none): a string with comma separated value of the
- * user types e.g. "guest,system" or "normal"
+ * @types: (transfer none): a string array of user types (e.g admin, normal etc)
  *
  * This method gets the list of users based on the type. In case offline mode is
  * enabled, then the users is retrieved directly without using dbus otherwise
@@ -693,7 +691,7 @@ gum_user_service_get_user_list (
 GumUserList *
 gum_user_service_get_user_list_sync (
         GumUserService *self,
-        const gchar *types)
+        const gchar *const *types)
 {
     GError *error = NULL;
     gboolean rval = FALSE;

@@ -45,6 +45,7 @@
 #include "common/gum-file.h"
 #include "common/gum-user-types.h"
 #include "common/gum-group-types.h"
+#include "common/gum-string-utils.h"
 #include "common/dbus/gum-dbus-user-service-gen.h"
 #include "common/dbus/gum-dbus-user-gen.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
@@ -1050,6 +1051,7 @@ START_TEST (test_get_user_list)
     GumUserService *service = NULL;
     gboolean rval = FALSE;
     GumUserList *user_list = NULL;
+    gchar **strv = NULL;
 
     DBG ("\n");
 
@@ -1080,8 +1082,11 @@ START_TEST (test_get_user_list)
     /* case 5: get user list async -- success */
     service = gum_user_service_create_sync (FALSE);
     fail_if (service == NULL, "failed to create new user service");
-    rval = gum_user_service_get_user_list (service, "normal,system",
+    strv = gum_string_utils_append_string (NULL,"normal");
+    strv = gum_string_utils_append_string (strv,"system");
+    rval = gum_user_service_get_user_list (service, (const gchar *const *)strv,
             _on_user_service_user_list_op_success, NULL);
+    g_strfreev (strv);
     fail_if (rval == FALSE, "failed to get users uids");
     _run_mainloop ();
     g_object_unref (service);
@@ -1089,8 +1094,10 @@ START_TEST (test_get_user_list)
     /* case 6: get user list async -- failure */
     service = gum_user_service_create_sync (FALSE);
     fail_if (service == NULL, "failed to create new user service");
-    rval = gum_user_service_get_user_list (service, "none",
+    strv = gum_string_utils_append_string (NULL,"none");
+    rval = gum_user_service_get_user_list (service, (const gchar *const *)strv,
             _on_user_service_user_list_op_failure, NULL);
+    g_strfreev (strv);
     fail_if (rval == FALSE, "failed to get users uids");
     _run_mainloop ();
     g_object_unref (service);
@@ -1098,14 +1105,20 @@ START_TEST (test_get_user_list)
     /* case 7: get user list sync */
     service = gum_user_service_create_sync (FALSE);
     fail_if (service == NULL, "failed to create new user service");
-    user_list = gum_user_service_get_user_list_sync (service, "none");
+    strv = gum_string_utils_append_string (NULL,"none");
+    user_list = gum_user_service_get_user_list_sync (service,
+            (const gchar *const *)strv);
+    g_strfreev (strv);
     fail_if (user_list != NULL, "failed to get users uids");
     g_object_unref (service);
 
     /* case 8: get user list sync -- success */
     service = gum_user_service_create_sync (FALSE);
     fail_if (service == NULL, "failed to create new user service");
-    user_list = gum_user_service_get_user_list_sync (service, "normal");
+    strv = gum_string_utils_append_string (NULL,"normal");
+    user_list = gum_user_service_get_user_list_sync (service,
+            (const gchar *const *)strv);
+    g_strfreev (strv);
     fail_if (user_list == NULL, "failed to get users uids");
     fail_if (g_list_length (user_list) <= 0, "no normal users found");
     gum_user_service_list_free (user_list);

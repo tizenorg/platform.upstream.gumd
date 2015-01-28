@@ -110,7 +110,7 @@
             <tp:docstring>Gets the list of the uids of the users
             </tp:docstring>
 
-            <arg name="types" type="s" direction="in">
+            <arg name="types" type="as" direction="in">
                 <tp:docstring>Type of the users to be retrieved. If type is an
                 empty string, all users are fetched. User type is first compared
                 with usertype in gecos field. If gecos field for usertype does
@@ -120,7 +120,7 @@
                 </tp:docstring>
             </arg>
 
-            <arg name="uids" type="a(u)" direction="out">
+            <arg name="uids" type="au" direction="out">
                 <tp:docstring>users' list of uids.
                 </tp:docstring>
             </arg>

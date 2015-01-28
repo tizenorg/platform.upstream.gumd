@@ -396,7 +396,7 @@ gumd_daemon_update_user (
 GVariant *
 gumd_daemon_get_user_list (
         GumdDaemon *self,
-        const gchar *types,
+        const gchar *const *types,
         GError **error)
 {
     if (!self || !GUMD_IS_DAEMON (self)) {

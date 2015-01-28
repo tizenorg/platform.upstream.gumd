@@ -3,7 +3,7 @@
 /*
  * This file is part of gumd
  *
- * Copyright (C) 2013 Intel Corporation.
+ * Copyright (C) 2013 - 2015 Intel Corporation.
  *
  * Contact: Imran Zaman <imran.zaman@intel.com>
  *
@@ -1865,7 +1865,7 @@ gumd_daemon_user_get_uid_by_name (
 
 GVariant *
 gumd_daemon_user_get_user_list (
-        const gchar *types,
+        const gchar *const *types,
         GumConfig *config,
         GError **error)
 {
@@ -1877,14 +1877,14 @@ gumd_daemon_user_get_user_list (
     GumUserType ut;
     uid_t sys_uid_min, sys_uid_max;
     const gchar *fn = NULL;
-    DBG ("get user list %s", types);
+    DBG ("");
 
     /* If user type is NULL or empty string, then return all users */
-    if (!types || g_strcmp0 (types, "") == 0)
+    if (!types || g_strv_length ((gchar **)types) <= 0)
         in_types = GUM_USERTYPE_SYSTEM | GUM_USERTYPE_ADMIN |
         GUM_USERTYPE_GUEST | GUM_USERTYPE_NORMAL;
     else
-        in_types = gum_user_type_users_to_integer (types);
+        in_types = gum_user_type_from_strv (types);
 
     if (in_types == GUM_USERTYPE_NONE) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
@@ -1910,7 +1910,7 @@ gumd_daemon_user_get_user_list (
     sys_uid_max = (uid_t) gum_config_get_uint (config,
             GUM_CONFIG_GENERAL_SYS_UID_MAX, GUM_USER_INVALID_UID);
 
-    g_variant_builder_init (&builder, (const GVariantType *)"a(u)");
+    g_variant_builder_init (&builder, (const GVariantType *)"au");
     while ((pent = fgetpwent (fp)) != NULL) {
         /* If type is an empty string, all users are fetched. User type is
          * first compared with usertype in gecos field. If gecos field for
@@ -1926,7 +1926,7 @@ gumd_daemon_user_get_user_list (
                 ut = GUM_USERTYPE_NORMAL;
         }
         if (ut & in_types) {
-            g_variant_builder_add (&builder, "(u)", pent->pw_uid);
+            g_variant_builder_add (&builder, "u", pent->pw_uid);
         }
         pent = NULL;
     }

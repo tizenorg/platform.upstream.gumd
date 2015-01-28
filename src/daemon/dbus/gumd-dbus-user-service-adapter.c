@@ -94,7 +94,7 @@ static gboolean
 _handle_get_user_list (
         GumdDbusUserServiceAdapter *self,
         GDBusMethodInvocation *invocation,
-        const gchar *types,
+        const gchar *const *types,
         gpointer user_data);
 
 static void
@@ -662,13 +662,13 @@ static gboolean
 _handle_get_user_list (
         GumdDbusUserServiceAdapter *self,
         GDBusMethodInvocation *invocation,
-        const gchar *types,
+        const gchar *const *types,
         gpointer user_data)
 {
     GError *error = NULL;
     GVariant *users = NULL;
 
-    DBG ("type %s", types);
+    DBG ("");
 
     gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
 

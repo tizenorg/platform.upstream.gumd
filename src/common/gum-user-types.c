@@ -110,62 +110,55 @@ gum_user_type_from_string (
 }
 
 /**
- * gum_user_type_users_to_string:
+ * gum_user_type_to_strv:
  * @types: the type(s) of the user OR'd as per defined as #GumUserType
  * e.g. GUM_USERTYPE_SYSTEM | GUM_USERTYPE_NORMAL
  *
- * Converts enumerated #GumUserType types into a string with each value
- * separated comma (from lower enum type to high enum type).
+ * Converts enumerated #GumUserType types into an array of string of user type.
  *
- * Returns: if successful returns a string, NULL otherwise.
+ * Returns: (transfer full) if successful returns a string, NULL otherwise.
  */
-gchar *
-gum_user_type_users_to_string (
+gchar **
+gum_user_type_to_strv (
         guint16 types)
 {
     gint i = 0, ind = 0;
-    gchar *types_str = NULL;
     gchar **strv = g_malloc0 (sizeof (gchar *) * (GUM_USERTYPE_COUNT + 1));
     while (i < GUM_USERTYPE_COUNT) {
         if (types & user_type_strings[i].type) {
-            strv[ind++] = (gchar *) user_type_strings[i].str;
+            strv[ind++] = g_strdup ((gchar *) user_type_strings[i].str);
         }
         i++;
     }
     strv[ind] = NULL;
-    types_str = g_strjoinv (",", strv);
-    g_free (strv); //strv doesn't own strings
-    return types_str;
+    return strv;
 }
 
 /**
- * gum_user_type_users_to_integer:
- * @types: (transfer none): a string with comma separated value of the
- * user types e.g. "guest,system" or "normal"
+ * gum_user_type_from_strv:
+ * @types: (transfer none): an array of string of user types
  *
  * Converts the string consisting of types to a single uint16 by ORing each
- * type as #GumUserType e.g. if string is "guest,normal", then result would be
- * GUM_USERTYPE_GUEST | GUM_USERTYPE_NORMAL
+ * type as #GumUserType e.g. if string array contains guest and normal, then
+ * result would be GUM_USERTYPE_GUEST | GUM_USERTYPE_NORMAL
  *
  * Returns: if successful returns the converted types, GUM_USERTYPE_NONE
  * otherwise.
  */
 guint16
-gum_user_type_users_to_integer (
-        const gchar *types)
+gum_user_type_from_strv (
+        const gchar *const *types)
 {
     guint16 res = GUM_USERTYPE_NONE;
     gint i = 0, len = 0;
-    gchar **strv = NULL;
-    if (!types || strlen(types) <= 0 ||
-        (strv = g_strsplit (types, ",", -1)) == NULL) {
+    gchar **strv = (gchar **)types;
+
+    if (!strv || (len = g_strv_length (strv)) <= 0) {
         return GUM_USERTYPE_NONE;
     }
 
-    len = g_strv_length (strv);
     while (i < len) {
         res |= gum_user_type_from_string (strv[i++]);
     }
-    g_strfreev (strv);
     return res;
 }

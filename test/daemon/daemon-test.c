@@ -45,6 +45,7 @@
 #include "common/gum-file.h"
 #include "common/gum-user-types.h"
 #include "common/gum-group-types.h"
+#include "common/gum-string-utils.h"
 #include "common/dbus/gum-dbus-user-service-gen.h"
 #include "common/dbus/gum-dbus-user-gen.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
@@ -1945,6 +1946,7 @@ START_TEST (test_get_user_list)
     GVariant *users = NULL;
     gboolean res = FALSE;
     uid_t user_id = GUM_USER_INVALID_UID;
+    gchar **strv = NULL;
 
     connection = _get_bus_connection (&error);
     fail_if (connection == NULL, "failed to get bus connection : %s",
@@ -1968,8 +1970,10 @@ START_TEST (test_get_user_list)
             error ? error->message : "");
     fail_unless (user_id != GUM_USER_INVALID_UID);
 
+    strv = gum_string_utils_append_string (NULL,"normal");
     res = gum_dbus_user_service_call_get_user_list_sync (user_service,
-            "normal", &users, NULL, &error);
+            (const gchar *const *)strv, &users, NULL, &error);
+    g_strfreev (strv);
     fail_if (res == FALSE, "Failed to get users : %s",
             error ? error->message : "");
     fail_if (users == NULL, "Failed to get users");
@@ -2001,8 +2005,10 @@ START_TEST (test_get_user_list)
             error ? error->message : "");
     fail_unless (user_id != GUM_USER_INVALID_UID);
 
+    strv = gum_string_utils_append_string (NULL,"system");
     res = gum_dbus_user_service_call_get_user_list_sync (user_service,
-            "system", &users, NULL, &error);
+            (const gchar *const *)strv, &users, NULL, &error);
+    g_strfreev (strv);
     fail_if (res == FALSE, "Failed to get users : %s",
             error ? error->message : "");
     fail_if (users == NULL, "Failed to get users");

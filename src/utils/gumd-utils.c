@@ -366,11 +366,15 @@ _handle_user_get_list (
     GumUserService *service = NULL;
     GumUser *guser = NULL;
     GumUserList *users = NULL;
+    gchar **strv = NULL;
 
     service = gum_user_service_create_sync (offline_mode);
     if (!service) return;
 
-    users = gum_user_service_get_user_list_sync (service, types);
+    strv = g_strsplit (types, ",", -1);
+    users = gum_user_service_get_user_list_sync (service,
+            (const gchar *const *)strv);
+    g_strfreev (strv);
     if (users) {
         GumUserList *src_list = users;
         for ( ; src_list != NULL; src_list = g_list_next (src_list)) {

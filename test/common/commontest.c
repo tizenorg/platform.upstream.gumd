@@ -854,6 +854,8 @@ END_TEST
 START_TEST (test_usertype)
 {
     DBG("");
+    gchar** strv = NULL;
+    gchar* str = NULL;
 
     fail_if (gum_user_type_from_string (NULL) != GUM_USERTYPE_NONE);
     fail_if (gum_user_type_from_string ("") != GUM_USERTYPE_NONE);
@@ -879,26 +881,59 @@ START_TEST (test_usertype)
     fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_NORMAL),
             "normal") != 0);
 
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (GUM_USERTYPE_NORMAL),
-                "normal") != 0);
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (
-            GUM_USERTYPE_NORMAL|GUM_USERTYPE_SYSTEM), "system,normal") != 0);
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (
-            GUM_USERTYPE_SYSTEM|GUM_USERTYPE_NORMAL), "system,normal") != 0);
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (GUM_USERTYPE_NONE),
-            "") != 0);
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (GUM_USERTYPE_NONE),
-            "none") == 0);
-    fail_if (g_strcmp0 (gum_user_type_users_to_string (16), "") != 0);
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NORMAL);
+    fail_if (strv == NULL || g_strv_length (strv) != 1);
+    str = g_strjoinv (",",strv);
+    fail_if (g_strcmp0 (str, "normal") != 0);
+    g_free (str); g_strfreev (strv);
 
-    fail_if (gum_user_type_users_to_integer ("") != GUM_USERTYPE_NONE);
-    fail_if (gum_user_type_users_to_integer ("normal") != GUM_USERTYPE_NORMAL);
-    fail_if (gum_user_type_users_to_integer ("guest") != GUM_USERTYPE_GUEST);
-    fail_if (gum_user_type_users_to_integer ("dasdf") != GUM_USERTYPE_NONE);
-    fail_if (gum_user_type_users_to_integer ("normal,guest") !=
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NORMAL|GUM_USERTYPE_SYSTEM);
+    fail_if (strv == NULL || g_strv_length (strv) != 2);
+    str = g_strjoinv (",",strv);
+    fail_if (g_strcmp0 (str, "system,normal") != 0);
+    g_free (str); g_strfreev (strv);
+
+    strv = gum_user_type_to_strv (16);
+    fail_if (strv == NULL || g_strv_length (strv) != 0);
+    g_strfreev (strv);
+
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NONE);
+    fail_if (strv == NULL || g_strv_length (strv) != 0);
+    g_strfreev (strv);
+
+    fail_if (gum_user_type_from_strv (NULL) != GUM_USERTYPE_NONE);
+
+    strv = gum_string_utils_append_string (NULL,"");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv)
+            != GUM_USERTYPE_NONE);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"normal");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_NORMAL);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_GUEST);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"dasdf");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_NONE);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    strv = gum_string_utils_append_string (strv,"normal");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
             (GUM_USERTYPE_NORMAL|GUM_USERTYPE_GUEST));
-    fail_if (gum_user_type_users_to_integer ("guest,normal") !=
-            (GUM_USERTYPE_NORMAL|GUM_USERTYPE_GUEST));
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    strv = gum_string_utils_append_string (strv,"normalsdafsa");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_GUEST);
+    g_strfreev (strv);
 }
 END_TEST
 
