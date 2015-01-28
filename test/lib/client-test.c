@@ -50,6 +50,7 @@
 #include "common/dbus/gum-dbus-group-service-gen.h"
 #include "common/dbus/gum-dbus-group-gen.h"
 #include "gum-user.h"
+#include "gum-user-service.h"
 #include "gum-group.h"
 
 #ifdef GUM_BUS_TYPE_P2P
@@ -88,6 +89,7 @@ _setup_env (void)
     gchar *fpath = NULL;
     gchar *cmd = NULL;
 
+    fail_if (g_setenv ("UM_CONF_FILE", GUM_TEST_DATA_DIR, TRUE) == FALSE);
     fail_if (g_setenv ("UM_DAEMON_TIMEOUT", "10", TRUE) == FALSE);
     fail_if (g_setenv ("UM_USER_TIMEOUT", "10", TRUE) == FALSE);
     fail_if (g_setenv ("UM_GROUP_TIMEOUT", "10", TRUE) == FALSE);
@@ -295,6 +297,18 @@ _on_user_op_failure (
     _stop_mainloop ();
 
     fail_if (error == NULL, "user operation should have been failed");
+}
+
+static void
+_on_user_service_op_success (
+        GumUserService *service,
+        const GError *error,
+        gpointer user_data)
+{
+    _stop_mainloop ();
+
+    fail_if (error != NULL, "failed user service operation : %s",
+            error ? error->message : "(null)");
 }
 
 static void
@@ -1004,6 +1018,101 @@ START_TEST (test_delete_group_member)
 }
 END_TEST
 
+static void
+_on_user_service_user_list_op_success (
+        GumUserService *service,
+        GumUserList *users,
+        const GError *error,
+        gpointer user_data)
+{
+    _stop_mainloop ();
+
+    fail_if (error != NULL, "failed user service user list operation : %s",
+            error ? error->message : "(null)");
+    gum_user_service_list_free (users);
+}
+
+static void
+_on_user_service_user_list_op_failure (
+        GumUserService *service,
+        GumUserList *users,
+        const GError *error,
+        gpointer user_data)
+{
+    _stop_mainloop ();
+
+    fail_if (error == NULL, "op should have failed for getting user list");
+    gum_user_service_list_free (users);
+}
+
+START_TEST (test_get_user_list)
+{
+    GumUserService *service = NULL;
+    gboolean rval = FALSE;
+    GumUserList *user_list = NULL;
+
+    DBG ("\n");
+
+    /* case 1: create async object */
+    service = gum_user_service_create (_on_user_service_op_success, NULL);
+    fail_if (service == NULL, "failed to create new user service");
+    _run_mainloop ();
+    fail_if (gum_user_service_get_dbus_proxy(service) == NULL, "no dbus proxy");
+    g_object_unref (service);
+
+    /* case 2: create sync object without offline */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    g_object_unref (service);
+
+    /* case 3 create sync object with offline */
+    service = gum_user_service_create_sync (TRUE);
+    fail_if (service == NULL, "failed to create new user service");
+    fail_if (gum_user_service_get_dbus_proxy(service) == NULL, "dbus proxy");
+    g_object_unref (service);
+
+    /* case 4: misc */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    fail_if (gum_user_service_get_dbus_proxy(service) == NULL, "no dbus proxy");
+    g_object_unref (service);
+
+    /* case 5: get user list async -- success */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    rval = gum_user_service_get_user_list (service, "normal,system",
+            _on_user_service_user_list_op_success, NULL);
+    fail_if (rval == FALSE, "failed to get users uids");
+    _run_mainloop ();
+    g_object_unref (service);
+
+    /* case 6: get user list async -- failure */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    rval = gum_user_service_get_user_list (service, "none",
+            _on_user_service_user_list_op_failure, NULL);
+    fail_if (rval == FALSE, "failed to get users uids");
+    _run_mainloop ();
+    g_object_unref (service);
+
+    /* case 7: get user list sync */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    user_list = gum_user_service_get_user_list_sync (service, "none");
+    fail_if (user_list != NULL, "failed to get users uids");
+    g_object_unref (service);
+
+    /* case 8: get user list sync -- success */
+    service = gum_user_service_create_sync (FALSE);
+    fail_if (service == NULL, "failed to create new user service");
+    user_list = gum_user_service_get_user_list_sync (service, "normal");
+    fail_if (user_list == NULL, "failed to get users uids");
+    fail_if (g_list_length (user_list) <= 0, "no normal users found");
+    gum_user_service_list_free (user_list);
+    g_object_unref (service);
+}
+END_TEST
+
 Suite* daemon_suite (void)
 {
     TCase *tc = NULL;
@@ -1031,6 +1140,7 @@ Suite* daemon_suite (void)
     tcase_add_test (tc, test_add_group_member);
     tcase_add_test (tc, test_delete_group_member);
 
+    tcase_add_test (tc, test_get_user_list);
     suite_add_tcase (s, tc);
 
     return s;

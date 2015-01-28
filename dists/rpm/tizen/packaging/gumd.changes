@@ -1,3 +1,6 @@
+* Wed Jan 28 2015 Imran Zaman <imran.zaman@intel.com>
+- Added APIs for fetching users based on the type
+
 * Thu Jan 15 2015 Imran Zaman <imran.zaman@intel.com>
 - Added separate configuration file Tizen IVI
 - Newly created users are added to weston-launch group for Tizen IVI

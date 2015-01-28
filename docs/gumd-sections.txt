@@ -246,7 +246,14 @@ gum_user_get_type
 
 <SECTION>
 <FILE>gum-user-types</FILE>
+GUM_USERTYPE_COUNT
+GUM_USERTYPE_MAX_VALUE
 GumUserType
+GumUserTypeString
+gum_user_type_to_string
+gum_user_type_from_string
+gum_user_type_users_to_string
+gum_user_type_users_to_integer
 </SECTION>
 
 <SECTION>
