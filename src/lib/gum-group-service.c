@@ -44,6 +44,7 @@ static void
 _thread_service_free (
         GWeakRef *data)
 {
+    g_weak_ref_clear (data);
     g_slice_free (GWeakRef, data);
 }
 
@@ -94,10 +95,12 @@ _on_group_service_destroyed (
         GObject *obj)
 {
     g_mutex_lock (&mutex);
-    if (group_service_objects)
-    {
-        g_hash_table_unref (group_service_objects);
-        group_service_objects = NULL;
+    if (group_service_objects) {
+        g_hash_table_remove (group_service_objects, g_thread_self ());
+        if (g_hash_table_size (group_service_objects) <= 0) {
+            g_hash_table_unref (group_service_objects);
+            group_service_objects = NULL;
+        }
     }
     g_mutex_unlock (&mutex);
 }

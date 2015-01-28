@@ -3,7 +3,7 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2013 Intel Corporation.
+ * Copyright (C) 2013 - 2015 Intel Corporation.
  *
  * Contact: Imran Zaman <imran.zaman@intel.com>
  *
@@ -115,9 +115,9 @@ typedef struct {
 
 struct _GumUserPrivate
 {
-    GumDbusUserService *dbus_service;
-    GumDbusUser *dbus_user;
+    GumUserService *dbus_service;
     GumdDaemon *offline_service;
+    GumDbusUser *dbus_user;
     GumdDaemonUser *offline_user;
     GCancellable *cancellable;
     GumUserOp *op;
@@ -150,13 +150,16 @@ enum
 
 static GParamSpec *properties[N_PROPERTIES];
 
-
 static void
 _free_op (
         GumUser *self)
 {
     if (self &&
         self->priv->op) {
+        if (self->priv->op->cb_id > 0) {
+            g_source_remove (self->priv->op->cb_id);
+            self->priv->op->cb_id = 0;
+        }
         if (self->priv->op->error) g_error_free (self->priv->op->error);
         g_free (self->priv->op);
         self->priv->op = NULL;
@@ -216,7 +219,6 @@ _on_user_remote_object_destroyed(
 
     GUM_OBJECT_UNREF (self->priv->dbus_user);
 }
-
 static void
 _set_property (
         GObject *object,
@@ -231,7 +233,7 @@ _set_property (
                 self->priv->offline_service = gumd_daemon_new ();
             } else {
                 self->priv->cancellable = g_cancellable_new ();
-                self->priv->dbus_service = gum_user_service_get_instance ();
+                self->priv->dbus_service = gum_user_service_create_sync (FALSE);
             }
             break;
         }
@@ -276,12 +278,7 @@ static void
 _dispose (GObject *object)
 {
     GumUser *self = GUM_USER (object);
-
-    if (self->priv->op &&
-        self->priv->op->cb_id > 0) {
-        g_source_remove (self->priv->op->cb_id);
-        self->priv->op->cb_id = 0;
-    }
+    _free_op (self);
 
     if (self->priv->cancellable) {
         g_cancellable_cancel (self->priv->cancellable);
@@ -295,11 +292,8 @@ _dispose (GObject *object)
     }
 
     GUM_OBJECT_UNREF (self->priv->dbus_user);
-
     GUM_OBJECT_UNREF (self->priv->dbus_service);
-
     GUM_OBJECT_UNREF (self->priv->offline_user);
-
     GUM_OBJECT_UNREF (self->priv->offline_service);
 
     G_OBJECT_CLASS (gum_user_parent_class)->dispose (object);
@@ -308,10 +302,6 @@ _dispose (GObject *object)
 static void
 _finalize (GObject *object)
 {
-    GumUser *self = GUM_USER (object);
-
-    _free_op (self);
-
     G_OBJECT_CLASS (gum_user_parent_class)->finalize (object);
 }
 
@@ -541,12 +531,12 @@ _create_dbus_user (
         gchar *object_path,
         GError *error)
 {
+    GDBusProxy *serv_dbus_proxy = gum_user_service_get_dbus_proxy (
+            user->priv->dbus_service);
     user->priv->dbus_user = gum_dbus_user_proxy_new_sync (
-            g_dbus_proxy_get_connection (G_DBUS_PROXY (
-                    user->priv->dbus_service)),
-            G_DBUS_PROXY_FLAGS_NONE, g_dbus_proxy_get_name (
-            G_DBUS_PROXY (user->priv->dbus_service)), object_path,
-            user->priv->cancellable, &error);
+            g_dbus_proxy_get_connection (serv_dbus_proxy),
+            G_DBUS_PROXY_FLAGS_NONE, g_dbus_proxy_get_name (serv_dbus_proxy),
+            object_path, user->priv->cancellable, &error);
     if (!error) {
         g_signal_connect (G_OBJECT (user->priv->dbus_user), "unregistered",
             G_CALLBACK (_on_user_remote_object_destroyed),  user);
@@ -583,10 +573,11 @@ _sync_properties (
     GVariant *result = NULL;
 
     /* load all properties synchronously */
+    GDBusProxy *serv_dbus_proxy = gum_user_service_get_dbus_proxy (
+                user->priv->dbus_service);
     result = g_dbus_connection_call_sync (
-            g_dbus_proxy_get_connection (
-                    G_DBUS_PROXY (user->priv->dbus_service)),
-            g_dbus_proxy_get_name (G_DBUS_PROXY (user->priv->dbus_service)),
+            g_dbus_proxy_get_connection (serv_dbus_proxy),
+            g_dbus_proxy_get_name (serv_dbus_proxy),
             g_dbus_proxy_get_object_path (G_DBUS_PROXY (user->priv->dbus_user)),
             "org.freedesktop.DBus.Properties",
             "GetAll",
@@ -797,7 +788,9 @@ gum_user_create (
 
     g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
     _create_op (user, callback, user_data);
-    gum_dbus_user_service_call_create_new_user (user->priv->dbus_service,
+    gum_dbus_user_service_call_create_new_user (
+            (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+                    user->priv->dbus_service),
             user->priv->cancellable, _on_new_user_cb, user);
     return user;
 }
@@ -833,8 +826,9 @@ gum_user_create_sync (
     g_return_val_if_fail (user->priv->dbus_service != NULL, NULL);
 
     if (gum_dbus_user_service_call_create_new_user_sync (
-                user->priv->dbus_service, &object_path, user->priv->cancellable,
-                &error)) {
+            (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+                    user->priv->dbus_service), &object_path,
+                    user->priv->cancellable, &error)) {
         _create_dbus_user (user, object_path, error);
     }
 
@@ -875,8 +869,10 @@ gum_user_get (
     g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
 
     _create_op (user, callback, user_data);
-     gum_dbus_user_service_call_get_user (user->priv->dbus_service, uid,
-            user->priv->cancellable, _on_get_user_cb, user);
+     gum_dbus_user_service_call_get_user (
+             (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+             user->priv->dbus_service), uid, user->priv->cancellable,
+             _on_get_user_cb, user);
 
     return user;
 }
@@ -911,8 +907,10 @@ gum_user_get_sync (
                 user->priv->offline_service, uid, &error);
     } else if (user->priv->dbus_service) {
 
-        if (gum_dbus_user_service_call_get_user_sync (user->priv->dbus_service,
-                uid, &object_path, user->priv->cancellable, &error)) {
+        if (gum_dbus_user_service_call_get_user_sync (
+                (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+                user->priv->dbus_service), uid, &object_path,
+                user->priv->cancellable, &error)) {
             _create_dbus_user (user, object_path, error);
         }
         g_free (object_path);
@@ -958,8 +956,10 @@ gum_user_get_by_name (
     g_return_val_if_fail (user && user->priv->dbus_service != NULL, NULL);
 
     _create_op (user, callback, user_data);
-    gum_dbus_user_service_call_get_user_by_name (user->priv->dbus_service,
-            username, user->priv->cancellable, _on_get_user_by_name_cb, user);
+    gum_dbus_user_service_call_get_user_by_name (
+            (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+            user->priv->dbus_service), username, user->priv->cancellable,
+            _on_get_user_by_name_cb, user);
     return user;
 }
 
@@ -998,7 +998,8 @@ gum_user_get_by_name_sync (
 
     } else if (user->priv->dbus_service) {
         if (gum_dbus_user_service_call_get_user_by_name_sync (
-                user->priv->dbus_service, username, &object_path,
+                (GumDbusUserService*) gum_user_service_get_dbus_proxy (
+                user->priv->dbus_service), username, &object_path,
                 user->priv->cancellable,  &error)) {
             _create_dbus_user (user, object_path, error);
         }
@@ -1017,7 +1018,7 @@ gum_user_get_by_name_sync (
 
 /**
  * gum_user_add:
- * @self: #GumUser object to be added; object should have either valid
+ * @self: #GumUser object to be added
  * #GumUser:username or #GumUser:nickname in addition to valid
  * #GumUser:usertype.
  * @callback: #GumUserCb to be invoked when user is added
