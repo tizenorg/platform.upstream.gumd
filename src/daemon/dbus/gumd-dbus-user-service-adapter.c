@@ -90,6 +90,13 @@ _handle_get_user_by_name (
         const gchar *username,
         gpointer user_data);
 
+static gboolean
+_handle_get_user_list (
+        GumdDbusUserServiceAdapter *self,
+        GDBusMethodInvocation *invocation,
+        const gchar *types,
+        gpointer user_data);
+
 static void
 _on_dbus_user_adapter_disposed (
         gpointer data,
@@ -272,7 +279,6 @@ _dispose (
 
     G_OBJECT_CLASS (gumd_dbus_user_service_adapter_parent_class)->dispose (
             object);
-    DBG ("user service adapter (%p) dispose end", object);
 }
 
 static void
@@ -280,14 +286,12 @@ _finalize (
         GObject *object)
 {
     GumdDbusUserServiceAdapter *self = GUMD_DBUS_USER_SERVICE_ADAPTER (object);
-    DBG ("user service adapter (%p) finalise beg", object);
 
     if (self->priv->peer_users) {
         g_list_free (self->priv->peer_users);
         self->priv->peer_users = NULL;
     }
 
-    DBG ("user service adapter (%p) finalize end", object);
     G_OBJECT_CLASS (gumd_dbus_user_service_adapter_parent_class)->finalize (
             object);
 }
@@ -654,6 +658,39 @@ _handle_get_user_by_name (
     return TRUE;
 }
 
+static gboolean
+_handle_get_user_list (
+        GumdDbusUserServiceAdapter *self,
+        GDBusMethodInvocation *invocation,
+        const gchar *types,
+        gpointer user_data)
+{
+    GError *error = NULL;
+    GVariant *users = NULL;
+
+    DBG ("type %s", types);
+
+    gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), FALSE);
+
+    users = gumd_daemon_get_user_list (self->priv->daemon, types, &error);
+
+    if (users) {
+        gum_dbus_user_service_complete_get_user_list (
+                self->priv->dbus_user_service, invocation, users);
+    } else {
+        if (!error) {
+            error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_USER_NOT_FOUND,
+                    "Users Not Found");
+        }
+        g_dbus_method_invocation_return_gerror (invocation, error);
+        g_error_free (error);
+    }
+
+    gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
+
+    return TRUE;
+}
+
 GumdDbusUserServiceAdapter *
 gumd_dbus_user_service_adapter_new_with_connection (
         GDBusConnection *bus_connection,
@@ -692,6 +729,9 @@ gumd_dbus_user_service_adapter_new_with_connection (
         "handle-get-user", G_CALLBACK(_handle_get_user), adapter);
     g_signal_connect_swapped (adapter->priv->dbus_user_service,
         "handle-get-user-by-name", G_CALLBACK(_handle_get_user_by_name),
+        adapter);
+    g_signal_connect_swapped (adapter->priv->dbus_user_service,
+        "handle-get-user-list", G_CALLBACK(_handle_get_user_list),
         adapter);
 
     g_signal_connect (G_OBJECT (adapter->priv->daemon), "user-added",
