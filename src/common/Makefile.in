@@ -135,7 +135,7 @@ am_libgum_common_la_OBJECTS = libgum_common_la-gum-config.lo \
 	libgum_common_la-gum-file.lo \
 	libgum_common_la-gum-string-utils.lo \
 	libgum_common_la-gum-utils.lo libgum_common_la-gum-validate.lo \
-	$(am__objects_1)
+	libgum_common_la-gum-user-types.lo $(am__objects_1)
 dist_libgum_common_la_OBJECTS = $(am__objects_1)
 libgum_common_la_OBJECTS = $(am_libgum_common_la_OBJECTS) \
 	$(dist_libgum_common_la_OBJECTS)
@@ -453,6 +453,7 @@ libgum_common_la_SOURCES = \
     gum-string-utils.c \
     gum-utils.c \
     gum-validate.c \
+    gum-user-types.c \
     $(NULL)
 
 dist_libgum_common_la_SOURCES = \
@@ -550,6 +551,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-file.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-lock.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-string-utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-user-types.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgum_common_la-gum-validate.Plo@am__quote@
 
@@ -646,6 +648,13 @@ libgum_common_la-gum-validate.lo: gum-validate.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-validate.c' object='libgum_common_la-gum-validate.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_common_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_common_la-gum-validate.lo `test -f 'gum-validate.c' || echo '$(srcdir)/'`gum-validate.c
+
+libgum_common_la-gum-user-types.lo: gum-user-types.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_common_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgum_common_la-gum-user-types.lo -MD -MP -MF $(DEPDIR)/libgum_common_la-gum-user-types.Tpo -c -o libgum_common_la-gum-user-types.lo `test -f 'gum-user-types.c' || echo '$(srcdir)/'`gum-user-types.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgum_common_la-gum-user-types.Tpo $(DEPDIR)/libgum_common_la-gum-user-types.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='gum-user-types.c' object='libgum_common_la-gum-user-types.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgum_common_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgum_common_la-gum-user-types.lo `test -f 'gum-user-types.c' || echo '$(srcdir)/'`gum-user-types.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

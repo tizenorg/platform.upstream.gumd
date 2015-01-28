@@ -393,6 +393,20 @@ gumd_daemon_update_user (
     return TRUE;
 }
 
+GVariant *
+gumd_daemon_get_user_list (
+        GumdDaemon *self,
+        const gchar *const *types,
+        GError **error)
+{
+    if (!self || !GUMD_IS_DAEMON (self)) {
+        GUM_RETURN_WITH_ERROR (GUM_ERROR_INVALID_INPUT,
+                "Daemon object is not valid", error, NULL);
+    }
+
+    return gumd_daemon_user_get_user_list (types, self->priv->config, error);
+}
+
 guint
 gumd_daemon_get_user_timeout (
         GumdDaemon *self)

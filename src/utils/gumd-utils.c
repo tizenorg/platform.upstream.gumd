@@ -3,9 +3,9 @@
 /*
  * This file is part of gum
  *
- * Copyright (C) 2013 Intel Corporation.
+ * Copyright (C) 2013 - 2015 Intel Corporation.
  *
- * Contact: Imran Zaman <imran.zaman@gmail.com>
+ * Contact: Imran Zaman <imran.zaman@intel.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,7 @@
 #include <stdlib.h>
 
 #include "gum-user.h"
+#include "gum-user-service.h"
 #include "common/gum-log.h"
 #include "common/gum-config.h"
 #include "common/gum-defines.h"
@@ -42,7 +43,7 @@
 typedef struct {
     uid_t uid;
     gid_t gid;
-    GumUserType usertype;
+    gchar *user_type;
     gchar *user_name;
     gchar *nick_name;
     gchar *real_name;
@@ -56,9 +57,9 @@ typedef struct {
 
 typedef struct {
     gid_t gid;
-    GumGroupType grouptype;
+    gchar *group_type;
     gchar *group_name;
-    gchar *grp_secret;
+    gchar *group_secret;
 
     uid_t mem_uid; /*used in adding/deleting a member from the group*/
 } InputGroup;
@@ -92,7 +93,7 @@ _free_test_user (
 		g_free (user->nick_name); g_free (user->real_name);
 		g_free (user->office); g_free (user->office_phone);
 		g_free (user->home_phone); g_free (user->home_dir);
-		g_free (user->shell);
+		g_free (user->shell); g_free (user->user_type);
 		g_free (user);
 	}
 }
@@ -102,7 +103,8 @@ _free_test_group (
 		InputGroup *group)
 {
     if (group) {
-        g_free (group->group_name); g_free (group->grp_secret);
+        g_free (group->group_name); g_free (group->group_secret);
+        g_free (group->group_type);
         g_free (group);
     }
 }
@@ -138,7 +140,10 @@ _set_user_prop (
         GumUser *guser,
         InputUser *user)
 {
-    g_object_set (G_OBJECT (guser), "usertype", user->usertype, NULL);
+    if (user->user_type) {
+        g_object_set (G_OBJECT (guser), "usertype",
+                gum_user_type_from_string (user->user_type), NULL);
+    }
     if (user->user_name) {
         g_object_set (G_OBJECT (guser), "username", user->user_name, NULL);
     }
@@ -155,10 +160,15 @@ static void
 _print_user_prop (
 		GumUser *guser)
 {
+	if (!guser) return;
+
 	InputUser *user = _create_test_user ();
+	GumUserType ut = GUM_USERTYPE_NONE;
 	g_object_get (G_OBJECT (guser), "uid", &user->uid, NULL);
 	g_object_get (G_OBJECT (guser), "gid", &user->gid, NULL);
     g_object_get (G_OBJECT (guser), "username", &user->user_name, NULL);
+    g_object_get (G_OBJECT (guser), "usertype", &ut, NULL);
+    user->user_type = g_strdup (gum_user_type_to_string (ut));
     g_object_get (G_OBJECT (guser), "nickname", &user->nick_name, NULL);
     g_object_get (G_OBJECT (guser), "realname", &user->real_name, NULL);
     g_object_get (G_OBJECT (guser), "office", &user->office, NULL);
@@ -171,6 +181,7 @@ _print_user_prop (
     INFO ("uid : %u", user->uid);
     INFO ("gid : %u", user->gid);
     INFO ("username : %s", user->user_name ? user->user_name : "UNKNOWN");
+    INFO ("usertype : %s", user->user_type ? user->user_type : "UNKNOWN");
     INFO ("nickname : %s", user->nick_name ? user->nick_name : "UNKNOWN");
     INFO ("realname : %s", user->real_name ? user->real_name : "UNKNOWN");
     INFO ("office : %s", user->office ? user->office : "UNKNOWN");
@@ -178,7 +189,7 @@ _print_user_prop (
     		user->office_phone ? user->office_phone : "UNKNOWN");
     INFO ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
     INFO ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
-    INFO ("shell : %s", user->shell ? user->shell : "UNKNOWN");
+    INFO ("shell : %s\n", user->shell ? user->shell : "UNKNOWN");
 
     _free_test_user (user);
 }
@@ -349,13 +360,52 @@ _handle_user_get_by_name (
 }
 
 static void
+_handle_user_get_list (
+        const gchar *types)
+{
+    GumUserService *service = NULL;
+    GumUser *guser = NULL;
+    GumUserList *users = NULL;
+    gchar **strv = NULL;
+
+    service = gum_user_service_create_sync (offline_mode);
+    if (!service) return;
+
+    strv = g_strsplit (types, ",", -1);
+    users = gum_user_service_get_user_list_sync (service,
+            (const gchar *const *)strv);
+    g_strfreev (strv);
+    if (users) {
+        GumUserList *src_list = users;
+        for ( ; src_list != NULL; src_list = g_list_next (src_list)) {
+            guser = (GumUser*) src_list->data;
+            _print_user_prop (guser);
+        }
+        gum_user_service_list_free (users);
+    }
+
+    g_object_unref (service);
+}
+
+static void
 _set_group_update_prop (
         GumGroup *grp,
         InputGroup *group)
 {
-    if (group->grp_secret) {
-        g_object_set (G_OBJECT (grp), "secret", group->grp_secret, NULL);
+    if (group->group_secret) {
+        g_object_set (G_OBJECT (grp), "secret", group->group_secret, NULL);
     }
+}
+
+static GumGroupType
+_group_type_from_string (
+        const gchar *in_type)
+{
+    if (g_strcmp0 (in_type, "user") == 0)
+        return GUM_GROUPTYPE_USER;
+    else if (g_strcmp0 (in_type, "system") == 0)
+        return GUM_GROUPTYPE_SYSTEM;
+    return GUM_GROUPTYPE_NONE;
 }
 
 static void
@@ -363,7 +413,10 @@ _set_group_prop (
         GumGroup *grp,
         InputGroup *group)
 {
-    g_object_set (G_OBJECT (grp), "grouptype", group->grouptype, NULL);
+    if (group->group_type) {
+        g_object_set (G_OBJECT (grp), "grouptype", _group_type_from_string (
+                group->group_type), NULL);
+    }
     if (group->group_name) {
         g_object_set (G_OBJECT (grp), "groupname", group->group_name, NULL);
     }
@@ -527,6 +580,10 @@ main (int argc, char *argv[])
     gboolean rval = FALSE;
     GumConfig *config = NULL;
     gchar *sysroot = NULL;
+    gchar *user_types = NULL;
+
+    gboolean is_user_list_op = FALSE;
+    GOptionGroup* user_serv_option = NULL;
 
     gboolean is_user_add_op = FALSE, is_user_del_op = FALSE;
     gboolean is_user_up_op = FALSE, is_user_get_op = FALSE;
@@ -547,15 +604,8 @@ main (int argc, char *argv[])
 
     GOptionEntry main_entries[] =
     {
-        { "offline", 'o', 0, G_OPTION_ARG_NONE, &offline_mode,
-                "when gum-utils is invoked in offline mode, it triggers "
-                "synchronous APIs in offline mode. Effectively libgum will "
-                "perform the sync op add/delete/update/get without (dbus) gumd",
-                NULL},
-        { "sysroot", 'q', 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
-                "[Offline mode ONLY]", "sysroot"},
         { "add-user", 'a', 0, G_OPTION_ARG_NONE, &is_user_add_op, "add user"
-                " -- username (or nickname) and usertype is mandatory", NULL},
+                " -- username (or nickname) and user_type is mandatory", NULL},
         { "delete-user", 'd', 0, G_OPTION_ARG_NONE, &is_user_del_op,
                 "delete user -- uid is mandatory", NULL},
         { "update-user", 'u', 0, G_OPTION_ARG_NONE, &is_user_up_op,
@@ -569,7 +619,7 @@ main (int argc, char *argv[])
                         " mandatory", NULL},
 
         { "add-group", 'g', 0, G_OPTION_ARG_NONE, &is_group_add_op, "add group"
-                " -- groupname and grouptype are mandatory", NULL},
+                " -- groupname and group_type are mandatory", NULL},
         { "delete-group", 'h', 0, G_OPTION_ARG_NONE, &is_group_del_op,
                 "delete group -- gid is mandatory", NULL},
         { "update-group", 'i', 0, G_OPTION_ARG_NONE, &is_group_up_op,
@@ -588,16 +638,36 @@ main (int argc, char *argv[])
         { "write-nfc", 'p', 0, G_OPTION_ARG_NONE, &is_write_nfc,
                 "write username and secret to an NFC tag when creating or"
                 " updating a user", NULL},
+        { "offline", 'o', 0, G_OPTION_ARG_NONE, &offline_mode,
+                "offline mode triggers libgum synchronous APIs without (dbus) "
+                "gumd to perform op add/delete/update/get",
+                NULL},
+        { "sysroot", 'q', 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
+                "[Offline mode ONLY]", "sysroot"},
+        { "user-list", 'r', 0, G_OPTION_ARG_NONE, &is_user_list_op,
+                "if user_types argument is specified, then the calls will "
+                "return the specified users only otherwise all the users will "
+                "be returned", NULL},
         { NULL }
     };
     
+    GOptionEntry user_serv_entries[] =
+    {
+        { "user_types", 0, 0, G_OPTION_ARG_STRING, &user_types,
+                "valid user_type can be system or admin or guest or normal."
+                "Multiple user types can be specified as comma separated "
+                "values e.g. normal,system",
+                "type"},
+        { NULL }
+    };
+
     GOptionEntry user_entries[] =
     {
         { "username", 0, 0, G_OPTION_ARG_STRING, &user->user_name,
                 "user name", "name"},
-        { "usertype", 0, 0, G_OPTION_ARG_INT, &user->usertype,
-                "usertype can be 1 (system), 2 (admin), 3 (guest), 4 (normal) ",
-                "type; only integer is accepted as type."},
+        { "user_type", 0, 0, G_OPTION_ARG_STRING, &user->user_type,
+                "valid user_type can be system or admin or guest or normal.",
+                "type"},
         { "uid", 0, 0, G_OPTION_ARG_INT, &user->uid, "user id", "uid"},
         { "ugid", 0, 0, G_OPTION_ARG_INT, &user->gid, "group id", "gid"},
         { "usecret", 0, 0, G_OPTION_ARG_STRING, &user->secret,
@@ -623,11 +693,10 @@ main (int argc, char *argv[])
     {
         { "groupname", 0, 0, G_OPTION_ARG_STRING, &group->group_name,
                 "group name", "name"},
-        { "grouptype", 0, 0, G_OPTION_ARG_INT, &group->grouptype,
-                "group type can be 1 (system), 2 (user). Only integer is "
-                "accepted as type.", "type"},
+        { "group_type", 0, 0, G_OPTION_ARG_STRING, &group->group_type,
+                "valid group type can be system or user", "type"},
         { "gid", 0, 0, G_OPTION_ARG_INT, &group->gid, "group id", "gid"},
-        { "gsecret", 0, 0, G_OPTION_ARG_STRING, &group->grp_secret,
+        { "gsecret", 0, 0, G_OPTION_ARG_STRING, &group->group_secret,
                 "group secret in plain text", "secret"},
         { "mem_uid", 0, 0, G_OPTION_ARG_INT, &group->mem_uid, "mem uid",
         		"mem_uid"},
@@ -640,10 +709,15 @@ main (int argc, char *argv[])
     
     context = g_option_context_new ("\n"
             "  To add user in non-offline mode, gum-utils -a --username=user1 "
-            "  --usertype=4\n"
+            "  --user_type=normal\n"
             "  To delete user in offline mode, gum-utils -o -d --uid=2001\n"
             "  NOTE: Only one command can be run at one time.");
     g_option_context_add_main_entries (context, main_entries, NULL);
+
+    user_serv_option = g_option_group_new("user-service-options", "User service "
+            "specific options", "User service specific options", NULL, NULL);
+    g_option_group_add_entries(user_serv_option, user_serv_entries);
+    g_option_context_add_group (context, user_serv_option);
 
     user_option = g_option_group_new("user-options", "User specific options",
             "User specific options", NULL, NULL);
@@ -681,6 +755,8 @@ main (int argc, char *argv[])
     	_handle_user_get (user);
     } else if (is_user_get_by_name_op) {
     	_handle_user_get_by_name (user);
+    } else if (is_user_list_op) {
+        _handle_user_get_list (user_types);
     }
 
     /* group */
@@ -705,6 +781,7 @@ main (int argc, char *argv[])
     if (config) g_object_unref (config);
     _free_test_user (user);
     _free_test_group (group);
+    g_free (user_types);
 
     return 0;
 }

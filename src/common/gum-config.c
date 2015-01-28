@@ -107,13 +107,13 @@ struct _GumConfigPrivate
 
 G_DEFINE_TYPE (GumConfig, gum_config, G_TYPE_OBJECT);
 
-#define UID_MIN      2000
+#define UID_MIN      1000
 #define UID_MAX      60000
-#define SYS_UID_MIN  200
+#define SYS_UID_MIN  100
 #define SYS_UID_MAX  999
-#define GID_MIN      2000
+#define GID_MIN      1000
 #define GID_MAX      60000
-#define SYS_GID_MIN  200
+#define SYS_GID_MIN  100
 #define SYS_GID_MAX  999
 
 /* shadow */
