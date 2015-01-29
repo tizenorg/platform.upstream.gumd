@@ -275,12 +275,17 @@ gum_string_utils_append_string (
 {
     gchar **dest_strv = NULL;
     gint ind = 0;
-    gint len = g_strv_length (src_strv);
+    gint len = 0;
+
+    if (src_strv)
+        len = g_strv_length (src_strv);
 
     dest_strv = g_malloc0 (sizeof (gchar *) * (len + 2));
-    while (src_strv[ind]) {
-        dest_strv[ind] = g_strdup (src_strv[ind]);
-        ind++;
+    if (src_strv) {
+        while (src_strv[ind]) {
+            dest_strv[ind] = g_strdup (src_strv[ind]);
+            ind++;
+        }
     }
     dest_strv[ind++] = g_strdup (string);
     dest_strv[ind] = NULL;
