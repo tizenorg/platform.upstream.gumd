@@ -31,6 +31,7 @@ BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(gmodule-2.0)
 Requires: tizen-platform-config
 
+
 %description
 %{summary} files
 
