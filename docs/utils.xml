@@ -41,7 +41,7 @@
                     mandatory-args are:
                         --username=&lt;username&gt; OR --nickname=&lt;nickname&gt;
                         --usertype=&lt;usertype&gt;
-                         possible usertypes are: system(1), admin(2), guest(3), normal(4).
+                         possible usertype can be system or admin or guest or normal.
                     optional-args are:
                         --usecret=&lt;secret&gt;
                         --realname=&lt;realname&gt;
