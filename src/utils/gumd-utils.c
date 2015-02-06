@@ -653,8 +653,8 @@ main (int argc, char *argv[])
     
     GOptionEntry user_serv_entries[] =
     {
-        { "user_types", 0, 0, G_OPTION_ARG_STRING, &user_types,
-                "valid user_type can be system or admin or guest or normal."
+        { "usertypes", 0, 0, G_OPTION_ARG_STRING, &user_types,
+                "valid usertypes can be system or admin or guest or normal."
                 "Multiple user types can be specified as comma separated "
                 "values e.g. normal,system",
                 "type"},
@@ -665,7 +665,7 @@ main (int argc, char *argv[])
     {
         { "username", 0, 0, G_OPTION_ARG_STRING, &user->user_name,
                 "user name", "name"},
-        { "user_type", 0, 0, G_OPTION_ARG_STRING, &user->user_type,
+        { "usertype", 0, 0, G_OPTION_ARG_STRING, &user->user_type,
                 "valid user_type can be system or admin or guest or normal.",
                 "type"},
         { "uid", 0, 0, G_OPTION_ARG_INT, &user->uid, "user id", "uid"},
