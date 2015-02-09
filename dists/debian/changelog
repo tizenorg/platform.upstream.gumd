@@ -1,3 +1,9 @@
+gumd (1.0.7-0) unstable; urgency=low
+
+  * Fixed copying of extended attributes from skel folder
+
+ -- Imran Zaman <imran.zaman@intel.com>  Mon, 09 Feb  2015 18:00:00 +0300
+
 gumd (1.0.6-0) unstable; urgency=low
 
   * Fixed gum-utils documentation

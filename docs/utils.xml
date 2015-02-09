@@ -134,7 +134,7 @@
                     mandatory-args are:
                         --groupname=&lt;groupname&gt;
                         --grouptype=&lt;grouptype&gt;
-                        possible grouptypes are: system(1), user(2).
+                        possible grouptypes are: system or user.
                     optional-args are:
                         --gsecret=&lt;secret&gt;
             </computeroutput>

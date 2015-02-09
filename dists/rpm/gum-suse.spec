@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 1.0.6
+Version: 1.0.7
 Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
@@ -150,6 +150,9 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Mon Feb 09 2015 Imran Zaman <imran.zaman@intel.com>
+- Fixed copying of extended attributes from skel folder
+
 * Thu Feb 05 2015 Imran Zaman <imran.zaman@intel.com>
 - Fixed gum-utils documentation
 
