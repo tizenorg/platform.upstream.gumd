@@ -1,3 +1,9 @@
+* Mon Feb 09 2015 Imran Zaman <imran.zaman@intel.com>
+- Fixed copying of extended attributes from skel folder
+
+* Thu Feb 05 2015 Imran Zaman <imran.zaman@intel.com>
+- Fixed gum-utils documentation
+
 * Wed Jan 28 2015 Imran Zaman <imran.zaman@intel.com>
 - Added APIs for fetching users based on the type
 

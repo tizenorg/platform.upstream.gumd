@@ -129,7 +129,7 @@ _set_smack64_attr (
      */
     if (smack_label &&
         len > 0 &&
-        setxattr (path, XATTR_NAME_SMACK, smack_label, len, 0) != 0) {
+        lsetxattr (path, XATTR_NAME_SMACK, smack_label, len, 0) != 0) {
         g_object_unref (config);
         return FALSE;
     }
@@ -182,10 +182,8 @@ _copy_file_attributes (
             names[attrs_size] = '\0';
             ssize_t size = 0;
 
-            while (name != end_names) {
-                if (name)
-                    name = strchr (name,'\0')+1;
-                if (name && name[0] != '\0') {
+            while (name && name != end_names) {
+                if (name[0] != '\0') {
                     size = lgetxattr (from_path, name, NULL, 0);
                     if(size > 0 &&
                         (value = g_realloc (value, size)) &&
@@ -197,6 +195,7 @@ _copy_file_attributes (
                         }
                     }
                 }
+                name = strchr (name,'\0') + 1;
             }
             g_free (value);
         }
@@ -253,16 +252,16 @@ gum_file_open_db_files (
         goto _fail;
     }
 
-    if (!_copy_file_attributes (source_file_path, dup_file_path)) {
-        GUM_SET_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
-                "Unable to get/set file attributes", error, retval, FALSE);
-        goto _fail;
-    }
-
     if (!_set_smack64_attr (dup_file_path,
             GUM_CONFIG_GENERAL_SMACK64_NEW_FILES)) {
         GUM_SET_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
                  "Unable to set smack file attributes", error, retval, FALSE);
+        goto _fail;
+    }
+
+    if (!_copy_file_attributes (source_file_path, dup_file_path)) {
+        GUM_SET_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                "Unable to get/set file attributes", error, retval, FALSE);
         goto _fail;
     }
 
@@ -755,6 +754,7 @@ _copy_dir_recursively (
             stop = !_set_smack64_attr (dest_filepath,
                     GUM_CONFIG_GENERAL_SMACK64_USER_FILES);
         }
+        if (!stop) stop = !_copy_file_attributes (src_filepath, dest_filepath);
         if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
 
 _free_data:
@@ -804,7 +804,11 @@ gum_file_create_home_dir (
     }
 
     if (g_access (home_dir, F_OK) != 0) {
-        GumConfig *config = NULL;
+        GumConfig *config = gum_config_new (NULL);
+        const gchar *skel_dir = NULL;
+
+        skel_dir = gum_config_get_string (config, GUM_CONFIG_GENERAL_SKEL_DIR);
+        g_object_unref (config);
 
         if (!g_file_test (home_dir, G_FILE_TEST_EXISTS)) {
             g_mkdir_with_parents (home_dir, mode);
@@ -821,6 +825,11 @@ gum_file_create_home_dir (
                      "Unable to set smack64 home dir attr", error, FALSE);
         }
 
+        if (!_copy_file_attributes (skel_dir, home_dir)) {
+            GUM_RETURN_WITH_ERROR (GUM_ERROR_FILE_ATTRIBUTE,
+                    "Unable to get/set dir attributes", error, FALSE);
+        }
+
         /* when run in test mode, user may not exist */
 #ifdef ENABLE_TESTS
         uid = getuid ();
@@ -831,11 +840,8 @@ gum_file_create_home_dir (
                     "Home directory chown failure", error, FALSE);
         }
 
-        config = gum_config_new (NULL);
-        retval = _copy_dir_recursively (gum_config_get_string (config,
-            GUM_CONFIG_GENERAL_SKEL_DIR), home_dir, uid, gid, umask, error);
-        g_object_unref (config);
-
+        retval = _copy_dir_recursively (skel_dir, home_dir, uid, gid, umask,
+                error);
 	}
 
 	return retval;

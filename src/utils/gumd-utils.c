@@ -645,7 +645,7 @@ main (int argc, char *argv[])
         { "sysroot", 'q', 0, G_OPTION_ARG_STRING, &sysroot, "sysroot path "
                 "[Offline mode ONLY]", "sysroot"},
         { "user-list", 'r', 0, G_OPTION_ARG_NONE, &is_user_list_op,
-                "if user_types argument is specified, then the calls will "
+                "if usertypes argument is specified, then the calls will "
                 "return the specified users only otherwise all the users will "
                 "be returned", NULL},
         { NULL }
@@ -653,8 +653,8 @@ main (int argc, char *argv[])
     
     GOptionEntry user_serv_entries[] =
     {
-        { "user_types", 0, 0, G_OPTION_ARG_STRING, &user_types,
-                "valid user_type can be system or admin or guest or normal."
+        { "usertypes", 0, 0, G_OPTION_ARG_STRING, &user_types,
+                "valid usertypes can be system or admin or guest or normal."
                 "Multiple user types can be specified as comma separated "
                 "values e.g. normal,system",
                 "type"},
@@ -665,7 +665,7 @@ main (int argc, char *argv[])
     {
         { "username", 0, 0, G_OPTION_ARG_STRING, &user->user_name,
                 "user name", "name"},
-        { "user_type", 0, 0, G_OPTION_ARG_STRING, &user->user_type,
+        { "usertype", 0, 0, G_OPTION_ARG_STRING, &user->user_type,
                 "valid user_type can be system or admin or guest or normal.",
                 "type"},
         { "uid", 0, 0, G_OPTION_ARG_INT, &user->uid, "user id", "uid"},
@@ -693,7 +693,7 @@ main (int argc, char *argv[])
     {
         { "groupname", 0, 0, G_OPTION_ARG_STRING, &group->group_name,
                 "group name", "name"},
-        { "group_type", 0, 0, G_OPTION_ARG_STRING, &group->group_type,
+        { "grouptype", 0, 0, G_OPTION_ARG_STRING, &group->group_type,
                 "valid group type can be system or user", "type"},
         { "gid", 0, 0, G_OPTION_ARG_INT, &group->gid, "group id", "gid"},
         { "gsecret", 0, 0, G_OPTION_ARG_STRING, &group->group_secret,
@@ -709,7 +709,7 @@ main (int argc, char *argv[])
     
     context = g_option_context_new ("\n"
             "  To add user in non-offline mode, gum-utils -a --username=user1 "
-            "  --user_type=normal\n"
+            "  --usertype=normal\n"
             "  To delete user in offline mode, gum-utils -o -d --uid=2001\n"
             "  NOTE: Only one command can be run at one time.");
     g_option_context_add_main_entries (context, main_entries, NULL);
