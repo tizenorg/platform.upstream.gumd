@@ -6,7 +6,7 @@
 
 Name:    gumd
 Summary: User management daemon and client library
-Version: 1.0.6
+Version: 1.0.7
 Release: 0
 Group:   Security/Accounts
 License: LGPL-2.1+
@@ -30,7 +30,6 @@ BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(gmodule-2.0)
 Requires: tizen-platform-config
-
 
 %description
 %{summary} files
