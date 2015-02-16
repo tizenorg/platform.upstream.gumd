@@ -107,6 +107,7 @@ install -d -m 755 %{_sysconfdir}/%{name}/useradd.d
 install -d -m 755 %{_sysconfdir}/%{name}/userdel.d
 install -d -m 755 %{_sysconfdir}/%{name}/groupadd.d
 install -d -m 755 %{_sysconfdir}/%{name}/groupdel.d
+install -d -m 755 %{_localstatedir}/lib/%{name}/user
 
 
 %postun -p /sbin/ldconfig

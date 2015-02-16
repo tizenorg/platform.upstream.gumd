@@ -53,6 +53,7 @@ typedef struct {
     gchar *home_dir;
     gchar *shell;
     gchar *secret;
+    gchar *icon;
 } InputUser;
 
 typedef struct {
@@ -94,6 +95,7 @@ _free_test_user (
 		g_free (user->office); g_free (user->office_phone);
 		g_free (user->home_phone); g_free (user->home_dir);
 		g_free (user->shell); g_free (user->user_type);
+		g_free (user->icon);
 		g_free (user);
 	}
 }
@@ -132,6 +134,9 @@ _set_user_update_prop (
     }
     if (user->secret) {
         g_object_set (G_OBJECT (guser), "secret", user->secret, NULL);
+    }
+    if (user->icon) {
+        g_object_set (G_OBJECT (guser), "icon", user->icon, NULL);
     }
 }
 
@@ -177,6 +182,7 @@ _print_user_prop (
     g_object_get (G_OBJECT (guser), "homephone", &user->home_phone, NULL);
     g_object_get (G_OBJECT (guser), "homedir", &user->home_dir, NULL);
     g_object_get (G_OBJECT (guser), "shell", &user->shell, NULL);
+    g_object_get (G_OBJECT (guser), "icon", &user->icon, NULL);
 
     INFO ("uid : %u", user->uid);
     INFO ("gid : %u", user->gid);
@@ -189,6 +195,7 @@ _print_user_prop (
     		user->office_phone ? user->office_phone : "UNKNOWN");
     INFO ("homephone : %s", user->home_phone ? user->home_phone : "UNKNOWN");
     INFO ("homedir : %s", user->home_dir ? user->home_dir : "UNKNOWN");
+    INFO ("icon: %s", user->icon ? user->icon: "UNKNOWN");
     INFO ("shell : %s\n", user->shell ? user->shell : "UNKNOWN");
 
     _free_test_user (user);
@@ -610,8 +617,8 @@ main (int argc, char *argv[])
                 "delete user -- uid is mandatory", NULL},
         { "update-user", 'u', 0, G_OPTION_ARG_NONE, &is_user_up_op,
                 "update user -- uid is mandatory; possible props that can be "
-                "updated are secret, realname, office, officephone, homephone "
-                "and shell", NULL},
+                "updated are secret, realname, office, officephone, homephone, "
+                "icon and shell", NULL},
         { "get-user", 'b', 0, G_OPTION_ARG_NONE, &is_user_get_op, "get user"
                 " -- uid is mandatory", NULL},
         { "get-user-by-name", 'c', 0, G_OPTION_ARG_NONE,
@@ -686,6 +693,8 @@ main (int argc, char *argv[])
                 "dir"},
         { "shell", 0, 0, G_OPTION_ARG_STRING, &user->shell, "shell path",
                 "shell"},
+        { "icon", 0, 0, G_OPTION_ARG_STRING, &user->icon, "icon path",
+                "icon"},
         { NULL }
     };
 
