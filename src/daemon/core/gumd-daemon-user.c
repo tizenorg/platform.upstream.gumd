@@ -2130,8 +2130,10 @@ gumd_daemon_user_get_user_list (
         if (ut == GUM_USERTYPE_NONE) {
             if (pent->pw_uid >=sys_uid_min && pent->pw_uid <= sys_uid_max)
                 ut = GUM_USERTYPE_SYSTEM;
-            else
-                ut = GUM_USERTYPE_NORMAL;
+            else {
+                pent = NULL;
+                continue;
+	    }
         }
         if (ut & in_types) {
             g_variant_builder_add (&builder, "u", pent->pw_uid);
