@@ -137,5 +137,11 @@
             </tp:docstring>
         </property>
 
+        <property name="icon" tp:name-for-bindings="icon"
+         type="s" access="readwrite">
+            <tp:docstring>path of the user icon
+            </tp:docstring>
+        </property>
+
     </interface>
 </node>

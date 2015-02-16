@@ -144,6 +144,7 @@ enum
     PROP_HOMEDIR,
     PROP_SHELL,
     PROP_OFFLINE,
+    PROP_ICON,
 
     N_PROPERTIES
 };
@@ -520,6 +521,16 @@ gum_user_class_init (
             "Operational mode for the User object",
             FALSE,
             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
+    /**
+     * GumUser:icon:
+     */
+    properties[PROP_ICON] = g_param_spec_string ("icon",
+            "Icon",
+            "Icon path of User",
+            "" /* default value */,
+            G_PARAM_READWRITE |
+            G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties (object_class, N_PROPERTIES,
             properties);
