@@ -32,6 +32,8 @@
 #include <gio/gio.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <glib/gprintf.h>
+#include <glib/gstdio.h>
 
 #include "gumd-daemon-user.h"
 #include "gumd-daemon-group.h"
@@ -44,6 +46,10 @@
 #include "common/gum-log.h"
 #include "common/gum-error.h"
 #include "common/gum-utils.h"
+
+struct _userinfo {
+    char *icon;
+};
 
 struct _GumdDaemonUserPrivate
 {
@@ -63,6 +69,11 @@ struct _GumdDaemonUserPrivate
      * account_expiry_date:reserved_field
      */
     struct spwd *shadow;
+
+    /* user info file entries format:
+     * icon:
+     */
+    struct _userinfo *info;
 };
 
 G_DEFINE_TYPE (GumdDaemonUser, gumd_daemon_user, G_TYPE_OBJECT)
@@ -71,6 +82,7 @@ G_DEFINE_TYPE (GumdDaemonUser, gumd_daemon_user, G_TYPE_OBJECT)
         GUMD_TYPE_DAEMON_USER, GumdDaemonUserPrivate)
 
 #define GUMD_DAY (24L*3600L)
+#define GUMD_STR_LEN 4096
 
 enum
 {
@@ -89,6 +101,7 @@ enum
     PROP_HOMEPHONE,
     PROP_HOMEDIR,
     PROP_SHELL,
+    PROP_ICON,
 
     N_PROPERTIES
 };
@@ -128,6 +141,15 @@ _free_shadow_entry (
         g_free (shadow->sp_namp);
         g_free (shadow->sp_pwdp);
         g_free (shadow);
+    }
+}
+
+static void
+_free_info_entry (
+        struct _userinfo *info)
+{
+    if (info) {
+        g_free (info->icon);
     }
 }
 
@@ -344,6 +366,19 @@ _set_shell_property (
 }
 
 static void
+_set_icon_property (
+        GumdDaemonUser *self,
+        const gchar *value)
+{
+    if (g_strcmp0 (value, self->priv->info->icon) != 0 &&
+        gum_validate_db_string_entry (value, NULL)) {
+        GUM_STR_FREE (self->priv->info->icon);
+        self->priv->info->icon = g_strdup (value);
+        g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON]);
+    }
+}
+
+static void
 _set_property (
         GObject *object,
         guint property_id,
@@ -403,6 +438,10 @@ _set_property (
         }
         case PROP_SHELL: {
             _set_shell_property (self, g_value_get_string (value));
+            break;
+        }
+        case PROP_ICON: {
+            _set_icon_property (self, g_value_get_string (value));
             break;
         }
         default:
@@ -503,6 +542,10 @@ _get_property (
                 g_value_set_string (value, self->priv->pw->pw_shell);
             break;
         }
+        case PROP_ICON: {
+            g_value_set_string (value, self->priv->info->icon);
+            break;
+        }
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -537,6 +580,11 @@ _finalize (GObject *object)
         self->priv->pw = NULL;
     }
 
+    if (self->priv->info) {
+        _free_info_entry (self->priv->info);
+        self->priv->info = NULL;
+    }
+
     G_OBJECT_CLASS (gumd_daemon_user_parent_class)->finalize (object);
 }
 
@@ -551,6 +599,7 @@ gumd_daemon_user_init (
     self->priv->pw->pw_uid = GUM_USER_INVALID_UID;
     self->priv->pw->pw_gid = GUMD_DAEMON_GROUP_INVALID_GID;
     self->priv->shadow = g_malloc0 (sizeof (struct spwd));
+    self->priv->info = g_malloc0 (sizeof (struct _userinfo));
 }
 
 static void
@@ -660,6 +709,13 @@ gumd_daemon_user_class_init (
     properties[PROP_SHELL] = g_param_spec_string ("shell",
             "Shell",
             "Shell",
+            "" /* default value */,
+            G_PARAM_READWRITE |
+            G_PARAM_STATIC_STRINGS);
+
+    properties[PROP_ICON] = g_param_spec_string ("icon",
+            "Icon",
+            "Icon path of User",
             "" /* default value */,
             G_PARAM_READWRITE |
             G_PARAM_STATIC_STRINGS);
@@ -1237,6 +1293,137 @@ _finished:
     return deleted;
 }
 
+static gboolean
+_get_userinfo_path(GumdDaemonUser *self, gchar *path, gulong n)
+{
+    const gchar *str = NULL;
+
+    str = gum_config_get_string (self->priv->config, GUM_CONFIG_GENERAL_USERINFO_DIR);
+    if (!str) {
+        WARN("Failed to get userinfo file path");
+        return FALSE;
+    }
+
+    g_snprintf(path, n, "%s%d", str, self->priv->pw->pw_uid);
+
+    return TRUE;
+}
+
+static void
+_delete_userinfo(GumdDaemonUser *self)
+{
+    gchar path[GUMD_STR_LEN];
+
+    if (!_get_userinfo_path(self, path, sizeof(path)))
+        return;
+
+    g_remove(path);
+}
+
+static gboolean
+_add_userinfo(GumdDaemonUser *self)
+{
+    GKeyFile *key = NULL;
+    GError *error = NULL;
+    gchar path[GUMD_STR_LEN];
+
+    key = g_key_file_new();
+    if (!key)
+        return FALSE;
+
+    if (self->priv->info->icon)
+        g_key_file_set_string(key, "User", "Icon", self->priv->info->icon);
+
+    if (!_get_userinfo_path(self, path, sizeof(path)))
+        return FALSE;
+
+    if (!g_key_file_save_to_file(key, path, &error)) {
+        WARN("Key file save failure error %d:%s", error ? error->code : 0,
+                error ? error->message : "");
+        g_key_file_free(key);
+        g_clear_error(&error);
+        return FALSE;
+    }
+
+    g_key_file_free(key);
+
+    return TRUE;
+}
+
+static gboolean
+_update_userinfo(GumdDaemonUser *self, struct _userinfo *info)
+{
+    GKeyFile *key = NULL;
+    GError *error = NULL;
+    gchar path[GUMD_STR_LEN];
+
+    key = g_key_file_new();
+    if (!key)
+        return FALSE;
+
+    if (!_get_userinfo_path(self, path, sizeof(path)))
+        return FALSE;
+
+    g_key_file_load_from_file(key, path, G_KEY_FILE_NONE, NULL);
+
+    if (info->icon)
+        g_key_file_set_string(key, "User", "Icon", info->icon);
+
+    if (!g_key_file_save_to_file(key, path, &error)) {
+        WARN("Key file save failure error %d:%s", error ? error->code : 0,
+                error ? error->message : "");
+        g_key_file_free(key);
+        g_clear_error(&error);
+        return FALSE;
+    }
+
+    g_key_file_free(key);
+
+    return TRUE;
+}
+
+static gboolean
+_get_userinfo(GumdDaemonUser *self, struct _userinfo *info)
+{
+    GKeyFile *key = NULL;
+    GError *error = NULL;
+    gchar path[GUMD_STR_LEN];
+
+    key = g_key_file_new();
+    if (!key)
+        return FALSE;
+
+    if (!_get_userinfo_path(self, path, sizeof(path)))
+        return FALSE;
+
+    if (!g_key_file_load_from_file(key, path, G_KEY_FILE_NONE, &error)) {
+        g_key_file_free(key);
+        g_clear_error(&error);
+        return FALSE;
+    }
+
+    info->icon = g_key_file_get_string(key, "User", "Icon", NULL);
+    if (!info->icon)
+        info->icon = "";
+
+    g_key_file_free(key);
+
+    return TRUE;
+}
+
+static gboolean
+_copy_userinfo_struct (
+        struct _userinfo *src,
+        GumdDaemonUser *dest)
+{
+    if (!src || !dest)
+        return FALSE;
+
+    _set_icon_property (dest, src->icon);
+
+    return TRUE;
+}
+
 static struct passwd *
 _get_passwd (
         GumdDaemonUser *self,
@@ -1320,6 +1507,7 @@ _copy_passwd_data (
 {
     struct passwd *pent = NULL;
     struct spwd *spent = NULL;
+    struct _userinfo info = {0,};
     DBG("");
 
     if ((pent = _get_passwd (self, error)) == NULL) {
@@ -1331,12 +1519,16 @@ _copy_passwd_data (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND, "User not found",
                 error, FALSE);
     }
+    _get_userinfo (self, &info);
 
     /*passwd entry*/
     _copy_passwd_struct (pent, self);
 
     /*shadow entry*/
     _copy_shadow_struct (spent, self->priv->shadow, FALSE);
+
+    /*userinfo entry*/
+    _copy_userinfo_struct (&info, self);
 
     return TRUE;
 }
@@ -1546,6 +1738,8 @@ gumd_daemon_user_add (
         return FALSE;
     }
 
+    _add_userinfo(self);
+
     if (!_set_default_groups (self, error) ||
         !_create_home_dir (self, error)) {
         gum_lock_pwdf_unlock ();
@@ -1568,6 +1762,7 @@ gumd_daemon_user_add (
     gum_utils_run_user_scripts (scrip_dir, self->priv->pw->pw_name,
             self->priv->pw->pw_uid, self->priv->pw->pw_gid,
             self->priv->pw->pw_dir, ut);
+
     g_free (ut);
     gum_lock_pwdf_unlock ();
     return TRUE;
@@ -1650,6 +1845,8 @@ gumd_daemon_user_delete (
             self->priv->pw->pw_uid, self->priv->pw->pw_gid,
             self->priv->pw->pw_dir, NULL);
 
+    _delete_userinfo(self);
+
     if (!gum_file_update (G_OBJECT (self), GUM_OPTYPE_DELETE,
             (GumFileUpdateCB)_update_passwd_entry,
             gum_config_get_string (self->priv->config,
@@ -1731,6 +1928,7 @@ gumd_daemon_user_update (
 {
     struct passwd *pw = NULL;
     struct spwd *shadow = NULL;
+    struct _userinfo info = {0,};
     gchar *old_name = NULL;
     gint change = 0;
 
@@ -1760,6 +1958,16 @@ gumd_daemon_user_update (
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_NOT_FOUND,
                 "User not found in Shadow", error, FALSE);
     }
+
+    /* userinfo entry */
+    _get_userinfo (self, &info);
+
+    if (self->priv->info->icon && g_strcmp0 (info.icon, self->priv->info->icon)) {
+        change++;
+        info.icon = self->priv->info->icon;
+    }
+    if (change)
+        _update_userinfo(self, &info);
 
     /* shadow entry */
     _copy_shadow_struct (shadow, self->priv->shadow, TRUE);
