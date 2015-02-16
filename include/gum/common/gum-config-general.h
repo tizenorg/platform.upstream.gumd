@@ -158,6 +158,14 @@
                                               "/SKEL_DIR"
 
 /**
+ * GUM_CONFIG_GENERAL_USERINFO_DIR:
+ *
+ * Path to user information folder.
+ */
+#define GUM_CONFIG_GENERAL_USERINFO_DIR         GUM_CONFIG_GENERAL \
+                                              "/USERINFO_DIR"
+
+/**
  * GUM_CONFIG_GENERAL_UID_MIN:
  *
  * Minimum value for the automatic uid selection. Default value is: 2000
