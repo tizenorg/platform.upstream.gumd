@@ -81,6 +81,7 @@ cp -a %{SOURCE1001} %{name}.manifest
 cp -a %{SOURCE1002} libgum.manifest
 
 %build
+autoreconf -ivf
 %if %{debug_build} == 1
 %configure --enable-dbus-type=%{dbus_type} --enable-debug
 %else

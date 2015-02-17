@@ -85,9 +85,9 @@ DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(srcdir)/config.h.in \
-	$(top_srcdir)/src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service.in \
+	$(top_srcdir)/src/daemon/dbus/services/org.O1.SecurityAccounts.gUserManagement.service.in \
 	$(top_srcdir)/test/data/test-gumd-dbus.conf.in \
-	$(top_srcdir)/test/data/services/org.tizen.SecurityAccounts.gUserManagement.service.in \
+	$(top_srcdir)/test/data/services/org.O1.SecurityAccounts.gUserManagement.service.in \
 	COPYING.LIB build-aux/ar-lib build-aux/compile \
 	build-aux/config.guess build-aux/config.sub build-aux/depcomp \
 	build-aux/install-sh build-aux/missing build-aux/ltmain.sh \
@@ -109,9 +109,9 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service \
+CONFIG_CLEAN_FILES = src/daemon/dbus/services/org.O1.SecurityAccounts.gUserManagement.service \
 	test/data/test-gumd-dbus.conf \
-	test/data/services/org.tizen.SecurityAccounts.gUserManagement.service
+	test/data/services/org.O1.SecurityAccounts.gUserManagement.service
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -429,11 +429,11 @@ $(srcdir)/config.h.in:  $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f config.h stamp-h1
-src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service: $(top_builddir)/config.status $(top_srcdir)/src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service.in
+src/daemon/dbus/services/org.O1.SecurityAccounts.gUserManagement.service: $(top_builddir)/config.status $(top_srcdir)/src/daemon/dbus/services/org.O1.SecurityAccounts.gUserManagement.service.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 test/data/test-gumd-dbus.conf: $(top_builddir)/config.status $(top_srcdir)/test/data/test-gumd-dbus.conf.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-test/data/services/org.tizen.SecurityAccounts.gUserManagement.service: $(top_builddir)/config.status $(top_srcdir)/test/data/services/org.tizen.SecurityAccounts.gUserManagement.service.in
+test/data/services/org.O1.SecurityAccounts.gUserManagement.service: $(top_builddir)/config.status $(top_srcdir)/test/data/services/org.O1.SecurityAccounts.gUserManagement.service.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 mostlyclean-libtool:
