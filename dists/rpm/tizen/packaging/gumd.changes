@@ -1,3 +1,6 @@
+* Tue Feb 17 2015 Imran Zaman <imran.zaman@intel.com>
+- Renamed dbus interface with prefix org.O1
+
 * Mon Feb 09 2015 Imran Zaman <imran.zaman@intel.com>
 - Fixed copying of extended attributes from skel folder
 

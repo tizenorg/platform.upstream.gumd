@@ -32,7 +32,7 @@ src/daemon/dbus/gumd-dbus.conf
 test/common/commontest
 test/daemon/daemontest
 test/lib/clienttest
-test/data/services/org.tizen.SecurityAccounts.gUserManagement.service
+test/data/services/org.O1.SecurityAccounts.gUserManagement.service
 test/data/test-gumd-dbus.conf
 src/utils/gum-utils
 stamp-h1
