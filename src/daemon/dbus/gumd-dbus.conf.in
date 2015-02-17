@@ -7,12 +7,12 @@
     <servicedir>@DBUS_SERVICES_DIR@</servicedir>
 
     <policy user="root">
-        <allow own="org.tizen.SecurityAccounts.gUserManagement"/>
-        <allow send_destination="org.tizen.SecurityAccounts.gUserManagement"/>
+        <allow own="org.O1.SecurityAccounts.gUserManagement"/>
+        <allow send_destination="org.O1.SecurityAccounts.gUserManagement"/>
     </policy>
     
     <policy context="default">
-        <deny send_destination="org.tizen.SecurityAccounts.gUserManagement"/>
+        <deny send_destination="org.O1.SecurityAccounts.gUserManagement"/>
     </policy>
 
 </busconfig>

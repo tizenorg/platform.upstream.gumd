@@ -41,6 +41,7 @@
 #include "common/gum-file.h"
 #include "common/gum-crypt.h"
 #include "common/gum-validate.h"
+#include "common/gum-user-types.h"
 #include "common/gum-lock.h"
 #include "common/gum-string-utils.h"
 #include "common/gum-defines.h"
@@ -850,6 +851,92 @@ START_TEST (test_dictionary)
 }
 END_TEST
 
+START_TEST (test_usertype)
+{
+    DBG("");
+    gchar** strv = NULL;
+    gchar* str = NULL;
+
+    fail_if (gum_user_type_from_string (NULL) != GUM_USERTYPE_NONE);
+    fail_if (gum_user_type_from_string ("") != GUM_USERTYPE_NONE);
+
+    fail_if (gum_user_type_from_string ("abcde") != GUM_USERTYPE_NONE);
+    fail_if (gum_user_type_from_string ("system") != GUM_USERTYPE_SYSTEM);
+    fail_if (gum_user_type_from_string ("admin") != GUM_USERTYPE_ADMIN);
+    fail_if (gum_user_type_from_string ("guest") != GUM_USERTYPE_GUEST);
+    fail_if (gum_user_type_from_string ("normal") != GUM_USERTYPE_NORMAL);
+
+    fail_if (gum_user_type_to_string (45) != NULL);
+    fail_if (gum_user_type_to_string (0) != NULL);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_NONE),
+            "asdf") == 0);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_NONE),
+            "none") == 0);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_SYSTEM),
+            "system") != 0);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_ADMIN),
+            "admin") != 0);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_GUEST),
+            "guest") != 0);
+    fail_if (g_strcmp0 (gum_user_type_to_string (GUM_USERTYPE_NORMAL),
+            "normal") != 0);
+
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NORMAL);
+    fail_if (strv == NULL || g_strv_length (strv) != 1);
+    str = g_strjoinv (",",strv);
+    fail_if (g_strcmp0 (str, "normal") != 0);
+    g_free (str); g_strfreev (strv);
+
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NORMAL|GUM_USERTYPE_SYSTEM);
+    fail_if (strv == NULL || g_strv_length (strv) != 2);
+    str = g_strjoinv (",",strv);
+    fail_if (g_strcmp0 (str, "system,normal") != 0);
+    g_free (str); g_strfreev (strv);
+
+    strv = gum_user_type_to_strv (16);
+    fail_if (strv == NULL || g_strv_length (strv) != 0);
+    g_strfreev (strv);
+
+    strv = gum_user_type_to_strv (GUM_USERTYPE_NONE);
+    fail_if (strv == NULL || g_strv_length (strv) != 0);
+    g_strfreev (strv);
+
+    fail_if (gum_user_type_from_strv (NULL) != GUM_USERTYPE_NONE);
+
+    strv = gum_string_utils_append_string (NULL,"");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv)
+            != GUM_USERTYPE_NONE);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"normal");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_NORMAL);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_GUEST);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"dasdf");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_NONE);
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    strv = gum_string_utils_append_string (strv,"normal");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            (GUM_USERTYPE_NORMAL|GUM_USERTYPE_GUEST));
+    g_strfreev (strv);
+
+    strv = gum_string_utils_append_string (NULL,"guest");
+    strv = gum_string_utils_append_string (strv,"normalsdafsa");
+    fail_if (gum_user_type_from_strv ((const gchar *const *)strv) !=
+            GUM_USERTYPE_GUEST);
+    g_strfreev (strv);
+}
+END_TEST
+
 Suite* common_suite (void)
 {
     Suite *s = suite_create ("Common library");
@@ -866,6 +953,7 @@ Suite* common_suite (void)
     tcase_add_test (tc_core, test_crypt);
     tcase_add_test (tc_core, test_error);
     tcase_add_test (tc_core, test_dictionary);
+    tcase_add_test (tc_core, test_usertype);
     suite_add_tcase (s, tc_core);
     return s;
 }

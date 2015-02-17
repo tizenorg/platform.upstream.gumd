@@ -10,7 +10,7 @@
 # Primary group name for the new user. If the primary group does not
 # exist, it will be created otherwise user gid will be set accordingly.
 # Default primary group name is same as name of the user.
-USR_PRIMARY_GRPNAME=users
+#USR_PRIMARY_GRPNAME=users
 
 # Comma separate listed of groups, which every user (other than system user)
 # will be added to at the time of user account creation. Default value is:
@@ -65,29 +65,29 @@ USR_PRIMARY_GRPNAME=users
 # environment variable.
 #SKEL_DIR=/etc/skel
 
-# Minimum value for the automatic uid selection. Default value is: 2000
-#UID_MIN=2000
+# Minimum value for the automatic uid selection. Default value is: 1000
+#UID_MIN=1000
 
 # Maximum value for the automatic uid selection. Default value is: 60000
 #UID_MAX=60000
 
 # Minimum value for the automatic uid selection for system user. Default
-# value is: 200
-#SYS_UID_MIN=200
+# value is: 100
+#SYS_UID_MIN=100
 
 # Maximum value for the automatic uid selection for system user. Default value
 # is: 999
 #SYS_UID_MAX=999
 
-# Minimum value for the automatic gid selection. Default value is: 2000
-#GID_MIN=2000
+# Minimum value for the automatic gid selection. Default value is: 1000
+#GID_MIN=1000
 
 # Maximum value for the automatic gid selection. Default value is: 60000
 #GID_MAX=60000
 
 # Minimum value for the automatic gid selection for system user. Default value
-# is: 200
-#SYS_GID_MIN=200
+# is: 100
+#SYS_GID_MIN=100
 
 # Maximum value for the automatic gid selection for system user. Default value
 # is: 999
@@ -111,12 +111,6 @@ USR_PRIMARY_GRPNAME=users
 # Value used to set the encryption algorithm. Default
 # value is: 'SHA512' (other supported options are: 'MD5', 'SHA256', 'DES')
 #ENCRYPT_METHOD=SHA512
-
-# Value used to set the smack label for newly created files and folders.
-SMACK64_NEW_FILES=_
-
-# Value used to set the smack label for User files and folders.
-SMACK64_USER_FILES=User
 
 #
 # D-Bus related settings.

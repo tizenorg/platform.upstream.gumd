@@ -45,6 +45,7 @@
 #include "common/gum-file.h"
 #include "common/gum-user-types.h"
 #include "common/gum-group-types.h"
+#include "common/gum-string-utils.h"
 #include "common/dbus/gum-dbus-user-service-gen.h"
 #include "common/dbus/gum-dbus-user-gen.h"
 #include "common/dbus/gum-dbus-group-service-gen.h"
@@ -89,6 +90,7 @@ _setup_env (void)
     gchar *fpath = NULL;
     gchar *cmd = NULL;
 
+    fail_if (g_setenv ("UM_CONF_FILE", GUM_TEST_DATA_DIR, TRUE) == FALSE);
     fail_if (g_setenv ("UM_DAEMON_TIMEOUT", "10", TRUE) == FALSE);
     fail_if (g_setenv ("UM_USER_TIMEOUT", "10", TRUE) == FALSE);
     fail_if (g_setenv ("UM_GROUP_TIMEOUT", "10", TRUE) == FALSE);
@@ -521,7 +523,17 @@ START_TEST (test_daemon_user)
     fail_unless (error == NULL);
     g_object_get (G_OBJECT (user), "uid", &uid, "gid", &gid, "realname",
             &str, NULL);
-    fail_unless (uid == gid);
+    DBG("uid=%d gid=%d", uid, gid);
+    fail_unless (uid != GUM_USER_INVALID_UID &&
+            uid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_UID_MIN,
+                    GUM_USER_INVALID_UID) &&
+            uid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_UID_MAX,
+                    GUM_USER_INVALID_UID));
+    fail_unless (gid != GUM_GROUP_INVALID_GID &&
+            gid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_GID_MIN,
+                    GUM_GROUP_INVALID_GID) &&
+            gid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_GID_MAX,
+                    GUM_GROUP_INVALID_GID));
     fail_unless (str != NULL);
     g_free (str);
 
@@ -534,8 +546,17 @@ START_TEST (test_daemon_user)
     fail_unless (gumd_daemon_user_add (user, &uid, &error) == TRUE);
     fail_unless (uid > 0);
     fail_unless (error == NULL);
-    g_object_get (G_OBJECT (user), "uid", &uid, "gid", &gid,NULL);
-    fail_unless (uid == gid);
+    g_object_get (G_OBJECT (user), "uid", &uid, "gid", &gid, NULL);
+    fail_unless (uid != GUM_USER_INVALID_UID &&
+            uid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_UID_MIN,
+                    GUM_USER_INVALID_UID) &&
+            uid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_UID_MAX,
+                    GUM_USER_INVALID_UID));
+    fail_unless (gid != GUM_GROUP_INVALID_GID &&
+            gid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_GID_MIN,
+                    GUM_GROUP_INVALID_GID) &&
+            gid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_SYS_GID_MAX,
+                    GUM_GROUP_INVALID_GID));
 
     /* case 12: add admin user */
     g_object_unref (user);
@@ -547,7 +568,17 @@ START_TEST (test_daemon_user)
     fail_unless (uid > 0);
     fail_unless (error == NULL);
     g_object_get (G_OBJECT (user), "uid", &uid, "gid", &gid, NULL);
-    fail_unless (uid == gid);
+    fail_unless (uid != GUM_USER_INVALID_UID &&
+            uid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_UID_MIN,
+                    GUM_USER_INVALID_UID) &&
+            uid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_UID_MAX,
+                    GUM_USER_INVALID_UID));
+    fail_unless (gid != GUM_GROUP_INVALID_GID &&
+            gid >= gum_config_get_uint (config, GUM_CONFIG_GENERAL_GID_MIN,
+                    GUM_GROUP_INVALID_GID) &&
+            gid <= gum_config_get_uint (config, GUM_CONFIG_GENERAL_GID_MAX,
+                    GUM_GROUP_INVALID_GID));
+
     hdir = g_build_filename (gum_config_get_string (config,
             GUM_CONFIG_GENERAL_HOME_DIR_PREF), "admin_daemon_user1", NULL);
     fail_unless (stat (hdir, &sb) == 0);
@@ -1905,6 +1936,93 @@ START_TEST (test_delete_group_member)
 }
 END_TEST
 
+START_TEST (test_get_user_list)
+{
+    DBG ("\n");
+    GError *error = NULL;
+    GDBusConnection *connection = NULL;
+    GumDbusUserService *user_service = NULL;
+    GumDbusUser *user_proxy = NULL;
+    GVariant *users = NULL;
+    gboolean res = FALSE;
+    uid_t user_id = GUM_USER_INVALID_UID;
+    gchar **strv = NULL;
+
+    connection = _get_bus_connection (&error);
+    fail_if (connection == NULL, "failed to get bus connection : %s",
+            error ? error->message : "(null)");
+
+    user_service = _get_user_service (connection, &error);
+    fail_if (user_service == NULL, "failed to get user_service : %s",
+            error ? error->message : "");
+
+    user_proxy = _create_new_user_proxy (user_service, &error);
+    fail_if (user_proxy == NULL, "Failed to create new user : %s",
+            error ? error->message : "");
+
+    g_object_set (G_OBJECT (user_proxy), "username", "test_userlist1",
+            "secret", "123456", "nickname", "nick1", "usertype",
+            GUM_USERTYPE_NORMAL, NULL);
+
+    res = gum_dbus_user_call_add_user_sync (user_proxy, &user_id, NULL,
+            &error);
+    fail_if (res == FALSE, "Failed to add new user : %s",
+            error ? error->message : "");
+    fail_unless (user_id != GUM_USER_INVALID_UID);
+
+    strv = gum_string_utils_append_string (NULL,"normal");
+    res = gum_dbus_user_service_call_get_user_list_sync (user_service,
+            (const gchar *const *)strv, &users, NULL, &error);
+    g_strfreev (strv);
+    fail_if (res == FALSE, "Failed to get users : %s",
+            error ? error->message : "");
+    fail_if (users == NULL, "Failed to get users");
+
+    fail_if (g_variant_n_children (users) <= 0,
+            "Expected no of users > 1, got '%d'", g_variant_n_children(users));
+
+    /*
+    GVariantIter iter;
+    GVariant *user = NULL;
+    g_variant_iter_init (&iter, users);
+    while ((user = g_variant_iter_next_value (&iter))) {
+        gchar *name, *type;
+        uid_t uid;
+        uid_t gid;
+        g_variant_get (user, "(u)", &uid);
+        DBG ("user uid %d", uid);
+        g_variant_unref (user);
+    }*/
+    g_variant_unref (users);
+
+    g_object_set (G_OBJECT (user_proxy), "username", "test_userlist2",
+            "secret", "123456", "nickname", "nick1", "usertype",
+            GUM_USERTYPE_SYSTEM, NULL);
+
+    res = gum_dbus_user_call_add_user_sync (user_proxy, &user_id, NULL,
+            &error);
+    fail_if (res == FALSE, "Failed to add new user : %s",
+            error ? error->message : "");
+    fail_unless (user_id != GUM_USER_INVALID_UID);
+
+    strv = gum_string_utils_append_string (NULL,"system");
+    res = gum_dbus_user_service_call_get_user_list_sync (user_service,
+            (const gchar *const *)strv, &users, NULL, &error);
+    g_strfreev (strv);
+    fail_if (res == FALSE, "Failed to get users : %s",
+            error ? error->message : "");
+    fail_if (users == NULL, "Failed to get users");
+
+    fail_if (g_variant_n_children (users) <= 0,
+            "Expected no of users > 1, got '%d'", g_variant_n_children(users));
+    g_variant_unref (users);
+
+    g_object_unref (user_proxy);
+    g_object_unref (user_service);
+    g_object_unref (connection);
+}
+END_TEST
+
 Suite* daemon_suite (void)
 {
     TCase *tc = NULL;
@@ -1934,6 +2052,8 @@ Suite* daemon_suite (void)
 
     tcase_add_test (tc, test_add_group_member);
     tcase_add_test (tc, test_delete_group_member);
+
+    tcase_add_test (tc, test_get_user_list);
     suite_add_tcase (s, tc);
 
     return s;

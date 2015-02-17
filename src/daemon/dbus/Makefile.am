@@ -36,9 +36,9 @@ libgumd_dbus_la_SOURCES = \
 if USE_DBUS_SERVICE
 dbusservicedir = $(DBUS_SERVICES_DIR)
 dbusservice_DATA = \
-    $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
+    $(SERVICES_DIR)/org.O1.SecurityAccounts.gUserManagement.service
 nodist_dbusservice_DATA = \
-    $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
+    $(SERVICES_DIR)/org.O1.SecurityAccounts.gUserManagement.service
 endif
 
 EXTRA_DIST = \

@@ -32,12 +32,12 @@
  * Common DBUS definitions
  */
 #define GUM_DBUS_ADDRESS         "unix:path=%s/gumd/bus-sock"
-#define GUM_SERVICE_PREFIX       "org.tizen.SecurityAccounts.gUserManagement"
+#define GUM_SERVICE_PREFIX       "org.O1.SecurityAccounts.gUserManagement"
 #define GUM_SERVICE              GUM_SERVICE_PREFIX
 #define GUM_USER_SERVICE_OBJECTPATH      \
-    "/org/tizen/SecurityAccounts/gUserManagement/User"
+    "/org/O1/SecurityAccounts/gUserManagement/User"
 #define GUM_GROUP_SERVICE_OBJECTPATH     \
-    "/org/tizen/SecurityAccounts/gUserManagement/Group"
+    "/org/O1/SecurityAccounts/gUserManagement/Group"
 
 #define GUM_DBUS_FREEDESKTOP_SERVICE    "org.freedesktop.DBus"
 #define GUM_DBUS_FREEDESKTOP_PATH       "/org/freedesktop/DBus"
