@@ -369,14 +369,15 @@ DBUS_BUILT_SOURCES = \
     gum-dbus-group-service-gen.h \
     $(NULL)
 
+BUILT_SOURCES = $(DBUS_BUILT_SOURCES)
 DBUS_BUILT_DOCS = \
-    gum-dbus-user-doc-gen-org.tizen.SecurityAccounts.gUserManagement.User.xml \
-    gum-dbus-user-service-doc-gen-org.tizen.SecurityAccounts.gUserManagement.UserService.xml \
-    gum-dbus-group-doc-gen-org.tizen.SecurityAccounts.gUserManagement.Group.xml \
-    gum-dbus-group-service-doc-gen-org.tizen.SecurityAccounts.gUserManagement.GroupService.xml \
+    gum-dbus-user-doc-gen-org.O1.SecurityAccounts.gUserManagement.User.xml \
+    gum-dbus-user-service-doc-gen-org.O1.SecurityAccounts.gUserManagement.UserService.xml \
+    gum-dbus-group-doc-gen-org.O1.SecurityAccounts.gUserManagement.Group.xml \
+    gum-dbus-group-service-doc-gen-org.O1.SecurityAccounts.gUserManagement.GroupService.xml \
     $(NULL)
 
-DBUS_INTERFACE_PREFIX = "org.tizen.SecurityAccounts.gUserManagement."
+DBUS_INTERFACE_PREFIX = "org.O1.SecurityAccounts.gUserManagement."
 noinst_LTLIBRARIES = libgum-dbus-glue.la
 libgum_dbus_glue_la_CPPFLAGS = \
     $(GUM_COMMON_INCLUDES) \
@@ -394,13 +395,14 @@ nodist_libgum_dbus_glue_la_SOURCES = \
 
 @USE_DBUS_SERVICE_TRUE@dbusinterfacesdir = $(DBUS_INTERFACES_DIR)
 @USE_DBUS_SERVICE_TRUE@dbusinterfaces_DATA = \
-@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.User.xml \
-@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.UserService.xml \
-@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.Group.xml \
-@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.GroupService.xml
+@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.User.xml \
+@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.UserService.xml \
+@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.Group.xml \
+@USE_DBUS_SERVICE_TRUE@    $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.GroupService.xml
 
 EXTRA_DIST = interfaces
-all: all-am
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -622,13 +624,15 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
-check: check-am
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA)
 installdirs:
 	for dir in "$(DESTDIR)$(dbusinterfacesdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -658,6 +662,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
 clean-am: clean-generic clean-libtool clean-local \
@@ -729,7 +734,7 @@ ps-am:
 
 uninstall-am: uninstall-dbusinterfacesDATA
 
-.MAKE: install-am install-strip
+.MAKE: all check install install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-local clean-noinstLTLIBRARIES \
@@ -746,7 +751,7 @@ uninstall-am: uninstall-dbusinterfacesDATA
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-dbusinterfacesDATA
 
-gum-dbus-user-gen.c gum-dbus-user-gen.h : $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.User.xml
+gum-dbus-user-gen.c gum-dbus-user-gen.h : $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.User.xml
 	gdbus-codegen                                       \
        --interface-prefix $(DBUS_INTERFACE_PREFIX)      \
        --c-namespace GumDbus                       \
@@ -754,7 +759,7 @@ gum-dbus-user-gen.c gum-dbus-user-gen.h : $(INTERFACES_DIR)/org.tizen.SecurityAc
        --generate-docbook gum-dbus-user-doc-gen \
        $<
 
-gum-dbus-user-service-gen.c gum-dbus-user-service-gen.h : $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.UserService.xml
+gum-dbus-user-service-gen.c gum-dbus-user-service-gen.h : $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.UserService.xml
 	gdbus-codegen                                       \
        --interface-prefix $(DBUS_INTERFACE_PREFIX)      \
        --c-namespace GumDbus                       \
@@ -762,7 +767,7 @@ gum-dbus-user-service-gen.c gum-dbus-user-service-gen.h : $(INTERFACES_DIR)/org.
        --generate-docbook gum-dbus-user-service-doc-gen \
        $<
 
-gum-dbus-group-gen.c gum-dbus-group-gen.h : $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.Group.xml
+gum-dbus-group-gen.c gum-dbus-group-gen.h : $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.Group.xml
 	gdbus-codegen                                       \
        --interface-prefix $(DBUS_INTERFACE_PREFIX)      \
        --c-namespace GumDbus                       \
@@ -770,7 +775,7 @@ gum-dbus-group-gen.c gum-dbus-group-gen.h : $(INTERFACES_DIR)/org.tizen.Security
        --generate-docbook gum-dbus-group-doc-gen \
        $<
 
-gum-dbus-group-service-gen.c gum-dbus-group-service-gen.h : $(INTERFACES_DIR)/org.tizen.SecurityAccounts.gUserManagement.GroupService.xml
+gum-dbus-group-service-gen.c gum-dbus-group-service-gen.h : $(INTERFACES_DIR)/org.O1.SecurityAccounts.gUserManagement.GroupService.xml
 	gdbus-codegen                                       \
        --interface-prefix $(DBUS_INTERFACE_PREFIX)      \
        --c-namespace GumDbus                       \

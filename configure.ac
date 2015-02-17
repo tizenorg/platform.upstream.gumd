@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([gumd], [1.0.7],[],[],[https://github.com/01org/gumd])
+AC_INIT([gumd], [1.0.8],[],[],[https://github.com/01org/gumd])
 AC_CONFIG_SRCDIR([src/daemon/main.c])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -303,7 +303,7 @@ src/common/dbus/Makefile
 src/daemon/Makefile
 src/daemon/core/Makefile
 src/daemon/dbus/Makefile
-src/daemon/dbus/services/org.tizen.SecurityAccounts.gUserManagement.service
+src/daemon/dbus/services/org.O1.SecurityAccounts.gUserManagement.service
 src/daemon/dbus/gumd-dbus.conf
 src/lib/Makefile
 src/lib/libgum.pc
@@ -326,7 +326,7 @@ if test "x$enable_tests" = "xyes" ; then
     
     if test x$enable_dbus_type != xp2p; then
         AC_CONFIG_FILES([
-        test/data/services/org.tizen.SecurityAccounts.gUserManagement.service
+        test/data/services/org.O1.SecurityAccounts.gUserManagement.service
         ])
     fi
 fi

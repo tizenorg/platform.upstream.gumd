@@ -396,10 +396,10 @@ libgumd_dbus_la_SOURCES = \
 
 @USE_DBUS_SERVICE_TRUE@dbusservicedir = $(DBUS_SERVICES_DIR)
 @USE_DBUS_SERVICE_TRUE@dbusservice_DATA = \
-@USE_DBUS_SERVICE_TRUE@    $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
+@USE_DBUS_SERVICE_TRUE@    $(SERVICES_DIR)/org.O1.SecurityAccounts.gUserManagement.service
 
 @USE_DBUS_SERVICE_TRUE@nodist_dbusservice_DATA = \
-@USE_DBUS_SERVICE_TRUE@    $(SERVICES_DIR)/org.tizen.SecurityAccounts.gUserManagement.service
+@USE_DBUS_SERVICE_TRUE@    $(SERVICES_DIR)/org.O1.SecurityAccounts.gUserManagement.service
 
 EXTRA_DIST = \
       gumd-dbus.conf.in
