@@ -24,7 +24,7 @@
         </p>
     </tp:license>
     
-    <interface name="org.tizen.SecurityAccounts.gUserManagement.GroupService">
+    <interface name="org.O1.SecurityAccounts.gUserManagement.GroupService">
     
         <tp:docstring xmlns="http://www.w3.org/1999/xhtml">
             <p>GroupService object encapsulates the APIs to create or retrieve 

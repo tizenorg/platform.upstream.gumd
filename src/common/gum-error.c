@@ -142,7 +142,7 @@
  * the error message to logs, and returns with specified retval.
  */
 
-#define _ERROR_PREFIX "org.tizen.SecurityAccounts.gUserManagement.Error"
+#define _ERROR_PREFIX "org.O1.SecurityAccounts.gUserManagement.Error"
 
 GDBusErrorEntry _gum_errors[] =
 {

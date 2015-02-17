@@ -24,7 +24,7 @@
         </p>
     </tp:license>
     
-    <interface name="org.tizen.SecurityAccounts.gUserManagement.Group">
+    <interface name="org.O1.SecurityAccounts.gUserManagement.Group">
     
         <tp:docstring xmlns="http://www.w3.org/1999/xhtml">
             <p>User object encapsulates the necessary details of a group

@@ -1,4 +1,4 @@
 [D-BUS Service]
-Name=org.tizen.SecurityAccounts.gUserManagement
+Name=org.O1.SecurityAccounts.gUserManagement
 Exec=@prefix@/bin/gumd
 @MESSAGE_BUS_USER@
