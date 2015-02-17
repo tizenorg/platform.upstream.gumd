@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.O1.SecurityAccounts.gUserManagement
+Exec=@prefix@/bin/gumd
+@MESSAGE_BUS_USER@

@@ -7,7 +7,7 @@
 
 Name: gumd
 Summary: User management daemon and client library
-Version: 1.0.2
+Version: 1.0.8
 Release: 0
 Group: System/Daemons
 License: LGPL-2.1+
@@ -150,6 +150,22 @@ mkdir -p %{_sysconfdir}/%{name}/groupdel.d
 
 
 %changelog
+* Tue Feb 17 2015 Imran Zaman <imran.zaman@intel.com>
+- Renamed dbus interface with prefix org.O1
+
+* Mon Feb 09 2015 Imran Zaman <imran.zaman@intel.com>
+- Fixed copying of extended attributes from skel folder
+
+* Thu Feb 05 2015 Imran Zaman <imran.zaman@intel.com>
+- Fixed gum-utils documentation
+
+* Wed Jan 28 2015 Imran Zaman <imran.zaman@intel.com>
+- Added APIs for fetching users based on the type
+
+* Thu Jan 15 2015 Imran Zaman <imran.zaman@intel.com>
+- Added separate configuration file Tizen IVI
+- Newly created users are added to weston-launch group for Tizen IVI
+
 * Thu Nov 27 2014 Imran Zaman <imran.zaman@intel.com>
 - Updated inputs for scripts e.g. usertype to useradd script
 

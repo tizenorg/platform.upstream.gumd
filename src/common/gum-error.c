@@ -31,7 +31,7 @@
 /**
  * SECTION:gum-error
  * @short_description: error definitions and utilities
- * @title: Errors
+ * @title: Gum Error
  * @include: gum/common/gum-error.h
  *
  * This file provides Gum error definitions and utilities.
@@ -142,7 +142,7 @@
  * the error message to logs, and returns with specified retval.
  */
 
-#define _ERROR_PREFIX "org.tizen.SecurityAccounts.gUserManagement.Error"
+#define _ERROR_PREFIX "org.O1.SecurityAccounts.gUserManagement.Error"
 
 GDBusErrorEntry _gum_errors[] =
 {
