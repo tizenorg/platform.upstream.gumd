@@ -1218,7 +1218,6 @@ _set_default_groups (
                 GUM_CONFIG_GENERAL_DEF_USR_GROUPS), ",", -1);
 
     if (def_groupsv) {
-
         gint ind = 0;
         while (def_groupsv[ind]) {
             GumdDaemonGroup *agroup = gumd_daemon_group_new (self->priv->config);
@@ -1228,7 +1227,9 @@ _set_default_groups (
                 added = gumd_daemon_group_add_member (agroup,
                         self->priv->pw->pw_uid, FALSE, error);
                 g_object_unref (agroup);
-                if (!added) break;
+                if (!added) {
+                    WARN ("Failed to set group : %s", def_groupsv[ind]);
+                }
             } else {
                 GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_GROUP_ADD_FAILURE,
                                 "Unable to add default groups", error, FALSE);
@@ -1740,8 +1741,9 @@ gumd_daemon_user_add (
 
     _add_userinfo(self);
 
-    if (!_set_default_groups (self, error) ||
-        !_create_home_dir (self, error)) {
+    _set_default_groups (self, error);
+
+    if (!_create_home_dir (self, error)) {
         gum_lock_pwdf_unlock ();
         return FALSE;
     }
