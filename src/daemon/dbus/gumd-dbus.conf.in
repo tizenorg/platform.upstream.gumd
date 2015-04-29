@@ -10,9 +10,57 @@
         <allow own="org.O1.SecurityAccounts.gUserManagement"/>
         <allow send_destination="org.O1.SecurityAccounts.gUserManagement"/>
     </policy>
-    
-    <policy context="default">
-        <deny send_destination="org.O1.SecurityAccounts.gUserManagement"/>
-    </policy>
 
+    <policy context="default">
+        <allow send_destination="org.O1.SecurityAccounts.gUserManagement"/>
+
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="addUser"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="deleteUser"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="updateUser"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="createNewUser"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUser"
+         privilege="http://tizen.org/privilege/usermanagement.get"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUserByName"
+         privilege="http://tizen.org/privilege/usermanagement.get"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUserList"
+         privilege="http://tizen.org/privilege/usermanagement.get"/>
+
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="addGroup"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="deleteGroup"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="updateGroup"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="addMember"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="deleteMember"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="createNewGroup"
+         privilege="http://tizen.org/privilege/usermanagement.set"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="getGroup"
+         privilege="http://tizen.org/privilege/usermanagement.get"/>
+        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="getGroupByName"
+         privilege="http://tizen.org/privilege/usermanagement.get"/>
+    </policy>
 </busconfig>
