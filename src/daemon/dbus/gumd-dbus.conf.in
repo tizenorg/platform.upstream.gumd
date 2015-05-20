@@ -17,61 +17,61 @@
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.freedesktop.DBus.Properties" send_member="Get"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.freedesktop.DBus.Properties" send_member="GetAll"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.freedesktop.DBus.Properties" send_member="Set"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="addUser"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="deleteUser"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="updateUser"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="createNewUser"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUser"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUserByName"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="getUserList"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="addGroup"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="deleteGroup"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="updateGroup"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="addMember"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.Group" send_member="deleteMember"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="createNewGroup"
-         privilege="http://tizen.org/privilege/usermanagement.set"/>
+         privilege="http://tizen.org/privilege/usermanagement.set.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="getGroup"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.GroupService" send_member="getGroupByName"
-         privilege="http://tizen.org/privilege/usermanagement.get"/>
+         privilege="http://tizen.org/privilege/usermanagement.get.temp"/>
     </policy>
 </busconfig>
