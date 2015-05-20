@@ -378,7 +378,11 @@ _handle_user_get_list (
     service = gum_user_service_create_sync (offline_mode);
     if (!service) return;
 
-    strv = g_strsplit (types, ",", -1);
+    if (types)
+         strv = g_strsplit (types, ",", -1);
+    else
+         strv = g_malloc0 (sizeof (gchar *));
+
     users = gum_user_service_get_user_list_sync (service,
             (const gchar *const *)strv);
     g_strfreev (strv);
