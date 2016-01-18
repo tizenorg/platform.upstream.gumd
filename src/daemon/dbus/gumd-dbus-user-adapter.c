@@ -22,6 +22,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA
  */
+
+#include <sys/socket.h>
+
 #include "common/gum-utils.h"
 #include "common/gum-dbus.h"
 #include "common/gum-defines.h"
@@ -342,6 +345,82 @@ _handle_update_user (
     return TRUE;
 }
 
+static uid_t get_sender_uid (const gchar *sender)
+{
+    GVariant *res;
+    uid_t uid;
+    GDBusConnection *server;
+    GError *err;
+
+    if (!sender)
+        return GUM_USER_INVALID_UID;
+
+    err = NULL;
+    server = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, &err);
+    if (err) {
+        WARN ("Connect failed: %s", err->message);
+        g_clear_error (&err);
+        return GUM_USER_INVALID_UID;
+    }
+
+    res = g_dbus_connection_call_sync (server,
+                                       "org.freedesktop.DBus",
+                                       "/",
+                                       "org.freedesktop.DBus",
+                                       "GetConnectionUnixUser",
+                                       g_variant_new("(s)", sender),
+                                       G_VARIANT_TYPE("(u)"),
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       -1,
+                                       NULL,
+                                       NULL);
+    if (res) {
+        g_variant_get (res, "(u)", &uid);
+        g_variant_unref (res);
+    } else {
+        uid = GUM_USER_INVALID_UID;
+    }
+
+    g_object_unref (server);
+
+    return uid;
+}
+
+static gboolean
+_handle_update_mine (
+        GumdDbusUserAdapter *self,
+        GDBusMethodInvocation *invocation,
+        gpointer user_data)
+{
+    GError *error;
+    gboolean valid;
+    uid_t uid;
+    uid_t req_uid;
+
+    g_return_val_if_fail (self && GUMD_IS_DBUS_USER_ADAPTER(self), FALSE);
+
+    uid = GUM_USER_INVALID_UID;
+    g_object_get (G_OBJECT (self->priv->user), "uid", &uid, NULL);
+    valid = (uid != GUM_USER_INVALID_UID);
+
+    if (valid) {
+        const gchar *sender = g_dbus_method_invocation_get_sender (invocation);
+        req_uid = get_sender_uid (sender);
+        if (req_uid == GUM_USER_INVALID_UID)
+            valid = FALSE;
+    }
+
+    if (valid && uid == req_uid) {
+        _handle_update_user (self, invocation, user_data);
+    } else {
+        error = GUM_GET_ERROR_FOR_ID (GUM_ERROR_PERMISSION_DENIED, "Permission denied");
+        g_dbus_method_invocation_return_gerror (invocation, error);
+        g_error_free (error);
+    }
+
+    return TRUE;
+}
+
 static void
 gumd_dbus_user_adapter_init (
         GumdDbusUserAdapter *self)
@@ -401,6 +480,8 @@ gumd_dbus_user_adapter_new_with_connection (
             G_CALLBACK (_handle_delete_user), adapter);
     g_signal_connect_swapped (adapter->priv->dbus_user, "handle-update-user",
             G_CALLBACK (_handle_update_user), adapter);
+    g_signal_connect_swapped (adapter->priv->dbus_user, "handle-update-mine",
+            G_CALLBACK (_handle_update_mine), adapter);
 
     g_signal_connect (G_OBJECT (adapter->priv->dbus_user), "notify",
             G_CALLBACK (_on_dbus_property_changed), adapter);
