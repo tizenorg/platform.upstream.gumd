@@ -64,7 +64,13 @@
             database
             </tp:docstring>        
         </method>
-        
+
+        <method name="updateMine">
+            <tp:docstring>Updates his or her own info into the user's account
+	    database
+            </tp:docstring>
+        </method>
+
         <property name="uid" tp:name-for-bindings="uid" type="u" access="read">
             <tp:docstring>id of the user
             </tp:docstring>
