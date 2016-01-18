@@ -778,6 +778,28 @@ _on_user_update_cb (
     g_clear_error (&error);
 }
 
+static void
+_on_user_update_self_cb (
+        GObject *object,
+        GAsyncResult *res,
+        gpointer user_data)
+{
+    GumUser *user = (GumUser*)user_data;
+    GumDbusUser *proxy = GUM_DBUS_USER (object);
+    GError *error = NULL;
+
+    g_return_if_fail (user != NULL);
+
+    DBG ("");
+
+    gum_dbus_user_call_update_self_user_finish (proxy, res, &error);
+
+    if (GUM_OPERATION_IS_NOT_CANCELLED (error)) {
+        _setup_idle_callback (user, error);
+    }
+    g_clear_error (&error);
+}
+
 /**
  * gum_user_create:
  * @callback: #GumUserCb to be invoked when new user object is created
@@ -1196,6 +1218,8 @@ gum_user_update (
         GumUserCb callback,
         gpointer user_data)
 {
+    uid_t uid = GUM_USER_INVALID_UID;
+
     DBG ("");
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
 
@@ -1204,8 +1228,15 @@ gum_user_update (
         return FALSE;
     }
     _create_op (self, callback, user_data);
-    gum_dbus_user_call_update_user (self->priv->dbus_user,
-            self->priv->cancellable, _on_user_update_cb, self);
+    g_object_get (G_OBJECT (self), "uid", &uid, NULL);
+    if (uid != GUM_USER_INVALID_UID && uid == getuid()) {
+        gum_dbus_user_call_update_self_user (self->priv->dbus_user,
+                self->priv->cancellable, _on_user_update_self_cb, self);
+    } else {
+        gum_dbus_user_call_update_user (self->priv->dbus_user,
+                self->priv->cancellable, _on_user_update_cb, self);
+    }
+
     return TRUE;
 }
 
@@ -1228,6 +1259,7 @@ gum_user_update_sync (
 {
     GError *error = NULL;
     gboolean rval = FALSE;
+    uid_t uid = GUM_USER_INVALID_UID;
 
     DBG ("");
     g_return_val_if_fail (GUM_IS_USER (self), FALSE);
@@ -1236,8 +1268,14 @@ gum_user_update_sync (
         rval = gumd_daemon_update_user (self->priv->offline_service,
                 self->priv->offline_user, &error);
     } else if (self->priv->dbus_user) {
-        rval = gum_dbus_user_call_update_user_sync (self->priv->dbus_user,
-                self->priv->cancellable,  &error);
+        g_object_get (G_OBJECT (self), "uid", &uid, NULL);
+        if (uid != GUM_USER_INVALID_UID && uid == getuid()) {
+            rval = gum_dbus_user_call_update_self_user_sync (self->priv->dbus_user,
+                    self->priv->cancellable,  &error);
+        } else {
+            rval = gum_dbus_user_call_update_user_sync (self->priv->dbus_user,
+                    self->priv->cancellable,  &error);
+        }
         if (rval) _sync_properties (self);
     }
 

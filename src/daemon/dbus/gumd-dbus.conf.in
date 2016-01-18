@@ -16,12 +16,7 @@
         <allow receive_sender="org.O1.SecurityAccounts.gUserManagement" receive_type="signal"/>
 
         <allow send_destination="org.O1.SecurityAccounts.gUserManagement"
-         send_interface="org.freedesktop.DBus.Properties" send_member="Get"/>
-        <allow send_destination="org.O1.SecurityAccounts.gUserManagement"
-         send_interface="org.freedesktop.DBus.Properties" send_member="GetAll"/>
-        <check send_destination="org.O1.SecurityAccounts.gUserManagement"
-         send_interface="org.freedesktop.DBus.Properties" send_member="Set"
-         privilege="http://tizen.org/privilege/internal/usermanagement"/>
+         send_interface="org.freedesktop.DBus.Properties"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="addUser"
@@ -32,6 +27,8 @@
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="updateUser"
          privilege="http://tizen.org/privilege/internal/usermanagement"/>
+        <allow send_destination="org.O1.SecurityAccounts.gUserManagement"
+         send_interface="org.O1.SecurityAccounts.gUserManagement.User" send_member="updateSelfUser"/>
 
         <check send_destination="org.O1.SecurityAccounts.gUserManagement"
          send_interface="org.O1.SecurityAccounts.gUserManagement.UserService" send_member="createNewUser"
