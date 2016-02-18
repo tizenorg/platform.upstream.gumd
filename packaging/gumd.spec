@@ -94,12 +94,7 @@ rm -rf %{buildroot}
 %make_install
 rm -f %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 install -m 755 -d %{buildroot}%{_sysconfdir}/%{name}
-
-%if "%{profile}" != "ivi"
 install -m 644 data/tizen/etc/%{name}/%{name}-tizen-common.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
-%else
-install -m 644 data/tizen/etc/%{name}/%{name}-tizen-ivi.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
-%endif
 
 %post
 ldconfig
