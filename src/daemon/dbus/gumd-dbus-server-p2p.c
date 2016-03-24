@@ -85,6 +85,8 @@ G_DEFINE_TYPE_WITH_CODE (GumdDbusServerP2P,
 #define GUMD_DBUS_SERVER_P2P_GET_PRIV(obj) G_TYPE_INSTANCE_GET_PRIVATE ((obj),\
         GUMD_TYPE_DBUS_SERVER_P2P, GumdDbusServerP2PPrivate)
 
+#define MAX_STRERROR_LEN	256
+
 static void
 _set_property (
         GObject *object,
@@ -394,8 +396,9 @@ _gumd_dbus_server_p2p_start (
         path = g_strstr_len(server->priv->address, -1, "unix:path=") + 10;
         if (path) {
             if (g_chmod (path, S_IRUSR | S_IWUSR) < 0) {
+                gchar buf[MAX_STRERROR_LEN];
                 WARN("Setting server socket permission failed with error '%s'",
-                    strerror(errno));
+                    strerror_r(errno, buf, MAX_STRERROR_LEN));
             }
         }
     }
@@ -493,8 +496,9 @@ gumd_dbus_server_p2p_new_with_address (
             gchar *base_path = g_path_get_dirname (file_path);
             if (g_mkdir_with_parents (base_path, S_IRUSR | S_IWUSR | S_IXUSR)
                     == -1) {
+                gchar buf[MAX_STRERROR_LEN];
                 WARN ("Could not create '%s', error: %s", base_path,
-                        strerror(errno));
+                    strerror_r(errno, buf, MAX_STRERROR_LEN));
             }
             g_free (base_path);
         }

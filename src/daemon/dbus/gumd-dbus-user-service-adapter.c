@@ -224,9 +224,9 @@ _dbus_peer_user_remove (
     if (peer_user && GUMD_IS_DBUS_USER_ADAPTER(peer_user->user_adapter)) {
         g_object_weak_unref (G_OBJECT (peer_user->user_adapter),
                 _on_dbus_user_adapter_disposed, user_data);
-        _dbus_peer_user_free (peer_user, NULL);
         self->priv->peer_users = g_list_remove (self->priv->peer_users,
                 (gpointer)peer_user);
+        _dbus_peer_user_free (peer_user, NULL);
     }
 }
 
@@ -362,10 +362,10 @@ _clear_cache_for_peer_name (
                 peer_user->user_adapter, peer_user->peer_name);
         g_object_weak_unref (G_OBJECT (peer_user->user_adapter),
                 _on_dbus_user_adapter_disposed, peer_user->user_service);
-        _dbus_peer_user_free (peer_user, NULL);
         user_data->user_service->priv->peer_users = g_list_remove (
                 user_data->user_service->priv->peer_users,
                 (gpointer)peer_user);
+        _dbus_peer_user_free (peer_user, NULL);
     }
 }
 
@@ -426,10 +426,10 @@ _clear_cache_for_user (
         DBG ("removing dbus user adapter '%p' from cache",
                 peer_user->user_adapter);
         peer_user->user_adapter = NULL;
-        _dbus_peer_user_free (peer_user, NULL);
         user_data->user_service->priv->peer_users = g_list_remove (
                 user_data->user_service->priv->peer_users,
                 (gpointer)peer_user);
+        _dbus_peer_user_free (peer_user, NULL);
     }
 }
 

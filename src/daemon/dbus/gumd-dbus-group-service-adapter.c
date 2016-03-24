@@ -218,9 +218,9 @@ _dbus_peer_group_remove (
     if (peer_group && GUMD_IS_DBUS_GROUP_ADAPTER(peer_group->dbus_group)) {
         g_object_weak_unref (G_OBJECT (peer_group->dbus_group),
                 _on_dbus_group_adapter_disposed, group_data);
-        _dbus_peer_group_free (peer_group, NULL);
         self->priv->peer_groups = g_list_remove (self->priv->peer_groups,
                 (gpointer)peer_group);
+        _dbus_peer_group_free (peer_group, NULL);
     }
 }
 
@@ -355,10 +355,10 @@ _clear_cache_for_peer_name (
         DBG ("removing dbus group '%p' from cache", peer_group->dbus_group);
         g_object_weak_unref (G_OBJECT (peer_group->dbus_group),
                 _on_dbus_group_adapter_disposed, peer_group->group_service);
-        _dbus_peer_group_free (peer_group, NULL);
         group_data->group_service->priv->peer_groups = g_list_remove (
                 group_data->group_service->priv->peer_groups,
                 (gpointer)peer_group);
+        _dbus_peer_group_free (peer_group, NULL);
     }
 }
 
@@ -418,10 +418,10 @@ _clear_cache_for_group (
     if (peer_group->dbus_group == group_data->dbus_group) {
         DBG ("removing dbus group '%p' from cache", peer_group->dbus_group);
         peer_group->dbus_group = NULL;
-        _dbus_peer_group_free (peer_group, NULL);
         group_data->group_service->priv->peer_groups = g_list_remove (
                 group_data->group_service->priv->peer_groups,
                 (gpointer)peer_group);
+        _dbus_peer_group_free (peer_group, NULL);
     }
 }
 

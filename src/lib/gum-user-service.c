@@ -298,7 +298,7 @@ static gboolean
 _service_dbus_proxy_callback (
         gpointer user_data)
 {
-    g_return_if_fail (user_data && GUM_IS_USER_SERVICE (user_data));
+    g_return_val_if_fail (user_data && GUM_IS_USER_SERVICE (user_data), FALSE);
     const gchar *env = NULL;
     GumDbusUserService *dbus_service = NULL;
     GDBusConnection *connection = NULL;
