@@ -107,6 +107,7 @@
  */
 
 #define GUM_PERM 0777
+#define MAX_STRERROR_LEN	256
 
 static gboolean
 _set_smack64_attr (
@@ -146,7 +147,10 @@ _open_file (
     FILE *fp = NULL;
     if (!fn || !(fp = fopen (fn, mode))) {
         if (!fp)
-            WARN ("Could not open file '%s', error: %s", fn, strerror(errno));
+        {
+            char buf[MAX_STRERROR_LEN];;
+            WARN ("Could not open file '%s', error: %s", fn, strerror_r(errno, buf, MAX_STRERROR_LEN));
+        }
         return NULL;
     }
     return fp;

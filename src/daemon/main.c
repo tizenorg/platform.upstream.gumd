@@ -159,6 +159,12 @@ main (int argc, char **argv)
 
     gid_t daemon_gid;
     struct group *daemon_group = NULL;
+    struct group buf_group;
+    gchar *buf = NULL;
+    gchar *tmp = NULL;
+    gsize buflen = sysconf(_SC_GETGR_R_SIZE_MAX);
+    if (buflen<sizeof(struct group))
+        buflen = 1024;
 
 #if !GLIB_CHECK_VERSION (2, 36, 0)
     g_type_init ();
@@ -180,9 +186,21 @@ main (int argc, char **argv)
 
     DBG ("Before set: r-gid %d e-gid %d", getgid (), getegid ());
     daemon_gid = getgid ();
-    daemon_group = getgrnam ("gumd");
+
+    for (; NULL != (tmp = g_realloc(buf, buflen)); buflen*=2)
+    {
+        buf = tmp;
+        if (ERANGE == getgrnam_r("gumd", &buf_group, buf, buflen, &daemon_group))
+            continue;
+        else
+            break;
+    }
     if (daemon_group)
         daemon_gid = daemon_group->gr_gid;
+
+    if (buf)
+        g_free(buf);
+
     if (setegid (daemon_gid))
         WARN ("setegid() failed");
     DBG ("After set: r-gid %d e-gid %d", getgid (), getegid ());
