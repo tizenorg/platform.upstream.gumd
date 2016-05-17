@@ -9,7 +9,7 @@ Summary: User management daemon and client library
 Version: 1.0.8
 Release: 0
 Group:   Security/Accounts
-License: LGPL-2.1+
+License: LGPL-2.1+ and GPL-3.0+ and GPL-3.0-with-autoconf-exception
 URL:     https://github.com/01org/gumd
 Source:  %{name}-%{version}.tar.gz
 Source1001:     %{name}.manifest
