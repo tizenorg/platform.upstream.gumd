@@ -637,7 +637,10 @@ gum_user_service_create_sync (
 {
     GumUserService *self = GUM_USER_SERVICE (g_object_new (
             GUM_TYPE_USER_SERVICE, "offline", offline, NULL));
-    _service_dbus_proxy_callback (self);
+
+    if (FALSE == offline)
+        _service_dbus_proxy_callback (self);
+
     return self;
 }
 
