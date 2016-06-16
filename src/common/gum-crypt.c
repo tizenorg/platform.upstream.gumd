@@ -65,7 +65,7 @@ _generate_salt (
 		const gchar *encryp_algo)
 {
     ssize_t bytes_read = 0;
-    gchar salt[SALT_ARRAY_LEN];
+    gchar salt[SALT_ARRAY_LEN] = {0,};
     int fd = 0;
     gint id_len = METHODID_LEN, i = 0;
 

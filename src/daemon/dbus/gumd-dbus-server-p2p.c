@@ -468,7 +468,7 @@ const gchar *
 gumd_dbus_server_p2p_get_address (
         GumdDbusServerP2P *server)
 {
-    g_return_val_if_fail (server || GUMD_IS_DBUS_SERVER_P2P (server), NULL);
+    g_return_val_if_fail (server && GUMD_IS_DBUS_SERVER_P2P (server), NULL);
     return g_dbus_server_get_client_address (server->priv->bus_server);
 }
 

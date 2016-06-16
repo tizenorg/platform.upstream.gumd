@@ -344,8 +344,10 @@ _gumd_dbus_server_msg_bus_get_remote_pid (
 
     connection = g_bus_get_sync (GUM_BUS_TYPE, NULL, &error);
     if (!connection) {
-        WARN ("Failed to open connection to msg bus: %s", error->message);
-        g_error_free (error);
+        if (error) {
+            WARN ("Failed to open connection to msg bus: %s", error->message);
+            g_error_free (error);
+        }
         return remote_pid;
     }
 
@@ -359,8 +361,10 @@ _gumd_dbus_server_msg_bus_get_remote_pid (
     g_object_unref (connection);
 
     if (!response) {
-        WARN ("Request for msg-bus peer pid failed: %s", error->message);
-        g_error_free (error);
+        if (error) {
+            WARN ("Request for msg-bus peer pid failed: %s", error->message);
+            g_error_free (error);
+        }
         return remote_pid;
     }
 
