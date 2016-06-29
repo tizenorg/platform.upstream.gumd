@@ -29,6 +29,7 @@ BuildRequires: pkgconfig(gobject-2.0)
 BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(gmodule-2.0)
+BuildRequires: pkgconfig(libtzplatform-config)
 Requires: tizen-platform-config
 
 %description

@@ -16,6 +16,7 @@ libgum_common_la_DEPENDENCIES = \
 libgum_common_la_LIBADD = \
     $(top_builddir)/src/common/dbus/libgum-dbus-glue.la \
     $(GUM_COMMON_LIBS) \
+    $(TZ_PLATFORM_CONFIG_LIBS) \
     $(NULL)
 
 gum_common_pubhdr = $(top_srcdir)/include/gum/common

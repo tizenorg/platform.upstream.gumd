@@ -48,6 +48,10 @@ AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADERS([sys/xattr.h attr/xattr.h],[break])
 AC_CHECK_FUNCS(llistxattr lgetxattr lsetxattr)
 
+PKG_CHECK_MODULES(TZ_PLATFORM_CONFIG, libtzplatform-config)
+AC_SUBST(TZ_PLATFORM_CONFIG_CFLAGS)
+AC_SUBST(TZ_PLATFORM_CONFIG_LIBS)
+
 # Crypt library.
 AC_SEARCH_LIBS([crypt],[crypt], CRYPT_LIB="-l$ac_lib", CRYPT_LIB="")
 AC_SUBST(CRYPT_LIB)

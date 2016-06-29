@@ -32,6 +32,8 @@
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
+#include <tzplatform_config.h>
+
 
 #include "config.h"
 #include "common/gum-config.h"
@@ -619,6 +621,8 @@ static void
 _gum_config_initialize (
         GumConfig *self)
 {
+    const gchar *home_path = tzplatform_getenv(TZ_SYS_HOME);
+
     gum_config_set_string (self, GUM_CONFIG_GENERAL_PASSWD_FILE,
     		GUM_PASSWD_FILE);
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SHADOW_FILE,
@@ -627,8 +631,13 @@ _gum_config_initialize (
             GUM_GROUP_FILE);
     gum_config_set_string (self, GUM_CONFIG_GENERAL_GSHADOW_FILE,
             GUM_GSHADOW_FILE);
-    gum_config_set_string (self, GUM_CONFIG_GENERAL_HOME_DIR_PREF,
-    		GUM_HOME_DIR_PREFIX);
+
+    if (NULL != home_path)  {
+        gum_config_set_string (self, GUM_CONFIG_GENERAL_HOME_DIR_PREF, home_path);
+    } else  {
+        gum_config_set_string (self, GUM_CONFIG_GENERAL_HOME_DIR_PREF, GUM_HOME_DIR_PREFIX);
+    }
+
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SHELL, GUM_SHELL);
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SKEL_DIR, GUM_SKEL_DIR);
 
