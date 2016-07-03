@@ -146,6 +146,14 @@
                                               "/SHELL"
 
 /**
+ * GUM_CONFIG_GENERAL_SEC_SHELL:
+ *
+ * Path to security user shell executable. Default value is '/bin/bash'
+ */
+#define GUM_CONFIG_GENERAL_SEC_SHELL            GUM_CONFIG_GENERAL \
+                                              "/SEC_SHELL"
+
+/**
  * GUM_CONFIG_GENERAL_SKEL_DIR:
  *
  * Path to skeleton folder. When new users are created, contents of the skel
@@ -198,6 +206,22 @@
  */
 #define GUM_CONFIG_GENERAL_SYS_UID_MAX      GUM_CONFIG_GENERAL \
                                               "/SYS_UID_MAX"
+
+/**
+ * GUM_CONFIG_GENERAL_SEC_UID_MIN:
+ *
+ * Minimum value for the automatic uid selection. Default value is: 60001
+ */
+#define GUM_CONFIG_GENERAL_SEC_UID_MIN      GUM_CONFIG_GENERAL \
+                                              "/SEC_UID_MIN"
+
+/**
+ * GUM_CONFIG_GENERAL_SEC_UID_MAX:
+ *
+ * Maximum value for the automatic uid selection. Default value is: 60100
+ */
+#define GUM_CONFIG_GENERAL_SEC_UID_MAX      GUM_CONFIG_GENERAL \
+                                              "/SEC_UID_MAX"
 
 /**
  * GUM_CONFIG_GENERAL_GID_MIN:

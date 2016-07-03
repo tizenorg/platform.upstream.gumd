@@ -785,6 +785,9 @@ _get_default_uid_range (
     if (ut == GUM_USERTYPE_SYSTEM)
         *min = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_SYS_UID_MIN, GUM_USER_INVALID_UID);
+    else if (ut == GUM_USERTYPE_SECURITY)
+        *min = (uid_t) gum_config_get_uint (config,
+                GUM_CONFIG_GENERAL_SEC_UID_MIN, GUM_USER_INVALID_UID);
     else
         *min = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_UID_MIN, GUM_USER_INVALID_UID);
@@ -792,6 +795,9 @@ _get_default_uid_range (
     if (ut == GUM_USERTYPE_SYSTEM)
         *max = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_SYS_UID_MAX, GUM_USER_INVALID_UID);
+    else if (ut == GUM_USERTYPE_SECURITY)
+        *max = (uid_t) gum_config_get_uint (config,
+                GUM_CONFIG_GENERAL_SEC_UID_MAX, GUM_USER_INVALID_UID);
     else
         *max = (uid_t) gum_config_get_uint (config,
                 GUM_CONFIG_GENERAL_UID_MAX, GUM_USER_INVALID_UID);
@@ -1683,6 +1689,7 @@ gumd_daemon_user_add (
         uid_t *uid,
         GError **error)
 {
+    GumUserType usertype = GUM_USERTYPE_NONE;
     DBG ("");
 
     /* reset uid if set
@@ -1701,14 +1708,21 @@ gumd_daemon_user_add (
      *** copy skel files and set permissions
      * unlock db
      */
-    if (_get_usertype_from_gecos (self->priv->pw) == GUM_USERTYPE_NONE) {
+    usertype = _get_usertype_from_gecos (self->priv->pw);
+    if (usertype == GUM_USERTYPE_NONE) {
         GUM_RETURN_WITH_ERROR (GUM_ERROR_USER_INVALID_USER_TYPE,
                             "Invalid user type", error, FALSE);
     }
 
     if (!self->priv->pw->pw_shell) {
-        _set_shell_property (self, gum_config_get_string (self->priv->config,
+        if (usertype == GUM_USERTYPE_SECURITY)  {
+            _set_shell_property (self, gum_config_get_string (self->priv->config,
+                GUM_CONFIG_GENERAL_SEC_SHELL));
+        }
+        else    {
+            _set_shell_property (self, gum_config_get_string (self->priv->config,
                 GUM_CONFIG_GENERAL_SHELL));
+        }
     }
 
     if (!gum_lock_pwdf_lock ()) {
