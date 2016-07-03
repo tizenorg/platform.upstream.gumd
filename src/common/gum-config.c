@@ -113,6 +113,9 @@ G_DEFINE_TYPE (GumConfig, gum_config, G_TYPE_OBJECT);
 #define UID_MAX      60000
 #define SYS_UID_MIN  100
 #define SYS_UID_MAX  999
+#define SEC_UID_MIN  60001
+#define SEC_UID_MAX  60100
+
 #define GID_MIN      1000
 #define GID_MAX      60000
 #define SYS_GID_MIN  100
@@ -369,6 +372,8 @@ _load_config (
                     g_strcmp0 (GUM_CONFIG_GENERAL_UID_MAX, key) == 0 ||
                     g_strcmp0 (GUM_CONFIG_GENERAL_SYS_UID_MIN, key) == 0 ||
                     g_strcmp0 (GUM_CONFIG_GENERAL_SYS_UID_MAX, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SEC_UID_MIN, key) == 0 ||
+                    g_strcmp0 (GUM_CONFIG_GENERAL_SEC_UID_MAX, key) == 0 ||
                     g_strcmp0 (GUM_CONFIG_GENERAL_GID_MIN, key) == 0 ||
                     g_strcmp0 (GUM_CONFIG_GENERAL_GID_MAX, key) == 0 ||
                     g_strcmp0 (GUM_CONFIG_GENERAL_SYS_GID_MIN, key) == 0 ||
@@ -639,12 +644,15 @@ _gum_config_initialize (
     }
 
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SHELL, GUM_SHELL);
+    gum_config_set_string (self, GUM_CONFIG_GENERAL_SEC_SHELL, GUM_SHELL);
     gum_config_set_string (self, GUM_CONFIG_GENERAL_SKEL_DIR, GUM_SKEL_DIR);
 
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_UID_MIN, UID_MIN);
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_UID_MAX, UID_MAX);
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_SYS_UID_MIN, SYS_UID_MIN);
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_SYS_UID_MAX, SYS_UID_MAX);
+    gum_config_set_uint (self, GUM_CONFIG_GENERAL_SEC_UID_MIN, SEC_UID_MIN);
+    gum_config_set_uint (self, GUM_CONFIG_GENERAL_SEC_UID_MAX, SEC_UID_MAX);
 
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_GID_MIN, GID_MIN);
     gum_config_set_uint (self, GUM_CONFIG_GENERAL_GID_MAX, GID_MAX);

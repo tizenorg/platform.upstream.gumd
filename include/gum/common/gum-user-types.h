@@ -68,7 +68,7 @@ G_BEGIN_DECLS
  *
  * Defines total number of types of the users.
  */
-#define GUM_USERTYPE_COUNT   5
+#define GUM_USERTYPE_COUNT   6
 
 /**
  * GUM_USERTYPE_MAX_VALUE:
@@ -82,7 +82,8 @@ typedef enum {
     GUM_USERTYPE_SYSTEM = 0x01,
     GUM_USERTYPE_ADMIN = 0x02,
     GUM_USERTYPE_GUEST = 0x04,
-    GUM_USERTYPE_NORMAL = 0x08
+    GUM_USERTYPE_NORMAL = 0x08,
+    GUM_USERTYPE_SECURITY = 0x10
 } GumUserType;
 
 const gchar *

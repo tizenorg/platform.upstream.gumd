@@ -48,7 +48,8 @@ GumUserTypeString user_type_strings[GUM_USERTYPE_COUNT] = {
         {GUM_USERTYPE_SYSTEM, "system"},
         {GUM_USERTYPE_ADMIN, "admin"},
         {GUM_USERTYPE_GUEST, "guest"},
-        {GUM_USERTYPE_NORMAL, "normal"}
+        {GUM_USERTYPE_NORMAL, "normal"},
+        {GUM_USERTYPE_SECURITY, "security"}
 };
 
 gint16
