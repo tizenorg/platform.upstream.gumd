@@ -4,6 +4,13 @@
 # WARNING! do not use for production builds as it will break security
 %define debug_build 0
 
+%if "%{profile}" == "wearable"
+%define disable_cap_admin 1
+%else
+%define disable_cap_admin 0
+%endif
+
+
 Name:    gumd
 Summary: User management daemon and client library
 Version: 1.0.8
@@ -80,6 +87,9 @@ Requires:   libgum = %{version}-%{release}
 %setup -q -n %{name}-%{version}
 cp -a %{SOURCE1001} %{name}.manifest
 cp -a %{SOURCE1002} libgum.manifest
+%if %{disable_cap_admin} == 1
+echo "CapabilityBoundingSet=~CAP_MAC_ADMIN" >> data/gumd.service
+%endif
 
 %build
 autoreconf -ivf
@@ -96,6 +106,8 @@ rm -rf %{buildroot}
 rm -f %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 install -m 755 -d %{buildroot}%{_sysconfdir}/%{name}
 install -m 644 data/tizen/etc/%{name}/%{name}-tizen-common.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
+install -m 755 -d %{buildroot}%{_unitdir}
+install -m 644 data/gumd.service %{buildroot}%{_unitdir}
 
 %post
 ldconfig
@@ -144,6 +156,7 @@ install -d -m 755 %{_localstatedir}/lib/%{name}/user
 %dir %{_sysconfdir}/dbus-1
 %dir %{_sysconfdir}/dbus-1/system.d
 %config(noreplace) %{_sysconfdir}/dbus-1/system.d/gumd-dbus.conf
+%{_unitdir}/gumd.service
 %endif
 
 %files doc

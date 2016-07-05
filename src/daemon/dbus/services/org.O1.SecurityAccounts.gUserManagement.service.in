@@ -1,4 +1,5 @@
 [D-BUS Service]
 Name=org.O1.SecurityAccounts.gUserManagement
-Exec=@prefix@/bin/gumd
+Exec=/bin/false
 @MESSAGE_BUS_USER@
+SystemdService=gumd.service
