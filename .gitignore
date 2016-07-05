@@ -36,7 +36,6 @@ test/data/services/org.O1.SecurityAccounts.gUserManagement.service
 test/data/test-gumd-dbus.conf
 src/utils/gum-utils
 stamp-h1
-*service
 docs/gumd-decl-list.txt
 docs/gumd-decl.txt
 docs/gumd-overrides.txt
