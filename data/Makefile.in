@@ -301,6 +301,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 EXTRA_DIST = \
       gumd.conf.in \
+      gumd.service \
       tizen
 
 gumdconfdir = ${sysconfdir}/gumd
