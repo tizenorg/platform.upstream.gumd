@@ -384,6 +384,10 @@ _on_bus_name_lost (
             (gpointer)&peer_group);
 
     g_hash_table_remove (self->priv->caller_watchers, (gpointer)peer_name);
+
+    if (g_list_length (self->priv->peer_groups) == 0) {
+        gum_disposable_set_auto_dispose (GUM_DISPOSABLE (self), TRUE);
+    }
 }
 
 static void
