@@ -89,6 +89,9 @@ cp -a %{SOURCE1001} %{name}.manifest
 cp -a %{SOURCE1002} libgum.manifest
 %if %{disable_cap_admin} == 1
 echo "CapabilityBoundingSet=~CAP_MAC_ADMIN" >> data/gumd.service
+echo "SmackProcessLabel=System" >> data/gumd.service
+%else
+echo "SmackProcessLabel=System::Privileged" >> data/gumd.service
 %endif
 
 %build
