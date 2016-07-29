@@ -167,7 +167,7 @@ _copy_file_attributes (
 
     if (stat (from_path, &from_stat) < 0 ||
         chmod (to_path, from_stat.st_mode) < 0 ||
-        chown (to_path, from_stat.st_uid, from_stat.st_gid) < 0) {
+        lchown (to_path, from_stat.st_uid, from_stat.st_gid) < 0) {
         return FALSE;
     }
 
@@ -759,7 +759,7 @@ _copy_dir_recursively (
                     GUM_CONFIG_GENERAL_SMACK64_USER_FILES);
         }
         if (!stop) stop = !_copy_file_attributes (src_filepath, dest_filepath);
-        if (!stop) stop = (chown (dest_filepath, uid, gid) < 0);
+        if (!stop) stop = (lchown (dest_filepath, uid, gid) < 0);
 
 _free_data:
         g_free (src_filepath);
@@ -839,7 +839,7 @@ gum_file_create_home_dir (
         uid = getuid ();
         gid = getgid ();
 #endif
-        if (chown (home_dir, uid, gid) < 0) {
+        if (lchown (home_dir, uid, gid) < 0) {
             GUM_RETURN_WITH_ERROR (GUM_ERROR_HOME_DIR_CREATE_FAILURE,
                     "Home directory chown failure", error, FALSE);
         }
